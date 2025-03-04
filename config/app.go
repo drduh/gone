@@ -1,6 +1,7 @@
 package config
 
 import (
+	"log/slog"
 	"time"
 )
 
@@ -15,4 +16,7 @@ type App struct {
 
 	// Server start time
 	Start time.Time
+
+	// Structured logger/output
+	Log *slog.Logger
 }
