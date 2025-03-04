@@ -40,18 +40,18 @@ type Settings struct {
 // Paths to route
 type Paths struct {
 
-	// Embedded/static file ("/static")
-	Static string `json:"static"`
+	// File download ("/download")
+	Download string `json:"download"`
 
 	// Heartbeat/health check ("/heartbeat")
 	Heartbeat string `json:"heartbeat"`
 
-	// File upload ("/upload")
-	Upload string `json:"upload"`
-
-	// File download ("/download")
-	Download string `json:"download"`
-
 	// File list ("/list")
 	List string `json:"list"`
+
+	// Embedded/static file ("/static")
+	Static string `json:"static"`
+
+	// File upload ("/upload")
+	Upload string `json:"upload"`
 }
