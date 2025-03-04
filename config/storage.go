@@ -26,6 +26,9 @@ type File struct {
 	// Number of downloads
 	Downloads int
 
+	// User limit on number of downloads
+	LimitDownloads int
+
 	// Raw file content
 	Data []byte
 

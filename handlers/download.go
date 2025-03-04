@@ -39,11 +39,17 @@ func Download(app *config.App) http.HandlerFunc {
 		w.WriteHeader(http.StatusOK)
 		_, _ = w.Write(file.Data)
 
-		file.Downloads++
-
 		app.Log.Info("download complete",
 			"name", file.Name, "size", file.Size,
 			"downloads", file.Downloads,
 			"ip", ip, "ua", ua)
+
+		file.Downloads++
+		if file.Downloads >= file.LimitDownloads {
+			delete(app.Storage.Files, file.Name)
+			app.Log.Info("removed file",
+				"reason", "download limit reached",
+				"downloads", file.Downloads)
+		}
 	}
 }
