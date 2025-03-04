@@ -16,15 +16,15 @@ BUILDARCH = $(shell $(GO) env GOHOSTARCH)
 BUILDVERS = $(shell $(GO) env GOVERSION)
 BUILDPKG  = $(GIT)/version
 BUILDFLAG = -X "$(BUILDPKG).Id=$(APP)" \
-						-X "$(BUILDPKG).Version=$(VERSION)" \
-						-X "$(BUILDPKG).User=$(BUILDUSER)" \
-						-X "$(BUILDPKG).OS=$(BUILDOS)" \
-						-X "$(BUILDPKG).Arch=$(BUILDARCH)" \
-						-X "$(BUILDPKG).Go=$(BUILDVERS)"
+            -X "$(BUILDPKG).Version=$(VERSION)" \
+            -X "$(BUILDPKG).User=$(BUILDUSER)" \
+            -X "$(BUILDPKG).OS=$(BUILDOS)" \
+            -X "$(BUILDPKG).Arch=$(BUILDARCH)" \
+            -X "$(BUILDPKG).Go=$(BUILDVERS)"
 BUILDCMD  = $(GO) build -ldflags '-s -w $(BUILDFLAG)'
 BINLINUX  = $(BINARY)-$(BUILDOS)-$(BUILDARCH)
 BLDLINUX  = GOOS=$(BUILDOS) GOARCH=$(BUILDARCH) \
-						$(BUILDCMD) -o $(OUT)/$(BINLINUX) $(SRC)
+            $(BUILDCMD) -o $(OUT)/$(BINLINUX) $(SRC)
 
 all: fmt dev
 
