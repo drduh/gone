@@ -1,7 +1,11 @@
 package v1
 
-import "fmt"
+import (
+	"fmt"
+
+	"github.com/drduh/gone/version"
+)
 
 func Run() {
-	fmt.Println("hello world")
+	fmt.Println(version.Id, version.Version)
 }
