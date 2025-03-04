@@ -17,11 +17,6 @@ var defaultSettings []byte
 
 // Returns loaded application configuration
 func Load() *App {
-	var s Settings
-	if err := json.Unmarshal(defaultSettings, &s); err != nil {
-		log.Fatalf("failed to load default settings: %v", err)
-	}
-
 	hostname, err := os.Hostname()
 	if err != nil {
 		log.Fatalf("failed to get hostname: %v", err)
@@ -32,8 +27,13 @@ func Load() *App {
 		log.Fatalf("failed to start auditor: %v", err)
 	}
 
+	var s Settings
+	if err := json.Unmarshal(defaultSettings, &s); err != nil {
+		log.Fatalf("failed to load default settings: %v", err)
+	}
+
 	return &App{
-		Version:  version.Version,
+		Version:  version.Short(),
 		Hostname: hostname,
 		Start:    time.Now(),
 		Log:      auditor.Log,

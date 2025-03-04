@@ -12,6 +12,7 @@ import (
 func Serve(app *config.App) error {
 	mux := http.NewServeMux()
 	mux.HandleFunc("/", handlers.Heartbeat())
+	mux.HandleFunc("/static", handlers.Static(app))
 
 	srv := &http.Server{
 		Addr:    fmt.Sprintf(":%d", app.Port),
