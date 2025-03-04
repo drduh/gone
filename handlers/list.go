@@ -27,7 +27,8 @@ func List(app *config.App) http.HandlerFunc {
 		}
 
 		writeJSON(w, http.StatusOK, files)
-		app.Log.Info("listed files",
-			"files", len(files), "ip", ip, "ua", ua)
+		app.Log.Info("files listed",
+			"files", len(files),
+			"ip", ip, "ua", ua)
 	}
 }

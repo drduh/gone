@@ -11,7 +11,8 @@ import (
 // Start HTTP server with application configuration
 func Serve(app *config.App) error {
 	mux := http.NewServeMux()
-	mux.HandleFunc("/", handlers.Heartbeat())
+
+	mux.HandleFunc("/", handlers.Heartbeat(app))
 	mux.HandleFunc(app.Settings.Paths.Download, handlers.Download(app))
 	mux.HandleFunc(app.Settings.Paths.List, handlers.List(app))
 	mux.HandleFunc(app.Settings.Paths.Static, handlers.Static(app))

@@ -6,6 +6,8 @@ import (
 	"github.com/drduh/gone/config"
 )
 
+var errNotFound = map[string]string{"error": "file not found"}
+
 // Returns content by file name
 func Download(app *config.App) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
@@ -26,9 +28,10 @@ func Download(app *config.App) http.HandlerFunc {
 		}
 
 		if !found {
-			writeJSON(w, http.StatusNotFound, map[string]string{"error": "file not found"})
+			writeJSON(w, http.StatusNotFound, errNotFound)
 			app.Log.Error("file not found",
-				"file", fileName, "ip", ip, "ua", ua)
+				"file", fileName,
+				"ip", ip, "ua", ua)
 			return
 		}
 
@@ -36,7 +39,7 @@ func Download(app *config.App) http.HandlerFunc {
 		w.WriteHeader(http.StatusOK)
 		_, _ = w.Write(file.Data)
 
-		app.Log.Info("served file",
+		app.Log.Info("download complete",
 			"name", file.Name, "size", file.Size,
 			"ip", ip, "ua", ua)
 	}
