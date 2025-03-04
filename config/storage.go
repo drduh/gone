@@ -23,6 +23,9 @@ type File struct {
 	// Size of file (in bytes)
 	Size int
 
+	// Number of downloads
+	Downloads int
+
 	// Raw file content
 	Data []byte
 
