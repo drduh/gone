@@ -22,6 +22,9 @@ type App struct {
 
 	// Loaded and validated application settings
 	Settings
+
+	// Uploaded content storage
+	Storage
 }
 
 // Application settings

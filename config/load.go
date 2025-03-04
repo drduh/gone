@@ -38,5 +38,6 @@ func Load() *App {
 		Start:    time.Now(),
 		Log:      auditor.Log,
 		Settings: s,
+		Storage:  Storage{Files: make(map[string]*File)},
 	}
 }
