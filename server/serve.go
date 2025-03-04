@@ -12,6 +12,7 @@ import (
 func Serve(app *config.App) error {
 	mux := http.NewServeMux()
 	mux.HandleFunc("/", handlers.Heartbeat())
+	mux.HandleFunc("/download", handlers.Download(app))
 	mux.HandleFunc("/static", handlers.Static(app))
 	mux.HandleFunc("/upload", handlers.Upload(app))
 
