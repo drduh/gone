@@ -1,4 +1,7 @@
 {
+	"limits": {
+		"downloads": 3
+	},
 	"paths": {
 		"download":  "/download",
 		"heartbeat": "/heartbeat",

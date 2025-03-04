@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"io"
 	"net/http"
+	"strconv"
 	"time"
 
 	"github.com/drduh/gone/config"
@@ -35,11 +36,18 @@ func Upload(app *config.App) http.HandlerFunc {
 			return
 		}
 
+		downloadLimit := app.Settings.Limits.Downloads
+		downloadLimitInput := r.FormValue("downloads")
+		if limit, err := strconv.Atoi(downloadLimitInput); err == nil {
+			downloadLimit = limit
+		}
+
 		record := &config.File{
-			Name:     handler.Filename,
-			Uploaded: time.Now(),
-			Size:     len(buf.Bytes()),
-			Data:     buf.Bytes(),
+			Name:           handler.Filename,
+			Uploaded:       time.Now(),
+			LimitDownloads: downloadLimit,
+			Size:           len(buf.Bytes()),
+			Data:           buf.Bytes(),
 			Owner: config.Owner{
 				Address: ip,
 				Agent:   ua,
@@ -50,9 +58,10 @@ func Upload(app *config.App) http.HandlerFunc {
 		response := map[string]interface{}{
 			"status": "ok",
 			"data": map[string]interface{}{
-				"name": record.Name,
-				"size": record.Size,
-				"time": record.Uploaded,
+				"fileName":       record.Name,
+				"fileSize":       record.Size,
+				"uploadTime":     record.Uploaded,
+				"limitDownloads": record.LimitDownloads,
 			},
 		}
 

@@ -36,6 +36,9 @@ type Settings struct {
 	// Paths to route
 	Paths `json:"paths"`
 
+	// Limit routes
+	Limits `json:"limits"`
+
 	// TCP port to listen on
 	Port int `json:"port"`
 }
@@ -67,4 +70,11 @@ type Paths struct {
 
 	// File upload ("/upload")
 	Upload string `json:"upload"`
+}
+
+// Download and upload limits
+type Limits struct {
+
+	// Number of allowed downloads
+	Downloads int `json:"downloads"`
 }
