@@ -1,7 +1,6 @@
 package handlers
 
 import (
-	"encoding/json"
 	"net/http"
 )
 
@@ -13,8 +12,6 @@ func Heartbeat() http.HandlerFunc {
 			"ip": ip,
 			"ua": ua,
 		}
-		w.Header().Set("Content-Type", "application/json;charset=utf-8")
-		w.WriteHeader(http.StatusOK)
-		_ = json.NewEncoder(w).Encode(payload)
+		writeJSON(w, http.StatusOK, payload)
 	}
 }
