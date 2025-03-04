@@ -1,3 +1,10 @@
 {
-  "port": 8080
+	"paths": {
+		"download":  "/download",
+		"heartbeat": "/heartbeat",
+		"list":      "/list",
+		"static":    "/static",
+		"upload":    "/upload"
+	},
+  "port":        8080
 }

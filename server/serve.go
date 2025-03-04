@@ -11,16 +11,20 @@ import (
 // Start HTTP server with application configuration
 func Serve(app *config.App) error {
 	mux := http.NewServeMux()
-	mux.HandleFunc("/", handlers.Heartbeat())
-	mux.HandleFunc("/static", handlers.Static(app))
-	mux.HandleFunc("/upload", handlers.Upload(app))
+
+	mux.HandleFunc("/", handlers.Heartbeat(app))
+	mux.HandleFunc(app.Settings.Paths.Download, handlers.Download(app))
+	mux.HandleFunc(app.Settings.Paths.List, handlers.List(app))
+	mux.HandleFunc(app.Settings.Paths.Static, handlers.Static(app))
+	mux.HandleFunc(app.Settings.Paths.Upload, handlers.Upload(app))
 
 	srv := &http.Server{
 		Addr:    fmt.Sprintf(":%d", app.Port),
 		Handler: mux,
 	}
 
-	app.Log.Info("starting server", "port", app.Port)
+	app.Log.Info("starting server",
+		"port", app.Port)
 
 	return srv.ListenAndServe()
 }

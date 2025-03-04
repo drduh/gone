@@ -30,6 +30,28 @@ type App struct {
 // Application settings
 type Settings struct {
 
-	// TCP por to listen on
+	// TCP port to listen on
 	Port int `json:"port"`
+
+	// Paths to route
+	Paths `json:"paths"`
+}
+
+// Paths to route
+type Paths struct {
+
+	// File download ("/download")
+	Download string `json:"download"`
+
+	// Heartbeat/health check ("/heartbeat")
+	Heartbeat string `json:"heartbeat"`
+
+	// File list ("/list")
+	List string `json:"list"`
+
+	// Embedded/static file ("/static")
+	Static string `json:"static"`
+
+	// File upload ("/upload")
+	Upload string `json:"upload"`
 }
