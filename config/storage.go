@@ -45,3 +45,11 @@ type Owner struct {
 	// User Agent header
 	Agent string
 }
+
+// Returns reason if file is expired
+func (f *File) IsExpired() string {
+	if f.Downloads >= f.LimitDownloads {
+		return "limit downloads"
+	}
+	return ""
+}
