@@ -16,12 +16,18 @@ type Auditor struct {
 }
 
 // Returns initialized Auditor ready for logging
-func StartAuditor() (*Auditor, error) {
+func StartAuditor(debug bool) (*Auditor, error) {
 	opts := slog.HandlerOptions{}
+	if debug {
+		opts.Level = slog.LevelDebug
+	}
+
 	dest := os.Stdout
+
 	handler := &Auditor{
 		Handler: slog.NewJSONHandler(dest, &opts),
 		Logger:  log.New(dest, "", 0),
 	}
+
 	return &Auditor{Log: slog.New(handler)}, nil
 }
