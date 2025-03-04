@@ -13,6 +13,8 @@ func Run() {
 
 	app.Log.Info("started v1",
 		"version", app.Version, "host", app.Hostname)
+	app.Log.Debug("debug logging enabled",
+		"configuration", app)
 
 	signal.Setup(app)
 
