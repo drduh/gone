@@ -19,4 +19,14 @@ type App struct {
 
 	// Structured logger/output
 	Log *slog.Logger
+
+	// Loaded and validated application settings
+	Settings
+}
+
+// Application settings
+type Settings struct {
+
+	// TCP por to listen on
+	Port int `json:"port"`
 }
