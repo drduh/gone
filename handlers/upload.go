@@ -36,7 +36,7 @@ func Upload(app *config.App) http.HandlerFunc {
 			return
 		}
 
-		downloadLimit := 0
+		downloadLimit := app.Settings.Limits.Downloads
 		downloadLimitInput := r.FormValue("downloads")
 		if limit, err := strconv.Atoi(downloadLimitInput); err == nil {
 			downloadLimit = limit
