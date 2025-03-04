@@ -30,11 +30,21 @@ type App struct {
 // Application settings
 type Settings struct {
 
-	// TCP port to listen on
-	Port int `json:"port"`
+	// Application mode
+	Modes `json:"modes"`
 
 	// Paths to route
 	Paths `json:"paths"`
+
+	// TCP port to listen on
+	Port int `json:"port"`
+}
+
+// Application operation modes
+type Modes struct {
+
+	// Whether to display verbose debug output
+	Debug bool
 }
 
 // Paths to route
