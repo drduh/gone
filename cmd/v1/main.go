@@ -7,5 +7,7 @@ import (
 )
 
 func Run() {
-	fmt.Println(version.Id, version.Version)
+	fmt.Println(version.Id, version.Version,
+		version.User, version.OS,
+		version.Arch, version.Go)
 }
