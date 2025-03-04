@@ -1,7 +1,8 @@
 ROOT      = gone
+AUTHOR   ?= drduh
 
 APP      ?= $(ROOT)
-GIT      ?= github.com/drduh/$(ROOT)
+GIT      ?= github.com/$(AUTHOR)
 GO       ?= go
 VERSION  ?= $(shell date +"%Y.%m.%d")
 
@@ -14,7 +15,7 @@ BUILDUSER = $(shell whoami)
 BUILDOS   = $(shell $(GO) env GOHOSTOS)
 BUILDARCH = $(shell $(GO) env GOHOSTARCH)
 BUILDVERS = $(shell $(GO) env GOVERSION)
-BUILDPKG  = $(GIT)/version
+BUILDPKG  = $(GIT)/$(APP)/version
 BUILDFLAG = -X "$(BUILDPKG).Id=$(APP)" \
             -X "$(BUILDPKG).Version=$(VERSION)" \
             -X "$(BUILDPKG).User=$(BUILDUSER)" \
@@ -30,6 +31,12 @@ all: fmt dev
 
 dev: build
 	@$(OUT)/$(BINLINUX)
+
+debug: build
+	@$(OUT)/$(BINLINUX) -debug
+
+version: build
+	@$(OUT)/$(BINLINUX) -version
 
 build: prep linux
 
