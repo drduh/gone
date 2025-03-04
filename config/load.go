@@ -22,14 +22,16 @@ func Load() *App {
 		log.Fatalf("failed to get hostname: %v", err)
 	}
 
-	auditor, err := audit.StartAuditor()
-	if err != nil {
-		log.Fatalf("failed to start auditor: %v", err)
+	var settings Settings
+	if err := json.Unmarshal(defaultSettings, &settings); err != nil {
+		log.Fatalf("failed to load default settings: %v", err)
 	}
 
-	var s Settings
-	if err := json.Unmarshal(defaultSettings, &s); err != nil {
-		log.Fatalf("failed to load default settings: %v", err)
+	settings.Modes.Debug = modeDebug
+
+	auditor, err := audit.StartAuditor(settings.Modes.Debug)
+	if err != nil {
+		log.Fatalf("failed to start auditor: %v", err)
 	}
 
 	return &App{
@@ -37,7 +39,7 @@ func Load() *App {
 		Hostname: hostname,
 		Start:    time.Now(),
 		Log:      auditor.Log,
-		Settings: s,
+		Settings: settings,
 		Storage:  Storage{Files: make(map[string]*File)},
 	}
 }
