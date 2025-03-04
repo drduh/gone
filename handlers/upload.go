@@ -31,7 +31,7 @@ func Upload(app *config.App) http.HandlerFunc {
 				map[string]string{"error": err.Error()})
 			app.Log.Error("upload copy failed",
 				"error", err.Error(),
-				"ip", ip, "ua", ua, "error")
+				"ip", ip, "ua", ua)
 			return
 		}
 
