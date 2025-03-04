@@ -8,12 +8,17 @@ import (
 	"github.com/drduh/gone/handlers"
 )
 
-func Serve(c *config.App) error {
+// Start HTTP server with application configuration
+func Serve(app *config.App) error {
 	mux := http.NewServeMux()
 	mux.HandleFunc("/", handlers.Heartbeat())
+
 	srv := &http.Server{
-		Addr:    fmt.Sprintf(":%d", c.Port),
+		Addr:    fmt.Sprintf(":%d", app.Port),
 		Handler: mux,
 	}
+
+	app.Log.Info("starting server", "port", app.Port)
+
 	return srv.ListenAndServe()
 }
