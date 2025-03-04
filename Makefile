@@ -35,6 +35,9 @@ dev: build
 debug: build
 	@$(OUT)/$(BINLINUX) -debug
 
+version: build
+	@$(OUT)/$(BINLINUX) -version
+
 build: prep linux
 
 linux:

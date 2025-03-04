@@ -1,15 +1,22 @@
 package v1
 
 import (
+	"fmt"
 	"os"
 
 	"github.com/drduh/gone/config"
 	"github.com/drduh/gone/server"
 	"github.com/drduh/gone/signal"
+	"github.com/drduh/gone/version"
 )
 
 func Run() {
 	app := config.Load()
+
+	if app.Modes.Version {
+		fmt.Println(version.Full())
+		os.Exit(0)
+	}
 
 	app.Log.Info("started v1",
 		"version", app.Version, "host", app.Hostname)

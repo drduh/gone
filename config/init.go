@@ -4,7 +4,7 @@ import "flag"
 
 var (
 	modeDebug   bool
-	showVersion bool
+	modeVersion bool
 	pathConfig  string
 	portNumber  int
 )
@@ -13,9 +13,9 @@ func init() {
 	flag.BoolVar(&modeDebug, "debug", false, "Debug mode")
 	flag.BoolVar(&modeDebug, "d", false, "Shortcut for -debug")
 
-	flag.BoolVar(&showVersion, "version", false, "Show version")
-	flag.BoolVar(&showVersion, "vers", false, "Shorcut for -version")
-	flag.BoolVar(&showVersion, "v", false, "Shorcut for -version")
+	flag.BoolVar(&modeVersion, "version", false, "Show version")
+	flag.BoolVar(&modeVersion, "vers", false, "Shorcut for -version")
+	flag.BoolVar(&modeVersion, "v", false, "Shorcut for -version")
 
 	flag.StringVar(&pathConfig, "config", "", "Path to settings JSON")
 	flag.StringVar(&pathConfig, "conf", "", "Shortcut for -config")

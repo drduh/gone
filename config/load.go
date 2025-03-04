@@ -27,7 +27,9 @@ func Load() *App {
 		log.Fatalf("failed to load default settings: %v", err)
 	}
 
+	// Flag override
 	settings.Modes.Debug = modeDebug
+	settings.Modes.Version = modeVersion
 
 	auditor, err := audit.StartAuditor(settings.Modes.Debug)
 	if err != nil {
