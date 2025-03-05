@@ -3,7 +3,6 @@ package audit
 import (
 	"log"
 	"log/slog"
-	"os"
 )
 
 var cfg = &Config{}
@@ -17,7 +16,10 @@ func StartAuditor(c *Config) (*Auditor, error) {
 		opts.Level = slog.LevelDebug
 	}
 
-	dest := os.Stdout
+	dest, err := getDest(cfg.Filename)
+	if err != nil {
+		return nil, err
+	}
 
 	handler := &Auditor{
 		Handler: slog.NewJSONHandler(dest, &opts),

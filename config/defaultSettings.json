@@ -1,14 +1,17 @@
 {
+	"audit": {
+		"logFile":    "",
+		"timeFormat": "Monday Jan 2 15:04"
+	},
 	"limits": {
-		"downloads": 3
+		"downloads":  3
 	},
 	"paths": {
-		"download":  "/download",
-		"heartbeat": "/heartbeat",
-		"list":      "/list",
-		"static":    "/static",
-		"upload":    "/upload"
+		"download":   "/download",
+		"heartbeat":  "/heartbeat",
+		"list":       "/list",
+		"static":     "/static",
+		"upload":     "/upload"
 	},
-	"port":        8080,
-	"timeFormat":  "Monday Jan 2 15:04"
+	"port":         8080
 }
