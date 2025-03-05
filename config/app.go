@@ -41,6 +41,9 @@ type Settings struct {
 
 	// TCP port to listen on
 	Port int `json:"port"`
+
+	// Format for datetime in logs
+	TimeFormat string `json:"timeFormat"`
 }
 
 // Application operation modes

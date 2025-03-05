@@ -16,8 +16,8 @@ func (a *Auditor) Handle(ctx context.Context, r slog.Record) error {
 
 	event := Event{
 		Time:    r.Time.Format(cfg.TimeFormat),
-		Message: r.Message,
 		Level:   r.Level.String(),
+		Message: r.Message,
 		Data:    data,
 	}
 
