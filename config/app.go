@@ -30,20 +30,30 @@ type App struct {
 // Application settings
 type Settings struct {
 
-	// Application mode
-	Modes `json:"modes"`
+	// Application modes (debug, version, etc.)
+	Modes
 
-	// Paths to route
-	Paths `json:"paths"`
+	// Auditor options
+	Audit `json:"audit"`
 
 	// Limit routes
 	Limits `json:"limits"`
 
+	// Paths to route
+	Paths `json:"paths"`
+
 	// TCP port to listen on
 	Port int `json:"port"`
+}
 
-	// Auditor options
-	Audit `json:"audit"`
+// Application operation modes
+type Modes struct {
+
+	// Whether to display verbose debug output
+	Debug bool
+
+	// Whether to display version/build information
+	Version bool
 }
 
 // Auditor logging preferences
@@ -56,14 +66,11 @@ type Audit struct {
 	TimeFormat string `json:"timeFormat"`
 }
 
-// Application operation modes
-type Modes struct {
+// Download and upload limits
+type Limits struct {
 
-	// Whether to display verbose debug output
-	Debug bool
-
-	// Whether to display version/build information
-	Version bool
+	// Number of allowed downloads
+	Downloads int `json:"downloads"`
 }
 
 // Paths to route
@@ -83,11 +90,4 @@ type Paths struct {
 
 	// File upload ("/upload")
 	Upload string `json:"upload"`
-}
-
-// Download and upload limits
-type Limits struct {
-
-	// Number of allowed downloads
-	Downloads int `json:"downloads"`
 }

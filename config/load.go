@@ -27,7 +27,9 @@ func Load() *App {
 		log.Fatalf("failed to load default settings: %v", err)
 	}
 
-	// Flag override
+	if pathConfig != "" {
+		settings = loadFromFile(pathConfig)
+	}
 	settings.Modes.Debug = modeDebug
 	settings.Modes.Version = modeVersion
 
@@ -48,4 +50,19 @@ func Load() *App {
 		Settings: settings,
 		Storage:  Storage{Files: make(map[string]*File)},
 	}
+}
+
+// Returns application settings from file at path
+func loadFromFile(path string) Settings {
+	data, err := os.ReadFile(path)
+	if err != nil {
+		log.Fatalf("failed to read %s: %v", path, err)
+	}
+
+	var settings Settings
+	if err := json.Unmarshal(data, &settings); err != nil {
+		log.Fatalf("failed to load settings: %v", err)
+	}
+
+	return settings
 }
