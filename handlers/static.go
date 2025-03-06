@@ -11,10 +11,10 @@ import (
 func Static(app *config.App) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		ip, ua := r.RemoteAddr, r.UserAgent()
-		resp := templates.Static{
+		response := templates.Static{
 			Data: templates.StaticData,
 		}
-		writeJSON(w, http.StatusOK, resp)
+		writeJSON(w, http.StatusOK, response)
 		app.Log.Info("served static content",
 			"ip", ip, "ua", ua)
 	}

@@ -8,6 +8,7 @@ import (
 	"time"
 
 	"github.com/drduh/gone/config"
+	"github.com/drduh/gone/templates"
 )
 
 // Accepts content uploads
@@ -55,13 +56,13 @@ func Upload(app *config.App) http.HandlerFunc {
 		}
 		app.Storage.Files[record.Name] = record
 
-		response := map[string]interface{}{
-			"status": "ok",
-			"data": map[string]interface{}{
-				"fileName":       record.Name,
-				"fileSize":       record.Size,
-				"uploadTime":     record.Uploaded,
-				"limitDownloads": record.LimitDownloads,
+		response := templates.File{
+			Name: record.Name,
+			Size: record.Size,
+			Owner: templates.Owner{
+				Address:  record.Owner.Address,
+				Agent:    record.Owner.Agent,
+				Uploaded: record.Uploaded,
 			},
 		}
 
