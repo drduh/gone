@@ -41,6 +41,19 @@ type Settings struct {
 
 	// TCP port to listen on
 	Port int `json:"port"`
+
+	// Auditor options
+	Audit `json:"audit"`
+}
+
+// Auditor logging preferences
+type Audit struct {
+
+	// Optional file destination for logs
+	Filename string `json:"logFile"`
+
+	// Format for datetime in logs
+	TimeFormat string `json:"timeFormat"`
 }
 
 // Application operation modes

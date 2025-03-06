@@ -3,31 +3,42 @@ package audit
 import (
 	"log"
 	"log/slog"
-	"os"
 )
 
-// Monitor and save application events
+// Auditor configuration
+type Config struct {
+
+	// Whether to output verbose debug messages
+	Debug bool
+
+	// Format for datetime in events
+	TimeFormat string
+
+	// Name of log file to write
+	Filename string
+}
+
+// Monitor for application events
 type Auditor struct {
 
-	// Structured logger for use in app
+	// Structured logger with custom handler
 	Log *slog.Logger
 	slog.Handler
 	*log.Logger
 }
 
-// Returns initialized Auditor ready for logging
-func StartAuditor(debug bool) (*Auditor, error) {
-	opts := slog.HandlerOptions{}
-	if debug {
-		opts.Level = slog.LevelDebug
-	}
+// An audit event
+type Event struct {
 
-	dest := os.Stdout
+	// Time of event
+	Time string `json:"time"`
 
-	handler := &Auditor{
-		Handler: slog.NewJSONHandler(dest, &opts),
-		Logger:  log.New(dest, "", 0),
-	}
+	// Severity level ("INFO", "DEBUG", etc.)
+	Level string `json:"level"`
 
-	return &Auditor{Log: slog.New(handler)}, nil
+	// Message summary (short)
+	Message string `json:"message"`
+
+	// Event data (full)
+	Data map[string]interface{} `json:"data"`
 }

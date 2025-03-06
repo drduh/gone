@@ -11,3 +11,9 @@ To build and run the application on Linux:
 ```
 make
 ```
+
+Output is structured in JSON format and can be easily parsed with `jq` for convenience, for example:
+
+```
+make | jq .data
+```
