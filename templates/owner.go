@@ -2,20 +2,7 @@ package templates
 
 import "time"
 
-// List of file records
-type List struct {
-
-	// Name of the file
-	Name string `json:"name"`
-
-	// Size of file
-	Size int `json:"size"`
-
-	// File owner/uploader
-	Owner `json:"owner"`
-}
-
-// Information about the uploader
+// File uploader/owner information
 type Owner struct {
 
 	// Upload time
