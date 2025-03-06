@@ -12,8 +12,22 @@ To build and run the application on Linux:
 make
 ```
 
+Binaries are built into a local `release` directory for distribution and installation.
+
+# Use
+
 Output is structured in JSON format and can be easily parsed with `jq` for convenience, for example:
 
 ```
-make | jq .data
+gone | jq .data
+```
+
+# Configuration
+
+gone uses an embedded JSON-based configuration [config/defaultSettings.json](https://github.com/drduh/gone/blob/main/config/defaultSettings.json) as default settings.
+
+Copy the JSON file and pass its path to gone to override configuration options, such as listening port:
+
+```
+gone -config=mySettings.json
 ```
