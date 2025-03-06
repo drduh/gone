@@ -6,7 +6,6 @@ var (
 	modeDebug   bool
 	modeVersion bool
 	pathConfig  string
-	portNumber  int
 )
 
 func init() {
@@ -20,8 +19,6 @@ func init() {
 	flag.StringVar(&pathConfig, "config", "", "Path to settings JSON")
 	flag.StringVar(&pathConfig, "conf", "", "Shortcut for -config")
 	flag.StringVar(&pathConfig, "c", "", "Shortcut for -config")
-
-	flag.IntVar(&portNumber, "port", 0, "Port to listen on")
 
 	flag.Parse()
 }
