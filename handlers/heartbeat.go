@@ -11,7 +11,6 @@ import (
 // Server Heartbeat JSON response
 func Heartbeat(app *config.App) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-
 		ip, ua := r.RemoteAddr, r.UserAgent()
 		uptime := time.Since(app.Start).String()
 
@@ -21,6 +20,13 @@ func Heartbeat(app *config.App) http.HandlerFunc {
 			Port:      app.Settings.Port,
 			Uptime:    uptime,
 			FileCount: len(app.Storage.Files),
+			Limits: templates.Limits{
+				Downloads: app.Settings.Limits.Downloads,
+			},
+			Client: templates.Client{
+				Address: ip,
+				Headers: r.Header,
+			},
 		}
 
 		writeJSON(w, http.StatusOK, resp)
