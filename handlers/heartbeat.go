@@ -14,7 +14,7 @@ func Heartbeat(app *config.App) http.HandlerFunc {
 		ip, ua := r.RemoteAddr, r.UserAgent()
 		uptime := time.Since(app.Start).String()
 
-		resp := templates.Heartbeat{
+		response := templates.Heartbeat{
 			Hostname:  app.Hostname,
 			Version:   app.Version,
 			Port:      app.Settings.Port,
@@ -29,7 +29,7 @@ func Heartbeat(app *config.App) http.HandlerFunc {
 			},
 		}
 
-		writeJSON(w, http.StatusOK, resp)
+		writeJSON(w, http.StatusOK, response)
 		app.Log.Info("heartbeat",
 			"uptime", uptime,
 			"ip", ip, "ua", ua)
