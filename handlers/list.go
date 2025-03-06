@@ -12,15 +12,15 @@ func List(app *config.App) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		ip, ua := r.RemoteAddr, r.UserAgent()
 
-		files := make([]templates.List, 0, len(app.Storage.Files))
-		for _, rec := range app.Storage.Files {
-			file := templates.List{
-				Name: rec.Name,
-				Size: rec.Size,
+		files := make([]templates.File, 0, len(app.Storage.Files))
+		for _, record := range app.Storage.Files {
+			file := templates.File{
+				Name: record.Name,
+				Size: record.Size,
 				Owner: templates.Owner{
-					Address:  rec.Owner.Address,
-					Agent:    rec.Owner.Agent,
-					Uploaded: rec.Uploaded,
+					Address:  record.Owner.Address,
+					Agent:    record.Owner.Agent,
+					Uploaded: record.Uploaded,
 				},
 			}
 			files = append(files, file)
