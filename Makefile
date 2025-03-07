@@ -49,5 +49,8 @@ prep:
 fmt:
 	@$(GO) fmt ./...
 
+test:
+	@$(GO) test ./...
+
 clean:
 	@rm -rf $(OUT)

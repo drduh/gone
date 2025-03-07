@@ -4,18 +4,18 @@ import "net/http"
 
 const HEADER = "X-Auth"
 
-// Returns true if request header contains valid pass
-func Basic(pass string, r *http.Request) bool {
+// Returns true if request header contains valid token
+func Basic(token string, r *http.Request) bool {
 
-	// Always allow access if pass is not configured
-	if pass == "" {
+	// Always allow access if token is not configured
+	if token == "" {
 		return true
 	}
 
-	// Check header for non-empty pass and validate
-	passHeader := r.Header.Get(HEADER)
-	if passHeader != "" {
-		return passHeader == pass
+	// Check header for non-empty token and validate
+	tokenHeader := r.Header.Get(HEADER)
+	if tokenHeader != "" {
+		return tokenHeader == token
 	}
 
 	return false
