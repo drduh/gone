@@ -1,10 +1,13 @@
 package handlers
 
 var (
+	errorDeny         = "not authorized"
+	errorFileNotFound = "file not found"
+
 	responseErrorDeny = map[string]string{
-		"error": "not authorized",
+		"error": errorDeny,
 	}
 	responseErrorFileNotFound = map[string]string{
-		"error": "file not found",
+		"error": errorFileNotFound,
 	}
 )

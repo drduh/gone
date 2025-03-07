@@ -15,7 +15,8 @@ func List(app *config.App) http.HandlerFunc {
 
 		if app.Settings.Auth.Require.List && !auth.Basic(app.Settings.Auth.Basic, r) {
 			writeJSON(w, http.StatusUnauthorized, responseErrorDeny)
-			app.Log.Error("list not authorized",
+			app.Log.Error(errorDeny,
+				"action", "list",
 				"ip", ip, "ua", ua)
 			return
 		}
