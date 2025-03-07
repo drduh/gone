@@ -33,6 +33,5 @@ func Heartbeat(app *config.App) http.HandlerFunc {
 		app.Log.Info("heartbeat",
 			"uptime", uptime,
 			"ip", ip, "ua", ua)
-
 	}
 }
