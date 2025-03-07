@@ -9,7 +9,7 @@ gone is an ephemeral file sharing service written in Go.
 To build and run the application on Linux:
 
 ```
-make
+make run
 ```
 
 Binaries are built into a local `release` directory for distribution and installation.

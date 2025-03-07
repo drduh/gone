@@ -27,9 +27,9 @@ BINLINUX  = $(BINARY)-$(BUILDOS)-$(BUILDARCH)
 BLDLINUX  = GOOS=$(BUILDOS) GOARCH=$(BUILDARCH) \
             $(BUILDCMD) -o $(OUT)/$(BINLINUX) $(SRC)
 
-all: fmt dev
+all: fmt test build
 
-dev: build
+run: build
 	@$(OUT)/$(BINLINUX)
 
 debug: build
@@ -48,6 +48,9 @@ prep:
 
 fmt:
 	@$(GO) fmt ./...
+
+test:
+	@$(GO) test ./...
 
 clean:
 	@rm -rf $(OUT)

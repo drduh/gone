@@ -3,15 +3,23 @@ package handlers
 import (
 	"net/http"
 
+	"github.com/drduh/gone/auth"
 	"github.com/drduh/gone/config"
 )
-
-var errNotFound = map[string]string{"error": "file not found"}
 
 // Returns content by file name
 func Download(app *config.App) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		ip, ua := r.RemoteAddr, r.UserAgent()
+
+		if app.Settings.Auth.Require.Download && !auth.Basic(app.Settings.Auth.Basic, r) {
+			writeJSON(w, http.StatusUnauthorized, responseErrorDeny)
+			app.Log.Error(errorDeny,
+				"action", "download",
+				"ip", ip, "ua", ua)
+			return
+		}
+
 		fileName := r.URL.Query().Get("name")
 
 		var file *config.File
@@ -28,8 +36,8 @@ func Download(app *config.App) http.HandlerFunc {
 		}
 
 		if !found {
-			writeJSON(w, http.StatusNotFound, errNotFound)
-			app.Log.Error("file not found",
+			writeJSON(w, http.StatusNotFound, responseErrorFileNotFound)
+			app.Log.Error(errorFileNotFound,
 				"file", fileName,
 				"ip", ip, "ua", ua)
 			return
@@ -41,16 +49,18 @@ func Download(app *config.App) http.HandlerFunc {
 
 		file.Downloads++
 
-		app.Log.Info("download complete",
-			"name", file.Name, "size", file.Size,
+		app.Log.Info("file downloaded",
+			"name", file.Name,
+			"size", file.Size,
 			"downloads", file.Downloads,
 			"ip", ip, "ua", ua)
 
-		expiredReason := file.IsExpired()
-		if expiredReason != "" {
+		expireReason := file.IsExpired()
+		if expireReason != "" {
 			delete(app.Storage.Files, file.Name)
 			app.Log.Info("removed file",
-				"reason", expiredReason, "downloads", file.Downloads)
+				"reason", expireReason,
+				"downloads", file.Downloads)
 		}
 	}
 }

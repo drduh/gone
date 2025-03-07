@@ -7,6 +7,7 @@ import (
 	"strconv"
 	"time"
 
+	"github.com/drduh/gone/auth"
 	"github.com/drduh/gone/config"
 	"github.com/drduh/gone/templates"
 )
@@ -15,6 +16,14 @@ import (
 func Upload(app *config.App) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		ip, ua := r.RemoteAddr, r.UserAgent()
+
+		if app.Settings.Auth.Require.Upload && !auth.Basic(app.Settings.Auth.Basic, r) {
+			writeJSON(w, http.StatusUnauthorized, responseErrorDeny)
+			app.Log.Error(errorDeny,
+				"action", "upload",
+				"ip", ip, "ua", ua)
+			return
+		}
 
 		file, handler, err := r.FormFile("file")
 		if err != nil {

@@ -36,6 +36,9 @@ type Settings struct {
 	// Auditor options
 	Audit `json:"audit"`
 
+	// Authentication requirements
+	Auth `json:"auth"`
+
 	// Limit routes
 	Limits `json:"limits"`
 
@@ -64,6 +67,26 @@ type Audit struct {
 
 	// Format for datetime in logs
 	TimeFormat string `json:"timeFormat"`
+}
+
+// Authentication requirements
+type Auth struct {
+
+	// String-based token/pass
+	Basic string `json:"basic"`
+
+	// Route authentication requirements
+	Require struct {
+
+		// Whether to require authentication for download
+		Download bool `json:"download"`
+
+		// Whether to require authentication for list
+		List bool `json:"list"`
+
+		// Whether to require authentication for upload
+		Upload bool `json:"upload"`
+	} `json:"require"`
 }
 
 // Download and upload limits

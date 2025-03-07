@@ -1,4 +1,12 @@
 {
+  "auth": {
+    "basic":      "AAAA-BBBB-CCCC-DDDD",
+    "require": {
+      "download": true,
+      "list":     false,
+      "upload":   false
+    }
+  },
   "audit": {
     "logFile":    "",
     "timeFormat": "Monday Jan 2 15:04"
