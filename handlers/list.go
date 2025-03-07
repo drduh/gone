@@ -3,6 +3,7 @@ package handlers
 import (
 	"net/http"
 
+	"github.com/drduh/gone/auth"
 	"github.com/drduh/gone/config"
 	"github.com/drduh/gone/templates"
 )
@@ -11,6 +12,13 @@ import (
 func List(app *config.App) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		ip, ua := r.RemoteAddr, r.UserAgent()
+
+		if app.Settings.Auth.Require.List && !auth.Basic(app.Settings.Auth.Basic, r) {
+			writeJSON(w, http.StatusUnauthorized, errDeny)
+			app.Log.Error("list not authorized",
+				"ip", ip, "ua", ua)
+			return
+		}
 
 		files := make([]templates.File, 0, len(app.Storage.Files))
 		for _, record := range app.Storage.Files {

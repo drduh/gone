@@ -78,8 +78,14 @@ type Auth struct {
 	// Route authentication requirements
 	Require struct {
 
-		// Whether to require authentication for downloads
+		// Whether to require authentication for download
 		Download bool `json:"download"`
+
+		// Whether to require authentication for list
+		List bool `json:"list"`
+
+		// Whether to require authentication for upload
+		Upload bool `json:"upload"`
 	} `json:"require"`
 }
 

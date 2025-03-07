@@ -17,7 +17,7 @@ func Download(app *config.App) http.HandlerFunc {
 
 		if app.Settings.Auth.Require.Download && !auth.Basic(app.Settings.Auth.Basic, r) {
 			writeJSON(w, http.StatusUnauthorized, errDeny)
-			app.Log.Error("not authorized",
+			app.Log.Error("download not authorized",
 				"ip", ip, "ua", ua)
 			return
 		}

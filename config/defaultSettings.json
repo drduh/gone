@@ -2,7 +2,9 @@
   "auth": {
     "basic":      "AAAA-BBBB-CCCC-DDDD",
     "require": {
-      "download": true
+      "download": true,
+      "list":     false,
+      "upload":   false
     }
   },
   "audit": {
