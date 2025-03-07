@@ -18,7 +18,7 @@ func Upload(app *config.App) http.HandlerFunc {
 		ip, ua := r.RemoteAddr, r.UserAgent()
 
 		if app.Settings.Auth.Require.Upload && !auth.Basic(app.Settings.Auth.Basic, r) {
-			writeJSON(w, http.StatusUnauthorized, errDeny)
+			writeJSON(w, http.StatusUnauthorized, responseErrorDeny)
 			app.Log.Error("upload not authorized",
 				"ip", ip, "ua", ua)
 			return

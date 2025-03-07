@@ -7,16 +7,13 @@ import (
 	"github.com/drduh/gone/config"
 )
 
-var errDeny = map[string]string{"error": "not authorized"}
-var errNotFound = map[string]string{"error": "file not found"}
-
 // Returns content by file name
 func Download(app *config.App) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		ip, ua := r.RemoteAddr, r.UserAgent()
 
 		if app.Settings.Auth.Require.Download && !auth.Basic(app.Settings.Auth.Basic, r) {
-			writeJSON(w, http.StatusUnauthorized, errDeny)
+			writeJSON(w, http.StatusUnauthorized, responseErrorDeny)
 			app.Log.Error("download not authorized",
 				"ip", ip, "ua", ua)
 			return
@@ -38,7 +35,7 @@ func Download(app *config.App) http.HandlerFunc {
 		}
 
 		if !found {
-			writeJSON(w, http.StatusNotFound, errNotFound)
+			writeJSON(w, http.StatusNotFound, responseErrorFileNotFound)
 			app.Log.Error("file not found",
 				"file", fileName,
 				"ip", ip, "ua", ua)
