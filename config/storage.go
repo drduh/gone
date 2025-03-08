@@ -1,8 +1,6 @@
 package config
 
-import (
-	"time"
-)
+import "time"
 
 // Storage for uploaded content
 type Storage struct {
