@@ -6,10 +6,10 @@ import (
 	"github.com/drduh/gone/config"
 )
 
-// Returns true if request is allowed; not throttled by rate limit
+// Returns false if request is throttled
 func throttle(app *config.App) bool {
 	if app.Settings.Limits.PerMinute <= 0 {
-		return true
+		return false
 	}
 
 	now := time.Now()
@@ -26,11 +26,11 @@ func throttle(app *config.App) bool {
 	}
 
 	if len(fileTimes) >= app.Settings.Limits.PerMinute {
-		return false
+		return true
 	}
 
 	fileTimes = append(fileTimes, now)
 	app.Storage.Throttle.Times = fileTimes
 
-	return true
+	return false
 }
