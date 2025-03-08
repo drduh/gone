@@ -18,7 +18,7 @@ type File struct {
 	// Time of upload
 	Uploaded time.Time `json:"uploaded,omitempty"`
 
-	// Size of file (in bytes)
+	// File size (in bytes)
 	Size int `json:"size,omitempty"`
 
 	// Number of downloads

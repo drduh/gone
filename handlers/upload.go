@@ -25,6 +25,23 @@ func Upload(app *config.App) http.HandlerFunc {
 			return
 		}
 
+		maxBytes := int64(app.Settings.Limits.MaxSizeMb) << 20
+		if r.ContentLength > maxBytes {
+			writeJSON(w, http.StatusRequestEntityTooLarge, responseErrorFileTooLarge)
+			app.Log.Error(errorFileTooLarge,
+				"sizeMb", r.ContentLength/(1<<20),
+				"ip", ip, "ua", ua)
+			return
+		}
+
+		r.Body = http.MaxBytesReader(w, r.Body, maxBytes)
+		if err := r.ParseMultipartForm(maxBytes); err != nil {
+			app.Log.Error("upload failed",
+				"error", err.Error(),
+				"ip", ip, "ua", ua)
+			return
+		}
+
 		file, handler, err := r.FormFile("file")
 		if err != nil {
 			writeJSON(w, http.StatusBadRequest,
@@ -66,9 +83,10 @@ func Upload(app *config.App) http.HandlerFunc {
 		app.Storage.Files[record.Name] = record
 
 		response := config.File{
-			Name:     record.Name,
-			Size:     record.Size,
-			Uploaded: record.Uploaded,
+			Name:           record.Name,
+			Size:           record.Size,
+			Uploaded:       record.Uploaded,
+			LimitDownloads: record.LimitDownloads,
 			Owner: config.Owner{
 				Address: record.Owner.Address,
 				Agent:   record.Owner.Agent,

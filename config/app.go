@@ -95,7 +95,7 @@ type Limits struct {
 	// Number of allowed downloads
 	Downloads int `json:"downloads"`
 
-	// Maximum size of files (in Megabytes)
+	// Maximum file size (in Megabytes)
 	MaxSizeMb int `json:"maxSizeMb"`
 }
 
