@@ -2,6 +2,7 @@ package config
 
 import (
 	"net/http"
+	"sync"
 	"time"
 )
 
@@ -10,6 +11,9 @@ type Storage struct {
 
 	// Collection of files
 	Files map[string]*File
+
+	// Rate limiter for file uploads
+	Throttle
 }
 
 // An uploaded file
@@ -48,6 +52,16 @@ type Owner struct {
 
 	// Full HTTP headers
 	Headers http.Header `json:"headers,omitempty"`
+}
+
+// Throttle requests by time
+type Throttle struct {
+
+	// Record times to rate limit
+	Times []time.Time
+
+	// File lock
+	Lease sync.Mutex
 }
 
 // Returns reason if file is expired

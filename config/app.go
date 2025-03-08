@@ -92,11 +92,14 @@ type Auth struct {
 // Download and upload limits
 type Limits struct {
 
-	// Number of allowed downloads
+	// Number of allowed downloads before file expiry
 	Downloads int `json:"downloads,omitempty"`
 
 	// Maximum file size (in Megabytes)
 	MaxSizeMb int `json:"maxSizeMb,omitempty"`
+
+	// Number of uploads per minute to rate limit
+	UploadsPM int `json:"uploadsPM,omitempty"`
 }
 
 // Paths to route
