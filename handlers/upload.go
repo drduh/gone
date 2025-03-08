@@ -25,6 +25,14 @@ func Upload(app *config.App) http.HandlerFunc {
 			return
 		}
 
+		if throttle(app) {
+			writeJSON(w, http.StatusTooManyRequests, responseErrorRateLimit)
+			app.Log.Error(errorRateLimit,
+				"action", "upload",
+				"ip", ip, "ua", ua)
+			return
+		}
+
 		maxBytes := int64(app.Settings.Limits.MaxSizeMb) << 20
 		if r.ContentLength > maxBytes {
 			writeJSON(w, http.StatusRequestEntityTooLarge, responseErrorFileTooLarge)
