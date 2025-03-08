@@ -15,22 +15,22 @@ func throttle(app *config.App) bool {
 	now := time.Now()
 	cutoff := now.Add(-1 * time.Minute)
 
-	app.Storage.Throttle.Lease.Lock()
-	defer app.Storage.Throttle.Lease.Unlock()
+	app.Throttle.Lease.Lock()
+	defer app.Throttle.Lease.Unlock()
 
-	fileTimes := make([]time.Time, 0, len(app.Storage.Throttle.Times))
-	for _, t := range app.Storage.Throttle.Times {
+	times := make([]time.Time, 0, len(app.Throttle.Times))
+	for _, t := range app.Throttle.Times {
 		if t.After(cutoff) {
-			fileTimes = append(fileTimes, t)
+			times = append(times, t)
 		}
 	}
 
-	if len(fileTimes) >= app.Settings.Limits.PerMinute {
+	if len(times) >= app.Settings.Limits.PerMinute {
 		return true
 	}
 
-	fileTimes = append(fileTimes, now)
-	app.Storage.Throttle.Times = fileTimes
+	times = append(times, now)
+	app.Throttle.Times = times
 
 	return false
 }

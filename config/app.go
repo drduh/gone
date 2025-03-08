@@ -25,6 +25,9 @@ type App struct {
 
 	// Uploaded content storage
 	Storage
+
+	// Rate limit throttle for requests
+	Throttle
 }
 
 // Application settings
