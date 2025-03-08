@@ -20,10 +20,11 @@ func Heartbeat(app *config.App) http.HandlerFunc {
 			Port:      app.Settings.Port,
 			Uptime:    uptime,
 			FileCount: len(app.Storage.Files),
-			Limits: templates.Limits{
+			Limits: config.Limits{
 				Downloads: app.Settings.Limits.Downloads,
+				MaxSizeMb: app.Settings.Limits.MaxSizeMb,
 			},
-			Client: templates.Client{
+			Owner: config.Owner{
 				Address: ip,
 				Headers: r.Header,
 			},

@@ -12,7 +12,8 @@
     "timeFormat": "Monday Jan 2 15:04"
   },
   "limits": {
-    "downloads":  3
+    "downloads":  3,
+    "maxSizeMb":  10
   },
   "paths": {
     "download":   "/download",

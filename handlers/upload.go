@@ -9,7 +9,6 @@ import (
 
 	"github.com/drduh/gone/auth"
 	"github.com/drduh/gone/config"
-	"github.com/drduh/gone/templates"
 )
 
 // Accepts content uploads
@@ -17,10 +16,28 @@ func Upload(app *config.App) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		ip, ua := r.RemoteAddr, r.UserAgent()
 
-		if app.Settings.Auth.Require.Upload && !auth.Basic(app.Settings.Auth.Basic, r) {
+		if app.Settings.Auth.Require.Upload &&
+			!auth.Basic(app.Settings.Auth.Basic, r) {
 			writeJSON(w, http.StatusUnauthorized, responseErrorDeny)
 			app.Log.Error(errorDeny,
 				"action", "upload",
+				"ip", ip, "ua", ua)
+			return
+		}
+
+		maxBytes := int64(app.Settings.Limits.MaxSizeMb) << 20
+		if r.ContentLength > maxBytes {
+			writeJSON(w, http.StatusRequestEntityTooLarge, responseErrorFileTooLarge)
+			app.Log.Error(errorFileTooLarge,
+				"sizeMb", r.ContentLength/(1<<20),
+				"ip", ip, "ua", ua)
+			return
+		}
+
+		r.Body = http.MaxBytesReader(w, r.Body, maxBytes)
+		if err := r.ParseMultipartForm(maxBytes); err != nil {
+			app.Log.Error("upload failed",
+				"error", err.Error(),
 				"ip", ip, "ua", ua)
 			return
 		}
@@ -65,19 +82,21 @@ func Upload(app *config.App) http.HandlerFunc {
 		}
 		app.Storage.Files[record.Name] = record
 
-		response := templates.File{
-			Name: record.Name,
-			Size: record.Size,
-			Owner: templates.Owner{
-				Address:  record.Owner.Address,
-				Agent:    record.Owner.Agent,
-				Uploaded: record.Uploaded,
+		response := config.File{
+			Name:           record.Name,
+			Size:           record.Size,
+			Uploaded:       record.Uploaded,
+			LimitDownloads: record.LimitDownloads,
+			Owner: config.Owner{
+				Address: record.Owner.Address,
+				Agent:   record.Owner.Agent,
 			},
 		}
 
 		writeJSON(w, http.StatusOK, response)
 		app.Log.Info("upload complete",
-			"name", record.Name, "size", record.Size,
+			"name", record.Name,
+			"size", record.Size,
 			"ip", ip, "ua", ua)
 	}
 }

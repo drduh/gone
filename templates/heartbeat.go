@@ -1,6 +1,6 @@
 package templates
 
-import "net/http"
+import "github.com/drduh/gone/config"
 
 // Server status response
 type Heartbeat struct {
@@ -21,25 +21,8 @@ type Heartbeat struct {
 	FileCount int `json:"files"`
 
 	// Limits configuration
-	Limits `json:"limits"`
+	config.Limits `json:"limits"`
 
-	// Client information
-	Client `json:"client"`
-}
-
-// Limits configuration
-type Limits struct {
-
-	// Maximum number of downloads
-	Downloads int `json:"downloads"`
-}
-
-// Client information
-type Client struct {
-
-	// Remote IP address
-	Address string `json:"address"`
-
-	// HTTP headers
-	Headers http.Header `json:"headers"`
+	// File owner information
+	config.Owner `json:"owner"`
 }

@@ -5,7 +5,6 @@ import (
 
 	"github.com/drduh/gone/auth"
 	"github.com/drduh/gone/config"
-	"github.com/drduh/gone/templates"
 )
 
 // Returns list of file records
@@ -13,7 +12,8 @@ func List(app *config.App) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		ip, ua := r.RemoteAddr, r.UserAgent()
 
-		if app.Settings.Auth.Require.List && !auth.Basic(app.Settings.Auth.Basic, r) {
+		if app.Settings.Auth.Require.List &&
+			!auth.Basic(app.Settings.Auth.Basic, r) {
 			writeJSON(w, http.StatusUnauthorized, responseErrorDeny)
 			app.Log.Error(errorDeny,
 				"action", "list",
@@ -21,15 +21,15 @@ func List(app *config.App) http.HandlerFunc {
 			return
 		}
 
-		files := make([]templates.File, 0, len(app.Storage.Files))
+		files := make([]config.File, 0, len(app.Storage.Files))
 		for _, record := range app.Storage.Files {
-			file := templates.File{
-				Name: record.Name,
-				Size: record.Size,
-				Owner: templates.Owner{
-					Address:  record.Owner.Address,
-					Agent:    record.Owner.Agent,
-					Uploaded: record.Uploaded,
+			file := config.File{
+				Name:     record.Name,
+				Size:     record.Size,
+				Uploaded: record.Uploaded,
+				Owner: config.Owner{
+					Address: record.Owner.Address,
+					Agent:   record.Owner.Agent,
 				},
 			}
 			files = append(files, file)

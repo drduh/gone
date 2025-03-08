@@ -1,6 +1,7 @@
 package config
 
 import (
+	"net/http"
 	"time"
 )
 
@@ -15,35 +16,38 @@ type Storage struct {
 type File struct {
 
 	// Provided filename
-	Name string
+	Name string `json:"name,omitempty"`
 
 	// Time of upload
-	Uploaded time.Time
+	Uploaded time.Time `json:"uploaded,omitempty"`
 
-	// Size of file (in bytes)
-	Size int
+	// File size (in bytes)
+	Size int `json:"size,omitempty"`
 
 	// Number of downloads
-	Downloads int
+	Downloads int `json:"downloads,omitempty"`
 
 	// User limit on number of downloads
-	LimitDownloads int
+	LimitDownloads int `json:"limitDownloads,omitempty"`
 
 	// Raw file content
-	Data []byte
+	Data []byte `json:"data,omitempty"`
 
-	// File owner/uploader
-	Owner
+	// Information about the uploader
+	Owner `json:"owner,omitempty"`
 }
 
-// Information about the uploader
+// File owner information
 type Owner struct {
 
 	// Remote IP address
-	Address string
+	Address string `json:"address,omitempty"`
 
 	// User Agent header
-	Agent string
+	Agent string `json:"agent,omitempty"`
+
+	// Full HTTP headers
+	Headers http.Header `json:"headers,omitempty"`
 }
 
 // Returns reason if file is expired

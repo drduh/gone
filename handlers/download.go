@@ -12,7 +12,8 @@ func Download(app *config.App) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		ip, ua := r.RemoteAddr, r.UserAgent()
 
-		if app.Settings.Auth.Require.Download && !auth.Basic(app.Settings.Auth.Basic, r) {
+		if app.Settings.Auth.Require.Download &&
+			!auth.Basic(app.Settings.Auth.Basic, r) {
 			writeJSON(w, http.StatusUnauthorized, responseErrorDeny)
 			app.Log.Error(errorDeny,
 				"action", "download",
@@ -59,6 +60,7 @@ func Download(app *config.App) http.HandlerFunc {
 		if expireReason != "" {
 			delete(app.Storage.Files, file.Name)
 			app.Log.Info("removed file",
+				"name", file.Name,
 				"reason", expireReason,
 				"downloads", file.Downloads)
 		}
