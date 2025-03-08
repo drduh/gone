@@ -28,6 +28,7 @@ func Upload(app *config.App) http.HandlerFunc {
 		if !throttle(app) {
 			writeJSON(w, http.StatusTooManyRequests, responseErrorRateLimit)
 			app.Log.Error(errorRateLimit,
+				"action", "upload",
 				"ip", ip, "ua", ua)
 			return
 		}

@@ -8,7 +8,7 @@ import (
 
 // Returns true if request is allowed; not throttled by rate limit
 func throttle(app *config.App) bool {
-	if app.Settings.Limits.UploadsPM <= 0 {
+	if app.Settings.Limits.PerMinute <= 0 {
 		return true
 	}
 
@@ -18,19 +18,19 @@ func throttle(app *config.App) bool {
 	app.Storage.Throttle.Lease.Lock()
 	defer app.Storage.Throttle.Lease.Unlock()
 
-	validTimes := make([]time.Time, 0, len(app.Storage.Throttle.Times))
+	fileTimes := make([]time.Time, 0, len(app.Storage.Throttle.Times))
 	for _, t := range app.Storage.Throttle.Times {
 		if t.After(cutoff) {
-			validTimes = append(validTimes, t)
+			fileTimes = append(fileTimes, t)
 		}
 	}
 
-	if len(validTimes) >= app.Settings.Limits.UploadsPM {
+	if len(fileTimes) >= app.Settings.Limits.PerMinute {
 		return false
 	}
 
-	validTimes = append(validTimes, now)
-	app.Storage.Throttle.Times = validTimes
+	fileTimes = append(fileTimes, now)
+	app.Storage.Throttle.Times = fileTimes
 
 	return true
 }

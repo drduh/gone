@@ -98,8 +98,8 @@ type Limits struct {
 	// Maximum file size (in Megabytes)
 	MaxSizeMb int `json:"maxSizeMb,omitempty"`
 
-	// Number of uploads per minute to rate limit
-	UploadsPM int `json:"uploadsPM,omitempty"`
+	// Number of requests per minute to rate limit
+	PerMinute int `json:"perMinute,omitempty"`
 }
 
 // Paths to route

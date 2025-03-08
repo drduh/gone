@@ -14,7 +14,7 @@
   "limits": {
     "downloads":  1,
     "maxSizeMb":  20,
-    "uploadsPM":  4
+    "perMinute":  4
   },
   "paths": {
     "download":   "/download",
