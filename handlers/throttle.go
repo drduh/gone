@@ -6,7 +6,7 @@ import (
 	"github.com/drduh/gone/config"
 )
 
-// Whether to throttle requests based on rate limit
+// Returns true if request is allowed; not throttled by rate limit
 func throttle(app *config.App) bool {
 	if app.Settings.Limits.UploadsPM <= 0 {
 		return true
