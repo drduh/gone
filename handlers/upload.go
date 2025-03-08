@@ -9,7 +9,6 @@ import (
 
 	"github.com/drduh/gone/auth"
 	"github.com/drduh/gone/config"
-	"github.com/drduh/gone/templates"
 )
 
 // Accepts content uploads
@@ -17,7 +16,8 @@ func Upload(app *config.App) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		ip, ua := r.RemoteAddr, r.UserAgent()
 
-		if app.Settings.Auth.Require.Upload && !auth.Basic(app.Settings.Auth.Basic, r) {
+		if app.Settings.Auth.Require.Upload &&
+			!auth.Basic(app.Settings.Auth.Basic, r) {
 			writeJSON(w, http.StatusUnauthorized, responseErrorDeny)
 			app.Log.Error(errorDeny,
 				"action", "upload",
@@ -65,13 +65,13 @@ func Upload(app *config.App) http.HandlerFunc {
 		}
 		app.Storage.Files[record.Name] = record
 
-		response := templates.File{
-			Name: record.Name,
-			Size: record.Size,
-			Owner: templates.Owner{
-				Address:  record.Owner.Address,
-				Agent:    record.Owner.Agent,
-				Uploaded: record.Uploaded,
+		response := config.File{
+			Name:     record.Name,
+			Size:     record.Size,
+			Uploaded: record.Uploaded,
+			Owner: config.Owner{
+				Address: record.Owner.Address,
+				Agent:   record.Owner.Agent,
 			},
 		}
 
