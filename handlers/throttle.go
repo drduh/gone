@@ -6,7 +6,7 @@ import (
 	"github.com/drduh/gone/config"
 )
 
-// Returns false if request is throttled
+// Returns true if request is throttled
 func throttle(app *config.App) bool {
 	if app.Settings.Limits.PerMinute <= 0 {
 		return false
