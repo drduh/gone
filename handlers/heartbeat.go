@@ -24,7 +24,7 @@ func Heartbeat(app *config.App) http.HandlerFunc {
 				Downloads: app.Settings.Limits.Downloads,
 				MaxSizeMb: app.Settings.Limits.MaxSizeMb,
 			},
-			Client: templates.Client{
+			Owner: config.Owner{
 				Address: ip,
 				Headers: r.Header,
 			},

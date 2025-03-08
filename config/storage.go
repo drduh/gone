@@ -1,6 +1,9 @@
 package config
 
-import "time"
+import (
+	"net/http"
+	"time"
+)
 
 // Storage for uploaded content
 type Storage struct {
@@ -42,6 +45,9 @@ type Owner struct {
 
 	// User Agent header
 	Agent string `json:"agent,omitempty"`
+
+	// Full HTTP headers
+	Headers http.Header `json:"headers,omitempty"`
 }
 
 // Returns reason if file is expired

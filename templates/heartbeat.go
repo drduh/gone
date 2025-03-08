@@ -1,10 +1,6 @@
 package templates
 
-import (
-	"net/http"
-
-	"github.com/drduh/gone/config"
-)
+import "github.com/drduh/gone/config"
 
 // Server status response
 type Heartbeat struct {
@@ -27,16 +23,6 @@ type Heartbeat struct {
 	// Limits configuration
 	config.Limits `json:"limits"`
 
-	// Client information
-	Client `json:"client"`
-}
-
-// Client information
-type Client struct {
-
-	// Remote IP address
-	Address string `json:"address"`
-
-	// HTTP headers
-	Headers http.Header `json:"headers"`
+	// File owner information
+	config.Owner `json:"owner"`
 }

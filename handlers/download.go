@@ -60,6 +60,7 @@ func Download(app *config.App) http.HandlerFunc {
 		if expireReason != "" {
 			delete(app.Storage.Files, file.Name)
 			app.Log.Info("removed file",
+				"name", file.Name,
 				"reason", expireReason,
 				"downloads", file.Downloads)
 		}
