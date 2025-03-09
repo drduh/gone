@@ -1,8 +1,15 @@
-# gone
+*Important* For experimental and development use only - not yet fit for production.
 
 gone is an ephemeral file sharing service written in Go.
 
-*Important* For experimental and development use only - not yet fit for production.
+# Features
+
+- Upload, download and list files
+- File expiration (removal) after downloads or duration of time
+- JSON-based configuration, logging and server responses
+- Token (string-based) authentication
+- Request rate-limiting
+- Native Go; no third-party dependencies
 
 # Development
 
