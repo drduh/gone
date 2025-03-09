@@ -49,9 +49,8 @@ func Download(app *config.App) http.HandlerFunc {
 		_, _ = w.Write(file.Data)
 
 		file.Downloads++
-
 		app.Log.Info("file downloaded",
-			"name", file.Name,
+			"filename", file.Name,
 			"size", file.Size,
 			"downloads", file.Downloads,
 			"ip", ip, "ua", ua)
@@ -60,8 +59,8 @@ func Download(app *config.App) http.HandlerFunc {
 		if expireReason != "" {
 			delete(app.Storage.Files, file.Name)
 			app.Log.Info("removed file",
-				"name", file.Name,
 				"reason", expireReason,
+				"filename", file.Name,
 				"downloads", file.Downloads)
 		}
 	}

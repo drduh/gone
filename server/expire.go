@@ -26,8 +26,8 @@ func expiryWorker(app *config.App) {
 			if reason != "" {
 				delete(app.Storage.Files, record.Name)
 				app.Log.Info("removed file",
-					"filename", record.Name,
 					"reason", reason,
+					"filename", record.Name,
 					"downloads", record.Downloads,
 					"lifetime", lifetime.String())
 			}
