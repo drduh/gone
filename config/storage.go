@@ -52,11 +52,11 @@ type Owner struct {
 
 // Returns reason if file is expired
 func (f *File) IsExpired(s Settings) string {
-	if time.Since(f.Uploaded) > s.Limits.Expiration.Duration {
-		return "limit duration"
-	}
 	if f.Downloads >= f.LimitDownloads {
 		return "limit downloads"
+	}
+	if time.Since(f.Uploaded) > s.Limits.Expiration.Duration {
+		return "limit duration"
 	}
 	return ""
 }
