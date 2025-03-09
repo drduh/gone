@@ -10,6 +10,8 @@ import (
 
 // Start HTTP server with application configuration
 func Serve(app *config.App) error {
+	go expiryWorker(app)
+
 	mux := http.NewServeMux()
 
 	mux.HandleFunc("/", handlers.Heartbeat(app))
