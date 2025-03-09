@@ -23,6 +23,7 @@ func Heartbeat(app *config.App) http.HandlerFunc {
 			Limits: config.Limits{
 				Downloads: app.Settings.Limits.Downloads,
 				MaxSizeMb: app.Settings.Limits.MaxSizeMb,
+				PerMinute: app.Settings.Limits.PerMinute,
 			},
 			Owner: config.Owner{
 				Address: ip,

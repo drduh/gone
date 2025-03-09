@@ -25,6 +25,9 @@ type App struct {
 
 	// Uploaded content storage
 	Storage
+
+	// Rate limit throttle for requests
+	Throttle
 }
 
 // Application settings
@@ -92,11 +95,14 @@ type Auth struct {
 // Download and upload limits
 type Limits struct {
 
-	// Number of allowed downloads
+	// Number of allowed downloads before file expiry
 	Downloads int `json:"downloads,omitempty"`
 
 	// Maximum file size (in Megabytes)
 	MaxSizeMb int `json:"maxSizeMb,omitempty"`
+
+	// Number of requests per minute to rate limit
+	PerMinute int `json:"perMinute,omitempty"`
 }
 
 // Paths to route

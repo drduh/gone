@@ -21,6 +21,14 @@ func List(app *config.App) http.HandlerFunc {
 			return
 		}
 
+		if throttle(app) {
+			writeJSON(w, http.StatusTooManyRequests, responseErrorRateLimit)
+			app.Log.Error(errorRateLimit,
+				"action", "list",
+				"ip", ip, "ua", ua)
+			return
+		}
+
 		files := make([]config.File, 0, len(app.Storage.Files))
 		for _, record := range app.Storage.Files {
 			file := config.File{

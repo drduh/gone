@@ -4,6 +4,7 @@ var (
 	errorDeny         = "not authorized"
 	errorFileNotFound = "file not found"
 	errorFileTooLarge = "file too large"
+	errorRateLimit    = "limit exceeded"
 
 	responseErrorDeny = map[string]string{
 		"error": errorDeny,
@@ -13,5 +14,8 @@ var (
 	}
 	responseErrorFileTooLarge = map[string]string{
 		"error": errorFileTooLarge,
+	}
+	responseErrorRateLimit = map[string]string{
+		"error": errorRateLimit,
 	}
 )
