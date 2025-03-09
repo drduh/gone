@@ -98,6 +98,9 @@ type Limits struct {
 	// Number of allowed downloads before file expiry
 	Downloads int `json:"downloads,omitempty"`
 
+	// Maximum period of time to keep files
+	Expiration Duration `json:"duration,omitempty"`
+
 	// Maximum file size (in Megabytes)
 	MaxSizeMb int `json:"maxSizeMb,omitempty"`
 
