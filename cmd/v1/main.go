@@ -1,7 +1,6 @@
 package v1
 
 import (
-	"fmt"
 	"os"
 
 	"github.com/drduh/gone/config"
@@ -14,7 +13,7 @@ func Run() {
 	app := config.Load()
 
 	if app.Modes.Version {
-		fmt.Println(version.Full())
+		version.Print()
 		os.Exit(0)
 	}
 
