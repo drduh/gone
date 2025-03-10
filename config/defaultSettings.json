@@ -13,6 +13,7 @@
   },
   "limits": {
     "downloads":  1,
+    "duration":   "2m",
     "maxSizeMb":  20,
     "perMinute":  4
   },
