@@ -6,7 +6,7 @@
       "list":     false,
       "upload":   false
     },
-    "token":     "AAAA-BBBB-CCCC-DDDD"
+    "token":      "mySecret"
   },
   "audit": {
     "logFile":    "",

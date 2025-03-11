@@ -7,15 +7,32 @@
 </head>
 <body>
   <div>
-  <div>
     <form action="{{ .PathUpload }}" method="POST" enctype="multipart/form-data">
       <input type="file" id="file" name="file" required>
       {{ if .AuthUpload }}
-        <label for="token">Token</label>
         <input type="text" id="token" name="{{ .AuthHeader }}" placeholder="{{ .AuthHolder }}">
       {{ end }}
       <input type="submit" value="Upload">
     </form>
+  </div>
+  <br>
+  <div>
+  <form action="{{ .PathDownload }}" method="GET">
+    <input type="text" id="fileName" name="name" placeholder="Filename" required>
+    {{ if .AuthDownload }}
+      <input type="text" id="token" name="{{ .AuthHeader }}" placeholder="{{ .AuthHolder }}">
+    {{ end }}
+    <input type="submit" value="Download">
+  </form>
+  </div>
+  <br>
+  <div>
+  <form action="{{ .PathList }}" method="GET">
+    {{ if .AuthList }}
+      <input type="text" id="token" name="{{ .AuthHeader }}" placeholder="{{ .AuthHolder }}">
+    {{ end }}
+  <input type="submit" value="List">
+  </form>
   </div>
 </div>
 </body>

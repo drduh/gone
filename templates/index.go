@@ -11,11 +11,15 @@ type Index struct {
 	// Page title
 	Title string
 
-	// Upload handler path
-	PathUpload string
+	// Route paths
+	PathDownload string
+	PathList     string
+	PathUpload   string
 
-	// Whether upload requires auth
-	AuthUpload bool
+	// Whether routes requires auth
+	AuthDownload bool
+	AuthList     bool
+	AuthUpload   bool
 
 	// Authentication header
 	AuthHeader string

@@ -24,11 +24,15 @@ func Index(app *config.App) http.HandlerFunc {
 		}
 
 		response := templates.Index{
-			Title:      app.Version,
-			PathUpload: app.Settings.Paths.Upload,
-			AuthUpload: app.Settings.Auth.Require.Upload,
-			AuthHeader: "X-Auth",
-			AuthHolder: "AAAA-BBBB",
+			Title:        app.Version,
+			AuthHeader:   app.Settings.Auth.Header,
+			AuthHolder:   "secret required",
+			AuthDownload: app.Settings.Auth.Require.Download,
+			AuthList:     app.Settings.Auth.Require.List,
+			AuthUpload:   app.Settings.Auth.Require.Upload,
+			PathDownload: app.Settings.Paths.Download,
+			PathList:     app.Settings.Paths.List,
+			PathUpload:   app.Settings.Paths.Upload,
 		}
 
 		err = tmpl.Execute(w, response)
