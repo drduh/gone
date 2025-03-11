@@ -1,11 +1,12 @@
 {
   "auth": {
-    "basic":      "AAAA-BBBB-CCCC-DDDD",
+    "header":     "X-Auth",
     "require": {
       "download": true,
       "list":     false,
       "upload":   false
-    }
+    },
+    "token":     "AAAA-BBBB-CCCC-DDDD"
   },
   "audit": {
     "logFile":    "",

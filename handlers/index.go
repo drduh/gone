@@ -14,7 +14,7 @@ func Index(app *config.App) http.HandlerFunc {
 		ip, ua := r.RemoteAddr, r.UserAgent()
 		tmplName := "index"
 
-		tmpl, err := template.New(tmplName).Parse(templates.IndexPage)
+		tmpl, err := template.New(tmplName).Parse(templates.HtmlIndex)
 		if err != nil {
 			writeJSON(w, http.StatusInternalServerError, responseErrorTmplParse)
 			app.Log.Error(errorTmplParse,

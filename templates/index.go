@@ -3,7 +3,7 @@ package templates
 import _ "embed"
 
 //go:embed html/index.html
-var IndexPage string
+var HtmlIndex string
 
 // Index HTML page elements
 type Index struct {
