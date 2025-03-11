@@ -102,8 +102,8 @@ func Upload(app *config.App) http.HandlerFunc {
 		}
 
 		writeJSON(w, http.StatusOK, response)
-		app.Log.Info("upload complete",
-			"name", record.Name,
+		app.Log.Info("file uploaded",
+			"filename", record.Name,
 			"size", record.Size,
 			"ip", ip, "ua", ua)
 	}

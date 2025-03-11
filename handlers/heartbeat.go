@@ -8,7 +8,7 @@ import (
 	"github.com/drduh/gone/templates"
 )
 
-// Server Heartbeat JSON response
+// Returns server status response
 func Heartbeat(app *config.App) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		ip, ua := r.RemoteAddr, r.UserAgent()
@@ -22,6 +22,7 @@ func Heartbeat(app *config.App) http.HandlerFunc {
 			FileCount: len(app.Storage.Files),
 			Limits: config.Limits{
 				Downloads: app.Settings.Limits.Downloads,
+				Expiration: app.Settings.Limits.Expiration,
 				MaxSizeMb: app.Settings.Limits.MaxSizeMb,
 				PerMinute: app.Settings.Limits.PerMinute,
 			},
@@ -32,7 +33,7 @@ func Heartbeat(app *config.App) http.HandlerFunc {
 		}
 
 		writeJSON(w, http.StatusOK, response)
-		app.Log.Info("heartbeat",
+		app.Log.Info("served heartbeat",
 			"uptime", uptime,
 			"ip", ip, "ua", ua)
 	}
