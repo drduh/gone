@@ -12,11 +12,12 @@ type Index struct {
 	Title string
 
 	// Route paths
-	PathDownload string
-	PathList     string
-	PathUpload   string
+	PathDownload  string
+	PathList      string
+	PathUpload    string
+	PathHeartbeat string
 
-	// Whether routes requires auth
+	// Whether routes require auth
 	AuthDownload bool
 	AuthList     bool
 	AuthUpload   bool
