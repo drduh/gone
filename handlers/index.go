@@ -24,7 +24,8 @@ func Index(app *config.App) http.HandlerFunc {
 		}
 
 		response := templates.Index{
-			Title:         app.Version,
+			Title:         "gone",
+			Version:       app.Version,
 			AuthHeader:    app.Settings.Auth.Header,
 			AuthHolder:    "secret required",
 			AuthDownload:  app.Settings.Auth.Require.Download,

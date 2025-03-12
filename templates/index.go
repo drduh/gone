@@ -11,6 +11,9 @@ type Index struct {
 	// Page title
 	Title string
 
+	// Application identifier
+	Version string
+
 	// Route paths
 	PathDownload  string
 	PathList      string
