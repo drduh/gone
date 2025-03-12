@@ -75,8 +75,11 @@ type Audit struct {
 // Authentication requirements
 type Auth struct {
 
-	// String-based token/pass
-	Basic string `json:"basic"`
+	// Header key name ("X-Auth")
+	Header string `json:"header"`
+
+	// String-based token
+	Token string `json:"token"`
 
 	// Route authentication requirements
 	Require struct {

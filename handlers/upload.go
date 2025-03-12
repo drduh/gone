@@ -17,7 +17,7 @@ func Upload(app *config.App) http.HandlerFunc {
 		ip, ua := r.RemoteAddr, r.UserAgent()
 
 		if app.Settings.Auth.Require.Upload &&
-			!auth.Basic(app.Settings.Auth.Basic, r) {
+			!auth.Basic(app.Settings.Auth.Header, app.Settings.Auth.Token, r) {
 			writeJSON(w, http.StatusUnauthorized, responseErrorDeny)
 			app.Log.Error(errorDeny,
 				"action", "upload",
@@ -102,8 +102,8 @@ func Upload(app *config.App) http.HandlerFunc {
 		}
 
 		writeJSON(w, http.StatusOK, response)
-		app.Log.Info("upload complete",
-			"name", record.Name,
+		app.Log.Info("file uploaded",
+			"filename", record.Name,
 			"size", record.Size,
 			"ip", ip, "ua", ua)
 	}

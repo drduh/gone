@@ -13,8 +13,8 @@ func Serve(app *config.App) error {
 	go expiryWorker(app)
 
 	mux := http.NewServeMux()
-
-	mux.HandleFunc("/", handlers.Heartbeat(app))
+	mux.HandleFunc("/", handlers.Index(app))
+	mux.HandleFunc(app.Settings.Paths.Heartbeat, handlers.Heartbeat(app))
 	mux.HandleFunc(app.Settings.Paths.Download, handlers.Download(app))
 	mux.HandleFunc(app.Settings.Paths.List, handlers.List(app))
 	mux.HandleFunc(app.Settings.Paths.Static, handlers.Static(app))

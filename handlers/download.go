@@ -13,7 +13,7 @@ func Download(app *config.App) http.HandlerFunc {
 		ip, ua := r.RemoteAddr, r.UserAgent()
 
 		if app.Settings.Auth.Require.Download &&
-			!auth.Basic(app.Settings.Auth.Basic, r) {
+			!auth.Basic(app.Settings.Auth.Header, app.Settings.Auth.Token, r) {
 			writeJSON(w, http.StatusUnauthorized, responseErrorDeny)
 			app.Log.Error(errorDeny,
 				"action", "download",
@@ -39,7 +39,7 @@ func Download(app *config.App) http.HandlerFunc {
 		if !found {
 			writeJSON(w, http.StatusNotFound, responseErrorFileNotFound)
 			app.Log.Error(errorFileNotFound,
-				"file", fileName,
+				"filename", fileName,
 				"ip", ip, "ua", ua)
 			return
 		}
@@ -49,7 +49,7 @@ func Download(app *config.App) http.HandlerFunc {
 		_, _ = w.Write(file.Data)
 
 		file.Downloads++
-		app.Log.Info("file downloaded",
+		app.Log.Info("served file",
 			"filename", file.Name,
 			"size", file.Size,
 			"downloads", file.Downloads,

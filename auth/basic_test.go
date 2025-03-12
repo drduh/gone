@@ -9,32 +9,30 @@ import (
 func TestBasic(t *testing.T) {
 	tests := []struct {
 		name     string
-		token    string
 		header   string
+		allowed  string
+		token    string
 		expected bool
 	}{
 		{
-			name:     "Token not configured: always pass",
+			name:     "Token not required",
+			header:   "X-Auth",
+			allowed:  "",
 			token:    "",
-			header:   "any",
 			expected: true,
 		},
 		{
-			name:     "Token matches header: pass",
-			token:    "valid",
-			header:   "valid",
+			name:     "Required token matches",
+			header:   "X-Auth",
+			allowed:  "valid-token",
+			token:    "valid-token",
 			expected: true,
 		},
 		{
-			name:     "Token does not match header: fail",
-			token:    "invalid",
-			header:   "valid",
-			expected: false,
-		},
-		{
-			name:     "No token header: fail",
-			token:    "valid",
-			header:   "",
+			name:     "Required token does not match",
+			header:   "X-Auth",
+			allowed:  "valid-token",
+			token:    "invalid-token",
 			expected: false,
 		},
 	}
@@ -43,11 +41,12 @@ func TestBasic(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			req := &http.Request{
 				Header: map[string][]string{
-					HEADER: {tt.header},
+					tt.header: {tt.token},
 				},
 			}
-			if got := Basic(tt.token, req); got != tt.expected {
-				t.Errorf("Basic: %v; want %v", got, tt.expected)
+			if got := Basic(tt.header, tt.allowed, req); got != tt.expected {
+				t.Errorf("%s: got %v (with '%#v'), expected %v",
+					tt.name, got, req.Header, tt.expected)
 			}
 		})
 	}

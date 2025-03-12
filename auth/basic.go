@@ -2,10 +2,8 @@ package auth
 
 import "net/http"
 
-const HEADER = "X-Auth"
-
 // Returns true if request header contains valid token
-func Basic(token string, r *http.Request) bool {
+func Basic(header, token string, r *http.Request) bool {
 
 	// Always allow access if token is not configured
 	if token == "" {
@@ -13,9 +11,15 @@ func Basic(token string, r *http.Request) bool {
 	}
 
 	// Check header for non-empty token and validate
-	tokenHeader := r.Header.Get(HEADER)
+	tokenHeader := r.Header.Get(header)
 	if tokenHeader != "" {
 		return tokenHeader == token
+	}
+
+	// Check form field value
+	tokenForm := r.FormValue(header)
+	if tokenForm != "" {
+		return tokenForm == token
 	}
 
 	return false
