@@ -45,33 +45,32 @@
 </head>
 <body>
   <div class="container">
-  <div class="box">
-    <form action="{{ .PathUpload }}" method="POST" enctype="multipart/form-data">
-    <input type="file" id="file" name="file" required>
-    {{ if .AuthUpload }}
-    <input type="text" id="token" name="{{ .AuthHeader }}" placeholder="{{ .AuthHolder }}">
-    {{ end }}
-    <input type="submit" value="Upload">
-  </form>
-  </div>
-  <div class="box">
-    <form action="{{ .PathDownload }}" method="GET">
-    <input type="text" id="fileName" name="name" placeholder="Filename" required>
-    {{ if .AuthDownload }}
+    <div class="box">
+      <form action="{{ .PathUpload }}" method="POST" enctype="multipart/form-data">
+      <input type="file" id="file" name="file" required>
+      {{ if .AuthUpload }}
       <input type="text" id="token" name="{{ .AuthHeader }}" placeholder="{{ .AuthHolder }}">
-    {{ end }}
-    <input type="submit" value="Download">
-    </form>
-  </div>
-  <br>
-  <div class="box">
-    <form action="{{ .PathList }}" method="GET">
-    {{ if .AuthList }}
-      <input type="text" id="token" name="{{ .AuthHeader }}" placeholder="{{ .AuthHolder }}">
-    {{ end }}
-    <input type="submit" value="List">
-    </form>
-  </div>
+      {{ end }}
+      <input type="submit" value="Upload">
+      </form>
+    </div>
+    <div class="box">
+      <form action="{{ .PathDownload }}" method="GET">
+      <input type="text" id="fileName" name="name" placeholder="Filename" required>
+      {{ if .AuthDownload }}
+        <input type="text" id="token" name="{{ .AuthHeader }}" placeholder="{{ .AuthHolder }}">
+      {{ end }}
+      <input type="submit" value="Download">
+      </form>
+    </div>
+    <div class="box">
+      <form action="{{ .PathList }}" method="GET">
+      {{ if .AuthList }}
+        <input type="text" id="token" name="{{ .AuthHeader }}" placeholder="{{ .AuthHolder }}">
+      {{ end }}
+      <input type="submit" value="List">
+      </form>
+    </div>
   </div>
   <div class="footer">
     <a href="{{ .PathHeartbeat }}">{{ .Version }}</a>
