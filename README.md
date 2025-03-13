@@ -43,16 +43,20 @@ gone -config=mySettings.json
 
 # Client
 
-Get default handler (heartbeat):
+The server provides a basic user interface for uploading, downloading and listing files at the default path (`/`).
+
+All features are also available using command line programs such as curl:
+
+Get server status:
 
 ```
-curl localhost:8080
+curl localhost:8080/heartbeat
 ```
 
 Upload file:
 
 ```
-curl -F "file=@test.txt" http://127.0.0.1:8080/upload
+curl -F "file=@test.txt" http://localhost:8080/upload
 ```
 
 `-F "downloads=2"` can be included to allow a maximum of 2 downloads before file expiration.
@@ -60,11 +64,11 @@ curl -F "file=@test.txt" http://127.0.0.1:8080/upload
 List uploaded files:
 
 ```
-curl "http://127.0.0.1:8080/list"
+curl "http://localhost:8080/list"
 ```
 
 Download file (the default configuration requires basic authentication):
 
 ```
-curl -H "X-Auth: mySecret" "http://127.0.0.1:8080/download?name=test.txt"
+curl -H "X-Auth: mySecret" "http://localhost:8080/download?name=test.txt"
 ```
