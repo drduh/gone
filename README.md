@@ -35,7 +35,7 @@ The optional `-debug` flag can be used for additional verbose program output.
 
 gone uses an embedded JSON-based configuration [config/defaultSettings.json](https://github.com/drduh/gone/blob/main/config/defaultSettings.json) as default settings.
 
-Copy the JSON file and use the `-config` flag to override options:
+Copy the JSON file and use the `-config` flag to set server options:
 
 ```
 gone -config=mySettings.json
@@ -59,16 +59,26 @@ Upload file:
 curl -F "file=@test.txt" http://localhost:8080/upload
 ```
 
-`-F "downloads=2"` can be included to allow a maximum of 2 downloads before file expiration.
+Upload file with explicit number of allowed downloads before expiration:
+
+```
+curl -F "downloads=3" -F "file=@test.txt" http://localhost:8080/upload
+```
 
 List uploaded files:
 
 ```
-curl "http://localhost:8080/list"
+curl http://localhost:8080/list
 ```
 
 Download file (the default configuration requires basic authentication):
 
 ```
 curl -H "X-Auth: mySecret" "http://localhost:8080/download?name=test.txt"
+```
+
+Get static (never expires) content:
+
+```
+curl http://localhost:8080/static
 ```
