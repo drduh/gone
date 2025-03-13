@@ -48,3 +48,23 @@ Get default handler (heartbeat):
 ```
 curl localhost:8080
 ```
+
+Upload file:
+
+```
+curl -F "file=@test.txt" http://127.0.0.1:8080/upload
+```
+
+`-F "downloads=2"` can be included to allow a maximum of 2 downloads before file expiration.
+
+List uploaded files:
+
+```
+curl "http://127.0.0.1:8080/list"
+```
+
+Download file (the default configuration requires basic authentication):
+
+```
+curl -H "X-Auth: mySecret" "http://127.0.0.1:8080/download?name=test.txt"
+```
