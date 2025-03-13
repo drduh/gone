@@ -21,10 +21,10 @@ func Heartbeat(app *config.App) http.HandlerFunc {
 			Uptime:    uptime,
 			FileCount: len(app.Storage.Files),
 			Limits: config.Limits{
-				Downloads: app.Settings.Limits.Downloads,
+				Downloads:  app.Settings.Limits.Downloads,
 				Expiration: app.Settings.Limits.Expiration,
-				MaxSizeMb: app.Settings.Limits.MaxSizeMb,
-				PerMinute: app.Settings.Limits.PerMinute,
+				MaxSizeMb:  app.Settings.Limits.MaxSizeMb,
+				PerMinute:  app.Settings.Limits.PerMinute,
 			},
 			Owner: config.Owner{
 				Address: ip,

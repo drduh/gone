@@ -44,7 +44,7 @@ func List(app *config.App) http.HandlerFunc {
 		}
 
 		writeJSON(w, http.StatusOK, files)
-		app.Log.Info("files listed",
+		app.Log.Info("served file list",
 			"files", len(files),
 			"ip", ip, "ua", ua)
 	}

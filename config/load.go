@@ -22,6 +22,10 @@ func Load() *App {
 		log.Fatalf("failed to get hostname: %v", err)
 	}
 
+	app := App{}
+	app.Modes.Debug = modeDebug
+	app.Modes.Version = modeVersion
+
 	var settings Settings
 	if err := json.Unmarshal(defaultSettings, &settings); err != nil {
 		log.Fatalf("failed to load default settings: %v", err)
@@ -30,26 +34,24 @@ func Load() *App {
 	if pathConfig != "" {
 		settings = loadFromFile(pathConfig)
 	}
-	settings.Modes.Debug = modeDebug
-	settings.Modes.Version = modeVersion
+	app.Settings = settings
 
 	auditor, err := audit.StartAuditor(&audit.Config{
-		Debug:      settings.Modes.Debug,
+		Debug:      app.Modes.Debug,
 		TimeFormat: settings.Audit.TimeFormat,
 		Filename:   settings.Audit.Filename,
 	})
 	if err != nil {
 		log.Fatalf("failed to start auditor: %v", err)
 	}
+	app.Log = auditor.Log
 
-	return &App{
-		Version:  version.Short(),
-		Hostname: hostname,
-		Start:    time.Now(),
-		Log:      auditor.Log,
-		Settings: settings,
-		Storage:  Storage{Files: make(map[string]*File)},
-	}
+	app.Hostname = hostname
+	app.Version = version.Short()
+	app.Start = time.Now()
+	app.Storage = Storage{Files: make(map[string]*File)}
+
+	return &app
 }
 
 // Returns application settings from file at path

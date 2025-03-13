@@ -2,7 +2,7 @@ package templates
 
 import _ "embed"
 
-//go:embed html/index.html
+//go:embed data/index.html
 var HtmlIndex string
 
 // Index HTML page elements
@@ -10,6 +10,9 @@ type Index struct {
 
 	// Page title
 	Title string
+
+	// Application identifier
+	Version string
 
 	// Route paths
 	PathDownload  string
