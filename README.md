@@ -61,10 +61,16 @@ Upload file:
 curl -F "file=@test.txt" http://localhost:8080/upload
 ```
 
-Upload file with explicit number of allowed downloads before expiration:
+With 3 allowed downloads before file expiration:
 
 ```
 curl -F "downloads=3" -F "file=@test.txt" http://localhost:8080/upload
+```
+
+With a 15 minutes file expiration:
+
+```
+curl -F "duration=15m" -F "file=@test.txt" http://localhost:8080/upload
 ```
 
 List uploaded files:
