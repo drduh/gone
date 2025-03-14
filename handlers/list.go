@@ -31,6 +31,15 @@ func List(app *config.App) http.HandlerFunc {
 
 		files := make([]config.File, 0, len(app.Storage.Files))
 		for _, record := range app.Storage.Files {
+			reason := record.IsExpired(app.Settings)
+			if reason != "" {
+				delete(app.Storage.Files, record.Name)
+				app.Log.Info("removed file",
+					"reason", reason,
+					"filename", record.Name,
+					"downloads", record.Downloads.Total)
+			}
+
 			file := config.File{
 				Name: record.Name,
 				Size: record.Size,
@@ -40,7 +49,7 @@ func List(app *config.App) http.HandlerFunc {
 				},
 				Time: config.Time{
 					Upload: record.Upload,
-					Remain: record.TimeRemaining(app.Settings).String(),
+					Remain: record.TimeRemaining().String(),
 				},
 				Downloads: config.Downloads{
 					Allow:  record.Downloads.Allow,
