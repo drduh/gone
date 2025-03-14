@@ -24,17 +24,14 @@ type File struct {
 	// File size (in bytes)
 	Size int `json:"size,omitempty"`
 
-	// Number of downloads
-	Downloads int `json:"downloads,omitempty"`
-
-	// User limit on number of downloads
-	LimitDownloads int `json:"limitDownloads,omitempty"`
-
 	// Raw file content
 	Data []byte `json:"data,omitempty"`
 
 	// Information about the uploader
 	Owner `json:"owner,omitempty"`
+
+	// Information about downloads
+	Downloads `json:"downloads,omitempty"`
 }
 
 // File owner information
@@ -50,9 +47,27 @@ type Owner struct {
 	Headers http.Header `json:"headers,omitempty"`
 }
 
+// File downloads information
+type Downloads struct {
+
+	// Number of allowed downloads
+	Allow int `json:"allowed,omitempty"`
+
+	// Remaining number of downloads to expiration
+	Remain int `json:"remain,omitempty"`
+
+	// Total number of downloads
+	Total int `json:"total,omitempty"`
+}
+
+// Returns number of remaining allowed downloads
+func (f *File) DownloadsRemaining() int {
+	return f.Downloads.Allow - f.Downloads.Total
+}
+
 // Returns reason if file is expired
 func (f *File) IsExpired(s Settings) string {
-	if f.Downloads >= f.LimitDownloads {
+	if f.Downloads.Total >= f.Downloads.Allow {
 		return "limit downloads"
 	}
 	if time.Since(f.Uploaded) > s.Limits.Expiration.Duration {
