@@ -18,19 +18,19 @@ type File struct {
 	// Provided filename
 	Name string `json:"name,omitempty"`
 
-	// Time of upload
-	Uploaded time.Time `json:"uploaded,omitempty"`
-
 	// File size (in bytes)
 	Size int `json:"size,omitempty"`
 
 	// Raw file content
 	Data []byte `json:"data,omitempty"`
 
-	// Information about the uploader
+	// Uploader information
 	Owner `json:"owner,omitempty"`
 
-	// Information about downloads
+	// Timing information
+	Time `json:"time,omitempty"`
+
+	// Downloads information
 	Downloads `json:"downloads,omitempty"`
 }
 
@@ -47,7 +47,17 @@ type Owner struct {
 	Headers http.Header `json:"headers,omitempty"`
 }
 
-// File downloads information
+// Timing information
+type Time struct {
+
+	// Formatted duration until expiration
+	Remain string `json:"remain,omitempty"`
+
+	// Absolute upload datetime
+	Upload time.Time `json:"upload,omitempty"`
+}
+
+// Downloads information
 type Downloads struct {
 
 	// Number of allowed downloads
@@ -60,9 +70,16 @@ type Downloads struct {
 	Total int `json:"total,omitempty"`
 }
 
-// Returns number of remaining allowed downloads
+// Returns number of remaining downloads until expiration
 func (f *File) NumRemaining() int {
 	return f.Downloads.Allow - f.Downloads.Total
+}
+
+// Returns relative duration remaining until expiration
+func (f *File) TimeRemaining(s Settings) time.Duration {
+	return time.Until(
+		f.Time.Upload.Add(s.Limits.Expiration.Duration)).Round(
+		time.Second)
 }
 
 // Returns reason if file is expired
@@ -70,7 +87,7 @@ func (f *File) IsExpired(s Settings) string {
 	if f.Downloads.Total >= f.Downloads.Allow {
 		return "limit downloads"
 	}
-	if time.Since(f.Uploaded) > s.Limits.Expiration.Duration {
+	if time.Since(f.Time.Upload) > s.Limits.Expiration.Duration {
 		return "limit duration"
 	}
 	return ""
