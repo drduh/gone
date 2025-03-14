@@ -16,7 +16,7 @@
     "downloads":  1,
     "duration":   "2m",
     "maxSizeMb":  20,
-    "perMinute":  4
+    "perMinute":  10
   },
   "paths": {
     "download":   "/download",
