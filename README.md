@@ -43,7 +43,9 @@ gone -config=mySettings.json
 
 # Client
 
-The server provides a basic user interface for uploading, downloading and listing files at the default path (`/`).
+The server provides a basic user interface for uploading, downloading and listing files at the default path (`/`):
+
+[localhost:8080](http://localhost:8080)
 
 All features are also available using command line programs such as curl:
 
