@@ -38,26 +38,26 @@ func List(app *config.App) http.HandlerFunc {
 					"reason", reason,
 					"filename", record.Name,
 					"downloads", record.Downloads.Total)
+			} else {
+				file := config.File{
+					Name: record.Name,
+					Size: record.Size,
+					Owner: config.Owner{
+						Address: record.Owner.Address,
+						Agent:   record.Owner.Agent,
+					},
+					Time: config.Time{
+						Upload: record.Upload,
+						Remain: record.TimeRemaining().String(),
+					},
+					Downloads: config.Downloads{
+						Allow:  record.Downloads.Allow,
+						Total:  record.Downloads.Total,
+						Remain: record.NumRemaining(),
+					},
+				}
+				files = append(files, file)
 			}
-
-			file := config.File{
-				Name: record.Name,
-				Size: record.Size,
-				Owner: config.Owner{
-					Address: record.Owner.Address,
-					Agent:   record.Owner.Agent,
-				},
-				Time: config.Time{
-					Upload: record.Upload,
-					Remain: record.TimeRemaining().String(),
-				},
-				Downloads: config.Downloads{
-					Allow:  record.Downloads.Allow,
-					Total:  record.Downloads.Total,
-					Remain: record.NumRemaining(),
-				},
-			}
-			files = append(files, file)
 		}
 
 		writeJSON(w, http.StatusOK, files)
