@@ -14,7 +14,7 @@ func expiryWorker(app *config.App) {
 
 	for range ticker.C {
 		for _, record := range app.Storage.Files {
-			lifetime := time.Since(record.Uploaded)
+			lifetime := time.Since(record.Time.Upload)
 			timeleft := period - lifetime
 			app.Log.Debug("checking file expiration",
 				"filename", record.Name,

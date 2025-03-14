@@ -78,13 +78,15 @@ func Upload(app *config.App) http.HandlerFunc {
 		}
 
 		record := &config.File{
-			Name:     handler.Filename,
-			Uploaded: time.Now(),
-			Size:     len(buf.Bytes()),
-			Data:     buf.Bytes(),
+			Name: handler.Filename,
+			Size: len(buf.Bytes()),
+			Data: buf.Bytes(),
 			Owner: config.Owner{
 				Address: ip,
 				Agent:   ua,
+			},
+			Time: config.Time{
+				Upload: time.Now(),
 			},
 			Downloads: config.Downloads{
 				Allow: downloadLimit,
@@ -93,12 +95,14 @@ func Upload(app *config.App) http.HandlerFunc {
 		app.Storage.Files[record.Name] = record
 
 		response := config.File{
-			Name:     record.Name,
-			Size:     record.Size,
-			Uploaded: record.Uploaded,
+			Name: record.Name,
+			Size: record.Size,
 			Owner: config.Owner{
 				Address: record.Owner.Address,
 				Agent:   record.Owner.Agent,
+			},
+			Time: config.Time{
+				Upload: record.Upload,
 			},
 			Downloads: config.Downloads{
 				Allow: record.Downloads.Allow,
