@@ -48,11 +48,11 @@ func Download(app *config.App) http.HandlerFunc {
 		w.WriteHeader(http.StatusOK)
 		_, _ = w.Write(file.Data)
 
-		file.Downloads++
+		file.Downloads.Total++
 		app.Log.Info("served file",
 			"filename", file.Name,
 			"size", file.Size,
-			"downloads", file.Downloads,
+			"downloads", file.Downloads.Total,
 			"ip", ip, "ua", ua)
 
 		expireReason := file.IsExpired(app.Settings)
@@ -61,7 +61,7 @@ func Download(app *config.App) http.HandlerFunc {
 			app.Log.Info("removed file",
 				"reason", expireReason,
 				"filename", file.Name,
-				"downloads", file.Downloads)
+				"downloads", file.Downloads.Total)
 		}
 	}
 }

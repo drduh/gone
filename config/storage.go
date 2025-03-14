@@ -61,7 +61,7 @@ type Downloads struct {
 }
 
 // Returns number of remaining allowed downloads
-func (f *File) DownloadsRemaining() int {
+func (f *File) NumRemaining() int {
 	return f.Downloads.Allow - f.Downloads.Total
 }
 

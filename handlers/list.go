@@ -39,6 +39,11 @@ func List(app *config.App) http.HandlerFunc {
 					Address: record.Owner.Address,
 					Agent:   record.Owner.Agent,
 				},
+				Downloads: config.Downloads{
+					Allow:  record.Downloads.Allow,
+					Total:  record.Downloads.Total,
+					Remain: record.NumRemaining(),
+				},
 			}
 			files = append(files, file)
 		}
