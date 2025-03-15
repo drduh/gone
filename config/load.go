@@ -17,11 +17,6 @@ var defaultSettings []byte
 
 // Returns loaded application configuration
 func Load() *App {
-	hostname, err := os.Hostname()
-	if err != nil {
-		log.Fatalf("failed to get hostname: %v", err)
-	}
-
 	app := App{}
 	app.Modes.Debug = modeDebug
 	app.Modes.Version = modeVersion
@@ -30,7 +25,6 @@ func Load() *App {
 	if err := json.Unmarshal(defaultSettings, &settings); err != nil {
 		log.Fatalf("failed to load default settings: %v", err)
 	}
-
 	if pathConfig != "" {
 		settings = loadFromFile(pathConfig)
 	}
@@ -46,7 +40,7 @@ func Load() *App {
 	}
 	app.Log = auditor.Log
 
-	app.Hostname = hostname
+	app.Hostname = getHostname()
 	app.Version = version.Short()
 	app.Start = time.Now()
 	app.Storage = Storage{Files: make(map[string]*File)}
@@ -67,4 +61,13 @@ func loadFromFile(path string) Settings {
 	}
 
 	return settings
+}
+
+// Returns OS hostname or exits with error
+func getHostname() string {
+	hostname, err := os.Hostname()
+	if err != nil {
+		log.Fatalf("failed to get hostname: %v", err)
+	}
+	return hostname
 }
