@@ -42,9 +42,18 @@
     width: 100%;
   }
 
-  input[type="number"] {
+  input[type=text], input[type=submit], input[type=file], input[type=number] {
+    background-color: #002b36;
+    border: none;
+    color: #eee8d5;
+    margin: 10px;
+    padding: 10px;
+    text-decoration: none;
+  }
+
+  input[type=number] {
     width: 28px;
-   }
+  }
   </style>
 </head>
 <body>
@@ -54,7 +63,7 @@
       <form action="{{ .PathUpload }}" method="POST" enctype="multipart/form-data">
       <input type="file" id="file" name="file" required>
       {{ if .AuthUpload }}
-      <input type="text" id="token" name="{{ .AuthHeader }}" placeholder="{{ .AuthHolder }}">
+      <input type="text" id="token" name="{{ .AuthHeader }}" placeholder="{{ .AuthHolder }}" required>
       {{ end }}
       <input type="number" name="downloads" id="downloads" min="1" step="1" placeholder="1">
       <input type="submit" value="Upload">
@@ -66,7 +75,7 @@
       <form action="{{ .PathDownload }}" method="GET">
       <input type="text" id="fileName" name="name" placeholder="Filename" required>
       {{ if .AuthDownload }}
-        <input type="text" id="token" name="{{ .AuthHeader }}" placeholder="{{ .AuthHolder }}">
+        <input type="text" id="token" name="{{ .AuthHeader }}" placeholder="{{ .AuthHolder }}" required>
       {{ end }}
       <input type="submit" value="Download">
       </form>
@@ -76,7 +85,7 @@
     <div class="box">
       <form action="{{ .PathList }}" method="GET">
       {{ if .AuthList }}
-        <input type="text" id="token" name="{{ .AuthHeader }}" placeholder="{{ .AuthHolder }}">
+        <input type="text" id="token" name="{{ .AuthHeader }}" placeholder="{{ .AuthHolder }}" required>
       {{ end }}
       <input type="submit" value="List">
       </form>
