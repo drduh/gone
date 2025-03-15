@@ -57,7 +57,7 @@ func Download(app *config.App) http.HandlerFunc {
 
 		reason := file.IsExpired(app.Settings)
 		if reason != "" {
-			delete(app.Storage.Files, file.Name)
+			app.Storage.Expire(file)
 			app.Log.Info("removed file",
 				"reason", reason,
 				"filename", file.Name,

@@ -88,7 +88,7 @@ func (f *File) TimeRemaining() time.Duration {
 		time.Second)
 }
 
-// Returns reason if file is expired
+// Returns reason if File is expired
 func (f *File) IsExpired(s Settings) string {
 	if f.Downloads.Total >= f.Downloads.Allow {
 		return "limit downloads"
@@ -97,4 +97,9 @@ func (f *File) IsExpired(s Settings) string {
 		return "limit duration"
 	}
 	return ""
+}
+
+// Removes File from Storage
+func (s *Storage) Expire(f *File) {
+	delete(s.Files, f.Name)
 }
