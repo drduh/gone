@@ -19,7 +19,7 @@
     display: flex;
     flex-grow: 1;
     justify-content: space-between;
-    padding: 20px;
+    padding: 10px;
   }
 
   .box {
@@ -41,6 +41,10 @@
     text-align: center;
     width: 100%;
   }
+
+  input[type="number"] {
+    width: 28px;
+   }
   </style>
 </head>
 <body>
@@ -52,6 +56,7 @@
       {{ if .AuthUpload }}
       <input type="text" id="token" name="{{ .AuthHeader }}" placeholder="{{ .AuthHolder }}">
       {{ end }}
+      <input type="number" name="downloads" id="downloads" min="1" step="1" placeholder="1">
       <input type="submit" value="Upload">
       </form>
     </div>
