@@ -14,7 +14,7 @@ func expiryWorker(app *config.App) {
 	for range ticker.C {
 		for _, file := range app.Storage.Files {
 			lifetime := time.Since(file.Time.Upload).Round(time.Second)
-			app.Log.Debug("checking file expiration",
+			app.Log.Debug("checking expiration",
 				"filename", file.Name,
 				"allowed", file.Time.Duration.String(),
 				"available", lifetime.String(),
@@ -27,7 +27,7 @@ func expiryWorker(app *config.App) {
 					"reason", reason,
 					"filename", file.Name,
 					"available", lifetime.String(),
-					"downloads", file.Downloads)
+					"downloads", file.Downloads.Total)
 			}
 		}
 	}
