@@ -45,6 +45,7 @@
 </head>
 <body>
   <div class="container">
+    {{ if .PathUpload }}
     <div class="box">
       <form action="{{ .PathUpload }}" method="POST" enctype="multipart/form-data">
       <input type="file" id="file" name="file" required>
@@ -54,6 +55,8 @@
       <input type="submit" value="Upload">
       </form>
     </div>
+    {{ end }}
+    {{ if .PathDownload }}
     <div class="box">
       <form action="{{ .PathDownload }}" method="GET">
       <input type="text" id="fileName" name="name" placeholder="Filename" required>
@@ -63,6 +66,8 @@
       <input type="submit" value="Download">
       </form>
     </div>
+    {{ end }}
+    {{ if .PathList }}
     <div class="box">
       <form action="{{ .PathList }}" method="GET">
       {{ if .AuthList }}
@@ -71,9 +76,12 @@
       <input type="submit" value="List">
       </form>
     </div>
+    {{ end }}
   </div>
+  {{ if .PathHeartbeat }}
   <div class="footer">
     <a href="{{ .PathHeartbeat }}">{{ .Version }}</a>
   </div>
+  {{ end }}
 </body>
 </html>
