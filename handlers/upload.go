@@ -75,6 +75,14 @@ func Upload(app *config.App) http.HandlerFunc {
 		downloadLimitInput := r.FormValue("downloads")
 		if limit, err := strconv.Atoi(downloadLimitInput); err == nil {
 			downloadLimit = limit
+			app.Log.Debug("got form value", "downloads", downloadLimit)
+		}
+
+		durationLimit := app.Settings.Limits.Expiration.Duration
+		durationLimitInput := r.FormValue("duration")
+		if limit, err := time.ParseDuration(durationLimitInput); err == nil {
+			durationLimit = limit
+			app.Log.Debug("got form value", "duration", durationLimit.String())
 		}
 
 		record := &config.File{
@@ -86,7 +94,8 @@ func Upload(app *config.App) http.HandlerFunc {
 				Agent:   ua,
 			},
 			Time: config.Time{
-				Upload: time.Now(),
+				Duration: durationLimit,
+				Upload:   time.Now(),
 			},
 			Downloads: config.Downloads{
 				Allow: downloadLimit,
@@ -103,13 +112,14 @@ func Upload(app *config.App) http.HandlerFunc {
 			},
 			Time: config.Time{
 				Upload: record.Upload,
+				Allow:  record.Time.Duration.String(),
 			},
 			Downloads: config.Downloads{
 				Allow: record.Downloads.Allow,
 			},
 		}
-
 		writeJSON(w, http.StatusOK, response)
+
 		app.Log.Info("file uploaded",
 			"filename", record.Name,
 			"size", record.Size,

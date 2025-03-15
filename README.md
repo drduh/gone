@@ -43,7 +43,9 @@ gone -config=mySettings.json
 
 # Client
 
-The server provides a basic user interface for uploading, downloading and listing files at the default path (`/`).
+The server provides a basic user interface for uploading, downloading and listing files at the default path (`/`):
+
+[localhost:8080](http://localhost:8080)
 
 All features are also available using command line programs such as curl:
 
@@ -59,10 +61,16 @@ Upload file:
 curl -F "file=@test.txt" http://localhost:8080/upload
 ```
 
-Upload file with explicit number of allowed downloads before expiration:
+With 3 allowed downloads before file expiration:
 
 ```
 curl -F "downloads=3" -F "file=@test.txt" http://localhost:8080/upload
+```
+
+With a 15 minutes file expiration:
+
+```
+curl -F "duration=15m" -F "file=@test.txt" http://localhost:8080/upload
 ```
 
 List uploaded files:

@@ -31,24 +31,33 @@ func List(app *config.App) http.HandlerFunc {
 
 		files := make([]config.File, 0, len(app.Storage.Files))
 		for _, record := range app.Storage.Files {
-			file := config.File{
-				Name: record.Name,
-				Size: record.Size,
-				Owner: config.Owner{
-					Address: record.Owner.Address,
-					Agent:   record.Owner.Agent,
-				},
-				Time: config.Time{
-					Upload: record.Upload,
-					Remain: record.TimeRemaining(app.Settings).String(),
-				},
-				Downloads: config.Downloads{
-					Allow:  record.Downloads.Allow,
-					Total:  record.Downloads.Total,
-					Remain: record.NumRemaining(),
-				},
+			reason := record.IsExpired(app.Settings)
+			if reason != "" {
+				delete(app.Storage.Files, record.Name)
+				app.Log.Info("removed file",
+					"reason", reason,
+					"filename", record.Name,
+					"downloads", record.Downloads.Total)
+			} else {
+				file := config.File{
+					Name: record.Name,
+					Size: record.Size,
+					Owner: config.Owner{
+						Address: record.Owner.Address,
+						Agent:   record.Owner.Agent,
+					},
+					Time: config.Time{
+						Upload: record.Upload,
+						Remain: record.TimeRemaining().String(),
+					},
+					Downloads: config.Downloads{
+						Allow:  record.Downloads.Allow,
+						Total:  record.Downloads.Total,
+						Remain: record.NumRemaining(),
+					},
+				}
+				files = append(files, file)
 			}
-			files = append(files, file)
 		}
 
 		writeJSON(w, http.StatusOK, files)

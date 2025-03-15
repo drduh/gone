@@ -50,6 +50,12 @@ type Owner struct {
 // Timing information
 type Time struct {
 
+	// Duration of file lifetime
+	Duration time.Duration `json:"duration,omitempty"`
+
+	// Formatted duration of file lifetime
+	Allow string `json:"allow,omitempty"`
+
 	// Formatted duration until expiration
 	Remain string `json:"remain,omitempty"`
 
@@ -76,9 +82,9 @@ func (f *File) NumRemaining() int {
 }
 
 // Returns relative duration remaining until expiration
-func (f *File) TimeRemaining(s Settings) time.Duration {
+func (f *File) TimeRemaining() time.Duration {
 	return time.Until(
-		f.Time.Upload.Add(s.Limits.Expiration.Duration)).Round(
+		f.Time.Upload.Add(f.Time.Duration)).Round(
 		time.Second)
 }
 
@@ -87,7 +93,7 @@ func (f *File) IsExpired(s Settings) string {
 	if f.Downloads.Total >= f.Downloads.Allow {
 		return "limit downloads"
 	}
-	if time.Since(f.Time.Upload) > s.Limits.Expiration.Duration {
+	if time.Since(f.Time.Upload) > f.Time.Duration {
 		return "limit duration"
 	}
 	return ""
