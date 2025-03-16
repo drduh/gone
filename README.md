@@ -1,18 +1,26 @@
-*Important* For experimental and development use only - not yet fit for production.
+# Design
 
-gone is an ephemeral file sharing service written in Go.
+gone is an ephemeral content sharing server written in Go.
 
-It is intended for use on a secure network with trusted devices, such as a private LAN.
+The primary goal is to enable sharing of a link, document or other file to another device on the network.
 
-# Features
+## Features
 
-- Upload, download and list files
-- File expiration (removal) after downloads or duration of time
+- In-memory storage - no file artifacts after program exits
+- Share files with upload, download and list functionality
+- Files expire (removed) after a number of downloads or duration of time
 - JSON-based configuration, logging and server responses
 - Token (string-based) authentication
 - Request rate and size limits
 - Basic user interface without scripts
+- Share and clear short text messages
 - No third-party dependencies
+
+## Security
+
+gone has not yet been subject to security audit and has several obvious vulnerabilities, such as lack of input validation.
+
+Therefore, gone is only intended for use on a secure network with trusted devices, such as a private LAN.
 
 # Development
 
@@ -118,4 +126,12 @@ Get static (never expires) content:
 
 ```
 curl http://localhost:8080/static
+```
+
+## Message
+
+Post a message to index:
+
+```
+curl -s -F 'message=hello, world!' http://localhost:8080 >/dev/null
 ```
