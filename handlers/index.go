@@ -16,13 +16,13 @@ func Index(app *config.App) http.HandlerFunc {
 
 		if r.Method == http.MethodPost {
 			if r.FormValue("clear") != "" {
-				app.Storage.Messages = make(map[int]*config.Message)
+				app.Storage.ClearMessages()
 				app.Log.Debug("cleared messages",
 					"ip", ip, "ua", ua)
 			}
 
 			message := config.Message{
-				Count: len(app.Storage.Messages),
+				Count: app.Storage.CountMessages(),
 				Owner: config.Owner{
 					Address: ip,
 					Agent:   ua,

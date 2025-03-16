@@ -122,3 +122,13 @@ func (f *File) IsExpired(s Settings) string {
 func (s *Storage) Expire(f *File) {
 	delete(s.Files, f.Name)
 }
+
+// Clears Messages from Storage
+func (s *Storage) ClearMessages() {
+	s.Messages = make(map[int]*Message)
+}
+
+// Counts Messages in Storage
+func (s *Storage) CountMessages() int {
+	return len(s.Messages)
+}
