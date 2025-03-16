@@ -8,8 +8,27 @@ import (
 // Storage for uploaded content
 type Storage struct {
 
-	// Collection of files
+	// Uploaded files
 	Files map[string]*File
+
+	// Submitted text messages
+	Messages map[int]*Message
+}
+
+// A submitted text message
+type Message struct {
+
+	// Counter (to order messages)
+	Count int
+
+	// Message content
+	Data string
+
+	// Owner information
+	Owner
+
+	// Timing information
+	Time
 }
 
 // An uploaded file
@@ -21,7 +40,7 @@ type File struct {
 	// File size (in bytes)
 	Size int `json:"size,omitempty"`
 
-	// Raw file content
+	// File content
 	Data []byte `json:"data,omitempty"`
 
 	// Uploader information
