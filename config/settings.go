@@ -29,11 +29,14 @@ type Audit struct {
 	TimeFormat string `json:"timeFormat"`
 }
 
-// Authentication requirements
+// Authentication properties
 type Auth struct {
 
 	// Header key name ("X-Auth")
 	Header string `json:"header"`
+
+	// Form field placeholder ("secret required")
+	Holder string `json:"holder"`
 
 	// String-based token
 	Token string `json:"token"`

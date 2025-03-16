@@ -27,7 +27,7 @@ func Index(app *config.App) http.HandlerFunc {
 			Title:         "gone",
 			Version:       app.Version,
 			AuthHeader:    app.Settings.Auth.Header,
-			AuthHolder:    "secret required",
+			AuthHolder:    app.Settings.Auth.Holder,
 			AuthDownload:  app.Settings.Auth.Require.Download,
 			AuthList:      app.Settings.Auth.Require.List,
 			AuthUpload:    app.Settings.Auth.Require.Upload,

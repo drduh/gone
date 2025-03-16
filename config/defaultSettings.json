@@ -1,6 +1,7 @@
 {
   "auth": {
     "header":     "X-Auth",
+    "holder":     "secret required",
     "require": {
       "download": true,
       "list":     false,
