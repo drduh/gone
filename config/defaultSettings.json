@@ -1,6 +1,7 @@
 {
   "auth": {
     "header":     "X-Auth",
+    "holder":     "secret required",
     "require": {
       "download": true,
       "list":     false,
@@ -16,7 +17,8 @@
     "downloads":  1,
     "duration":   "2m",
     "maxSizeMb":  20,
-    "perMinute":  10
+    "perMinute":  10,
+    "ticker":     "30s"
   },
   "paths": {
     "download":   "/download",

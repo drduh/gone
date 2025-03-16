@@ -30,38 +30,38 @@ func List(app *config.App) http.HandlerFunc {
 		}
 
 		files := make([]config.File, 0, len(app.Storage.Files))
-		for _, record := range app.Storage.Files {
-			reason := record.IsExpired(app.Settings)
+		for _, file := range app.Storage.Files {
+			reason := file.IsExpired(app.Settings)
 			if reason != "" {
-				delete(app.Storage.Files, record.Name)
+				app.Storage.Expire(file)
 				app.Log.Info("removed file",
 					"reason", reason,
-					"filename", record.Name,
-					"downloads", record.Downloads.Total)
+					"filename", file.Name,
+					"downloads", file.Downloads.Total)
 			} else {
-				file := config.File{
-					Name: record.Name,
-					Size: record.Size,
+				f := config.File{
+					Name: file.Name,
+					Size: file.Size,
 					Owner: config.Owner{
-						Address: record.Owner.Address,
-						Agent:   record.Owner.Agent,
+						Address: file.Owner.Address,
+						Agent:   file.Owner.Agent,
 					},
 					Time: config.Time{
-						Upload: record.Upload,
-						Remain: record.TimeRemaining().String(),
+						Upload: file.Upload,
+						Remain: file.TimeRemaining().String(),
 					},
 					Downloads: config.Downloads{
-						Allow:  record.Downloads.Allow,
-						Total:  record.Downloads.Total,
-						Remain: record.NumRemaining(),
+						Allow:  file.Downloads.Allow,
+						Total:  file.Downloads.Total,
+						Remain: file.NumRemaining(),
 					},
 				}
-				files = append(files, file)
+				files = append(files, f)
 			}
 		}
 
 		writeJSON(w, http.StatusOK, files)
-		app.Log.Info("served file list",
+		app.Log.Info("served list",
 			"files", len(files),
 			"ip", ip, "ua", ua)
 	}

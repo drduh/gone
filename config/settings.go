@@ -29,11 +29,14 @@ type Audit struct {
 	TimeFormat string `json:"timeFormat"`
 }
 
-// Authentication requirements
+// Authentication properties
 type Auth struct {
 
 	// Header key name ("X-Auth")
 	Header string `json:"header"`
+
+	// Form field placeholder ("secret required")
+	Holder string `json:"holder"`
 
 	// String-based token
 	Token string `json:"token"`
@@ -55,11 +58,14 @@ type Auth struct {
 // Download and upload limits
 type Limits struct {
 
-	// Number of allowed downloads before file expiry
+	// Number of allowed downloads before file expiration
 	Downloads int `json:"downloads,omitempty"`
 
 	// Maximum period of time to keep files
 	Expiration Duration `json:"duration,omitempty"`
+
+	// Frequency of file expiration check
+	Ticker Duration `json:"ticker,omitempty"`
 
 	// Maximum file size (in Megabytes)
 	MaxSizeMb int `json:"maxSizeMb,omitempty"`
