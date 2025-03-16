@@ -15,6 +15,12 @@ func Index(app *config.App) http.HandlerFunc {
 		ip, ua := r.RemoteAddr, r.UserAgent()
 
 		if r.Method == http.MethodPost {
+			if r.FormValue("clear") != "" {
+				app.Storage.Messages = make(map[int]*config.Message)
+				app.Log.Debug("cleared messages",
+					"ip", ip, "ua", ua)
+			}
+
 			message := config.Message{
 				Count: len(app.Storage.Messages),
 				Owner: config.Owner{
@@ -22,24 +28,17 @@ func Index(app *config.App) http.HandlerFunc {
 					Agent:   ua,
 				},
 				Time: config.Time{
-					Upload: time.Now(),
+					Allow: time.Now().Format(app.Settings.Audit.TimeFormat),
 				},
 			}
 
-			if r.FormValue("clear") != "" {
-				message.Count = 0
-				app.Storage.Messages = make(map[int]*config.Message)
-				app.Log.Debug("cleared messages",
-					"ip", ip, "ua", ua)
-			}
-
-			content := r.FormValue("entry")
+			content := r.FormValue("message")
 			if content != "" {
 				message.Count++
 				message.Data = content
 				app.Storage.Messages[message.Count] = &message
 				app.Log.Debug("added message",
-					"entry", content,
+					"message", content,
 					"ip", ip, "ua", ua)
 			}
 		}
