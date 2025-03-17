@@ -3,6 +3,7 @@ package handlers
 import (
 	"html/template"
 	"net/http"
+	"time"
 
 	"github.com/drduh/gone/config"
 	"github.com/drduh/gone/templates"
@@ -12,8 +13,37 @@ import (
 func Index(app *config.App) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		ip, ua := r.RemoteAddr, r.UserAgent()
-		tmplName := "index"
 
+		if r.Method == http.MethodPost {
+			if r.FormValue("clear") != "" {
+				app.Storage.ClearMessages()
+				app.Log.Debug("cleared messages",
+					"ip", ip, "ua", ua)
+			}
+
+			message := config.Message{
+				Count: app.Storage.CountMessages(),
+				Owner: config.Owner{
+					Address: ip,
+					Agent:   ua,
+				},
+				Time: config.Time{
+					Allow: time.Now().Format(app.Settings.Audit.TimeFormat),
+				},
+			}
+
+			content := r.FormValue("message")
+			if content != "" {
+				message.Count++
+				message.Data = content
+				app.Storage.Messages[message.Count] = &message
+				app.Log.Debug("added message",
+					"message", content,
+					"ip", ip, "ua", ua)
+			}
+		}
+
+		tmplName := "index"
 		tmpl, err := template.New(tmplName).Parse(templates.HtmlIndex)
 		if err != nil {
 			writeJSON(w, http.StatusInternalServerError, responseErrorTmplParse)
@@ -35,6 +65,7 @@ func Index(app *config.App) http.HandlerFunc {
 			PathList:      app.Settings.Paths.List,
 			PathUpload:    app.Settings.Paths.Upload,
 			PathHeartbeat: app.Settings.Paths.Heartbeat,
+			Messages:      app.Storage.Messages,
 		}
 
 		err = tmpl.Execute(w, response)

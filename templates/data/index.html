@@ -7,6 +7,7 @@
   <style type="text/css">
   body {
     background-color: #002b36;
+    background-attachment: fixed;
     color: #839496;
     display: flex;
     flex-direction: column;
@@ -23,8 +24,9 @@
   }
 
   .box {
-    background-color: #073642;
-    border: 2px solid #93a1a1;
+    background-color:rgba(7, 54, 66, 0.5);
+    border: 1px solid #839496;
+    border-radius: 6px;
     box-sizing: border-box;
     color: #839496;
     flex: 1;
@@ -34,11 +36,11 @@
   }
 
   .footer {
-    background-color: #073642;
-    border-top: 1px solid #93a1a1;
-    color: #839496;
-    padding: 20px;
+    bottom: 0;
+    font-size: 1em;
     text-align: center;
+    padding: 2em;
+    position: fixed;
     width: 100%;
   }
 
@@ -54,6 +56,60 @@
   input[type=number] {
     width: 28px;
   }
+
+  input[type=text] {
+    border-bottom: 1px dotted #fdf6e3;
+    width: 280px;
+  }
+
+  a:link, a:visited {
+    color: #657b83;
+    text-decoration: none;
+  }
+
+  a:active, a:hover {
+    color: #fdf6e3;
+    text-decoration: none;
+  }
+
+  .message {
+    border-bottom: 1px dotted #fdf6e3;
+    display: inline-block;
+    position: relative;
+  }
+
+  .message .owner {
+    background-color: #586e75;
+    border-radius: 6px;
+    bottom: 125%;
+    color: #fdf6e3;
+    left: 50%;
+    margin-left: -60px;
+    opacity: 0;
+    padding: 6px 0;
+    position: absolute;
+    text-align: center;
+    transition: opacity 0.2s;
+    visibility: hidden;
+    width: 12em;
+    z-index: 1;
+  }
+
+  .message .owner::after {
+    border-color: #fdf6e3 transparent transparent transparent;
+    border-style: solid;
+    border-width: 6px;
+    content: "";
+    left: 50%;
+    margin-left: -5px;
+    position: absolute;
+    top: 100%;
+  }
+
+  .message:hover .owner {
+    opacity: 1;
+    visibility: visible;
+  }
   </style>
 </head>
 <body>
@@ -62,9 +118,9 @@
     <div class="box">
       <form action="{{ .PathUpload }}" method="POST" enctype="multipart/form-data">
       <input type="file" id="file" name="file" required>
-      {{ if .AuthUpload }}
-      <input type="text" id="token" name="{{ .AuthHeader }}" placeholder="{{ .AuthHolder }}" required>
-      {{ end }}
+        {{ if .AuthUpload }}
+        <input type="text" id="token" name="{{ .AuthHeader }}" placeholder="{{ .AuthHolder }}" required>
+        {{ end }}
       <input type="number" name="downloads" id="downloads" min="1" step="1" placeholder="1">
       <input type="submit" value="Upload">
       </form>
@@ -74,9 +130,9 @@
     <div class="box">
       <form action="{{ .PathDownload }}" method="GET">
       <input type="text" id="fileName" name="name" placeholder="Filename" required>
-      {{ if .AuthDownload }}
+        {{ if .AuthDownload }}
         <input type="text" id="token" name="{{ .AuthHeader }}" placeholder="{{ .AuthHolder }}" required>
-      {{ end }}
+        {{ end }}
       <input type="submit" value="Download">
       </form>
     </div>
@@ -84,13 +140,29 @@
     {{ if .PathList }}
     <div class="box">
       <form action="{{ .PathList }}" method="GET">
-      {{ if .AuthList }}
+        {{ if .AuthList }}
         <input type="text" id="token" name="{{ .AuthHeader }}" placeholder="{{ .AuthHolder }}" required>
-      {{ end }}
+        {{ end }}
       <input type="submit" value="List">
       </form>
     </div>
     {{ end }}
+  </div>
+  <div class="container">
+    <div class="box">
+      <form action="/" method="POST" enctype="multipart/form-data">
+        <input type="text" name="message" id="message">
+        clear? <input type="radio" name="clear" id="clear">
+        <input type="submit" value="Submit">
+      </form>
+    </div>
+    <div class="box">
+      {{ range .Messages }}
+      <div class="message">({{ .Count }}) {{ .Data }}
+        <span class="owner">{{ .Owner.Address }} at {{ .Time.Allow }}</span>
+      </div><br>
+      {{ end }}
+    </div>
   </div>
   {{ if .PathHeartbeat }}
   <div class="footer">

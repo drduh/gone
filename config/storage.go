@@ -8,8 +8,27 @@ import (
 // Storage for uploaded content
 type Storage struct {
 
-	// Collection of files
+	// Uploaded files
 	Files map[string]*File
+
+	// Submitted text messages
+	Messages map[int]*Message
+}
+
+// A submitted text message
+type Message struct {
+
+	// Counter (to order messages)
+	Count int
+
+	// Message content
+	Data string
+
+	// Owner information
+	Owner
+
+	// Timing information
+	Time
 }
 
 // An uploaded file
@@ -21,7 +40,7 @@ type File struct {
 	// File size (in bytes)
 	Size int `json:"size,omitempty"`
 
-	// Raw file content
+	// File content
 	Data []byte `json:"data,omitempty"`
 
 	// Uploader information
@@ -102,4 +121,14 @@ func (f *File) IsExpired(s Settings) string {
 // Removes File from Storage
 func (s *Storage) Expire(f *File) {
 	delete(s.Files, f.Name)
+}
+
+// Clears Messages from Storage
+func (s *Storage) ClearMessages() {
+	s.Messages = make(map[int]*Message)
+}
+
+// Counts Messages in Storage
+func (s *Storage) CountMessages() int {
+	return len(s.Messages)
 }

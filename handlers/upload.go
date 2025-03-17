@@ -50,7 +50,7 @@ func Upload(app *config.App) http.HandlerFunc {
 			return
 		}
 
-		file, handler, err := r.FormFile("file")
+		content, handler, err := r.FormFile("file")
 		if err != nil {
 			writeJSON(w, http.StatusBadRequest,
 				map[string]string{"error": err.Error()})
@@ -59,10 +59,10 @@ func Upload(app *config.App) http.HandlerFunc {
 				"ip", ip, "ua", ua)
 			return
 		}
-		defer file.Close()
+		defer content.Close()
 
 		var buf bytes.Buffer
-		if _, err := io.Copy(&buf, file); err != nil {
+		if _, err := io.Copy(&buf, content); err != nil {
 			writeJSON(w, http.StatusInternalServerError,
 				map[string]string{"error": err.Error()})
 			app.Log.Error("upload copy failed",
@@ -85,7 +85,7 @@ func Upload(app *config.App) http.HandlerFunc {
 			app.Log.Debug("got form value", "duration", durationLimit.String())
 		}
 
-		record := &config.File{
+		file := &config.File{
 			Name: handler.Filename,
 			Size: len(buf.Bytes()),
 			Data: buf.Bytes(),
@@ -101,28 +101,28 @@ func Upload(app *config.App) http.HandlerFunc {
 				Allow: downloadLimit,
 			},
 		}
-		app.Storage.Files[record.Name] = record
+		app.Storage.Files[file.Name] = file
 
 		response := config.File{
-			Name: record.Name,
-			Size: record.Size,
+			Name: file.Name,
+			Size: file.Size,
 			Owner: config.Owner{
-				Address: record.Owner.Address,
-				Agent:   record.Owner.Agent,
+				Address: file.Owner.Address,
+				Agent:   file.Owner.Agent,
 			},
 			Time: config.Time{
-				Upload: record.Upload,
-				Allow:  record.Time.Duration.String(),
+				Upload: file.Upload,
+				Allow:  file.Time.Duration.String(),
 			},
 			Downloads: config.Downloads{
-				Allow: record.Downloads.Allow,
+				Allow: file.Downloads.Allow,
 			},
 		}
 		writeJSON(w, http.StatusOK, response)
 
 		app.Log.Info("file uploaded",
-			"filename", record.Name,
-			"size", record.Size,
+			"filename", file.Name,
+			"size", file.Size,
 			"ip", ip, "ua", ua)
 	}
 }

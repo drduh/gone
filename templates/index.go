@@ -1,6 +1,10 @@
 package templates
 
-import _ "embed"
+import (
+	_ "embed"
+
+	"github.com/drduh/gone/config"
+)
 
 //go:embed data/index.html
 var HtmlIndex string
@@ -30,4 +34,7 @@ type Index struct {
 
 	// Authentication form field placeholder
 	AuthHolder string
+
+	// Text messages
+	Messages map[int]*config.Message
 }
