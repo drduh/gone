@@ -9,6 +9,9 @@ type Settings struct {
 	// Authentication requirements
 	Auth `json:"auth"`
 
+	// User interface options
+	Index `json:"index"`
+
 	// Limit routes
 	Limits `json:"limits"`
 
@@ -53,6 +56,13 @@ type Auth struct {
 		// Whether to require authentication for upload
 		Upload bool `json:"upload"`
 	} `json:"require"`
+}
+
+// Index HTML index page properties
+type Index struct {
+
+	// Whether to use CSS stylesheet
+	Style bool
 }
 
 // Download and upload limits

@@ -13,6 +13,9 @@
     "logFile":    "",
     "timeFormat": "Monday Jan 2 15:04"
   },
+  "index": {
+    "style":      false
+  },
   "limits": {
     "downloads":  1,
     "duration":   "2m",

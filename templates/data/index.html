@@ -1,9 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>{{ .Title }}</title>
+  {{ if .Style }}
   <style type="text/css">
   body {
     background-color: #002b36;
@@ -135,6 +136,7 @@
     color: #002b36;
   }
   </style>
+  {{ end }}
 </head>
 <body>
   <div class="container">

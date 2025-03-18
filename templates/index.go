@@ -29,6 +29,9 @@ type Index struct {
 	AuthList     bool
 	AuthUpload   bool
 
+	// Whether to style HTML with CSS
+	Style bool
+
 	// Authentication header
 	AuthHeader string
 

@@ -56,8 +56,6 @@ func Index(app *config.App) http.HandlerFunc {
 
 		settings := app.Settings
 		response := templates.Index{
-			Title:           "gone",
-			Version:         app.Version,
 			AuthHeader:      settings.Auth.Header,
 			AuthHolder:      settings.Auth.Holder,
 			AuthDownload:    settings.Auth.Require.Download,
@@ -69,6 +67,9 @@ func Index(app *config.App) http.HandlerFunc {
 			PathUpload:      settings.Paths.Upload,
 			PathHeartbeat:   settings.Paths.Heartbeat,
 			Messages:        app.Storage.Messages,
+			Style:           settings.Index.Style,
+			Title:           "gone",
+			Version:         app.Version,
 		}
 
 		err = tmpl.Execute(w, response)
