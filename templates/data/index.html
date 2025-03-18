@@ -49,14 +49,11 @@
   input[type=number] {
     background-color: #002b36;
     border: none;
-    color: #eee8d5;
+    border-radius: 6px;
+    color: #fdf6e3;
     margin: 10px;
     padding: 10px;
     text-decoration: none;
-  }
-
-  input[type=text] {
-    border-bottom: 1px dotted #fdf6e3;
   }
 
   a:link,
@@ -72,6 +69,7 @@
   }
 
   .message {
+    color: #fdf6e3;
     border-bottom: 1px dotted #fdf6e3;
     display: inline-block;
     position: relative;
@@ -124,6 +122,18 @@
   .selectMessage {
     width: 28em;
   }
+
+  .selectSubmit {
+    width: 18em;
+  }
+
+  .selectFilename:hover,
+  .selectMessage:hover,
+  .selectSubmit:hover,
+  .selectToken:hover {
+    background-color: #fdf6e3;
+    color: #002b36;
+  }
   </style>
 </head>
 <body>
@@ -156,6 +166,7 @@
         placeholder="{{ .DefaultDuration }}">
         <br>
         <input type="submit"
+              class="selectSubmit"
               value="upload">
       </form>
     </div>
@@ -177,6 +188,7 @@
         {{ end }}
         <br>
         <input type="submit"
+              class="selectSubmit"
               value="download">
       </form>
     </div>
@@ -194,6 +206,7 @@
         {{ end }}
         <br>
         <input type="submit"
+              class="selectSubmit"
               value="list">
       </form>
     </div>
@@ -206,11 +219,14 @@
            enctype="multipart/form-data">
         <input type="text"
               class="selectMessage"
-               name="message">
+               name="message"
+        placeholder="enter message">
         clear? <input type="radio"
                      class="selectClear"
                       name="clear">
+        <br>
         <input type="submit"
+              class="selectSubmit"
               value="post">
       </form>
     </div>
