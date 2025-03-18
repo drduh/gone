@@ -211,10 +211,12 @@
       {{ end }}
     </div>
   </div>
-  {{ if .PathHeartbeat }}
   <div class="footer">
-    <a href="{{ .PathHeartbeat }}">{{ .Version }}</a>
-  </div>
+  {{ if .PathHeartbeat }}
+    <p><a href="{{ .PathHeartbeat }}">{{ .Version }}</a></p>
+  {{ else }}
+    <p>{{ .Version }}</p>
   {{ end }}
+  </div>
 </body>
 </html>
