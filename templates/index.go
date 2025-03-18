@@ -35,6 +35,9 @@ type Index struct {
 	// Authentication form field placeholder
 	AuthHolder string
 
+	// Duration form field placeholder
+	DefaultDuration string
+
 	// Text messages
 	Messages map[int]*config.Message
 }

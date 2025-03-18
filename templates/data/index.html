@@ -39,7 +39,6 @@
     bottom: 0;
     font-size: 1em;
     text-align: center;
-    padding: 2em;
     position: fixed;
     width: 100%;
   }
@@ -111,7 +110,8 @@
     visibility: visible;
   }
 
-  .selectDownloads {
+  .selectDownloads,
+  .selectDuration {
     width: 4em;
   }
 
@@ -133,23 +133,30 @@
       <form action="{{ .PathUpload }}"
             method="post"
            enctype="multipart/form-data">
-      <input required type="file"
-                     class="selectFile"
-                      name="file">
+        <input required type="file"
+                       class="selectFile"
+                        name="file">
         {{ if .AuthUpload }}
+        <br>
         <input required type="text"
                        class="selectToken"
                         name="{{ .AuthHeader }}"
                  placeholder="{{ .AuthHolder }}">
         {{ end }}
-      <input type="number"
-            class="selectDownloads"
-             name="downloads"
-              min="1"
-             step="1"
-      placeholder="1">
-      <input type="submit"
-            value="upload">
+        <br>
+        <input type="number"
+              class="selectDownloads"
+               name="downloads"
+                min="1"
+               step="1"
+        placeholder="1">
+        <input type="text"
+              class="selectDuration"
+               name="duration"
+        placeholder="{{ .DefaultDuration }}">
+        <br>
+        <input type="submit"
+              value="upload">
       </form>
     </div>
     {{ end }}
@@ -157,18 +164,20 @@
     <div class="box">
       <form action="{{ .PathDownload }}"
             method="get">
-      <input required type="text"
-                     class="selectFilename"
-                      name="name"
-               placeholder="filename">
+        <input required type="text"
+                       class="selectFilename"
+                        name="name"
+                 placeholder="filename">
         {{ if .AuthDownload }}
+        <br>
         <input required type="text"
                        class="selectToken"
                         name="{{ .AuthHeader }}"
                  placeholder="{{ .AuthHolder }}">
         {{ end }}
-      <input type="submit"
-            value="download">
+        <br>
+        <input type="submit"
+              value="download">
       </form>
     </div>
     {{ end }}
@@ -177,13 +186,15 @@
       <form action="{{ .PathList }}"
             method="get">
         {{ if .AuthList }}
+        <br>
         <input required type="text"
                        class="selectToken"
                         name="{{ .AuthHeader }}"
                  placeholder="{{ .AuthHolder }}">
         {{ end }}
-      <input type="submit"
-            value="list">
+        <br>
+        <input type="submit"
+              value="list">
       </form>
     </div>
     {{ end }}

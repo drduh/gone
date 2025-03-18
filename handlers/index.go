@@ -54,18 +54,19 @@ func Index(app *config.App) http.HandlerFunc {
 		}
 
 		response := templates.Index{
-			Title:         "gone",
-			Version:       app.Version,
-			AuthHeader:    app.Settings.Auth.Header,
-			AuthHolder:    app.Settings.Auth.Holder,
-			AuthDownload:  app.Settings.Auth.Require.Download,
-			AuthList:      app.Settings.Auth.Require.List,
-			AuthUpload:    app.Settings.Auth.Require.Upload,
-			PathDownload:  app.Settings.Paths.Download,
-			PathList:      app.Settings.Paths.List,
-			PathUpload:    app.Settings.Paths.Upload,
-			PathHeartbeat: app.Settings.Paths.Heartbeat,
-			Messages:      app.Storage.Messages,
+			Title:           "gone",
+			Version:         app.Version,
+			AuthHeader:      app.Settings.Auth.Header,
+			AuthHolder:      app.Settings.Auth.Holder,
+			AuthDownload:    app.Settings.Auth.Require.Download,
+			AuthList:        app.Settings.Auth.Require.List,
+			AuthUpload:      app.Settings.Auth.Require.Upload,
+			DefaultDuration: app.Settings.Limits.Expiration.Duration.String(),
+			PathDownload:    app.Settings.Paths.Download,
+			PathList:        app.Settings.Paths.List,
+			PathUpload:      app.Settings.Paths.Upload,
+			PathHeartbeat:   app.Settings.Paths.Heartbeat,
+			Messages:        app.Storage.Messages,
 		}
 
 		err = tmpl.Execute(w, response)
