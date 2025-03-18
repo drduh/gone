@@ -63,6 +63,9 @@ type Index struct {
 
 	// Whether to use CSS stylesheet
 	Style bool
+
+	// Page title
+	Title string
 }
 
 // Download and upload limits

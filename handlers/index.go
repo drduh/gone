@@ -55,20 +55,25 @@ func Index(app *config.App) http.HandlerFunc {
 		}
 
 		settings := app.Settings
+		auth := settings.Auth
+		index := settings.Index
+		paths := settings.Paths
+		duration := settings.Limits.Expiration.Duration
+
 		response := templates.Index{
-			AuthHeader:      settings.Auth.Header,
-			AuthHolder:      settings.Auth.Holder,
-			AuthDownload:    settings.Auth.Require.Download,
-			AuthList:        settings.Auth.Require.List,
-			AuthUpload:      settings.Auth.Require.Upload,
-			DefaultDuration: settings.Limits.Expiration.Duration.String(),
-			PathDownload:    settings.Paths.Download,
-			PathList:        settings.Paths.List,
-			PathUpload:      settings.Paths.Upload,
-			PathHeartbeat:   settings.Paths.Heartbeat,
+			AuthHeader:      auth.Header,
+			AuthHolder:      auth.Holder,
+			AuthDownload:    auth.Require.Download,
+			AuthList:        auth.Require.List,
+			AuthUpload:      auth.Require.Upload,
+			DefaultDuration: duration.String(),
+			PathDownload:    paths.Download,
+			PathList:        paths.List,
+			PathUpload:      paths.Upload,
+			PathHeartbeat:   paths.Heartbeat,
 			Messages:        app.Storage.Messages,
-			Style:           settings.Index.Style,
-			Title:           "gone",
+			Style:           index.Style,
+			Title:           index.Title,
 			Version:         app.Version,
 		}
 

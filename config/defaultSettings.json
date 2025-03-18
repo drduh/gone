@@ -14,7 +14,8 @@
     "timeFormat": "Monday Jan 2 15:04"
   },
   "index": {
-    "style":      false
+    "style":      true,
+    "title":      "gone"
   },
   "limits": {
     "downloads":  1,
