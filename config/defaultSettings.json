@@ -5,6 +5,7 @@
     "require": {
       "download": true,
       "list":     false,
+      "message":  false,
       "upload":   false
     },
     "token":      "mySecret"

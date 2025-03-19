@@ -12,6 +12,13 @@
         <input type="checkbox"
               class="selectClear"
                name="clear">
+        {{ if .AuthMessage }}
+        <br>
+        <input required type="text"
+                       class="selectToken"
+                        name="{{ .AuthHeader }}"
+                 placeholder="{{ .AuthHolder }}">
+        {{ end }}
         <br>
         <input type="submit"
               class="selectSubmit"

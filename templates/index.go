@@ -28,6 +28,7 @@ type Index struct {
 	// Whether routes require auth
 	AuthDownload bool
 	AuthList     bool
+	AuthMessage  bool
 	AuthUpload   bool
 
 	// Whether to style HTML with CSS

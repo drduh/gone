@@ -47,13 +47,16 @@ type Auth struct {
 	// Route authentication requirements
 	Require struct {
 
-		// Whether to require authentication for download
+		// Whether to require authentication to dowload files
 		Download bool `json:"download"`
 
-		// Whether to require authentication for list
+		// Whether to require authentication to list files
 		List bool `json:"list"`
 
-		// Whether to require authentication for upload
+		// Whether to require authentication to post messages
+		Message bool `json:"message"`
+
+		// Whether to require authentication to upload files
 		Upload bool `json:"upload"`
 	} `json:"require"`
 }
