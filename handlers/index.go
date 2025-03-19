@@ -7,6 +7,7 @@ import (
 
 	"github.com/drduh/gone/config"
 	"github.com/drduh/gone/templates"
+	"github.com/drduh/gone/version"
 )
 
 // Serves index page with app routing features
@@ -75,6 +76,7 @@ func Index(app *config.App) http.HandlerFunc {
 			Style:           index.Style,
 			Title:           index.Title,
 			Version:         app.Version,
+			VersionFull:     version.Full(),
 		}
 
 		err = tmpl.Execute(w, response)
