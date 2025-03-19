@@ -1,0 +1,10 @@
+<!-- footer.tmpl -->
+{{ define "footer" }}
+  <div class="footer">
+    <div class="message">{{ .Version }}
+      <span class="owner">
+      {{ range .VersionFull }} {{ . }} {{ end }}
+      </span>
+    </div>
+  </div>
+{{ end }}

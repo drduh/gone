@@ -43,8 +43,14 @@ func Index(app *config.App) http.HandlerFunc {
 			}
 		}
 
-		tmplName := "index"
-		tmpl, err := template.New(tmplName).Parse(templates.HtmlIndex)
+		tmplName := "base.tmpl"
+		tmpl, err := template.New(tmplName).ParseFS(templates.All,
+			"data/base.tmpl", "data/style.tmpl",
+			"data/upload.tmpl", "data/download.tmpl", "data/list.tmpl",
+			"data/message.tmpl",
+			"data/footer.tmpl",
+		)
+
 		if err != nil {
 			writeJSON(w, http.StatusInternalServerError, responseErrorTmplParse)
 			app.Log.Error(errorTmplParse,

@@ -1,13 +1,13 @@
 package templates
 
 import (
-	_ "embed"
+	"embed"
 
 	"github.com/drduh/gone/config"
 )
 
-//go:embed data/index.html
-var HtmlIndex string
+//go:embed data/*.tmpl
+var All embed.FS
 
 // Index HTML page elements
 type Index struct {

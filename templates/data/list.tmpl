@@ -1,0 +1,28 @@
+<!-- list.tmpl -->
+{{ define "list" }}
+    <div class="box">
+      <form action="{{ .PathList }}"
+            method="get">
+        {{ if .AuthList }}
+        <br>
+        <input required type="text"
+                       class="selectToken"
+                        name="{{ .AuthHeader }}"
+                 placeholder="{{ .AuthHolder }}">
+        {{ else }}
+        {{ range .Files }}
+        <div class="message">{{ .Name }}
+          <span class="owner">
+            {{ .Owner.Address }}
+          </span>
+        </div>
+        <br>
+        {{ end }}
+        {{ end }}
+        <br>
+        <input type="submit"
+              class="selectSubmit"
+              value="list">
+      </form>
+    </div>
+{{ end }}

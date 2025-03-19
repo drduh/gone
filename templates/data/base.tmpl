@@ -1,0 +1,27 @@
+<!-- base.tmpl -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{{ .Title }}</title>
+  <style type="text/css">
+  {{ template "style" .}}
+  </style>
+</head>
+<body>
+  <div class="container">
+  {{ if .PathUpload }}
+    {{ template "upload" .}}
+  {{ end }}
+  {{ if .PathDownload }}
+    {{ template "download" .}}
+  {{ end }}
+  {{ if .PathList }}
+    {{ template "list" .}}
+  {{ end }}
+  </div>
+  {{ template "message" .}}
+  {{ template "footer" .}}
+</body>
+</html>
