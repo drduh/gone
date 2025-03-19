@@ -36,25 +36,48 @@
     text-align: center;
   }
 
+  .box:hover {
+    background-color:rgba(7, 54, 66, 1);
+  }
+
   .footer {
-    bottom: 0;
+    bottom: 10px;
     font-size: 1em;
     text-align: center;
     position: fixed;
     width: 100%;
   }
 
-  input[type=text],
-  input[type=submit],
+  button[type=submit],
+  input[type=checkbox],
   input[type=file],
-  input[type=number] {
+  input[type=number],
+  input[type=submit],
+  input[type=text] {
     background-color: #002b36;
     border: none;
     border-radius: 6px;
     color: #fdf6e3;
+    cursor: pointer;
     margin: 10px;
     padding: 10px;
     text-decoration: none;
+  }
+
+  .selectClear {
+    appearance: none;
+    display: inline-block;
+    transition: all 0.2s ease;
+  }
+
+  .selectClear:checked {
+    background-color: #fdf6e3;
+    color: #002b36;
+  }
+
+  .selectClear::before {
+    content: "clear";
+    display: block;
   }
 
   a:link,
@@ -109,6 +132,7 @@
     visibility: visible;
   }
 
+  .selectClear,
   .selectDownloads,
   .selectDuration {
     width: 4em;
@@ -116,7 +140,8 @@
 
   .selectFile,
   .selectFilename,
-  .selectToken {
+  .selectToken,
+  .selectRefresh {
     width: 16em;
   }
 
@@ -128,8 +153,10 @@
     width: 18em;
   }
 
+  .selectClear:hover,
   .selectFilename:hover,
   .selectMessage:hover,
+  .selectRefresh:hover,
   .selectSubmit:hover,
   .selectToken:hover {
     background-color: #fdf6e3;
@@ -180,7 +207,7 @@
         <input required type="text"
                        class="selectFilename"
                         name="name"
-                 placeholder="filename">
+                 placeholder="enter filename">
         {{ if .AuthDownload }}
         <br>
         <input required type="text"
@@ -223,9 +250,9 @@
               class="selectMessage"
                name="message"
         placeholder="enter message">
-        clear? <input type="radio"
-                     class="selectClear"
-                      name="clear">
+        <input type="checkbox"
+              class="selectClear"
+               name="clear">
         <br>
         <input type="submit"
               class="selectSubmit"
@@ -234,18 +261,24 @@
     </div>
     <div class="box">
       {{ range .Messages }}
-      <div class="message">({{ .Count }}) {{ .Data }}
+      <div class="message"><b>{{ .Count }}</b> {{ .Data }}
         <span class="owner">{{ .Owner.Address }} at {{ .Time.Allow }}</span>
       </div><br>
       {{ end }}
+      <br>
+      <form action="">
+        <button type="submit"
+               class="selectRefresh">refresh</button>
+      </form>
     </div>
   </div>
   <div class="footer">
-  {{ if .PathHeartbeat }}
-    <p><a href="{{ .PathHeartbeat }}">{{ .Version }}</a></p>
-  {{ else }}
-    <p>{{ .Version }}</p>
-  {{ end }}
+    <div class="message">{{ .Version }}
+      <span class="owner">
+      {{ range .VersionFull }} {{ . }} {{ end }}
+      </span>
+    </div>
+    <br>
   </div>
 </body>
 </html>
