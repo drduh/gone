@@ -42,6 +42,9 @@ type Index struct {
 	// Duration form field placeholder
 	DefaultDuration string
 
+	// Uploaded files
+	Files map[string]*config.File
+
 	// Text messages
 	Messages map[int]*config.Message
 }
