@@ -99,6 +99,9 @@ type Paths struct {
 	// File list ("/list")
 	List string `json:"list"`
 
+	// Message post and read ("/")
+	Message string `json:"message"`
+
 	// Embedded/static file ("/static")
 	Static string `json:"static"`
 

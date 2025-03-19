@@ -5,23 +5,27 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>{{ .Title }}</title>
+  {{ if .Style }}
   <style type="text/css">
-  {{ template "style" .}}
+  {{ template "style" . }}
   </style>
+  {{ end }}
 </head>
 <body>
   <div class="container">
   {{ if .PathUpload }}
-    {{ template "upload" .}}
+    {{ template "upload" . }}
   {{ end }}
   {{ if .PathDownload }}
-    {{ template "download" .}}
+    {{ template "download" . }}
   {{ end }}
   {{ if .PathList }}
-    {{ template "list" .}}
+    {{ template "list" . }}
   {{ end }}
   </div>
-  {{ template "message" .}}
-  {{ template "footer" .}}
+  {{ if .PathMessage }}
+    {{ template "message" . }}
+  {{ end }}
+  {{ template "footer" . }}
 </body>
 </html>

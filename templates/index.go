@@ -20,10 +20,10 @@ type Index struct {
 	VersionFull map[string]string
 
 	// Route paths
-	PathDownload  string
-	PathList      string
-	PathUpload    string
-	PathHeartbeat string
+	PathDownload string
+	PathList     string
+	PathMessage  string
+	PathUpload   string
 
 	// Whether routes require auth
 	AuthDownload bool

@@ -28,6 +28,7 @@
     "download":   "/download",
     "heartbeat":  "/heartbeat",
     "list":       "/list",
+    "message":    "/",
     "static":     "/static",
     "upload":     "/upload"
   },
