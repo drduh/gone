@@ -45,7 +45,7 @@ func Index(app *config.App) http.HandlerFunc {
 
 		tmplName := "base.tmpl"
 		tmpl, err := template.New(tmplName).ParseFS(templates.All,
-			"data/base.tmpl", "data/style.tmpl",
+			"data/base.tmpl", "data/style.tmpl", "data/color.tmpl",
 			"data/upload.tmpl", "data/download.tmpl", "data/list.tmpl",
 			"data/message.tmpl",
 			"data/footer.tmpl",
