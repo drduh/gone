@@ -6,10 +6,19 @@
   <title>{{ .Title }}</title>
   {{ if .Style }}
   <style type="text/css">
+  :root {
+    --bg-dark:       rgba(  0,  43,  54,   1);
+    --bg-norm:       rgba(  7,  54,  66,   1);
+    --bg-norm-half:  rgba(  7,  54,  66, 0.5);
+    --bg-light:      rgba(101, 123, 131,   1);
+    --fg-dark:       rgba(131, 148, 150,   1);
+    --fg-light:      rgba(253, 246, 227,   1);
+  }
+
   body {
-    background-color: #002b36;
+    background-color: var(--bg-dark);
     background-attachment: fixed;
-    color: #839496;
+    color: var(--fg-dark);
     display: flex;
     flex-direction: column;
     font-family: "Open Sans", "Helvetica Neue", "Helvetica", "Arial", "sans-serif";
@@ -25,11 +34,11 @@
   }
 
   .box {
-    background-color:rgba(7, 54, 66, 0.5);
-    border: 1px solid #839496;
+    background-color: var(--bg-norm-half);
+    border: 1px solid var(--fg-dark);
     border-radius: 6px;
     box-sizing: border-box;
-    color: #839496;
+    color: var(--fg-dark);
     flex: 1;
     margin: 10px;
     padding: 20px;
@@ -37,7 +46,7 @@
   }
 
   .box:hover {
-    background-color:rgba(7, 54, 66, 1);
+    background-color: var(--bg-norm);
   }
 
   .footer {
@@ -54,10 +63,10 @@
   input[type=number],
   input[type=submit],
   input[type=text] {
-    background-color: #002b36;
+    background-color: var(--bg-dark);
     border: none;
     border-radius: 6px;
-    color: #fdf6e3;
+    color: var(--fg-light);
     cursor: pointer;
     margin: 10px;
     padding: 10px;
@@ -71,8 +80,8 @@
   }
 
   .selectClear:checked {
-    background-color: #fdf6e3;
-    color: #002b36;
+    background-color: var(--fg-light);
+    color: var(--bg-dark);
   }
 
   .selectClear::before {
@@ -82,28 +91,28 @@
 
   a:link,
   a:visited {
-    color: #657b83;
+    color: var(--bg-light);
     text-decoration: none;
   }
 
   a:active,
   a:hover {
-    color: #fdf6e3;
+    color: var(--fg-light);
     text-decoration: none;
   }
 
   .message {
-    color: #fdf6e3;
-    border-bottom: 1px dotted #fdf6e3;
+    color: var(--fg-light);
+    border-bottom: 1px dotted var(--fg-light);
     display: inline-block;
     position: relative;
   }
 
   .message .owner {
-    background-color: #586e75;
+    background-color: var(--bg-light);
     border-radius: 6px;
     bottom: 125%;
-    color: #fdf6e3;
+    color: var(--fg-light);
     left: 50%;
     margin-left: -60px;
     opacity: 0;
@@ -117,7 +126,7 @@
   }
 
   .message .owner::after {
-    border-color: #fdf6e3 transparent transparent transparent;
+    border-color: var(--fg-light) transparent transparent transparent;
     border-style: solid;
     border-width: 6px;
     content: "";
@@ -159,8 +168,8 @@
   .selectRefresh:hover,
   .selectSubmit:hover,
   .selectToken:hover {
-    background-color: #fdf6e3;
-    color: #002b36;
+    background-color: var(--fg-light);
+    color: var(--bg-dark);
   }
   </style>
   {{ end }}
