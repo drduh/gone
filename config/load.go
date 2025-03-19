@@ -42,6 +42,7 @@ func Load() *App {
 
 	app.Hostname = getHostname()
 	app.Version = version.Short()
+	app.VersionFull = version.Full()
 	app.Start = time.Now()
 	app.Storage = Storage{
 		Files:    make(map[string]*File),

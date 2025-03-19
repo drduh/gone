@@ -8,8 +8,9 @@ import (
 // Global application configuration
 type App struct {
 
-	// Application version
-	Version string
+	// Application version and build info
+	Version     string
+	VersionFull map[string]string
 
 	// Server hostname
 	Hostname string
