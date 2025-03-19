@@ -1,9 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>{{ .Title }}</title>
+  {{ if .Style }}
   <style type="text/css">
   body {
     background-color: #002b36;
@@ -39,40 +40,37 @@
     bottom: 0;
     font-size: 1em;
     text-align: center;
-    padding: 2em;
     position: fixed;
     width: 100%;
   }
 
-  input[type=text], input[type=submit], input[type=file], input[type=number] {
+  input[type=text],
+  input[type=submit],
+  input[type=file],
+  input[type=number] {
     background-color: #002b36;
     border: none;
-    color: #eee8d5;
+    border-radius: 6px;
+    color: #fdf6e3;
     margin: 10px;
     padding: 10px;
     text-decoration: none;
   }
 
-  input[type=number] {
-    width: 28px;
-  }
-
-  input[type=text] {
-    border-bottom: 1px dotted #fdf6e3;
-    width: 280px;
-  }
-
-  a:link, a:visited {
+  a:link,
+  a:visited {
     color: #657b83;
     text-decoration: none;
   }
 
-  a:active, a:hover {
+  a:active,
+  a:hover {
     color: #fdf6e3;
     text-decoration: none;
   }
 
   .message {
+    color: #fdf6e3;
     border-bottom: 1px dotted #fdf6e3;
     display: inline-block;
     position: relative;
@@ -110,50 +108,128 @@
     opacity: 1;
     visibility: visible;
   }
+
+  .selectDownloads,
+  .selectDuration {
+    width: 4em;
+  }
+
+  .selectFile,
+  .selectFilename,
+  .selectToken {
+    width: 16em;
+  }
+
+  .selectMessage {
+    width: 28em;
+  }
+
+  .selectSubmit {
+    width: 18em;
+  }
+
+  .selectFilename:hover,
+  .selectMessage:hover,
+  .selectSubmit:hover,
+  .selectToken:hover {
+    background-color: #fdf6e3;
+    color: #002b36;
+  }
   </style>
+  {{ end }}
 </head>
 <body>
   <div class="container">
     {{ if .PathUpload }}
     <div class="box">
-      <form action="{{ .PathUpload }}" method="POST" enctype="multipart/form-data">
-      <input type="file" id="file" name="file" required>
+      <form action="{{ .PathUpload }}"
+            method="post"
+           enctype="multipart/form-data">
+        <input required type="file"
+                       class="selectFile"
+                        name="file">
         {{ if .AuthUpload }}
-        <input type="text" id="token" name="{{ .AuthHeader }}" placeholder="{{ .AuthHolder }}" required>
+        <br>
+        <input required type="text"
+                       class="selectToken"
+                        name="{{ .AuthHeader }}"
+                 placeholder="{{ .AuthHolder }}">
         {{ end }}
-      <input type="number" name="downloads" id="downloads" min="1" step="1" placeholder="1">
-      <input type="submit" value="Upload">
+        <br>
+        <input type="number"
+              class="selectDownloads"
+               name="downloads"
+                min="1"
+               step="1"
+        placeholder="1">
+        <input type="text"
+              class="selectDuration"
+               name="duration"
+        placeholder="{{ .DefaultDuration }}">
+        <br>
+        <input type="submit"
+              class="selectSubmit"
+              value="upload">
       </form>
     </div>
     {{ end }}
     {{ if .PathDownload }}
     <div class="box">
-      <form action="{{ .PathDownload }}" method="GET">
-      <input type="text" id="fileName" name="name" placeholder="Filename" required>
+      <form action="{{ .PathDownload }}"
+            method="get">
+        <input required type="text"
+                       class="selectFilename"
+                        name="name"
+                 placeholder="filename">
         {{ if .AuthDownload }}
-        <input type="text" id="token" name="{{ .AuthHeader }}" placeholder="{{ .AuthHolder }}" required>
+        <br>
+        <input required type="text"
+                       class="selectToken"
+                        name="{{ .AuthHeader }}"
+                 placeholder="{{ .AuthHolder }}">
         {{ end }}
-      <input type="submit" value="Download">
+        <br>
+        <input type="submit"
+              class="selectSubmit"
+              value="download">
       </form>
     </div>
     {{ end }}
     {{ if .PathList }}
     <div class="box">
-      <form action="{{ .PathList }}" method="GET">
+      <form action="{{ .PathList }}"
+            method="get">
         {{ if .AuthList }}
-        <input type="text" id="token" name="{{ .AuthHeader }}" placeholder="{{ .AuthHolder }}" required>
+        <br>
+        <input required type="text"
+                       class="selectToken"
+                        name="{{ .AuthHeader }}"
+                 placeholder="{{ .AuthHolder }}">
         {{ end }}
-      <input type="submit" value="List">
+        <br>
+        <input type="submit"
+              class="selectSubmit"
+              value="list">
       </form>
     </div>
     {{ end }}
   </div>
   <div class="container">
     <div class="box">
-      <form action="/" method="POST" enctype="multipart/form-data">
-        <input type="text" name="message" id="message">
-        clear? <input type="radio" name="clear" id="clear">
-        <input type="submit" value="Submit">
+      <form action="/"
+            method="post"
+           enctype="multipart/form-data">
+        <input type="text"
+              class="selectMessage"
+               name="message"
+        placeholder="enter message">
+        clear? <input type="radio"
+                     class="selectClear"
+                      name="clear">
+        <br>
+        <input type="submit"
+              class="selectSubmit"
+              value="post">
       </form>
     </div>
     <div class="box">
@@ -164,10 +240,12 @@
       {{ end }}
     </div>
   </div>
-  {{ if .PathHeartbeat }}
   <div class="footer">
-    <a href="{{ .PathHeartbeat }}">{{ .Version }}</a>
-  </div>
+  {{ if .PathHeartbeat }}
+    <p><a href="{{ .PathHeartbeat }}">{{ .Version }}</a></p>
+  {{ else }}
+    <p>{{ .Version }}</p>
   {{ end }}
+  </div>
 </body>
 </html>

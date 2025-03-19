@@ -49,23 +49,32 @@ func Index(app *config.App) http.HandlerFunc {
 			writeJSON(w, http.StatusInternalServerError, responseErrorTmplParse)
 			app.Log.Error(errorTmplParse,
 				"template", tmplName,
+				"error", err.Error(),
 				"ip", ip, "ua", ua)
 			return
 		}
 
+		settings := app.Settings
+		auth := settings.Auth
+		index := settings.Index
+		paths := settings.Paths
+		duration := settings.Limits.Expiration.Duration
+
 		response := templates.Index{
-			Title:         "gone",
-			Version:       app.Version,
-			AuthHeader:    app.Settings.Auth.Header,
-			AuthHolder:    app.Settings.Auth.Holder,
-			AuthDownload:  app.Settings.Auth.Require.Download,
-			AuthList:      app.Settings.Auth.Require.List,
-			AuthUpload:    app.Settings.Auth.Require.Upload,
-			PathDownload:  app.Settings.Paths.Download,
-			PathList:      app.Settings.Paths.List,
-			PathUpload:    app.Settings.Paths.Upload,
-			PathHeartbeat: app.Settings.Paths.Heartbeat,
-			Messages:      app.Storage.Messages,
+			AuthHeader:      auth.Header,
+			AuthHolder:      auth.Holder,
+			AuthDownload:    auth.Require.Download,
+			AuthList:        auth.Require.List,
+			AuthUpload:      auth.Require.Upload,
+			DefaultDuration: duration.String(),
+			PathDownload:    paths.Download,
+			PathList:        paths.List,
+			PathUpload:      paths.Upload,
+			PathHeartbeat:   paths.Heartbeat,
+			Messages:        app.Storage.Messages,
+			Style:           index.Style,
+			Title:           index.Title,
+			Version:         app.Version,
 		}
 
 		err = tmpl.Execute(w, response)
@@ -73,6 +82,7 @@ func Index(app *config.App) http.HandlerFunc {
 			writeJSON(w, http.StatusInternalServerError, responseErrorTmplExec)
 			app.Log.Error(errorTmplExec,
 				"template", tmplName,
+				"error", err.Error(),
 				"ip", ip, "ua", ua)
 			return
 		}

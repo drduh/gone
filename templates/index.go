@@ -29,11 +29,17 @@ type Index struct {
 	AuthList     bool
 	AuthUpload   bool
 
+	// Whether to style HTML with CSS
+	Style bool
+
 	// Authentication header
 	AuthHeader string
 
 	// Authentication form field placeholder
 	AuthHolder string
+
+	// Duration form field placeholder
+	DefaultDuration string
 
 	// Text messages
 	Messages map[int]*config.Message

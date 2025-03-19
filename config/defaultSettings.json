@@ -13,6 +13,10 @@
     "logFile":    "",
     "timeFormat": "Monday Jan 2 15:04"
   },
+  "index": {
+    "style":      true,
+    "title":      "gone"
+  },
   "limits": {
     "downloads":  1,
     "duration":   "2m",
