@@ -55,6 +55,9 @@ func Index(app *config.App) http.HandlerFunc {
 		}
 
 		tmplColor := app.Settings.Index.Theme
+		if tmplColor == "auto" {
+			tmplColor = getTheme()
+		}
 		tmplColorFile := fmt.Sprintf("data/color%s.tmpl", tmplColor)
 		tmplName := "index.tmpl"
 		tmpl, err := template.New(tmplName).ParseFS(templates.All,
