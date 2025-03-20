@@ -1,3 +1,19 @@
 <!-- color.tmpl -->
 {{ define "color" }}
+{{ if eq .Theme "dark" }}
+    --bg-dark:      rgba(  0,  43,  54,   1);
+    --bg-norm:      rgba(  7,  54,  66,   1);
+    --bg-norm-half: rgba(  7,  54,  66, 0.5);
+    --bg-light:     rgba(101, 123, 131,   1);
+    --fg-dark:      rgba(131, 148, 150,   1);
+    --fg-light:     rgba(253, 246, 227,   1);
+{{ else if eq .Theme "light" }}
+    --bg-dark:      rgba(253, 246, 227,   1);
+    --bg-norm:      rgba(147, 161, 161,   1);
+    --bg-norm-half: rgba(147, 161, 161, 0.5);
+    --bg-light:     rgba(238, 232, 213,   1);
+    --fg-dark:      rgba(  0   43,  54,   1);
+    --fg-light:     rgba(  0,  43,  54,   1);
+{{ else }}
+{{ end }}
 {{ end }}

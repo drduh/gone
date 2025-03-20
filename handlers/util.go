@@ -17,7 +17,7 @@ func writeJSON(w http.ResponseWriter, code int, payload interface{}) {
 func getTheme() string {
 	now := time.Now().Hour()
 	if now > 7 && now < 19 {
-		return "Light"
+		return "light"
 	}
-	return "Dark"
+	return "dark"
 }

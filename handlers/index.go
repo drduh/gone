@@ -1,7 +1,6 @@
 package handlers
 
 import (
-	"fmt"
 	"html/template"
 	"net/http"
 	"time"
@@ -54,18 +53,12 @@ func Index(app *config.App) http.HandlerFunc {
 			}
 		}
 
-		tmplColor := app.Settings.Index.Theme
-		if tmplColor == "auto" {
-			tmplColor = getTheme()
+		theme := app.Settings.Index.Theme
+		if theme == "auto" {
+			theme = getTheme()
 		}
-		tmplColorFile := fmt.Sprintf("data/color%s.tmpl", tmplColor)
 		tmplName := "index.tmpl"
-		tmpl, err := template.New(tmplName).ParseFS(templates.All,
-			"data/index.tmpl", "data/style.tmpl", tmplColorFile,
-			"data/upload.tmpl", "data/download.tmpl", "data/list.tmpl",
-			"data/message.tmpl",
-			"data/footer.tmpl",
-		)
+		tmpl, err := template.New(tmplName).ParseFS(templates.All, "data/*.tmpl")
 
 		if err != nil {
 			writeJSON(w, http.StatusInternalServerError, responseErrorTmplParse)
@@ -96,7 +89,7 @@ func Index(app *config.App) http.HandlerFunc {
 			PathList:        paths.List,
 			PathMessage:     paths.Message,
 			PathUpload:      paths.Upload,
-			Theme:           index.Theme,
+			Theme:           theme,
 			Title:           index.Title,
 			Version:         app.Version,
 			VersionFull:     app.VersionFull,
