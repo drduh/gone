@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"fmt"
 	"html/template"
 	"net/http"
 	"time"
@@ -20,7 +21,7 @@ func Index(app *config.App) http.HandlerFunc {
 				!auth.Basic(app.Settings.Auth.Header, app.Settings.Auth.Token, r) {
 				writeJSON(w, http.StatusUnauthorized, responseErrorDeny)
 				app.Log.Error(errorDeny,
-					"action", "download",
+					"action", "message",
 					"ip", ip, "ua", ua)
 				return
 			}
@@ -53,9 +54,11 @@ func Index(app *config.App) http.HandlerFunc {
 			}
 		}
 
+		tmplColor := app.Settings.Index.Theme
+		tmplColorFile := fmt.Sprintf("data/color%s.tmpl", tmplColor)
 		tmplName := "index.tmpl"
 		tmpl, err := template.New(tmplName).ParseFS(templates.All,
-			"data/index.tmpl", "data/style.tmpl", "data/color.tmpl",
+			"data/index.tmpl", "data/style.tmpl", tmplColorFile,
 			"data/upload.tmpl", "data/download.tmpl", "data/list.tmpl",
 			"data/message.tmpl",
 			"data/footer.tmpl",
@@ -90,7 +93,7 @@ func Index(app *config.App) http.HandlerFunc {
 			PathList:        paths.List,
 			PathMessage:     paths.Message,
 			PathUpload:      paths.Upload,
-			Style:           index.Style,
+			Theme:           index.Theme,
 			Title:           index.Title,
 			Version:         app.Version,
 			VersionFull:     app.VersionFull,

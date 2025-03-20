@@ -15,6 +15,9 @@ type Index struct {
 	// Page title
 	Title string
 
+	// CSS theme
+	Theme string
+
 	// Application version and build information
 	Version     string
 	VersionFull map[string]string
@@ -30,9 +33,6 @@ type Index struct {
 	AuthList     bool
 	AuthMessage  bool
 	AuthUpload   bool
-
-	// Whether to style HTML with CSS
-	Style bool
 
 	// Authentication header
 	AuthHeader string
