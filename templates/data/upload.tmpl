@@ -1,0 +1,34 @@
+<!-- upload.tmpl -->
+{{ define "upload" }}
+    <div class="box">
+      <form action="{{ .PathUpload }}"
+            method="post"
+           enctype="multipart/form-data">
+        <input required type="file"
+                       class="selectFile"
+                        name="file">
+        {{ if .AuthUpload }}
+        <br>
+        <input required type="text"
+                       class="selectToken"
+                        name="{{ .AuthHeader }}"
+                 placeholder="{{ .AuthHolder }}">
+        {{ end }}
+        <br>
+        <input type="number"
+              class="selectDownloads"
+               name="downloads"
+                min="1"
+               step="1"
+        placeholder="1">
+        <input type="text"
+              class="selectDuration"
+               name="duration"
+        placeholder="{{ .DefaultDuration }}">
+        <br>
+        <input type="submit"
+              class="selectSubmit"
+              value="upload">
+      </form>
+    </div>
+{{ end }}

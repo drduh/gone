@@ -1,13 +1,13 @@
 package templates
 
 import (
-	_ "embed"
+	"embed"
 
 	"github.com/drduh/gone/config"
 )
 
-//go:embed data/index.html
-var HtmlIndex string
+//go:embed data/*.tmpl
+var All embed.FS
 
 // Index HTML page elements
 type Index struct {
@@ -15,18 +15,20 @@ type Index struct {
 	// Page title
 	Title string
 
-	// Application identifier
-	Version string
+	// Application version and build information
+	Version     string
+	VersionFull map[string]string
 
 	// Route paths
-	PathDownload  string
-	PathList      string
-	PathUpload    string
-	PathHeartbeat string
+	PathDownload string
+	PathList     string
+	PathMessage  string
+	PathUpload   string
 
 	// Whether routes require auth
 	AuthDownload bool
 	AuthList     bool
+	AuthMessage  bool
 	AuthUpload   bool
 
 	// Whether to style HTML with CSS
@@ -40,6 +42,9 @@ type Index struct {
 
 	// Duration form field placeholder
 	DefaultDuration string
+
+	// Uploaded files
+	Files map[string]*config.File
 
 	// Text messages
 	Messages map[int]*config.Message

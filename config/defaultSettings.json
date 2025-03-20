@@ -5,6 +5,7 @@
     "require": {
       "download": true,
       "list":     false,
+      "message":  false,
       "upload":   false
     },
     "token":      "mySecret"
@@ -28,6 +29,7 @@
     "download":   "/download",
     "heartbeat":  "/heartbeat",
     "list":       "/list",
+    "message":    "/",
     "static":     "/static",
     "upload":     "/upload"
   },
