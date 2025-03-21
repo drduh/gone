@@ -1,7 +1,7 @@
 {
   "auth": {
     "header":     "X-Auth",
-    "holder":     "secret required",
+    "holder":     "enter required secret",
     "require": {
       "download": true,
       "list":     false,
@@ -15,7 +15,7 @@
     "timeFormat": "Monday Jan 2 15:04"
   },
   "index": {
-    "style":      true,
+    "theme":      "",
     "title":      "gone"
   },
   "limits": {

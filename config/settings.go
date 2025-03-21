@@ -64,8 +64,8 @@ type Auth struct {
 // Index HTML index page properties
 type Index struct {
 
-	// Whether to use CSS stylesheet
-	Style bool
+	// CSS theme to style with
+	Theme string
 
 	// Page title
 	Title string

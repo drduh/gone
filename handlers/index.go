@@ -20,7 +20,7 @@ func Index(app *config.App) http.HandlerFunc {
 				!auth.Basic(app.Settings.Auth.Header, app.Settings.Auth.Token, r) {
 				writeJSON(w, http.StatusUnauthorized, responseErrorDeny)
 				app.Log.Error(errorDeny,
-					"action", "download",
+					"action", "message",
 					"ip", ip, "ua", ua)
 				return
 			}
@@ -53,13 +53,12 @@ func Index(app *config.App) http.HandlerFunc {
 			}
 		}
 
+		theme := app.Settings.Index.Theme
+		if theme == "" {
+			theme = getTheme()
+		}
 		tmplName := "index.tmpl"
-		tmpl, err := template.New(tmplName).ParseFS(templates.All,
-			"data/index.tmpl", "data/style.tmpl", "data/color.tmpl",
-			"data/upload.tmpl", "data/download.tmpl", "data/list.tmpl",
-			"data/message.tmpl",
-			"data/footer.tmpl",
-		)
+		tmpl, err := template.New(tmplName).ParseFS(templates.All, "data/*.tmpl")
 
 		if err != nil {
 			writeJSON(w, http.StatusInternalServerError, responseErrorTmplParse)
@@ -90,7 +89,7 @@ func Index(app *config.App) http.HandlerFunc {
 			PathList:        paths.List,
 			PathMessage:     paths.Message,
 			PathUpload:      paths.Upload,
-			Style:           index.Style,
+			Theme:           theme,
 			Title:           index.Title,
 			Version:         app.Version,
 			VersionFull:     app.VersionFull,
