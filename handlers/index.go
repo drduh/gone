@@ -54,7 +54,7 @@ func Index(app *config.App) http.HandlerFunc {
 		}
 
 		theme := app.Settings.Index.Theme
-		if theme == "auto" {
+		if theme == "" {
 			theme = getTheme()
 		}
 		tmplName := "index.tmpl"
