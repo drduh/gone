@@ -61,10 +61,11 @@ func Index(app *config.App) http.HandlerFunc {
 		var theme string
 
 		if app.Settings.Index.ThemePick {
-			cookieDuration := time.Now().Add(30 * 24 * time.Hour)
+			cookieDuration := app.Settings.Index.CookieTime.GetDuration()
+			cookieExpiration := time.Now().Add(cookieDuration)
 			cookieNew := &http.Cookie{
-				Name:    "theme",
-				Expires: cookieDuration,
+				Name:    "goneTheme",
+				Expires: cookieExpiration,
 				Path:    "/",
 			}
 

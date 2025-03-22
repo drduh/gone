@@ -72,6 +72,9 @@ type Index struct {
 
 	// Page title
 	Title string `json:"title"`
+
+	// Cookie validity period
+	CookieTime Duration `json:"cookieTime"`
 }
 
 // Download and upload limits
