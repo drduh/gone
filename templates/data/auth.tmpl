@@ -1,0 +1,9 @@
+<!-- auth.tmpl -->
+{{ define "auth" }}
+<input required type="text"
+               title="authentication required"
+               class="selectToken"
+                name="{{ .AuthHeader }}"
+         placeholder="{{ .AuthHolder }}">
+<br>
+{{ end }}
