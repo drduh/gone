@@ -13,8 +13,11 @@ func writeJSON(w http.ResponseWriter, code int, payload interface{}) {
 	_ = json.NewEncoder(w).Encode(payload)
 }
 
-// Returns CSS theme string based on current time of day
-func getTheme() string {
+// Returns CSS theme based on current time of day if unset
+func getTheme(theme string) string {
+	if theme != "" {
+		return theme
+	}
 	now := time.Now().Hour()
 	if now > 7 && now < 19 {
 		return "light"

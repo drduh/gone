@@ -53,42 +53,34 @@ func Index(app *config.App) http.HandlerFunc {
 			}
 		}
 
-		themeDefault := app.Settings.Index.Theme
-		if themeDefault == "" {
-			themeDefault = getTheme()
-		}
+		theme := getTheme(app.Settings.Index.Theme)
 
-		var theme string
 		if app.Settings.Index.ThemePick {
 			cookieDuration := app.Settings.Index.Cookie.Time.GetDuration()
-			cookieExpiration := time.Now().Add(cookieDuration)
 			cookieNew := &http.Cookie{
 				Name:    app.Settings.Index.Cookie.Id,
-				Expires: cookieExpiration,
+				Expires: time.Now().Add(cookieDuration),
 				Path:    "/",
 			}
 
-			theme = r.FormValue("theme")
-			if theme != "" {
+			themeForm := r.FormValue("theme")
+			if themeForm != "" {
+				theme = themeForm
 				cookieNew.Value = theme
 				http.SetCookie(w, cookieNew)
 			} else {
 				cookie, err := r.Cookie(app.Settings.Index.Cookie.Id)
 				if err != nil || cookie.Value == "" {
-					theme = themeDefault
 					cookieNew.Value = theme
 					http.SetCookie(w, cookieNew)
 				} else {
 					theme = cookie.Value
 				}
 			}
-		} else {
-			theme = themeDefault
 		}
 
 		tmplName := "index.tmpl"
 		tmpl, err := template.New(tmplName).ParseFS(templates.All, "data/*.tmpl")
-
 		if err != nil {
 			writeJSON(w, http.StatusInternalServerError, responseErrorTmplParse)
 			app.Log.Error(errorTmplParse,
@@ -99,23 +91,20 @@ func Index(app *config.App) http.HandlerFunc {
 		}
 
 		settings := app.Settings
-		index := settings.Index
 		duration := settings.Limits.Expiration.Duration
-
 		response := templates.Index{
 			Auth:            settings.Auth,
 			DefaultDuration: duration.String(),
 			Paths:           settings.Paths,
 			Storage:         app.Storage,
 			Theme:           theme,
-			ThemePick:       index.ThemePick,
-			Title:           index.Title,
+			ThemePick:       settings.Index.ThemePick,
+			Title:           settings.Index.Title,
 			Version:         app.Version,
 			VersionFull:     app.VersionFull,
 		}
 
-		err = tmpl.Execute(w, response)
-		if err != nil {
+		if err = tmpl.Execute(w, response); err != nil {
 			writeJSON(w, http.StatusInternalServerError, responseErrorTmplExec)
 			app.Log.Error(errorTmplExec,
 				"template", tmplName,
