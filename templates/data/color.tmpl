@@ -21,7 +21,7 @@
     --bg-light:     rgba(255, 212,  71,   1);
     --fg-dark:      rgba(255, 232, 120,   1);
     --fg-light:     rgba(255, 220, 115,   1);
-{{ else if eq .Theme "blue" }}
+{{ else if eq .Theme "navy" }}
     --bg-dark:      rgba(  1,  31,  75,   1);
     --bg-norm:      rgba(  3,  57, 108,   1);
     --bg-norm-half: rgba(  3,  57, 108, 0.5);
@@ -63,5 +63,19 @@
     --bg-light:     rgba(128,   0,   0,   1);
     --fg-dark:      rgba(191,   0,   0,   1);
     --fg-light:     rgba(255,   0,   0,   1);
+{{ else if eq .Theme "miami" }}
+    --bg-dark:      rgba(255, 132, 182,   1);
+    --bg-norm:      rgba(255, 192, 159,   1);
+    --bg-norm-half: rgba(255, 192, 159, 0.5);
+    --bg-light:     rgba(208, 188, 255,   1);
+    --fg-dark:      rgba(131, 127, 255,   1);
+    --fg-light:     rgba(255, 229, 142,   1);
+{{ else if eq .Theme "lush" }}
+    --bg-dark:      rgba( 26, 184, 126,   1);
+    --bg-norm:      rgba( 23, 255, 227,   1);
+    --bg-norm-half: rgba( 23, 255, 227, 0.5);
+    --bg-light:     rgba(169, 132, 248,   1);
+    --fg-dark:      rgba(239, 105,  46,   1);
+    --fg-light:     rgba(249, 155, 197,   1);
 {{ end }}
 {{ end }}
