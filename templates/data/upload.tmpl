@@ -9,7 +9,7 @@
                        title="file to upload"
                         name="file">
         <br>
-        {{ if .AuthUpload }}
+        {{ if .Auth.Require.Upload }}
           {{ template "auth" . }}
         {{ end }}
         <input type="number"

@@ -13,7 +13,7 @@
               class="selectClear"
                name="clear">
         <br>
-        {{ if .AuthMessage }}
+        {{ if .Auth.Require.Message }}
           {{ template "auth" . }}
         {{ end }}
         <input type="submit"

@@ -4,7 +4,7 @@
       <form action="{{ .Paths.List }}"
             method="get">
         <br>
-        {{ if .AuthList }}
+        {{ if .Auth.Require.List }}
           {{ template "auth" . }}
         {{ else }}
         {{ range .Storage.Files }}

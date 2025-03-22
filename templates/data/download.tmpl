@@ -9,7 +9,7 @@
                         name="name"
                  placeholder="enter filename">
         <br>
-        {{ if .AuthDownload }}
+        {{ if .Auth.Require.Download }}
           {{ template "auth" . }}
         {{ end }}
         <input type="submit"

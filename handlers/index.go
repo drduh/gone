@@ -99,16 +99,11 @@ func Index(app *config.App) http.HandlerFunc {
 		}
 
 		settings := app.Settings
-		auth := settings.Auth
 		index := settings.Index
 		duration := settings.Limits.Expiration.Duration
 
 		response := templates.Index{
-			Auth:            auth,
-			AuthDownload:    auth.Require.Download,
-			AuthList:        auth.Require.List,
-			AuthMessage:     auth.Require.Message,
-			AuthUpload:      auth.Require.Upload,
+			Auth:            settings.Auth,
 			DefaultDuration: duration.String(),
 			Paths:           settings.Paths,
 			Storage:         app.Storage,
