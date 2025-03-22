@@ -26,10 +26,10 @@ type Index struct {
 	VersionFull map[string]string
 
 	// Configured route paths
-	Path config.Paths
+	config.Paths
 
 	// Authentication configuration
-	Auth config.Auth
+	config.Auth
 
 	// Whether to require auth on routes
 	AuthDownload bool
@@ -40,9 +40,6 @@ type Index struct {
 	// Duration form field placeholder
 	DefaultDuration string
 
-	// Uploaded files
-	Files map[string]*config.File
-
-	// Text messages
-	Messages map[int]*config.Message
+	// Configured storage (files and messages)
+	config.Storage
 }

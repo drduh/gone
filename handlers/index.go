@@ -73,7 +73,7 @@ func Index(app *config.App) http.HandlerFunc {
 				cookieNew.Value = theme
 				http.SetCookie(w, cookieNew)
 			} else {
-				cookie, err := r.Cookie("theme")
+				cookie, err := r.Cookie("goneTheme")
 				if err != nil || cookie.Value == "" {
 					theme = themeDefault
 					cookieNew.Value = theme
@@ -101,32 +101,22 @@ func Index(app *config.App) http.HandlerFunc {
 		settings := app.Settings
 		auth := settings.Auth
 		index := settings.Index
-		paths := settings.Paths
 		duration := settings.Limits.Expiration.Duration
 
 		response := templates.Index{
-			Auth: config.Auth{
-				Header: auth.Header,
-				Holder: auth.Holder,
-			},
+			Auth:            auth,
 			AuthDownload:    auth.Require.Download,
 			AuthList:        auth.Require.List,
 			AuthMessage:     auth.Require.Message,
 			AuthUpload:      auth.Require.Upload,
-			Files:           app.Storage.Files,
 			DefaultDuration: duration.String(),
-			Messages:        app.Storage.Messages,
-			Path: config.Paths{
-				Download: paths.Download,
-				List:     paths.List,
-				Message:  paths.Message,
-				Upload:   paths.Upload,
-			},
-			Theme:       theme,
-			ThemePick:   index.ThemePick,
-			Title:       index.Title,
-			Version:     app.Version,
-			VersionFull: app.VersionFull,
+			Paths:           settings.Paths,
+			Storage:         app.Storage,
+			Theme:           theme,
+			ThemePick:       index.ThemePick,
+			Title:           index.Title,
+			Version:         app.Version,
+			VersionFull:     app.VersionFull,
 		}
 
 		err = tmpl.Execute(w, response)

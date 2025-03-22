@@ -14,21 +14,21 @@
 <body>
   <div class="container">
 
-  {{ if .Path.Upload }}
+  {{ if .Paths.Upload }}
     {{ template "upload" . }}
   {{ end }}
 
-  {{ if .Path.Download }}
+  {{ if .Paths.Download }}
     {{ template "download" . }}
   {{ end }}
 
-  {{ if .Path.List }}
+  {{ if .Paths.List }}
     {{ template "list" . }}
   {{ end }}
 
   </div>
 
-  {{ if .Path.Message }}
+  {{ if .Paths.Message }}
     {{ template "message" . }}
   {{ end }}
 
