@@ -2,7 +2,9 @@ package handlers
 
 import (
 	"encoding/json"
+	"mime"
 	"net/http"
+	"path/filepath"
 	"time"
 )
 
@@ -13,10 +15,17 @@ func writeJSON(w http.ResponseWriter, code int, data interface{}) {
 	_ = json.NewEncoder(w).Encode(data)
 }
 
-// Writes data response for Files
-func writeData(w http.ResponseWriter, data []byte) {
-	w.Header().Set("Content-Type", "application/octet-stream")
+// Writes File response with content
+func writeFile(w http.ResponseWriter, data []byte, name string) {
+	contentType := mime.TypeByExtension(filepath.Ext(name))
+	if contentType == "" {
+		contentType = "application/octet-stream"
+	}
+
+	w.Header().Set("Content-Type", contentType)
+	w.Header().Set("Content-Disposition", "attachment; filename="+name)
 	w.WriteHeader(http.StatusOK)
+
 	_, _ = w.Write(data)
 }
 
