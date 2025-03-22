@@ -53,10 +53,33 @@ func Index(app *config.App) http.HandlerFunc {
 			}
 		}
 
-		theme := app.Settings.Index.Theme
-		if theme == "" {
-			theme = getTheme()
+		themeDefault := app.Settings.Index.Theme
+		if themeDefault == "" {
+			themeDefault = getTheme()
 		}
+
+		cookieDuration := time.Now().Add(30 * 24 * time.Hour)
+		cookieNew := &http.Cookie{
+			Name:    "theme",
+			Expires: cookieDuration,
+			Path:    "/",
+		}
+
+		theme := r.FormValue("theme")
+		if theme != "" {
+			cookieNew.Value = theme
+			http.SetCookie(w, cookieNew)
+		} else {
+			cookie, err := r.Cookie("theme")
+			if err != nil || cookie.Value == "" {
+				theme = themeDefault
+				cookieNew.Value = theme
+				http.SetCookie(w, cookieNew)
+			} else {
+				theme = cookie.Value
+			}
+		}
+
 		tmplName := "index.tmpl"
 		tmpl, err := template.New(tmplName).ParseFS(templates.All, "data/*.tmpl")
 
