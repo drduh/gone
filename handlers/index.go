@@ -115,15 +115,17 @@ func Index(app *config.App) http.HandlerFunc {
 			Files:           app.Storage.Files,
 			DefaultDuration: duration.String(),
 			Messages:        app.Storage.Messages,
-			PathDownload:    paths.Download,
-			PathList:        paths.List,
-			PathMessage:     paths.Message,
-			PathUpload:      paths.Upload,
-			Theme:           theme,
-			ThemePick:       index.ThemePick,
-			Title:           index.Title,
-			Version:         app.Version,
-			VersionFull:     app.VersionFull,
+			Path: config.Paths{
+				Download: paths.Download,
+				List:     paths.List,
+				Message:  paths.Message,
+				Upload:   paths.Upload,
+			},
+			Theme:       theme,
+			ThemePick:   index.ThemePick,
+			Title:       index.Title,
+			Version:     app.Version,
+			VersionFull: app.VersionFull,
 		}
 
 		err = tmpl.Execute(w, response)

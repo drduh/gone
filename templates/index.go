@@ -25,11 +25,8 @@ type Index struct {
 	Version     string
 	VersionFull map[string]string
 
-	// Route paths
-	PathDownload string
-	PathList     string
-	PathMessage  string
-	PathUpload   string
+	// Configured route paths
+	Path config.Paths
 
 	// Whether routes require auth
 	AuthDownload bool

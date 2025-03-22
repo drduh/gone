@@ -1,7 +1,7 @@
 <!-- upload.tmpl -->
 {{ define "upload" }}
     <div class="box">
-      <form action="{{ .PathUpload }}"
+      <form action="{{ .Path.Upload }}"
             method="post"
            enctype="multipart/form-data">
         <input required type="file"
