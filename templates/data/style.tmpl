@@ -51,7 +51,9 @@
   input[type=file],
   input[type=number],
   input[type=submit],
-  input[type=text] {
+  input[type=text],
+  input::file-selector-button,
+  select {
     background-color: var(--bg-dark);
     border: none;
     border-radius: 6px;
@@ -60,6 +62,10 @@
     margin: 10px;
     padding: 10px;
     text-decoration: none;
+  }
+
+  input[type="number"] {
+    appearance: textfield;
   }
 
   .selectClear {
@@ -152,7 +158,7 @@
   }
 
   .selectTheme {
-    width: 8em;
+    width: 12em;
   }
 
   .selectClear:hover,
@@ -161,8 +167,10 @@
   .selectRefresh:hover,
   .selectSubmit:hover,
   .selectTheme:hover,
-  .selectToken:hover {
+  .selectToken:hover,
+  input[type="file"]::file-selector-button:hover {
     background-color: var(--fg-light);
     color: var(--bg-dark);
   }
+
 {{ end }}
