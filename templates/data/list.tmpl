@@ -3,12 +3,9 @@
     <div class="box">
       <form action="{{ .PathList }}"
             method="get">
-        {{ if .AuthList }}
         <br>
-        <input required type="text"
-                       class="selectToken"
-                        name="{{ .AuthHeader }}"
-                 placeholder="{{ .AuthHolder }}">
+        {{ if .AuthList }}
+          {{ template "auth" . }}
         {{ else }}
         {{ range .Files }}
         <div class="message">{{ .Name }}

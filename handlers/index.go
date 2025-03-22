@@ -58,26 +58,33 @@ func Index(app *config.App) http.HandlerFunc {
 			themeDefault = getTheme()
 		}
 
-		cookieDuration := time.Now().Add(30 * 24 * time.Hour)
-		cookieNew := &http.Cookie{
-			Name:    "theme",
-			Expires: cookieDuration,
-			Path:    "/",
-		}
+		var theme string
 
-		theme := r.FormValue("theme")
-		if theme != "" {
-			cookieNew.Value = theme
-			http.SetCookie(w, cookieNew)
-		} else {
-			cookie, err := r.Cookie("theme")
-			if err != nil || cookie.Value == "" {
-				theme = themeDefault
+		if app.Settings.Index.ThemePick {
+			cookieDuration := app.Settings.Index.CookieTime.GetDuration()
+			cookieExpiration := time.Now().Add(cookieDuration)
+			cookieNew := &http.Cookie{
+				Name:    "goneTheme",
+				Expires: cookieExpiration,
+				Path:    "/",
+			}
+
+			theme = r.FormValue("theme")
+			if theme != "" {
 				cookieNew.Value = theme
 				http.SetCookie(w, cookieNew)
 			} else {
-				theme = cookie.Value
+				cookie, err := r.Cookie("theme")
+				if err != nil || cookie.Value == "" {
+					theme = themeDefault
+					cookieNew.Value = theme
+					http.SetCookie(w, cookieNew)
+				} else {
+					theme = cookie.Value
+				}
 			}
+		} else {
+			theme = themeDefault
 		}
 
 		tmplName := "index.tmpl"
@@ -113,6 +120,7 @@ func Index(app *config.App) http.HandlerFunc {
 			PathMessage:     paths.Message,
 			PathUpload:      paths.Upload,
 			Theme:           theme,
+			ThemePick:       index.ThemePick,
 			Title:           index.Title,
 			Version:         app.Version,
 			VersionFull:     app.VersionFull,

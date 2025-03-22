@@ -1,14 +1,22 @@
 <!-- themeSelect.tmpl -->
 {{ define "themeSelect" }}
+  <div class="dropdown">
   <form action="">
-    <select name="theme">
+    <select name="theme"
+           class="selectTheme">
       <option value="">select theme</option>
       <option value="dark">dark</option>
       <option value="light">light</option>
+      <option value="blue">blue</option>
       <option value="gold">gold</option>
-      <option value="pastelPurple">pastel purple</option>
+      <option value="rose">rose</option>
+      <option value="lime">lime</option>
+      <option value="green">green</option>
+      <option value="purple">purple</option>
+      <option value="night">night</option>
     </select>
     <button type="submit"
-           class="selectTheme">select</button>
+           class="selectTheme">change theme</button>
   </form>
+  </div>
 {{ end }}

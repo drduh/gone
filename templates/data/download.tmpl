@@ -4,18 +4,16 @@
       <form action="{{ .PathDownload }}"
             method="get">
         <input required type="text"
+                       title="download file by name"
                        class="selectFilename"
                         name="name"
                  placeholder="enter filename">
+        <br>
         {{ if .AuthDownload }}
-        <br>
-        <input required type="text"
-                       class="selectToken"
-                        name="{{ .AuthHeader }}"
-                 placeholder="{{ .AuthHolder }}">
+          {{ template "auth" . }}
         {{ end }}
-        <br>
         <input type="submit"
+              title="download requested file"
               class="selectSubmit"
               value="download">
       </form>

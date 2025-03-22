@@ -6,6 +6,8 @@
       {{ range .VersionFull }} {{ . }} {{ end }}
       </span>
     </div>
+    {{ if .ThemePick }}
     {{ template "themeSelect" }}
+    {{ end }}
   </div>
 {{ end }}

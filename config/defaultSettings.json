@@ -15,7 +15,9 @@
     "timeFormat": "Monday Jan 2 15:04"
   },
   "index": {
+    "cookieTime": "192h",
     "theme":      "",
+    "themePick":  true,
     "title":      "gone"
   },
   "limits": {

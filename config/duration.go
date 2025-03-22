@@ -39,3 +39,8 @@ func isNumeric(str string) bool {
 	re := regexp.MustCompile(`^\d+$`)
 	return re.MatchString(str)
 }
+
+// Convert back to time.Duration
+func (d *Duration) GetDuration() time.Duration {
+	return time.Duration(d.Duration)
+}
