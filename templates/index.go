@@ -28,17 +28,14 @@ type Index struct {
 	// Configured route paths
 	Path config.Paths
 
-	// Whether routes require auth
+	// Authentication configuration
+	Auth config.Auth
+
+	// Whether to require auth on routes
 	AuthDownload bool
 	AuthList     bool
 	AuthMessage  bool
 	AuthUpload   bool
-
-	// Authentication header
-	AuthHeader string
-
-	// Authentication form field placeholder
-	AuthHolder string
 
 	// Duration form field placeholder
 	DefaultDuration string

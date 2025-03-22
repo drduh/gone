@@ -59,7 +59,6 @@ func Index(app *config.App) http.HandlerFunc {
 		}
 
 		var theme string
-
 		if app.Settings.Index.ThemePick {
 			cookieDuration := app.Settings.Index.CookieTime.GetDuration()
 			cookieExpiration := time.Now().Add(cookieDuration)
@@ -106,8 +105,10 @@ func Index(app *config.App) http.HandlerFunc {
 		duration := settings.Limits.Expiration.Duration
 
 		response := templates.Index{
-			AuthHeader:      auth.Header,
-			AuthHolder:      auth.Holder,
+			Auth: config.Auth{
+				Header: auth.Header,
+				Holder: auth.Holder,
+			},
 			AuthDownload:    auth.Require.Download,
 			AuthList:        auth.Require.List,
 			AuthMessage:     auth.Require.Message,
