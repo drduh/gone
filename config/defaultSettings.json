@@ -16,6 +16,7 @@
   },
   "index": {
     "theme":      "",
+    "themePick":  true,
     "title":      "gone"
   },
   "limits": {

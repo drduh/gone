@@ -15,6 +15,9 @@ type Index struct {
 	// Page title
 	Title string
 
+	// Whether to allow theme selection
+	ThemePick bool
+
 	// CSS theme
 	Theme string
 

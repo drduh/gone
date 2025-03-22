@@ -64,11 +64,14 @@ type Auth struct {
 // Index HTML index page properties
 type Index struct {
 
+	// Whether to allow theme selection
+	ThemePick bool `json:"themePick"`
+
 	// CSS theme to style with
-	Theme string
+	Theme string `json:"theme"`
 
 	// Page title
-	Title string
+	Title string `json:"title"`
 }
 
 // Download and upload limits
