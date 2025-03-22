@@ -44,9 +44,7 @@ func Download(app *config.App) http.HandlerFunc {
 			return
 		}
 
-		w.Header().Set("Content-Type", "application/octet-stream")
-		w.WriteHeader(http.StatusOK)
-		_, _ = w.Write(file.Data)
+		writeData(w, file.Data)
 
 		file.Downloads.Total++
 		app.Log.Info("served file",
