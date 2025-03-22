@@ -12,14 +12,10 @@
         <input type="checkbox"
               class="selectClear"
                name="clear">
+        <br>
         {{ if .AuthMessage }}
-        <br>
-        <input required type="text"
-                       class="selectToken"
-                        name="{{ .AuthHeader }}"
-                 placeholder="{{ .AuthHolder }}">
+          {{ template "auth" . }}
         {{ end }}
-        <br>
         <input type="submit"
               class="selectSubmit"
               value="post">

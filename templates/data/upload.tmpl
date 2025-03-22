@@ -6,16 +6,14 @@
            enctype="multipart/form-data">
         <input required type="file"
                        class="selectFile"
+                       title="file to upload"
                         name="file">
+        <br>
         {{ if .AuthUpload }}
-        <br>
-        <input required type="text"
-                       class="selectToken"
-                        name="{{ .AuthHeader }}"
-                 placeholder="{{ .AuthHolder }}">
+          {{ template "auth" . }}
         {{ end }}
-        <br>
         <input type="number"
+              title="number of allowed downloads"
               class="selectDownloads"
                name="downloads"
                 min="1"
@@ -24,10 +22,12 @@
         <input type="text"
               class="selectDuration"
                name="duration"
+              title="expire file after duration"
         placeholder="{{ .DefaultDuration }}">
         <br>
         <input type="submit"
               class="selectSubmit"
+              title="upload selected file"
               value="upload">
       </form>
     </div>
