@@ -67,13 +67,13 @@ type Index struct {
 	// Whether to allow theme selection
 	ThemePick bool `json:"themePick"`
 
-	// CSS theme to style with
+	// CSS theme to style with (leave empty for auto selection)
 	Theme string `json:"theme"`
 
-	// Page title
+	// Page title ("gone")
 	Title string `json:"title"`
 
-	// Cookie validity period
+	// Cookie validity period ("192h")
 	CookieTime Duration `json:"cookieTime"`
 }
 
