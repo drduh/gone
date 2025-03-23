@@ -13,7 +13,7 @@
               class="selectClear"
                name="clear">
         <br>
-        {{ if .AuthMessage }}
+        {{ if .Auth.Require.Message }}
           {{ template "auth" . }}
         {{ end }}
         <input type="submit"
@@ -22,12 +22,12 @@
       </form>
     </div>
     <div class="box">
-      {{ range .Messages }}
+      {{ range .Storage.Messages }}
       <div class="message"><b>{{ .Count }}</b> {{ .Data }}
         <span class="owner">{{ .Owner.Address }} at {{ .Time.Allow }}</span>
-      </div><br>
-      {{ end }}
+      </div>
       <br>
+      {{ end }}
       <form action="">
         <button type="submit"
                class="selectRefresh">refresh</button>

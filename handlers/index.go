@@ -53,43 +53,34 @@ func Index(app *config.App) http.HandlerFunc {
 			}
 		}
 
-		themeDefault := app.Settings.Index.Theme
-		if themeDefault == "" {
-			themeDefault = getTheme()
-		}
-
-		var theme string
+		theme := getTheme(app.Settings.Index.Theme)
 
 		if app.Settings.Index.ThemePick {
-			cookieDuration := app.Settings.Index.CookieTime.GetDuration()
-			cookieExpiration := time.Now().Add(cookieDuration)
+			cookieDuration := app.Settings.Index.Cookie.Time.GetDuration()
 			cookieNew := &http.Cookie{
-				Name:    "goneTheme",
-				Expires: cookieExpiration,
+				Name:    app.Settings.Index.Cookie.Id,
+				Expires: time.Now().Add(cookieDuration),
 				Path:    "/",
 			}
 
-			theme = r.FormValue("theme")
-			if theme != "" {
+			themeForm := r.FormValue("theme")
+			if themeForm != "" {
+				theme = themeForm
 				cookieNew.Value = theme
 				http.SetCookie(w, cookieNew)
 			} else {
-				cookie, err := r.Cookie("theme")
+				cookie, err := r.Cookie(app.Settings.Index.Cookie.Id)
 				if err != nil || cookie.Value == "" {
-					theme = themeDefault
 					cookieNew.Value = theme
 					http.SetCookie(w, cookieNew)
 				} else {
 					theme = cookie.Value
 				}
 			}
-		} else {
-			theme = themeDefault
 		}
 
 		tmplName := "index.tmpl"
 		tmpl, err := template.New(tmplName).ParseFS(templates.All, "data/*.tmpl")
-
 		if err != nil {
 			writeJSON(w, http.StatusInternalServerError, responseErrorTmplParse)
 			app.Log.Error(errorTmplParse,
@@ -100,34 +91,20 @@ func Index(app *config.App) http.HandlerFunc {
 		}
 
 		settings := app.Settings
-		auth := settings.Auth
-		index := settings.Index
-		paths := settings.Paths
 		duration := settings.Limits.Expiration.Duration
-
 		response := templates.Index{
-			AuthHeader:      auth.Header,
-			AuthHolder:      auth.Holder,
-			AuthDownload:    auth.Require.Download,
-			AuthList:        auth.Require.List,
-			AuthMessage:     auth.Require.Message,
-			AuthUpload:      auth.Require.Upload,
-			Files:           app.Storage.Files,
+			Auth:            settings.Auth,
 			DefaultDuration: duration.String(),
-			Messages:        app.Storage.Messages,
-			PathDownload:    paths.Download,
-			PathList:        paths.List,
-			PathMessage:     paths.Message,
-			PathUpload:      paths.Upload,
+			Paths:           settings.Paths,
+			Storage:         app.Storage,
 			Theme:           theme,
-			ThemePick:       index.ThemePick,
-			Title:           index.Title,
+			ThemePick:       settings.Index.ThemePick,
+			Title:           settings.Index.Title,
 			Version:         app.Version,
 			VersionFull:     app.VersionFull,
 		}
 
-		err = tmpl.Execute(w, response)
-		if err != nil {
+		if err = tmpl.Execute(w, response); err != nil {
 			writeJSON(w, http.StatusInternalServerError, responseErrorTmplExec)
 			app.Log.Error(errorTmplExec,
 				"template", tmplName,

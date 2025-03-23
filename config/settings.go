@@ -73,8 +73,15 @@ type Index struct {
 	// Page title ("gone")
 	Title string `json:"title"`
 
-	// Cookie validity period ("192h")
-	CookieTime Duration `json:"cookieTime"`
+	// Cookie management
+	Cookie struct {
+
+		// Time cookie is valid for ("192h")
+		Time Duration `json:"time"`
+
+		// Label ("goneTheme")
+		Id string `json:"id"`
+	} `json:"cookie"`
 }
 
 // Download and upload limits

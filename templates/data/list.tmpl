@@ -1,13 +1,13 @@
 <!-- list.tmpl -->
 {{ define "list" }}
     <div class="box">
-      <form action="{{ .PathList }}"
+      <form action="{{ .Paths.List }}"
             method="get">
         <br>
-        {{ if .AuthList }}
+        {{ if .Auth.Require.List }}
           {{ template "auth" . }}
         {{ else }}
-        {{ range .Files }}
+        {{ range .Storage.Files }}
         <div class="message">{{ .Name }}
           <span class="owner">
             {{ .Owner.Address }}
@@ -16,7 +16,6 @@
         <br>
         {{ end }}
         {{ end }}
-        <br>
         <input type="submit"
               class="selectSubmit"
               value="list">

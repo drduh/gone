@@ -25,30 +25,15 @@ type Index struct {
 	Version     string
 	VersionFull map[string]string
 
-	// Route paths
-	PathDownload string
-	PathList     string
-	PathMessage  string
-	PathUpload   string
-
-	// Whether routes require auth
-	AuthDownload bool
-	AuthList     bool
-	AuthMessage  bool
-	AuthUpload   bool
-
-	// Authentication header
-	AuthHeader string
-
-	// Authentication form field placeholder
-	AuthHolder string
-
-	// Duration form field placeholder
+	// Form field placeholder for duration
 	DefaultDuration string
 
-	// Uploaded files
-	Files map[string]*config.File
+	// Configured route paths
+	config.Paths
 
-	// Text messages
-	Messages map[int]*config.Message
+	// Authentication configuration
+	config.Auth
+
+	// Configured storage (files and messages)
+	config.Storage
 }
