@@ -1,7 +1,10 @@
 package util
 
-import "unicode"
+import (
+	"unicode"
+)
 
+// Returns true if string only contains numbers
 func IsNumeric(s string) bool {
 	for _, r := range s {
 		if !unicode.IsDigit(r) {

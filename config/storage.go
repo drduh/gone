@@ -37,11 +37,8 @@ type File struct {
 	// Provided filename
 	Name string `json:"name,omitempty"`
 
-	// File size (in bytes)
-	Size int `json:"size,omitempty"`
-
-	// File content
-	Data []byte `json:"data,omitempty"`
+	// File size (bytes parsed into string)
+	Size string `json:"size,omitempty"`
 
 	// Uploader information
 	Owner `json:"owner,omitempty"`
@@ -51,6 +48,9 @@ type File struct {
 
 	// Downloads information
 	Downloads `json:"downloads,omitempty"`
+
+	// File content
+	Data []byte
 }
 
 // File owner information

@@ -9,6 +9,7 @@ import (
 
 	"github.com/drduh/gone/auth"
 	"github.com/drduh/gone/config"
+	"github.com/drduh/gone/util"
 )
 
 // Accepts content uploads
@@ -87,7 +88,7 @@ func Upload(app *config.App) http.HandlerFunc {
 
 		file := &config.File{
 			Name: handler.Filename,
-			Size: len(buf.Bytes()),
+			Size: util.FormatSize(len(buf.Bytes())),
 			Data: buf.Bytes(),
 			Owner: config.Owner{
 				Address: ip,
