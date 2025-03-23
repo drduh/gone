@@ -53,8 +53,7 @@ func Upload(app *config.App) http.HandlerFunc {
 
 		content, handler, err := r.FormFile("file")
 		if err != nil {
-			writeJSON(w, http.StatusBadRequest,
-				map[string]string{"error": err.Error()})
+			writeJSON(w, http.StatusBadRequest, responseErrorFileFormFail)
 			app.Log.Error("upload form failed",
 				"error", err.Error(),
 				"ip", ip, "ua", ua)
@@ -64,8 +63,7 @@ func Upload(app *config.App) http.HandlerFunc {
 
 		var buf bytes.Buffer
 		if _, err := io.Copy(&buf, content); err != nil {
-			writeJSON(w, http.StatusInternalServerError,
-				map[string]string{"error": err.Error()})
+			writeJSON(w, http.StatusInternalServerError, responseErrorFileFormFail)
 			app.Log.Error("upload copy failed",
 				"error", err.Error(),
 				"ip", ip, "ua", ua)
