@@ -8,32 +8,32 @@ import (
 // Tests basic authentication
 func TestBasic(t *testing.T) {
 	tests := []struct {
-		name     string
-		header   string
-		allowed  string
-		token    string
-		expected bool
+		name    string
+		header  string
+		allowed string
+		token   string
+		expect  bool
 	}{
 		{
-			name:     "Token not required",
-			header:   "X-Auth",
-			allowed:  "",
-			token:    "",
-			expected: true,
+			name:    "Token not required",
+			header:  "X-Auth",
+			allowed: "",
+			token:   "",
+			expect:  true,
 		},
 		{
-			name:     "Required token matches",
-			header:   "X-Auth",
-			allowed:  "valid-token",
-			token:    "valid-token",
-			expected: true,
+			name:    "Required token matches",
+			header:  "X-Auth",
+			allowed: "valid-token",
+			token:   "valid-token",
+			expect:  true,
 		},
 		{
-			name:     "Required token does not match",
-			header:   "X-Auth",
-			allowed:  "valid-token",
-			token:    "invalid-token",
-			expected: false,
+			name:    "Required token does not match",
+			header:  "X-Auth",
+			allowed: "valid-token",
+			token:   "invalid-token",
+			expect:  false,
 		},
 	}
 
@@ -44,9 +44,8 @@ func TestBasic(t *testing.T) {
 					tt.header: {tt.token},
 				},
 			}
-			if got := Basic(tt.header, tt.allowed, req); got != tt.expected {
-				t.Errorf("%s: got %v (with '%#v'), expected %v",
-					tt.name, got, req.Header, tt.expected)
+			if got := Basic(tt.header, tt.allowed, req); got != tt.expect {
+				t.Errorf("%s=%v; expect %v", tt.name, got, tt.expect)
 			}
 		})
 	}
