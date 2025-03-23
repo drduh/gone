@@ -63,7 +63,7 @@ func Upload(app *config.App) http.HandlerFunc {
 
 		var buf bytes.Buffer
 		if _, err := io.Copy(&buf, content); err != nil {
-			writeJSON(w, http.StatusInternalServerError, responseErrorFileFormFail)
+			writeJSON(w, http.StatusInternalServerError, responseErrorFileCopyFail)
 			app.Log.Error("upload copy failed",
 				"error", err.Error(),
 				"ip", ip, "ua", ua)

@@ -77,5 +77,12 @@
     --bg-light:     rgba(169, 132, 248,   1);
     --fg-dark:      rgba(239, 105,  46,   1);
     --fg-light:     rgba(249, 155, 197,   1);
+{{ else if eq .Theme "dusk" }}
+    --bg-dark:      rgba( 38,  36,  48,   1);
+    --bg-norm:      rgba( 42,  45,  84,   1);
+    --bg-norm-half: rgba( 42,  45,  84, 0.5);
+    --bg-light:     rgba(255, 190, 111,   1);
+    --fg-dark:      rgba(166, 129, 186,   1);
+    --fg-light:     rgba(211,  65,  59,   1);
 {{ end }}
 {{ end }}
