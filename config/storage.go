@@ -37,11 +37,8 @@ type File struct {
 	// Provided filename
 	Name string `json:"name,omitempty"`
 
-	// File size (in bytes)
-	Size int `json:"size,omitempty"`
-
-	// File content
-	Data []byte `json:"data,omitempty"`
+	// File size (bytes parsed into string)
+	Size string `json:"size,omitempty"`
 
 	// Uploader information
 	Owner `json:"owner,omitempty"`
@@ -51,6 +48,9 @@ type File struct {
 
 	// Downloads information
 	Downloads `json:"downloads,omitempty"`
+
+	// File content
+	Data []byte `json:"data,omitempty"`
 }
 
 // File owner information
@@ -86,7 +86,7 @@ type Time struct {
 type Downloads struct {
 
 	// Number of allowed downloads
-	Allow int `json:"allowed,omitempty"`
+	Allow int `json:"allow,omitempty"`
 
 	// Remaining number of downloads to expiration
 	Remain int `json:"remain,omitempty"`
@@ -103,8 +103,7 @@ func (f *File) NumRemaining() int {
 // Returns relative duration remaining until expiration
 func (f *File) TimeRemaining() time.Duration {
 	return time.Until(
-		f.Time.Upload.Add(f.Time.Duration)).Round(
-		time.Second)
+		f.Time.Upload.Add(f.Time.Duration)).Round(time.Second)
 }
 
 // Returns reason if File is expired

@@ -16,24 +16,21 @@ func Serve(app *config.App) error {
 
 	mux.HandleFunc("/", handlers.Index(app))
 
-	if app.Settings.Paths.Heartbeat != "" {
-		mux.HandleFunc(app.Settings.Paths.Heartbeat, handlers.Heartbeat(app))
+	paths := app.Settings.Paths
+	if paths.Heartbeat != "" {
+		mux.HandleFunc(paths.Heartbeat, handlers.Heartbeat(app))
 	}
-
-	if app.Settings.Paths.Download != "" {
-		mux.HandleFunc(app.Settings.Paths.Download, handlers.Download(app))
+	if paths.Download != "" {
+		mux.HandleFunc(paths.Download, handlers.Download(app))
 	}
-
-	if app.Settings.Paths.List != "" {
-		mux.HandleFunc(app.Settings.Paths.List, handlers.List(app))
+	if paths.List != "" {
+		mux.HandleFunc(paths.List, handlers.List(app))
 	}
-
-	if app.Settings.Paths.Static != "" {
-		mux.HandleFunc(app.Settings.Paths.Static, handlers.Static(app))
+	if paths.Static != "" {
+		mux.HandleFunc(paths.Static, handlers.Static(app))
 	}
-
-	if app.Settings.Paths.Upload != "" {
-		mux.HandleFunc(app.Settings.Paths.Upload, handlers.Upload(app))
+	if paths.Upload != "" {
+		mux.HandleFunc(paths.Upload, handlers.Upload(app))
 	}
 
 	srv := &http.Server{

@@ -52,5 +52,8 @@ fmt:
 test:
 	@$(GO) test ./...
 
+test-verbose:
+	@$(GO) test -v ./...
+
 clean:
 	@rm -rf $(OUT)

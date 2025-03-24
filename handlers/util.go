@@ -5,7 +5,8 @@ import (
 	"mime"
 	"net/http"
 	"path/filepath"
-	"time"
+
+	"github.com/drduh/gone/util"
 )
 
 // Writes JSON-encoded response
@@ -21,11 +22,9 @@ func writeFile(w http.ResponseWriter, data []byte, name string) {
 	if contentType == "" {
 		contentType = "application/octet-stream"
 	}
-
 	w.Header().Set("Content-Type", contentType)
 	w.Header().Set("Content-Disposition", "attachment; filename="+name)
 	w.WriteHeader(http.StatusOK)
-
 	_, _ = w.Write(data)
 }
 
@@ -34,8 +33,7 @@ func getTheme(theme string) string {
 	if theme != "" {
 		return theme
 	}
-	now := time.Now().Hour()
-	if now > 7 && now < 19 {
+	if util.IsDaytime() {
 		return "light"
 	}
 	return "dark"

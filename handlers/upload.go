@@ -9,6 +9,7 @@ import (
 
 	"github.com/drduh/gone/auth"
 	"github.com/drduh/gone/config"
+	"github.com/drduh/gone/util"
 )
 
 // Accepts content uploads
@@ -52,8 +53,7 @@ func Upload(app *config.App) http.HandlerFunc {
 
 		content, handler, err := r.FormFile("file")
 		if err != nil {
-			writeJSON(w, http.StatusBadRequest,
-				map[string]string{"error": err.Error()})
+			writeJSON(w, http.StatusBadRequest, responseErrorFileFormFail)
 			app.Log.Error("upload form failed",
 				"error", err.Error(),
 				"ip", ip, "ua", ua)
@@ -63,8 +63,7 @@ func Upload(app *config.App) http.HandlerFunc {
 
 		var buf bytes.Buffer
 		if _, err := io.Copy(&buf, content); err != nil {
-			writeJSON(w, http.StatusInternalServerError,
-				map[string]string{"error": err.Error()})
+			writeJSON(w, http.StatusInternalServerError, responseErrorFileCopyFail)
 			app.Log.Error("upload copy failed",
 				"error", err.Error(),
 				"ip", ip, "ua", ua)
@@ -75,19 +74,21 @@ func Upload(app *config.App) http.HandlerFunc {
 		downloadLimitInput := r.FormValue("downloads")
 		if limit, err := strconv.Atoi(downloadLimitInput); err == nil {
 			downloadLimit = limit
-			app.Log.Debug("got form value", "downloads", downloadLimit)
+			app.Log.Debug("got form value",
+				"downloads", downloadLimit)
 		}
 
 		durationLimit := app.Settings.Limits.Expiration.Duration
 		durationLimitInput := r.FormValue("duration")
 		if limit, err := time.ParseDuration(durationLimitInput); err == nil {
 			durationLimit = limit
-			app.Log.Debug("got form value", "duration", durationLimit.String())
+			app.Log.Debug("got form value",
+				"duration", durationLimit.String())
 		}
 
 		file := &config.File{
 			Name: handler.Filename,
-			Size: len(buf.Bytes()),
+			Size: util.FormatSize(len(buf.Bytes())),
 			Data: buf.Bytes(),
 			Owner: config.Owner{
 				Address: ip,

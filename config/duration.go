@@ -3,8 +3,9 @@ package config
 import (
 	"encoding/json"
 	"fmt"
-	"regexp"
 	"time"
+
+	"github.com/drduh/gone/util"
 )
 
 // Time-based file expiration
@@ -18,26 +19,20 @@ type Duration struct {
 func (d *Duration) UnmarshalJSON(b []byte) error {
 	var s string
 	if err := json.Unmarshal(b, &s); err != nil {
-		return fmt.Errorf("failed parsing duration: %w", err)
+		return fmt.Errorf("failed parsing duration json: %w", err)
 	}
 
-	if isNumeric(s) {
+	if util.IsNumeric(s) {
 		s += "s"
 	}
 
 	duration, err := time.ParseDuration(s)
 	if err != nil {
-		return fmt.Errorf("failed parsing duration: %w", err)
+		return fmt.Errorf("failed parsing duration string: %w", err)
 	}
 	d.Duration = duration
 
 	return nil
-}
-
-// Returns true if string contains numbers only
-func isNumeric(str string) bool {
-	re := regexp.MustCompile(`^\d+$`)
-	return re.MatchString(str)
 }
 
 // Convert back to time.Duration

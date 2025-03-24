@@ -24,6 +24,8 @@ Therefore, gone is only intended for use on a secure network with trusted device
 
 # Development
 
+gone requires [Go 1.24.1](https://go.dev/doc/install) to develop.
+
 ## Build
 
 To build the application on Linux:
@@ -55,7 +57,7 @@ make debug
 Application output is structured in JSON format and can be parsed with `jq` for convenience, for example:
 
 ```
-gone | jq .data
+./gone | jq .data
 ```
 
 The optional `-debug` flag can be used for debug mode (additional verbose program output).
@@ -67,7 +69,7 @@ gone uses an embedded JSON-based configuration [config/defaultSettings.json](htt
 Copy the JSON file and use the `-config` flag to set server options:
 
 ```
-gone -config=mySettings.json
+./gone -config=mySettings.json
 ```
 
 # Client
@@ -134,4 +136,27 @@ Post a message to index:
 
 ```
 curl -s -F 'message=hello, world!' http://localhost:8080 >/dev/null
+```
+
+## Functions
+
+See [config/zshrc](https://github.com/drduh/config/blob/main/zshrc#L541) for alias and function examples, such as:
+
+```
+$ gone_put test.txt 1 20m
+{
+  "name": "test.txt",
+  "size": "6.00 Bytes",
+  "owner": {
+    "address": "127.0.0.1:4306",
+    "agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/132.0.0.0 Safari/537.3"
+  },
+  "time": {
+    "allow": "20m0s",
+    "upload": "2025-03-20T10:00:00.00"
+  },
+  "downloads": {
+    "allow": 1
+  }
+}
 ```
