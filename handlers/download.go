@@ -47,7 +47,7 @@ func Download(app *config.App) http.HandlerFunc {
 			return
 		}
 
-		writeFile(w, file.Data, file.Name)
+		writeFile(w, file)
 		file.Downloads.Total++
 		app.Log.Info("served file",
 			"filename", file.Name,
