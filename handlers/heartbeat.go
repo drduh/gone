@@ -11,7 +11,7 @@ import (
 // Returns server status response
 func Heartbeat(app *config.App) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		ip, ua := r.RemoteAddr, r.UserAgent()
+		req := parseRequest(r)
 		uptime := time.Since(app.Start).String()
 
 		response := templates.Heartbeat{
@@ -19,15 +19,10 @@ func Heartbeat(app *config.App) http.HandlerFunc {
 			Version:   app.Version,
 			Port:      app.Settings.Port,
 			Uptime:    uptime,
-			FileCount: len(app.Storage.Files),
-			Limits: config.Limits{
-				Downloads:  app.Settings.Limits.Downloads,
-				Expiration: app.Settings.Limits.Expiration,
-				MaxSizeMb:  app.Settings.Limits.MaxSizeMb,
-				PerMinute:  app.Settings.Limits.PerMinute,
-			},
+			FileCount: app.Storage.CountFiles(),
+			Limits:    app.Settings.Limits,
 			Owner: config.Owner{
-				Address: ip,
+				Address: req.Address,
 				Headers: r.Header,
 			},
 		}
@@ -35,6 +30,6 @@ func Heartbeat(app *config.App) http.HandlerFunc {
 		writeJSON(w, http.StatusOK, response)
 		app.Log.Info("served heartbeat",
 			"uptime", uptime,
-			"ip", ip, "ua", ua)
+			"user", req)
 	}
 }

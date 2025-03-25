@@ -97,6 +97,26 @@ type Downloads struct {
 	Total int `json:"total,omitempty"`
 }
 
+// Clears Messages from Storage
+func (s *Storage) ClearMessages() {
+	s.Messages = make(map[int]*Message)
+}
+
+// Returns number of Files in Storage
+func (s *Storage) CountFiles() int {
+	return len(s.Files)
+}
+
+// Returns number of Messages in Storage
+func (s *Storage) CountMessages() int {
+	return len(s.Messages)
+}
+
+// Removes File from Storage
+func (s *Storage) Expire(f *File) {
+	delete(s.Files, f.Name)
+}
+
 // Returns reason if File is expired
 func (f *File) IsExpired(s Settings) string {
 	if f.Downloads.Total >= f.Downloads.Allow {
@@ -126,19 +146,4 @@ func (f *File) MimeType() string {
 func (f *File) TimeRemaining() time.Duration {
 	return time.Until(
 		f.Time.Upload.Add(f.Time.Duration)).Round(time.Second)
-}
-
-// Removes File from Storage
-func (s *Storage) Expire(f *File) {
-	delete(s.Files, f.Name)
-}
-
-// Clears Messages from Storage
-func (s *Storage) ClearMessages() {
-	s.Messages = make(map[int]*Message)
-}
-
-// Counts Messages in Storage
-func (s *Storage) CountMessages() int {
-	return len(s.Messages)
 }

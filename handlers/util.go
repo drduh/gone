@@ -40,7 +40,7 @@ func getTheme(theme string) string {
 	return "dark"
 }
 
-// Returns parsed Request struct for log
+// Returns parsed http Request struct for log
 func parseRequest(r *http.Request) *Request {
 	return &Request{
 		Action:  r.URL.String(),
