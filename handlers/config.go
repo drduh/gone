@@ -1,6 +1,19 @@
 package handlers
 
-var (
+// Server request
+type Request struct {
+
+	// Handler path
+	Action string
+
+	// User IP
+	Address string
+
+	// User agent
+	Agent string
+}
+
+const (
 	errorDeny         = "not authorized"
 	errorFileCopyFail = "file copy fail"
 	errorFileFormFail = "file form fail"
@@ -9,7 +22,9 @@ var (
 	errorRateLimit    = "limit exceeded"
 	errorTmplExec     = "failed to exec"
 	errorTmplParse    = "failed parsing"
+)
 
+var (
 	responseErrorDeny = map[string]string{
 		"error": errorDeny,
 	}

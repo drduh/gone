@@ -8,7 +8,16 @@ import (
 	"github.com/drduh/gone/util"
 )
 
-// Writes JSON-encoded response
+// JSON response helper for deny (auth fail)
+func deny(w http.ResponseWriter, app *config.App, r *Request) {
+	writeJSON(w, http.StatusUnauthorized, responseErrorDeny)
+	app.Log.Error(errorDeny,
+		"action", r.Action,
+		"ip", r.Address,
+		"ua", r.Agent)
+}
+
+// Writes JSON response
 func writeJSON(w http.ResponseWriter, code int, data interface{}) {
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 	w.WriteHeader(code)
