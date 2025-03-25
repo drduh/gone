@@ -1,7 +1,9 @@
 package config
 
 import (
+	"mime"
 	"net/http"
+	"path/filepath"
 	"time"
 )
 
@@ -95,17 +97,6 @@ type Downloads struct {
 	Total int `json:"total,omitempty"`
 }
 
-// Returns number of remaining downloads until expiration
-func (f *File) NumRemaining() int {
-	return f.Downloads.Allow - f.Downloads.Total
-}
-
-// Returns relative duration remaining until expiration
-func (f *File) TimeRemaining() time.Duration {
-	return time.Until(
-		f.Time.Upload.Add(f.Time.Duration)).Round(time.Second)
-}
-
 // Returns reason if File is expired
 func (f *File) IsExpired(s Settings) string {
 	if f.Downloads.Total >= f.Downloads.Allow {
@@ -115,6 +106,26 @@ func (f *File) IsExpired(s Settings) string {
 		return "limit duration"
 	}
 	return ""
+}
+
+// Returns number of remaining downloads until expiration
+func (f *File) NumRemaining() int {
+	return f.Downloads.Allow - f.Downloads.Total
+}
+
+// Returns File content type based on extension
+func (f *File) MimeType() string {
+	t := mime.TypeByExtension(filepath.Ext(f.Name))
+	if t == "" {
+		t = "application/octet-stream"
+	}
+	return t
+}
+
+// Returns relative duration remaining until expiration
+func (f *File) TimeRemaining() time.Duration {
+	return time.Until(
+		f.Time.Upload.Add(f.Time.Duration)).Round(time.Second)
 }
 
 // Removes File from Storage
