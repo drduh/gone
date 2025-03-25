@@ -31,7 +31,7 @@
     "ticker":     "30s"
   },
   "paths": {
-    "download":   "/download",
+    "download":   "/download/",
     "heartbeat":  "/heartbeat",
     "list":       "/list",
     "message":    "/",

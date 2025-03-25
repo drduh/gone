@@ -21,7 +21,10 @@ func Download(app *config.App) http.HandlerFunc {
 			return
 		}
 
-		fileName := r.URL.Query().Get("name")
+		fileName := r.URL.Path[len(app.Settings.Paths.Download):]
+		if fileName == "" {
+			fileName = r.URL.Query().Get("name")
+		}
 
 		var file *config.File
 		var found bool
