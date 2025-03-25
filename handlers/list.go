@@ -10,22 +10,17 @@ import (
 // Returns list of file records
 func List(app *config.App) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		ip, ua := r.RemoteAddr, r.UserAgent()
+		req := parseRequest(r)
 
 		if app.Settings.Auth.Require.List &&
 			!auth.Basic(app.Settings.Auth.Header, app.Settings.Auth.Token, r) {
-			writeJSON(w, http.StatusUnauthorized, responseErrorDeny)
-			app.Log.Error(errorDeny,
-				"action", "list",
-				"ip", ip, "ua", ua)
+			deny(w, app, req)
 			return
 		}
 
 		if throttle(app) {
 			writeJSON(w, http.StatusTooManyRequests, responseErrorRateLimit)
-			app.Log.Error(errorRateLimit,
-				"action", "list",
-				"ip", ip, "ua", ua)
+			app.Log.Error(errorRateLimit, "user", req)
 			return
 		}
 
@@ -35,8 +30,7 @@ func List(app *config.App) http.HandlerFunc {
 			if reason != "" {
 				app.Storage.Expire(file)
 				app.Log.Info("removed file",
-					"reason", reason,
-					"filename", file.Name,
+					"reason", reason, "filename", file.Name,
 					"downloads", file.Downloads.Total)
 			} else {
 				f := config.File{
@@ -62,7 +56,6 @@ func List(app *config.App) http.HandlerFunc {
 
 		writeJSON(w, http.StatusOK, files)
 		app.Log.Info("served list",
-			"files", len(files),
-			"ip", ip, "ua", ua)
+			"files", len(files), "user", req)
 	}
 }

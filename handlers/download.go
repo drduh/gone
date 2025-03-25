@@ -39,25 +39,21 @@ func Download(app *config.App) http.HandlerFunc {
 		if !found {
 			writeJSON(w, http.StatusNotFound, responseErrorFileNotFound)
 			app.Log.Error(errorFileNotFound,
-				"filename", fileName,
-				"user", req)
+				"filename", fileName, "user", req)
 			return
 		}
 
 		writeFile(w, file)
 		file.Downloads.Total++
 		app.Log.Info("served file",
-			"filename", file.Name,
-			"size", file.Size,
-			"downloads", file.Downloads.Total,
-			"user", req)
+			"filename", file.Name, "size", file.Size,
+			"downloads", file.Downloads.Total, "user", req)
 
 		reason := file.IsExpired(app.Settings)
 		if reason != "" {
 			app.Storage.Expire(file)
 			app.Log.Info("removed file",
-				"reason", reason,
-				"filename", file.Name,
+				"reason", reason, "filename", file.Name,
 				"downloads", file.Downloads.Total)
 		}
 	}

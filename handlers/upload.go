@@ -17,8 +17,8 @@ func Upload(app *config.App) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		req := parseRequest(r)
 
-		if app.Settings.Auth.Require.Upload &&
-			!auth.Basic(app.Settings.Auth.Header, app.Settings.Auth.Token, r) {
+		if app.Settings.Auth.Require.Upload && !auth.Basic(
+			app.Settings.Auth.Header, app.Settings.Auth.Token, r) {
 			deny(w, app, req)
 			return
 		}
@@ -72,8 +72,7 @@ func Upload(app *config.App) http.HandlerFunc {
 		durationLimitInput := r.FormValue("duration")
 		if limit, err := time.ParseDuration(durationLimitInput); err == nil {
 			durationLimit = limit
-			app.Log.Debug("got form value",
-				"duration", durationLimit.String())
+			app.Log.Debug("got form value", "duration", durationLimit.String())
 		}
 
 		file := &config.File{

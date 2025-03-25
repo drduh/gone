@@ -29,7 +29,6 @@ func Heartbeat(app *config.App) http.HandlerFunc {
 
 		writeJSON(w, http.StatusOK, response)
 		app.Log.Info("served heartbeat",
-			"uptime", uptime,
-			"user", req)
+			"uptime", uptime, "user", req)
 	}
 }
