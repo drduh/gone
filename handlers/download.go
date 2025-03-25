@@ -10,14 +10,15 @@ import (
 // Returns content by file name
 func Download(app *config.App) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		ip, ua := r.RemoteAddr, r.UserAgent()
+		req := &Request{
+			Action:  "download",
+			Address: r.RemoteAddr,
+			Agent:   r.UserAgent(),
+		}
 
 		if app.Settings.Auth.Require.Download &&
 			!auth.Basic(app.Settings.Auth.Header, app.Settings.Auth.Token, r) {
-			writeJSON(w, http.StatusUnauthorized, responseErrorDeny)
-			app.Log.Error(errorDeny,
-				"action", "download",
-				"ip", ip, "ua", ua)
+			deny(w, app, req)
 			return
 		}
 
@@ -43,7 +44,7 @@ func Download(app *config.App) http.HandlerFunc {
 			writeJSON(w, http.StatusNotFound, responseErrorFileNotFound)
 			app.Log.Error(errorFileNotFound,
 				"filename", fileName,
-				"ip", ip, "ua", ua)
+				"user", req)
 			return
 		}
 
@@ -53,7 +54,7 @@ func Download(app *config.App) http.HandlerFunc {
 			"filename", file.Name,
 			"size", file.Size,
 			"downloads", file.Downloads.Total,
-			"ip", ip, "ua", ua)
+			"user", req)
 
 		reason := file.IsExpired(app.Settings)
 		if reason != "" {

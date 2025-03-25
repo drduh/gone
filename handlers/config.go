@@ -4,13 +4,13 @@ package handlers
 type Request struct {
 
 	// Handler path
-	Action string
+	Action string `json:"action"`
 
 	// User IP
-	Address string
+	Address string `json:"address"`
 
 	// User agent
-	Agent string
+	Agent string `json:"agent"`
 }
 
 const (

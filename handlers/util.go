@@ -11,10 +11,7 @@ import (
 // JSON response helper for deny (auth fail)
 func deny(w http.ResponseWriter, app *config.App, r *Request) {
 	writeJSON(w, http.StatusUnauthorized, responseErrorDeny)
-	app.Log.Error(errorDeny,
-		"action", r.Action,
-		"ip", r.Address,
-		"ua", r.Agent)
+	app.Log.Error(errorDeny, "user", r)
 }
 
 // Writes JSON response
