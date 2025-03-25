@@ -15,11 +15,7 @@ import (
 // Accepts content uploads
 func Upload(app *config.App) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		req := &Request{
-			Action:  "upload",
-			Address: r.RemoteAddr,
-			Agent:   r.UserAgent(),
-		}
+		req := parseRequest(r)
 
 		if app.Settings.Auth.Require.Upload &&
 			!auth.Basic(app.Settings.Auth.Header, app.Settings.Auth.Token, r) {

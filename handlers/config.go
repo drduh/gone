@@ -1,6 +1,6 @@
 package handlers
 
-// Server request
+// Server request to log
 type Request struct {
 
 	// Handler path

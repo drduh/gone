@@ -10,11 +10,7 @@ import (
 // Returns content by file name
 func Download(app *config.App) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		req := &Request{
-			Action:  "download",
-			Address: r.RemoteAddr,
-			Agent:   r.UserAgent(),
-		}
+		req := parseRequest(r)
 
 		if app.Settings.Auth.Require.Download &&
 			!auth.Basic(app.Settings.Auth.Header, app.Settings.Auth.Token, r) {
