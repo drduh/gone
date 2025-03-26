@@ -73,11 +73,23 @@ type Error struct {
 	// Deny (not authorized)
 	Deny string `json:"deny"`
 
+	// File exceeds Storage Limits
+	FileSize string `json:"fileSize"`
+
 	// Upload form error
 	Form string `json:"form"`
 
 	// File not found in Storage
 	NotFound string `json:"notFound"`
+
+	// Template could not be executed
+	TmplExec string `json:"tmplExec"`
+
+	// Template could not be parsed
+	TmplParse string `json:"tmplParse"`
+
+	// Too many requests
+	RateLimit string `json:"rateLimit"`
 }
 
 // Index HTML index page properties

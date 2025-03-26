@@ -17,11 +17,11 @@
   "error": {
     "copy":       "file copy fail",
     "deny":       "not authorized",
+    "fileSize":   "file too large",
     "form":       "file form fail",
     "notFound":   "file not found",
     "tmplExec":   "failed to exec",
     "tmplParse":  "failed parsing",
-    "tooLarge":   "file too large",
     "rateLimit":  "limit exceeded"
   },
   "index": {

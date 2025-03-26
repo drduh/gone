@@ -17,8 +17,8 @@ func List(app *config.App) http.HandlerFunc {
 		}
 
 		if throttle(app) {
-			writeJSON(w, http.StatusTooManyRequests, responseErrorRateLimit)
-			app.Log.Error(errorRateLimit, "user", req)
+			writeJSON(w, http.StatusTooManyRequests, errorJSON(app.Error.RateLimit))
+			app.Log.Error(app.Error.RateLimit, "user", req)
 			return
 		}
 

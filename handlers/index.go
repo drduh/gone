@@ -75,8 +75,8 @@ func Index(app *config.App) http.HandlerFunc {
 		tmplName := "index.tmpl"
 		tmpl, err := template.New(tmplName).ParseFS(templates.All, "data/*.tmpl")
 		if err != nil {
-			writeJSON(w, http.StatusInternalServerError, responseErrorTmplParse)
-			app.Log.Error(errorTmplParse,
+			writeJSON(w, http.StatusInternalServerError, errorJSON(app.Error.TmplParse))
+			app.Log.Error(app.Error.TmplParse,
 				"template", tmplName, "error", err.Error(), "user", req)
 			return
 		}
@@ -96,8 +96,8 @@ func Index(app *config.App) http.HandlerFunc {
 		}
 
 		if err = tmpl.Execute(w, response); err != nil {
-			writeJSON(w, http.StatusInternalServerError, responseErrorTmplExec)
-			app.Log.Error(errorTmplExec,
+			writeJSON(w, http.StatusInternalServerError, errorJSON(app.Error.TmplExec))
+			app.Log.Error(app.Error.TmplExec,
 				"template", tmplName, "error", err.Error(), "user", req)
 			return
 		}
