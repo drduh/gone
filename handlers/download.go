@@ -10,18 +10,18 @@ import (
 // Returns content by file name
 func Download(app *config.App) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		ip, ua := r.RemoteAddr, r.UserAgent()
+		req := parseRequest(r)
 
 		if app.Settings.Auth.Require.Download &&
 			!auth.Basic(app.Settings.Auth.Header, app.Settings.Auth.Token, r) {
-			writeJSON(w, http.StatusUnauthorized, responseErrorDeny)
-			app.Log.Error(errorDeny,
-				"action", "download",
-				"ip", ip, "ua", ua)
+			deny(w, app, req)
 			return
 		}
 
-		fileName := r.URL.Query().Get("name")
+		fileName := r.URL.Path[len(app.Settings.Paths.Download):]
+		if fileName == "" {
+			fileName = r.URL.Query().Get("name")
+		}
 
 		var file *config.File
 		var found bool
@@ -39,25 +39,21 @@ func Download(app *config.App) http.HandlerFunc {
 		if !found {
 			writeJSON(w, http.StatusNotFound, responseErrorFileNotFound)
 			app.Log.Error(errorFileNotFound,
-				"filename", fileName,
-				"ip", ip, "ua", ua)
+				"filename", fileName, "user", req)
 			return
 		}
 
-		writeFile(w, file.Data, file.Name)
+		writeFile(w, file)
 		file.Downloads.Total++
 		app.Log.Info("served file",
-			"filename", file.Name,
-			"size", file.Size,
-			"downloads", file.Downloads.Total,
-			"ip", ip, "ua", ua)
+			"filename", file.Name, "size", file.Size,
+			"downloads", file.Downloads.Total, "user", req)
 
 		reason := file.IsExpired(app.Settings)
 		if reason != "" {
 			app.Storage.Expire(file)
 			app.Log.Info("removed file",
-				"reason", reason,
-				"filename", file.Name,
+				"reason", reason, "filename", file.Name,
 				"downloads", file.Downloads.Total)
 		}
 	}

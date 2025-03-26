@@ -1,7 +1,9 @@
 package config
 
 import (
+	"mime"
 	"net/http"
+	"path/filepath"
 	"time"
 )
 
@@ -95,15 +97,24 @@ type Downloads struct {
 	Total int `json:"total,omitempty"`
 }
 
-// Returns number of remaining downloads until expiration
-func (f *File) NumRemaining() int {
-	return f.Downloads.Allow - f.Downloads.Total
+// Clears Messages from Storage
+func (s *Storage) ClearMessages() {
+	s.Messages = make(map[int]*Message)
 }
 
-// Returns relative duration remaining until expiration
-func (f *File) TimeRemaining() time.Duration {
-	return time.Until(
-		f.Time.Upload.Add(f.Time.Duration)).Round(time.Second)
+// Returns number of Files in Storage
+func (s *Storage) CountFiles() int {
+	return len(s.Files)
+}
+
+// Returns number of Messages in Storage
+func (s *Storage) CountMessages() int {
+	return len(s.Messages)
+}
+
+// Removes File from Storage
+func (s *Storage) Expire(f *File) {
+	delete(s.Files, f.Name)
 }
 
 // Returns reason if File is expired
@@ -117,17 +128,22 @@ func (f *File) IsExpired(s Settings) string {
 	return ""
 }
 
-// Removes File from Storage
-func (s *Storage) Expire(f *File) {
-	delete(s.Files, f.Name)
+// Returns number of remaining downloads until expiration
+func (f *File) NumRemaining() int {
+	return f.Downloads.Allow - f.Downloads.Total
 }
 
-// Clears Messages from Storage
-func (s *Storage) ClearMessages() {
-	s.Messages = make(map[int]*Message)
+// Returns File content type based on extension
+func (f *File) MimeType() string {
+	t := mime.TypeByExtension(filepath.Ext(f.Name))
+	if t == "" {
+		t = "application/octet-stream"
+	}
+	return t
 }
 
-// Counts Messages in Storage
-func (s *Storage) CountMessages() int {
-	return len(s.Messages)
+// Returns relative duration remaining until expiration
+func (f *File) TimeRemaining() time.Duration {
+	return time.Until(
+		f.Time.Upload.Add(f.Time.Duration)).Round(time.Second)
 }

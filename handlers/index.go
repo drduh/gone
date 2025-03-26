@@ -13,29 +13,26 @@ import (
 // Serves index page with app routing features
 func Index(app *config.App) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		ip, ua := r.RemoteAddr, r.UserAgent()
+		req := parseRequest(r)
 
 		if r.Method == http.MethodPost {
 			if app.Settings.Auth.Require.Message &&
 				!auth.Basic(app.Settings.Auth.Header, app.Settings.Auth.Token, r) {
 				writeJSON(w, http.StatusUnauthorized, responseErrorDeny)
-				app.Log.Error(errorDeny,
-					"action", "message",
-					"ip", ip, "ua", ua)
+				app.Log.Error(errorDeny, "user", req)
 				return
 			}
 
 			if r.FormValue("clear") != "" {
 				app.Storage.ClearMessages()
-				app.Log.Debug("cleared messages",
-					"ip", ip, "ua", ua)
+				app.Log.Debug("cleared messages", "user", req)
 			}
 
 			message := config.Message{
 				Count: app.Storage.CountMessages(),
 				Owner: config.Owner{
-					Address: ip,
-					Agent:   ua,
+					Address: req.Address,
+					Agent:   req.Agent,
 				},
 				Time: config.Time{
 					Allow: time.Now().Format(app.Settings.Audit.TimeFormat),
@@ -48,8 +45,7 @@ func Index(app *config.App) http.HandlerFunc {
 				message.Data = content
 				app.Storage.Messages[message.Count] = &message
 				app.Log.Debug("added message",
-					"message", content,
-					"ip", ip, "ua", ua)
+					"message", content, "user", req)
 			}
 		}
 
@@ -84,9 +80,7 @@ func Index(app *config.App) http.HandlerFunc {
 		if err != nil {
 			writeJSON(w, http.StatusInternalServerError, responseErrorTmplParse)
 			app.Log.Error(errorTmplParse,
-				"template", tmplName,
-				"error", err.Error(),
-				"ip", ip, "ua", ua)
+				"template", tmplName, "error", err.Error(), "user", req)
 			return
 		}
 
@@ -107,13 +101,10 @@ func Index(app *config.App) http.HandlerFunc {
 		if err = tmpl.Execute(w, response); err != nil {
 			writeJSON(w, http.StatusInternalServerError, responseErrorTmplExec)
 			app.Log.Error(errorTmplExec,
-				"template", tmplName,
-				"error", err.Error(),
-				"ip", ip, "ua", ua)
+				"template", tmplName, "error", err.Error(), "user", req)
 			return
 		}
 
-		app.Log.Info("served index",
-			"ip", ip, "ua", ua)
+		app.Log.Info("served index", "user", req)
 	}
 }

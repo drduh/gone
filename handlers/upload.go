@@ -15,22 +15,17 @@ import (
 // Accepts content uploads
 func Upload(app *config.App) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		ip, ua := r.RemoteAddr, r.UserAgent()
+		req := parseRequest(r)
 
-		if app.Settings.Auth.Require.Upload &&
-			!auth.Basic(app.Settings.Auth.Header, app.Settings.Auth.Token, r) {
-			writeJSON(w, http.StatusUnauthorized, responseErrorDeny)
-			app.Log.Error(errorDeny,
-				"action", "upload",
-				"ip", ip, "ua", ua)
+		if app.Settings.Auth.Require.Upload && !auth.Basic(
+			app.Settings.Auth.Header, app.Settings.Auth.Token, r) {
+			deny(w, app, req)
 			return
 		}
 
 		if throttle(app) {
 			writeJSON(w, http.StatusTooManyRequests, responseErrorRateLimit)
-			app.Log.Error(errorRateLimit,
-				"action", "upload",
-				"ip", ip, "ua", ua)
+			app.Log.Error(errorRateLimit, "user", req)
 			return
 		}
 
@@ -38,16 +33,14 @@ func Upload(app *config.App) http.HandlerFunc {
 		if r.ContentLength > maxBytes {
 			writeJSON(w, http.StatusRequestEntityTooLarge, responseErrorFileTooLarge)
 			app.Log.Error(errorFileTooLarge,
-				"sizeMb", r.ContentLength/(1<<20),
-				"ip", ip, "ua", ua)
+				"sizeMb", r.ContentLength/(1<<20), "user", req)
 			return
 		}
 
 		r.Body = http.MaxBytesReader(w, r.Body, maxBytes)
 		if err := r.ParseMultipartForm(maxBytes); err != nil {
 			app.Log.Error("upload failed",
-				"error", err.Error(),
-				"ip", ip, "ua", ua)
+				"error", err.Error(), "user", req)
 			return
 		}
 
@@ -55,8 +48,7 @@ func Upload(app *config.App) http.HandlerFunc {
 		if err != nil {
 			writeJSON(w, http.StatusBadRequest, responseErrorFileFormFail)
 			app.Log.Error("upload form failed",
-				"error", err.Error(),
-				"ip", ip, "ua", ua)
+				"error", err.Error(), "user", req)
 			return
 		}
 		defer content.Close()
@@ -65,8 +57,7 @@ func Upload(app *config.App) http.HandlerFunc {
 		if _, err := io.Copy(&buf, content); err != nil {
 			writeJSON(w, http.StatusInternalServerError, responseErrorFileCopyFail)
 			app.Log.Error("upload copy failed",
-				"error", err.Error(),
-				"ip", ip, "ua", ua)
+				"error", err.Error(), "user", req)
 			return
 		}
 
@@ -74,16 +65,14 @@ func Upload(app *config.App) http.HandlerFunc {
 		downloadLimitInput := r.FormValue("downloads")
 		if limit, err := strconv.Atoi(downloadLimitInput); err == nil {
 			downloadLimit = limit
-			app.Log.Debug("got form value",
-				"downloads", downloadLimit)
+			app.Log.Debug("got form value", "downloads", downloadLimit)
 		}
 
 		durationLimit := app.Settings.Limits.Expiration.Duration
 		durationLimitInput := r.FormValue("duration")
 		if limit, err := time.ParseDuration(durationLimitInput); err == nil {
 			durationLimit = limit
-			app.Log.Debug("got form value",
-				"duration", durationLimit.String())
+			app.Log.Debug("got form value", "duration", durationLimit.String())
 		}
 
 		file := &config.File{
@@ -91,8 +80,8 @@ func Upload(app *config.App) http.HandlerFunc {
 			Size: util.FormatSize(len(buf.Bytes())),
 			Data: buf.Bytes(),
 			Owner: config.Owner{
-				Address: ip,
-				Agent:   ua,
+				Address: req.Address,
+				Agent:   req.Agent,
 			},
 			Time: config.Time{
 				Duration: durationLimit,
@@ -122,8 +111,6 @@ func Upload(app *config.App) http.HandlerFunc {
 		writeJSON(w, http.StatusOK, response)
 
 		app.Log.Info("file uploaded",
-			"filename", file.Name,
-			"size", file.Size,
-			"ip", ip, "ua", ua)
+			"filename", file.Name, "size", file.Size, "user", req)
 	}
 }

@@ -121,6 +121,8 @@ curl http://localhost:8080/list
 Download file (the default configuration requires basic authentication):
 
 ```
+curl -H "X-Auth: mySecret" "http://localhost:8080/download/test.txt"
+
 curl -H "X-Auth: mySecret" "http://localhost:8080/download?name=test.txt"
 ```
 
