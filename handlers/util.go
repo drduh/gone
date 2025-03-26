@@ -18,12 +18,15 @@ func deny(w http.ResponseWriter, app *config.App, r *Request) {
 
 // Returns true if auth for route path is required and allowed
 func isAllowed(app *config.App, r *http.Request) bool {
-	required := false
+	required := true
 	if strings.Contains(r.URL.Path, app.Settings.Paths.Download) {
 		required = app.Settings.Auth.Require.Download
 	}
 	if strings.Contains(r.URL.Path, app.Settings.Paths.List) {
 		required = app.Settings.Auth.Require.List
+	}
+	if strings.Contains(r.URL.Path, app.Settings.Paths.Message) {
+		required = app.Settings.Auth.Require.Message
 	}
 	if strings.Contains(r.URL.Path, app.Settings.Paths.Upload) {
 		required = app.Settings.Auth.Require.Upload
