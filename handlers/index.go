@@ -5,7 +5,6 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/drduh/gone/auth"
 	"github.com/drduh/gone/config"
 	"github.com/drduh/gone/templates"
 )
@@ -16,8 +15,7 @@ func Index(app *config.App) http.HandlerFunc {
 		req := parseRequest(r)
 
 		if r.Method == http.MethodPost {
-			if app.Settings.Auth.Require.Message &&
-				!auth.Basic(app.Settings.Auth.Header, app.Settings.Auth.Token, r) {
+			if !isAllowed(app, r) {
 				writeJSON(w, http.StatusUnauthorized, responseErrorDeny)
 				app.Log.Error(errorDeny, "user", req)
 				return

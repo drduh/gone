@@ -7,7 +7,6 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/drduh/gone/auth"
 	"github.com/drduh/gone/config"
 	"github.com/drduh/gone/util"
 )
@@ -17,8 +16,7 @@ func Upload(app *config.App) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		req := parseRequest(r)
 
-		if app.Settings.Auth.Require.Upload && !auth.Basic(
-			app.Settings.Auth.Header, app.Settings.Auth.Token, r) {
+		if !isAllowed(app, r) {
 			deny(w, app, req)
 			return
 		}
