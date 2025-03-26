@@ -16,8 +16,7 @@ func Index(app *config.App) http.HandlerFunc {
 
 		if r.Method == http.MethodPost {
 			if !isAllowed(app, r) {
-				writeJSON(w, http.StatusUnauthorized, responseErrorDeny)
-				app.Log.Error(errorDeny, "user", req)
+				deny(w, app, req)
 				return
 			}
 

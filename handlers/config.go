@@ -14,7 +14,6 @@ type Request struct {
 }
 
 const (
-	errorDeny         = "not authorized"
 	errorFileCopyFail = "file copy fail"
 	errorFileFormFail = "file form fail"
 	errorFileNotFound = "file not found"
@@ -25,9 +24,6 @@ const (
 )
 
 var (
-	responseErrorDeny = map[string]string{
-		"error": errorDeny,
-	}
 	responseErrorFileCopyFail = map[string]string{
 		"error": errorFileCopyFail,
 	}

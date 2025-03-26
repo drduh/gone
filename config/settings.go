@@ -9,6 +9,9 @@ type Settings struct {
 	// Authentication requirements
 	Auth `json:"auth"`
 
+	// Errors to serve
+	Error `json:"error"`
+
 	// User interface options
 	Index `json:"index"`
 
@@ -59,6 +62,13 @@ type Auth struct {
 		// Whether to require authentication to upload files
 		Upload bool `json:"upload"`
 	} `json:"require"`
+}
+
+// Error response
+type Error struct {
+
+	// Deny (not authorized)
+	Deny string `json:"deny"`
 }
 
 // Index HTML index page properties
