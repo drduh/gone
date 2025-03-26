@@ -67,8 +67,17 @@ type Auth struct {
 // Error response
 type Error struct {
 
+	// Failure to copy file
+	Copy string `json:"copy"`
+
 	// Deny (not authorized)
 	Deny string `json:"deny"`
+
+	// Upload form error
+	Form string `json:"form"`
+
+	// File not found in Storage
+	NotFound string `json:"notFound"`
 }
 
 // Index HTML index page properties

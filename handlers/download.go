@@ -35,8 +35,8 @@ func Download(app *config.App) http.HandlerFunc {
 		}
 
 		if !found {
-			writeJSON(w, http.StatusNotFound, responseErrorFileNotFound)
-			app.Log.Error(errorFileNotFound,
+			writeJSON(w, http.StatusNotFound, errorJSON(app.Error.NotFound))
+			app.Log.Error(app.Error.NotFound,
 				"filename", fileName, "user", req)
 			return
 		}

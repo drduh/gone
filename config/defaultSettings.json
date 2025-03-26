@@ -15,7 +15,14 @@
     "timeFormat": "Monday Jan 2 15:04"
   },
   "error": {
-    "deny":       "not authorized"
+    "copy":       "file copy fail",
+    "deny":       "not authorized",
+    "form":       "file form fail",
+    "notFound":   "file not found",
+    "tmplExec":   "failed to exec",
+    "tmplParse":  "failed parsing",
+    "tooLarge":   "file too large",
+    "rateLimit":  "limit exceeded"
   },
   "index": {
     "cookie": {
