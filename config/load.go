@@ -30,7 +30,7 @@ func Load() *App {
 	}
 	app.Settings = settings
 
-	auditor, err := audit.StartAuditor(&audit.Config{
+	auditor, err := audit.Start(&audit.Config{
 		Debug:      app.Modes.Debug,
 		TimeFormat: settings.Audit.TimeFormat,
 		Filename:   settings.Audit.Filename,

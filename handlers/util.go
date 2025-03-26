@@ -3,7 +3,9 @@ package handlers
 import (
 	"encoding/json"
 	"net/http"
+	"strings"
 
+	"github.com/drduh/gone/auth"
 	"github.com/drduh/gone/config"
 	"github.com/drduh/gone/util"
 )
@@ -12,6 +14,29 @@ import (
 func deny(w http.ResponseWriter, app *config.App, r *Request) {
 	writeJSON(w, http.StatusUnauthorized, responseErrorDeny)
 	app.Log.Error(errorDeny, "user", r)
+}
+
+// Returns true if auth for route path is required and allowed
+func isAllowed(app *config.App, r *http.Request) bool {
+	required := false
+	if strings.Contains(r.URL.Path, app.Settings.Paths.Download) {
+		required = app.Settings.Auth.Require.Download
+	}
+	if strings.Contains(r.URL.Path, app.Settings.Paths.List) {
+		required = app.Settings.Auth.Require.List
+	}
+	if strings.Contains(r.URL.Path, app.Settings.Paths.Upload) {
+		required = app.Settings.Auth.Require.Upload
+	}
+	if !required {
+		return true
+	}
+	return isAuthenticated(app, r)
+}
+
+// Returns true if authentication is successful
+func isAuthenticated(app *config.App, r *http.Request) bool {
+	return auth.Basic(app.Settings.Auth.Header, app.Settings.Auth.Token, r)
 }
 
 // Writes JSON response
