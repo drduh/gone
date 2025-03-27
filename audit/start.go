@@ -8,7 +8,7 @@ import (
 var cfg = &Config{}
 
 // Returns initialized Auditor ready for logging
-func StartAuditor(c *Config) (*Auditor, error) {
+func Start(c *Config) (*Auditor, error) {
 	cfg = c
 
 	opts := slog.HandlerOptions{}

@@ -14,6 +14,16 @@
     "logFile":    "",
     "timeFormat": "Monday Jan 2 15:04"
   },
+  "error": {
+    "copy":       "file copy fail",
+    "deny":       "not authorized",
+    "fileSize":   "file too large",
+    "form":       "file form fail",
+    "notFound":   "file not found",
+    "tmplExec":   "failed to exec",
+    "tmplParse":  "failed parsing",
+    "rateLimit":  "limit exceeded"
+  },
   "index": {
     "cookie": {
       "id":       "goneTheme",

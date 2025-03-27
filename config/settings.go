@@ -9,6 +9,9 @@ type Settings struct {
 	// Authentication requirements
 	Auth `json:"auth"`
 
+	// Errors to serve
+	Error `json:"error"`
+
 	// User interface options
 	Index `json:"index"`
 
@@ -59,6 +62,34 @@ type Auth struct {
 		// Whether to require authentication to upload files
 		Upload bool `json:"upload"`
 	} `json:"require"`
+}
+
+// Error response
+type Error struct {
+
+	// Failure to copy file
+	Copy string `json:"copy"`
+
+	// Deny (not authorized)
+	Deny string `json:"deny"`
+
+	// File exceeds Storage Limits
+	FileSize string `json:"fileSize"`
+
+	// Upload form error
+	Form string `json:"form"`
+
+	// File not found in Storage
+	NotFound string `json:"notFound"`
+
+	// Template could not be executed
+	TmplExec string `json:"tmplExec"`
+
+	// Template could not be parsed
+	TmplParse string `json:"tmplParse"`
+
+	// Too many requests
+	RateLimit string `json:"rateLimit"`
 }
 
 // Index HTML index page properties

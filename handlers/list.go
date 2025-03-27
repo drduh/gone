@@ -3,7 +3,6 @@ package handlers
 import (
 	"net/http"
 
-	"github.com/drduh/gone/auth"
 	"github.com/drduh/gone/config"
 )
 
@@ -12,15 +11,14 @@ func List(app *config.App) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		req := parseRequest(r)
 
-		if app.Settings.Auth.Require.List &&
-			!auth.Basic(app.Settings.Auth.Header, app.Settings.Auth.Token, r) {
+		if !isAllowed(app, r) {
 			deny(w, app, req)
 			return
 		}
 
 		if throttle(app) {
-			writeJSON(w, http.StatusTooManyRequests, responseErrorRateLimit)
-			app.Log.Error(errorRateLimit, "user", req)
+			writeJSON(w, http.StatusTooManyRequests, errorJSON(app.Error.RateLimit))
+			app.Log.Error(app.Error.RateLimit, "user", req)
 			return
 		}
 

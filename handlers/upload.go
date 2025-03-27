@@ -7,7 +7,6 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/drduh/gone/auth"
 	"github.com/drduh/gone/config"
 	"github.com/drduh/gone/util"
 )
@@ -17,22 +16,21 @@ func Upload(app *config.App) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		req := parseRequest(r)
 
-		if app.Settings.Auth.Require.Upload && !auth.Basic(
-			app.Settings.Auth.Header, app.Settings.Auth.Token, r) {
+		if !isAllowed(app, r) {
 			deny(w, app, req)
 			return
 		}
 
 		if throttle(app) {
-			writeJSON(w, http.StatusTooManyRequests, responseErrorRateLimit)
-			app.Log.Error(errorRateLimit, "user", req)
+			writeJSON(w, http.StatusTooManyRequests, errorJSON(app.Error.RateLimit))
+			app.Log.Error(app.Error.RateLimit, "user", req)
 			return
 		}
 
 		maxBytes := int64(app.Settings.Limits.MaxSizeMb) << 20
 		if r.ContentLength > maxBytes {
-			writeJSON(w, http.StatusRequestEntityTooLarge, responseErrorFileTooLarge)
-			app.Log.Error(errorFileTooLarge,
+			writeJSON(w, http.StatusRequestEntityTooLarge, errorJSON(app.Error.FileSize))
+			app.Log.Error(app.Error.FileSize,
 				"sizeMb", r.ContentLength/(1<<20), "user", req)
 			return
 		}
@@ -46,7 +44,7 @@ func Upload(app *config.App) http.HandlerFunc {
 
 		content, handler, err := r.FormFile("file")
 		if err != nil {
-			writeJSON(w, http.StatusBadRequest, responseErrorFileFormFail)
+			writeJSON(w, http.StatusBadRequest, errorJSON(app.Error.Form))
 			app.Log.Error("upload form failed",
 				"error", err.Error(), "user", req)
 			return
@@ -55,7 +53,7 @@ func Upload(app *config.App) http.HandlerFunc {
 
 		var buf bytes.Buffer
 		if _, err := io.Copy(&buf, content); err != nil {
-			writeJSON(w, http.StatusInternalServerError, responseErrorFileCopyFail)
+			writeJSON(w, http.StatusInternalServerError, errorJSON(app.Error.Copy))
 			app.Log.Error("upload copy failed",
 				"error", err.Error(), "user", req)
 			return
