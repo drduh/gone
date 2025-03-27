@@ -16,6 +16,10 @@ func Serve(app *config.App) error {
 
 	mux.HandleFunc("/", handlers.Index(app))
 
+	mux.Handle("/static/", http.StripPrefix(
+		"/static/", http.FileServer(http.Dir(
+			"templates/data/static/"))))
+
 	paths := app.Settings.Paths
 	if paths.Heartbeat != "" {
 		mux.HandleFunc(paths.Heartbeat, handlers.Heartbeat(app))
