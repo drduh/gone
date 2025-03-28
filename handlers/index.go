@@ -86,6 +86,7 @@ func Index(app *config.App) http.HandlerFunc {
 		response := templates.Index{
 			Auth:            settings.Auth,
 			DefaultDuration: duration.String(),
+			Index:           settings.Index,
 			Paths:           settings.Paths,
 			Storage:         app.Storage,
 			Theme:           theme,

@@ -4,11 +4,11 @@
     <div class="box">
       <form action="/"
             method="post"
-           enctype="multipart/form-data">
+           enctype="application/x-www-form-urlencoded">
         <input type="text"
               class="selectMessage"
                name="message"
-        placeholder="enter message">
+        placeholder="{{ .Index.Placeholder.Message }}">
         <input type="checkbox"
               class="selectClear"
                name="clear">

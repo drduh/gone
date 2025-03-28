@@ -28,11 +28,14 @@ type Index struct {
 	// Form field placeholder for duration
 	DefaultDuration string
 
-	// Configured route paths
-	config.Paths
-
 	// Authentication configuration
 	config.Auth
+
+	// Index HTML page properties
+	config.Index
+
+	// Configured route paths
+	config.Paths
 
 	// Configured storage (files and messages)
 	config.Storage
