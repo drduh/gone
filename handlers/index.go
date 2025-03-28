@@ -87,6 +87,7 @@ func Index(app *config.App) http.HandlerFunc {
 			Auth:            settings.Auth,
 			DefaultDuration: duration.String(),
 			Index:           settings.Index,
+			Limits:          app.Limits,
 			Paths:           settings.Paths,
 			Storage:         app.Storage,
 			Theme:           theme,

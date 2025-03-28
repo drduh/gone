@@ -31,8 +31,11 @@ type Index struct {
 	// Authentication configuration
 	config.Auth
 
-	// Index HTML page properties
+	// Page properties
 	config.Index
+
+	// Page restrictions and limits
+	config.Limits
 
 	// Configured route paths
 	config.Paths

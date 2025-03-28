@@ -143,6 +143,9 @@ type Limits struct {
 	// Maximum file size (in Megabytes)
 	MaxSizeMb int `json:"maxSizeMb,omitempty"`
 
+	// Message character length
+	MsgChars int `json:"msgChars,omitempty"`
+
 	// Number of requests per minute to rate limit
 	PerMinute int `json:"perMinute,omitempty"`
 }

@@ -42,6 +42,7 @@
     "downloads":  1,
     "duration":   "2m",
     "maxSizeMb":  20,
+    "msgChars":   128,
     "perMinute":  10,
     "ticker":     "30s"
   },

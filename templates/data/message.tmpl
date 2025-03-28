@@ -8,6 +8,7 @@
         <input type="text"
               class="selectMessage"
                name="message"
+          maxlength="{{ .Limits.MsgChars }}"
         placeholder="{{ .Index.Placeholder.Message }}">
         <input type="checkbox"
               class="selectClear"
