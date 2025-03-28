@@ -12,12 +12,12 @@ func Message(app *config.App) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		req := parseRequest(r)
 
-		if r.Method == http.MethodPost {
-			if !isAllowed(app, r) {
-				deny(w, app, req)
-				return
-			}
+		if !isAllowed(app, r) {
+			deny(w, app, req)
+			return
+		}
 
+		if r.Method == http.MethodPost {
 			if r.FormValue("clear") != "" {
 				app.Storage.ClearMessages()
 				app.Log.Debug("cleared messages", "user", req)
@@ -42,9 +42,10 @@ func Message(app *config.App) http.HandlerFunc {
 				app.Log.Debug("added message",
 					"message", content, "user", req)
 			}
+
+			http.Redirect(w, r, "/", http.StatusSeeOther)
 		}
 
-		http.Redirect(w, r, "/", http.StatusSeeOther)
-		return
+		writeJSON(w, http.StatusOK, app.Storage.Messages)
 	}
 }
