@@ -113,6 +113,19 @@ type Index struct {
 		// Label ("goneTheme")
 		Id string `json:"id"`
 	} `json:"cookie"`
+
+	// Index form placeholder text
+	Placeholder struct {
+
+		// Authentication field
+		Auth string `json:"auth"`
+
+		// File selection field
+		Filename string `json:"filename"`
+
+		// Message input field
+		Message string `json:"message"`
+	} `json:"placeholder"`
 }
 
 // Download and upload limits

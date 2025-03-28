@@ -29,6 +29,11 @@
       "id":       "goneTheme",
       "time":     "192h"
     },
+    "placeholder": {
+      "auth":     "secret required",
+      "filename": "enter filename",
+      "message":  "enter message"
+    },
     "theme":      "",
     "themePick":  true,
     "title":      "gone"
