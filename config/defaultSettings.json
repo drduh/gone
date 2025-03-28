@@ -29,6 +29,7 @@
       "id":       "goneTheme",
       "time":     "192h"
     },
+    "csp":        true,
     "placeholder": {
       "auth":     "secret required",
       "filename": "enter filename",

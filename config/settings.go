@@ -95,6 +95,9 @@ type Error struct {
 // Index HTML index page properties
 type Index struct {
 
+	// Whether to enable Content Security Policy (CSP)
+	CSP bool `json:"csp"`
+
 	// Whether to allow theme selection
 	ThemePick bool `json:"themePick"`
 
