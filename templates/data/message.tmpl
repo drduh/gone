@@ -2,7 +2,7 @@
 {{ define "message" }}
   <div class="container">
     <div class="box">
-      <form action="/"
+      <form action="{{ .Paths.Message }}"
             method="post"
            enctype="application/x-www-form-urlencoded">
         <input type="text"

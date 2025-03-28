@@ -30,6 +30,9 @@ func isAllowed(app *config.App, r *http.Request) bool {
 	if strings.Contains(r.URL.Path, app.Settings.Paths.List) {
 		required = app.Settings.Auth.Require.List
 	}
+	if strings.Contains(r.URL.Path, app.Settings.Paths.Message) {
+		required = app.Settings.Auth.Require.Message
+	}
 	if strings.Contains(r.URL.Path, app.Settings.Paths.Upload) {
 		required = app.Settings.Auth.Require.Upload
 	}

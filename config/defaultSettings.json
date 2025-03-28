@@ -52,7 +52,7 @@
     "download":   "/download/",
     "heartbeat":  "/heartbeat",
     "list":       "/list",
-    "message":    "/",
+    "message":    "/msg",
     "static":     "/static",
     "upload":     "/upload"
   },

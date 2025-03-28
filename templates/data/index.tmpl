@@ -1,23 +1,5 @@
 <!-- index.tmpl -->
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="{{ .Version }}">
-    {{ if .Index.CSP }}
-    {{ template "csp" . }}
-    {{ end }}
-    {{ if .Theme }}
-    <link rel="stylesheet" href="/assets/style.css">
-    <style>
-      :root {
-        {{ template "theme" . }}
-      }
-    </style>
-    {{ end }}
-    <title>{{ .Title }}</title>
-  </head>
+{{ template "header" . }}
   <body>
     <div class="container">
 
@@ -40,6 +22,5 @@
     {{ end }}
 
     {{ template "footer" . }}
-
   </body>
 </html>

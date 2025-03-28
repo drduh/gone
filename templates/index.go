@@ -12,9 +12,6 @@ var All embed.FS
 // Index HTML page elements
 type Index struct {
 
-	// Page title
-	Title string
-
 	// Whether to allow theme selection
 	ThemePick bool
 
