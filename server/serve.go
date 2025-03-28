@@ -17,6 +17,12 @@ func Serve(app *config.App) error {
 	mux.HandleFunc("/", handlers.Index(app))
 
 	paths := app.Settings.Paths
+
+	if paths.Assets != "" {
+		mux.Handle(paths.Assets, http.StripPrefix(
+			paths.Assets, http.FileServer(
+				http.Dir("templates/data/assets/"))))
+	}
 	if paths.Heartbeat != "" {
 		mux.HandleFunc(paths.Heartbeat, handlers.Heartbeat(app))
 	}

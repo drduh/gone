@@ -41,6 +41,7 @@
     "ticker":     "30s"
   },
   "paths": {
+    "assets":     "/assets/",
     "download":   "/download/",
     "heartbeat":  "/heartbeat",
     "list":       "/list",

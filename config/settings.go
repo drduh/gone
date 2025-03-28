@@ -137,6 +137,9 @@ type Limits struct {
 // Paths to route
 type Paths struct {
 
+	// Assets for HTML pages ("/assets/")
+	Assets string `json:"assets"`
+
 	// File download ("/download")
 	Download string `json:"download"`
 

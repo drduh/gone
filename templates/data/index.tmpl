@@ -1,38 +1,49 @@
 <!-- index.tmpl -->
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>{{ .Title }}</title>
-  {{ if .Theme }}
-    <style type="text/css">
-      {{ template "style" . }}
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="{{ .Version }}">
+    <meta http-equiv="Content-Security-Policy"
+             content="child-src   'none';
+                      default-src 'self';
+                      frame-src   'none';
+                      object-src  'none';
+                      script-src  'self';
+                      style-src   'self' 'unsafe-inline';">
+    {{ if .Theme }}
+    <link rel="stylesheet" href="/assets/style.css">
+    <style>
+      :root {
+        {{ template "theme" . }}
+      }
     </style>
-  {{ end }}
-</head>
-<body>
-  <div class="container">
+    {{ end }}
+    <title>{{ .Title }}</title>
+  </head>
+  <body>
+    <div class="container">
 
-  {{ if .Paths.Upload }}
+    {{ if .Paths.Upload }}
     {{ template "upload" . }}
-  {{ end }}
+    {{ end }}
 
-  {{ if .Paths.Download }}
+    {{ if .Paths.Download }}
     {{ template "download" . }}
-  {{ end }}
+    {{ end }}
 
-  {{ if .Paths.List }}
+    {{ if .Paths.List }}
     {{ template "list" . }}
-  {{ end }}
+    {{ end }}
 
-  </div>
+    </div>
 
-  {{ if .Paths.Message }}
+    {{ if .Paths.Message }}
     {{ template "message" . }}
-  {{ end }}
+    {{ end }}
 
-  {{ template "footer" . }}
+    {{ template "footer" . }}
 
-</body>
+  </body>
 </html>
