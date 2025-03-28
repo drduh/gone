@@ -81,18 +81,16 @@ func Index(app *config.App) http.HandlerFunc {
 			return
 		}
 
-		settings := app.Settings
-		duration := settings.Limits.Expiration.Duration
 		response := templates.Index{
-			Auth:            settings.Auth,
-			DefaultDuration: duration.String(),
-			Index:           settings.Index,
+			Auth:            app.Auth,
+			DefaultDuration: app.Expiration.Duration.String(),
+			Index:           app.Index,
 			Limits:          app.Limits,
-			Paths:           settings.Paths,
+			Paths:           app.Paths,
 			Storage:         app.Storage,
 			Theme:           theme,
-			ThemePick:       settings.Index.ThemePick,
-			Title:           settings.Index.Title,
+			ThemePick:       app.ThemePick,
+			Title:           app.Title,
 			Version:         app.Version,
 			VersionFull:     app.VersionFull,
 		}
