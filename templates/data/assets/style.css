@@ -1,18 +1,26 @@
 /* style.css */
+* {
+  box-sizing: border-box;
+}
+
 body {
   background-color: var(--bg-dark);
   background-attachment: fixed;
   color: var(--fg-dark);
   display: flex;
   flex-direction: column;
-  font-family: "Open Sans", "Helvetica Neue", "Helvetica", "Arial", "sans-serif";
+  font-family: "Open Sans", "Helvetica Neue", "Helvetica", "Arial", sans-serif;
   margin: 0;
   padding: 0;
 }
 
+a:link, a:visited, a:hover, a:active {
+  color: var(--bg-light);
+  text-decoration: none;
+}
+
 .container {
   display: flex;
-  flex-grow: 1;
   justify-content: space-between;
   padding: 10px;
 }
@@ -21,12 +29,12 @@ body {
   background-color: var(--bg-norm-half);
   border: 1px solid var(--fg-dark);
   border-radius: 6px;
-  box-sizing: border-box;
   color: var(--fg-dark);
   flex: 1;
   margin: 10px;
   padding: 20px;
   text-align: center;
+  box-sizing: border-box;
 }
 
 .box:hover {
@@ -36,17 +44,17 @@ body {
 .footer {
   bottom: 10px;
   font-size: 1em;
-  text-align: center;
   position: fixed;
+  text-align: center;
   width: 100%;
 }
 
-button[type=submit],
-input[type=checkbox],
-input[type=file],
-input[type=number],
-input[type=submit],
-input[type=text],
+button[type="submit"],
+input[type="checkbox"],
+input[type="file"],
+input[type="number"],
+input[type="submit"],
+input[type="text"],
 input::file-selector-button,
 select {
   background-color: var(--bg-dark);
@@ -66,7 +74,7 @@ input[type="number"] {
 .selectClear {
   appearance: none;
   display: inline-block;
-  transition: all 0.2s ease;
+  transition: background-color 0.2s ease;
 }
 
 .selectClear:checked {
@@ -79,16 +87,9 @@ input[type="number"] {
   display: block;
 }
 
-a:link,
-a:visited {
-  color: var(--bg-light);
-  text-decoration: none;
-}
-
-a:active,
-a:hover {
-  color: var(--fg-light);
-  text-decoration: none;
+.selectClear:hover {
+  background-color: var(--fg-light);
+  color: var(--bg-dark);
 }
 
 .message {
@@ -131,17 +132,12 @@ a:hover {
   visibility: visible;
 }
 
-.selectClear,
-.selectDownloads,
-.selectDuration {
+.selectClear, .selectDownloads, .selectDuration {
   text-align: center;
   width: 4em;
 }
 
-.selectFile,
-.selectFilename,
-.selectToken,
-.selectRefresh {
+.selectFile, .selectFilename, .selectToken, .selectRefresh {
   width: 16em;
 }
 

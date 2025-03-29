@@ -1,24 +1,24 @@
 <!-- list.tmpl -->
 {{ define "list" }}
-    <div class="box">
-      <form action="{{ .Paths.List }}"
-            method="get">
-        <br>
-        {{ if .Auth.Require.List }}
-          {{ template "auth" . }}
-        {{ else }}
-        {{ range .Storage.Files }}
-        <div class="message">{{ .Name }}
-          <span class="owner">
-            {{ .Owner.Address }}
-          </span>
-        </div>
-        <br>
-        {{ end }}
-        {{ end }}
-        <input type="submit"
-              class="selectSubmit"
-              value="list">
-      </form>
-    </div>
+  <div class="box">
+    <form action="{{ .Paths.List }}"
+          method="get">
+      <br>
+      {{ if .Auth.Require.List }}
+      {{ template "auth" . }}
+      {{ else }}
+      {{ range .Storage.Files }}
+      <div class="message">{{ .Name }}
+        <span class="owner">
+        {{ .Owner.Address }}
+        </span>
+      </div>
+      <br>
+      {{ end }}
+      {{ end }}
+      <input type="submit"
+            class="selectSubmit"
+            value="list">
+    </form>
+  </div>
 {{ end }}
