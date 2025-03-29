@@ -11,10 +11,7 @@ func expiryWorker(app *config.App) {
 	ticker := time.NewTicker(app.Settings.Limits.Ticker.Duration)
 	defer ticker.Stop()
 	for range ticker.C {
-		select {
-		default:
-			expireFiles(app)
-		}
+		expireFiles(app)
 	}
 }
 
