@@ -29,6 +29,12 @@
       "id":       "goneTheme",
       "time":     "192h"
     },
+    "csp":        true,
+    "placeholder": {
+      "auth":     "secret required",
+      "filename": "enter filename",
+      "message":  "enter message"
+    },
     "theme":      "",
     "themePick":  true,
     "title":      "gone"
@@ -37,6 +43,7 @@
     "downloads":  1,
     "duration":   "2m",
     "maxSizeMb":  20,
+    "msgChars":   128,
     "perMinute":  10,
     "ticker":     "30s"
   },
@@ -45,7 +52,7 @@
     "download":   "/download/",
     "heartbeat":  "/heartbeat",
     "list":       "/list",
-    "message":    "/",
+    "message":    "/msg",
     "static":     "/static",
     "upload":     "/upload"
   },

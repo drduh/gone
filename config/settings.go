@@ -95,6 +95,9 @@ type Error struct {
 // Index HTML index page properties
 type Index struct {
 
+	// Whether to enable Content Security Policy (CSP)
+	CSP bool `json:"csp"`
+
 	// Whether to allow theme selection
 	ThemePick bool `json:"themePick"`
 
@@ -113,6 +116,19 @@ type Index struct {
 		// Label ("goneTheme")
 		Id string `json:"id"`
 	} `json:"cookie"`
+
+	// Index form placeholder text
+	Placeholder struct {
+
+		// Authentication field
+		Auth string `json:"auth"`
+
+		// File selection field
+		Filename string `json:"filename"`
+
+		// Message input field
+		Message string `json:"message"`
+	} `json:"placeholder"`
 }
 
 // Download and upload limits
@@ -129,6 +145,9 @@ type Limits struct {
 
 	// Maximum file size (in Megabytes)
 	MaxSizeMb int `json:"maxSizeMb,omitempty"`
+
+	// Message character length
+	MsgChars int `json:"msgChars,omitempty"`
 
 	// Number of requests per minute to rate limit
 	PerMinute int `json:"perMinute,omitempty"`

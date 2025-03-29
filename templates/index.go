@@ -12,9 +12,6 @@ var All embed.FS
 // Index HTML page elements
 type Index struct {
 
-	// Page title
-	Title string
-
 	// Whether to allow theme selection
 	ThemePick bool
 
@@ -28,11 +25,17 @@ type Index struct {
 	// Form field placeholder for duration
 	DefaultDuration string
 
-	// Configured route paths
-	config.Paths
-
 	// Authentication configuration
 	config.Auth
+
+	// Page properties
+	config.Index
+
+	// Page restrictions and limits
+	config.Limits
+
+	// Configured route paths
+	config.Paths
 
 	// Configured storage (files and messages)
 	config.Storage

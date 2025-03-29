@@ -7,7 +7,7 @@
                        title="download file by name"
                        class="selectFilename"
                         name="name"
-                 placeholder="enter filename">
+                 placeholder="{{ .Index.Placeholder.Filename }}">
         <br>
         {{ if .Auth.Require.Download }}
           {{ template "auth" . }}
