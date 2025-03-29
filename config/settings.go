@@ -159,7 +159,7 @@ type Paths struct {
 	// Assets for HTML pages ("/assets/")
 	Assets string `json:"assets"`
 
-	// File download ("/download")
+	// File download ("/download/")
 	Download string `json:"download"`
 
 	// Heartbeat/health check ("/heartbeat")
@@ -168,7 +168,7 @@ type Paths struct {
 	// File list ("/list")
 	List string `json:"list"`
 
-	// Message post and read ("/")
+	// Message post and read ("/msg")
 	Message string `json:"message"`
 
 	// Embedded/static file ("/static")

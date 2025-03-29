@@ -10,9 +10,9 @@ import (
 func expiryWorker(app *config.App) {
 	ticker := time.NewTicker(app.Settings.Limits.Ticker.Duration)
 	defer ticker.Stop()
-	for {
+	for range ticker.C {
 		select {
-		case <-ticker.C:
+		default:
 			expireFiles(app)
 		}
 	}
