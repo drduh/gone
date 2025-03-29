@@ -1,9 +1,11 @@
 <!-- footer.tmpl -->
 {{ define "footer" }}
   <div class="footer">
-    <div class="message">{{ .Version }}
+    <div class="message">{{ .Version.id }}
       <span class="owner">
-      {{ range .VersionFull }} {{ . }} {{ end }}
+      <a href="https://github.com/drduh/gone">{{ .Version.id }}-{{ .Version.vers }}</a>
+      <br>built by {{ .Version.user }} on {{ .Version.os }}
+      ({{ .Version.arch }}) using {{ .Version.go }} at {{ .Version.time }}
       </span>
     </div>
     {{ if .ThemePick }}

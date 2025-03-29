@@ -58,8 +58,7 @@ func Index(app *config.App) http.HandlerFunc {
 			Storage:         app.Storage,
 			Theme:           theme,
 			ThemePick:       app.ThemePick,
-			Version:         app.Version,
-			VersionFull:     app.VersionFull,
+			Version:         app.VersionFull,
 		}
 
 		if err = tmpl.Execute(w, response); err != nil {

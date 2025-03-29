@@ -26,13 +26,11 @@ func Download(app *config.App) http.HandlerFunc {
 		var file *config.File
 		var found bool
 
-		if fileName != "" {
-			for _, rec := range app.Storage.Files {
-				if rec.Name == fileName {
-					file = rec
-					found = true
-					break
-				}
+		for _, rec := range app.Storage.Files {
+			if rec.Name == fileName {
+				file = rec
+				found = true
+				break
 			}
 		}
 

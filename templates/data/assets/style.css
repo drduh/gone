@@ -15,9 +15,15 @@ body {
   padding: 0;
 }
 
-a:link, a:visited, a:hover, a:active {
-  color: var(--bg-light);
+a:link,
+a:visited {
+  color: var(--fg-light);
   text-decoration: none;
+}
+
+a:active,
+a:hover {
+  text-decoration: underline;
 }
 
 .container {
