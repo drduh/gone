@@ -10,6 +10,7 @@ body {
   display: flex;
   flex-direction: column;
   font-family: "Open Sans", "Helvetica Neue", "Helvetica", "Arial", sans-serif;
+  font-size: 1rem;
   margin: 0;
   padding: 0;
 }
@@ -29,12 +30,12 @@ a:link, a:visited, a:hover, a:active {
   background-color: var(--bg-norm-half);
   border: 1px solid var(--fg-dark);
   border-radius: 6px;
+  box-sizing: border-box;
   color: var(--fg-dark);
   flex: 1;
   margin: 10px;
   padding: 20px;
   text-align: center;
-  box-sizing: border-box;
 }
 
 .box:hover {
@@ -47,6 +48,10 @@ a:link, a:visited, a:hover, a:active {
   position: fixed;
   text-align: center;
   width: 100%;
+}
+
+*, button, input, select, a {
+  transition: all 0.2s ease;
 }
 
 button[type="submit"],
@@ -74,7 +79,6 @@ input[type="number"] {
 .selectClear {
   appearance: none;
   display: inline-block;
-  transition: background-color 0.2s ease;
 }
 
 .selectClear:checked {
@@ -110,7 +114,6 @@ input[type="number"] {
   padding: 6px 0;
   position: absolute;
   text-align: center;
-  transition: opacity 0.2s;
   visibility: hidden;
   width: 12em;
   z-index: 1;
@@ -165,4 +168,9 @@ input[type="number"] {
 input[type="file"]::file-selector-button:hover {
   background-color: var(--fg-light);
   color: var(--bg-dark);
+}
+
+button:focus, input:focus, select:focus {
+  outline: 1px solid var(--fg-light);
+  outline-offset: 2px;
 }
