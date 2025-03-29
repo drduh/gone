@@ -3,6 +3,8 @@ package audit
 import (
 	"log"
 	"log/slog"
+
+	"github.com/drduh/gone/util"
 )
 
 var cfg = &Config{}
@@ -16,7 +18,7 @@ func Start(c *Config) (*Auditor, error) {
 		opts.Level = slog.LevelDebug
 	}
 
-	dest, err := getDest(cfg.Filename)
+	dest, err := util.GetOutput(cfg.Filename)
 	if err != nil {
 		return nil, err
 	}

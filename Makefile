@@ -14,6 +14,7 @@ BINARY    = $(APP)-$(VERSION)
 BUILDUSER = $(shell whoami)
 BUILDOS   = $(shell $(GO) env GOHOSTOS)
 BUILDARCH = $(shell $(GO) env GOHOSTARCH)
+BUILDTIME = $(shell date +"%Y-%m-%dT%H:%M:%S")
 BUILDVERS = $(shell $(GO) env GOVERSION)
 BUILDPKG  = $(GIT)/$(APP)/version
 BUILDFLAG = -X "$(BUILDPKG).Id=$(APP)" \
@@ -21,6 +22,7 @@ BUILDFLAG = -X "$(BUILDPKG).Id=$(APP)" \
             -X "$(BUILDPKG).User=$(BUILDUSER)" \
             -X "$(BUILDPKG).OS=$(BUILDOS)" \
             -X "$(BUILDPKG).Arch=$(BUILDARCH)" \
+            -X "$(BUILDPKG).Time=$(BUILDTIME)" \
             -X "$(BUILDPKG).Go=$(BUILDVERS)"
 BUILDCMD  = $(GO) build -ldflags '-s -w $(BUILDFLAG)'
 BINLINUX  = $(BINARY)-$(BUILDOS)-$(BUILDARCH)

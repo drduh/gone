@@ -16,21 +16,21 @@ func Download(app *config.App) http.HandlerFunc {
 			return
 		}
 
-		fileName := r.URL.Path[len(app.Settings.Paths.Download):]
+		fileName := getFilename(r, len(app.Settings.Paths.Download))
 		if fileName == "" {
-			fileName = r.URL.Query().Get("name")
+			writeJSON(w, http.StatusNotFound, errorJSON(app.Error.NoFilename))
+			app.Log.Error(app.Error.NoFilename, "user", req)
+			return
 		}
 
 		var file *config.File
 		var found bool
 
-		if fileName != "" {
-			for _, rec := range app.Storage.Files {
-				if rec.Name == fileName {
-					file = rec
-					found = true
-					break
-				}
+		for _, rec := range app.Storage.Files {
+			if rec.Name == fileName {
+				file = rec
+				found = true
+				break
 			}
 		}
 
@@ -55,4 +55,16 @@ func Download(app *config.App) http.HandlerFunc {
 				"downloads", file.Downloads.Total)
 		}
 	}
+}
+
+// Returns filename value from request
+func getFilename(r *http.Request, pathLen int) string {
+	f := r.URL.Path[pathLen:]
+	if f == "" {
+		f = r.URL.Query().Get("name")
+	}
+	if f == "" {
+		f = r.FormValue("name")
+	}
+	return f
 }

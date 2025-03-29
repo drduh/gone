@@ -18,5 +18,6 @@ func Full() map[string]string {
 		"os":   OS,
 		"arch": Arch,
 		"go":   Go,
+		"time": Time,
 	}
 }

@@ -6,29 +6,31 @@ import (
 	"github.com/drduh/gone/config"
 )
 
-// Checks Storage for expired files on a timer
+// Runs expiration check on configured schedule
 func expiryWorker(app *config.App) {
 	ticker := time.NewTicker(app.Settings.Limits.Ticker.Duration)
 	defer ticker.Stop()
-
 	for range ticker.C {
-		for _, file := range app.Storage.Files {
-			lifetime := time.Since(file.Time.Upload).Round(time.Second)
-			app.Log.Debug("checking expiration",
-				"filename", file.Name,
-				"allowed", file.Time.Duration.String(),
-				"available", lifetime.String(),
-				"remaining", file.TimeRemaining().String())
+		expireFiles(app)
+	}
+}
 
-			reason := file.IsExpired(app.Settings)
-			if reason != "" {
-				app.Storage.Expire(file)
-				app.Log.Info("removed file",
-					"reason", reason,
-					"filename", file.Name,
-					"available", lifetime.String(),
-					"downloads", file.Downloads.Total)
-			}
+// Removes expired files from Storage
+func expireFiles(app *config.App) {
+	for _, f := range app.Storage.Files {
+		lifetime := time.Since(f.Time.Upload).Round(time.Second)
+		app.Log.Debug("checking expiration",
+			"filename", f.Name,
+			"allowed", f.Time.Duration.String(),
+			"available", lifetime.String(),
+			"remaining", f.TimeRemaining().String())
+		reason := f.IsExpired(app.Settings)
+		if reason != "" {
+			app.Storage.Expire(f)
+			app.Log.Info("removed file",
+				"reason", reason, "filename", f.Name,
+				"available", lifetime.String(),
+				"downloads", f.Downloads.Total)
 		}
 	}
 }
