@@ -79,6 +79,9 @@ type Error struct {
 	// Upload form error
 	Form string `json:"form"`
 
+	// Filename not provided
+	NoFilename string `json:"noFilename"`
+
 	// File not found in Storage
 	NotFound string `json:"notFound"`
 
