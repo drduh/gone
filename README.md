@@ -137,7 +137,7 @@ curl http://localhost:8080/static
 Post a message to index:
 
 ```
-curl -s -F 'message=hello, world!' http://localhost:8080 >/dev/null
+curl -s -F 'message=hello, world!' http://localhost:8080/msg >/dev/null
 ```
 
 ## Functions

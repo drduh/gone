@@ -20,6 +20,7 @@
     "fileSize":   "file too large",
     "form":       "file form fail",
     "notFound":   "file not found",
+    "noFilename": "need file name",
     "tmplExec":   "failed to exec",
     "tmplParse":  "failed parsing",
     "rateLimit":  "limit exceeded"

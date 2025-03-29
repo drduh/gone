@@ -18,9 +18,8 @@ type Index struct {
 	// CSS theme
 	Theme string
 
-	// Application version and build information
-	Version     string
-	VersionFull map[string]string
+	// Application version/build information
+	Version map[string]string
 
 	// Form field placeholder for duration
 	DefaultDuration string
