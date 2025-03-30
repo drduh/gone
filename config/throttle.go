@@ -11,6 +11,40 @@ type Throttle struct {
 	// Record times to rate limit
 	Times []time.Time
 
-	// File lock
+	// Throttle lock
 	Lease sync.Mutex
+}
+
+// Returns true if Throttle limit is not exceeded
+func (t *Throttle) Allow(limit int) bool {
+	if limit <= 0 {
+		return true
+	}
+
+	now := time.Now()
+	cut := getCutoff(now)
+
+	t.Lease.Lock()
+	defer t.Lease.Unlock()
+
+	times := make([]time.Time, 0, len(t.Times))
+	for _, t := range t.Times {
+		if t.After(cut) {
+			times = append(times, t)
+		}
+	}
+
+	if len(times) >= limit {
+		return false
+	}
+
+	times = append(times, now)
+	t.Times = times
+
+	return true
+}
+
+// Returns Throttle window cutoff (1 minute)
+func getCutoff(t time.Time) time.Time {
+	return t.Add(-1 * time.Minute)
 }
