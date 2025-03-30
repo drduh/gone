@@ -1,21 +1,21 @@
 <!-- download.tmpl -->
 {{ define "download" }}
-    <div class="box">
-      <form action="{{ .Paths.Download }}"
-            method="get">
-        <input required type="text"
-                       title="download file by name"
-                       class="selectFilename"
-                        name="name"
-                 placeholder="{{ .Index.Placeholder.Filename }}">
-        <br>
-        {{ if .Auth.Require.Download }}
-          {{ template "auth" . }}
-        {{ end }}
-        <input type="submit"
-              title="download requested file"
-              class="selectSubmit"
-              value="download">
-      </form>
-    </div>
+  <div class="box">
+    <form action="{{ .Paths.Download }}"
+          method="get">
+      <input required type="text"
+                     class="selectFilename"
+                      name="name"
+               placeholder="{{ .Index.Placeholder.Filename }}"
+                     title="download file by name">
+      <br>
+      {{ if .Auth.Require.Download }}
+      {{ template "auth" . }}
+      {{ end }}
+      <input type="submit"
+            class="selectSubmit"
+            title="download requested file"
+            value="download">
+    </form>
+  </div>
 {{ end }}
