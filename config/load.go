@@ -19,7 +19,7 @@ func Load() *App {
 	app := App{}
 	app.Start()
 
-	app.Modes.Debug = modeDebug
+	app.Debug = modeDebug
 	app.Modes.Version = modeVersion
 
 	var settings Settings

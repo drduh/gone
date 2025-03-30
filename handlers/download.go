@@ -16,7 +16,7 @@ func Download(app *config.App) http.HandlerFunc {
 			return
 		}
 
-		fileName := getFilename(r, len(app.Paths.Download))
+		fileName := getFilename(r, len(app.Download))
 		if fileName == "" {
 			writeJSON(w, http.StatusNotFound, errorJSON(app.NoFilename))
 			app.Log.Error(app.NoFilename, "user", req)
@@ -44,14 +44,14 @@ func Download(app *config.App) http.HandlerFunc {
 		file.Total++
 		app.Log.Info("served file",
 			"filename", file.Name, "size", file.Size,
-			"downloads", file.Downloads.Total, "user", req)
+			"downloads", file.Total, "user", req)
 
 		reason := file.IsExpired(app.Settings)
 		if reason != "" {
 			app.Expire(file)
 			app.Log.Info("removed file",
 				"reason", reason, "filename", file.Name,
-				"downloads", file.Downloads.Total)
+				"downloads", file.Total)
 		}
 	}
 }

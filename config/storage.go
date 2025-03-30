@@ -122,7 +122,7 @@ func (f *File) IsExpired(s Settings) string {
 	if f.Total >= f.Downloads.Allow {
 		return "limit downloads"
 	}
-	if time.Since(f.Upload) > f.Time.Duration {
+	if time.Since(f.Upload) > f.Duration {
 		return "limit duration"
 	}
 	return ""

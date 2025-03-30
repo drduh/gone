@@ -18,10 +18,10 @@ func deny(w http.ResponseWriter, app *config.App, r *Request) {
 // Returns true if auth for route path is required and allowed
 func isAllowed(app *config.App, r *http.Request) bool {
 	reqs := map[string]bool{
-		app.Download: app.Auth.Require.Download,
-		app.Message:  app.Auth.Require.Message,
-		app.List:     app.Auth.Require.List,
-		app.Upload:   app.Auth.Require.Upload,
+		app.Download: app.Require.Download,
+		app.Message:  app.Require.Message,
+		app.List:     app.Require.List,
+		app.Upload:   app.Require.Upload,
 	}
 	app.Log.Debug("checking auth", "path", r.URL.Path)
 	required, exists := reqs[r.URL.Path]

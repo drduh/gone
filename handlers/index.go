@@ -15,12 +15,12 @@ func Index(app *config.App) http.HandlerFunc {
 		req := parseRequest(r)
 		app.Log.Info("serving index", "user", req)
 
-		theme := getTheme(app.Settings.Index.Theme)
+		theme := getTheme(app.Index.Theme)
 
 		if app.Settings.Index.ThemePick {
-			cookieDuration := app.Settings.Index.Cookie.Time.GetDuration()
+			cookieDuration := app.Cookie.Time.GetDuration()
 			cookieNew := &http.Cookie{
-				Name:    app.Settings.Index.Cookie.Id,
+				Name:    app.Cookie.Id,
 				Expires: time.Now().Add(cookieDuration),
 				Path:    "/",
 			}
@@ -44,8 +44,8 @@ func Index(app *config.App) http.HandlerFunc {
 		tmplName := "index.tmpl"
 		tmpl, err := template.New(tmplName).ParseFS(templates.All, "data/*.tmpl")
 		if err != nil {
-			writeJSON(w, http.StatusInternalServerError, errorJSON(app.Error.TmplParse))
-			app.Log.Error(app.Error.TmplParse,
+			writeJSON(w, http.StatusInternalServerError, errorJSON(app.TmplParse))
+			app.Log.Error(app.TmplParse,
 				"template", tmplName, "error", err.Error(), "user", req)
 			return
 		}

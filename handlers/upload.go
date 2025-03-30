@@ -29,8 +29,8 @@ func Upload(app *config.App) http.HandlerFunc {
 
 		maxBytes := int64(app.Settings.Limits.MaxSizeMb) << 20
 		if r.ContentLength > maxBytes {
-			writeJSON(w, http.StatusRequestEntityTooLarge, errorJSON(app.Error.FileSize))
-			app.Log.Error(app.Error.FileSize,
+			writeJSON(w, http.StatusRequestEntityTooLarge, errorJSON(app.FileSize))
+			app.Log.Error(app.FileSize,
 				"sizeMb", r.ContentLength/(1<<20), "user", req)
 			return
 		}
@@ -44,12 +44,16 @@ func Upload(app *config.App) http.HandlerFunc {
 
 		content, handler, err := r.FormFile("file")
 		if err != nil {
-			writeJSON(w, http.StatusBadRequest, errorJSON(app.Error.Form))
-			app.Log.Error("upload form failed",
-				"error", err.Error(), "user", req)
+			writeJSON(w, http.StatusBadRequest, errorJSON(app.Form))
+			app.Log.Error(app.Form, "error", err.Error(), "user", req)
 			return
 		}
-		defer content.Close()
+		defer func() {
+			if err := content.Close(); err != nil {
+				app.Log.Error(app.Form, "error", err.Error(), "user", req)
+				return
+			}
+		}()
 
 		var buf bytes.Buffer
 		if _, err := io.Copy(&buf, content); err != nil {
