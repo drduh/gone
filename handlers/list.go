@@ -31,6 +31,8 @@ func List(app *config.App) http.HandlerFunc {
 					"reason", reason, "filename", file.Name,
 					"downloads", file.Downloads.Total)
 			} else {
+				file.Time.Remain = file.TimeRemaining().String()
+				app.Storage.Files[file.Name] = file
 				f := config.File{
 					Name: file.Name,
 					Size: file.Size,
@@ -40,7 +42,7 @@ func List(app *config.App) http.HandlerFunc {
 					},
 					Time: config.Time{
 						Upload: file.Upload,
-						Remain: file.TimeRemaining().String(),
+						Remain: file.Time.Remain,
 					},
 					Downloads: config.Downloads{
 						Allow:  file.Downloads.Allow,

@@ -17,6 +17,28 @@ type Storage struct {
 	Messages map[int]*Message
 }
 
+// An uploaded file
+type File struct {
+
+	// Provided filename
+	Name string `json:"name,omitempty"`
+
+	// File content
+	Data []byte `json:"data,omitempty"`
+
+	// Downloads information
+	Downloads `json:"downloads,omitempty"`
+
+	// File size (bytes parsed to string)
+	Size string `json:"size,omitempty"`
+
+	// Uploader information
+	Owner `json:"owner,omitempty"`
+
+	// Timing information
+	Time `json:"time,omitempty"`
+}
+
 // A submitted text message
 type Message struct {
 
@@ -31,28 +53,6 @@ type Message struct {
 
 	// Timing information
 	Time
-}
-
-// An uploaded file
-type File struct {
-
-	// Provided filename
-	Name string `json:"name,omitempty"`
-
-	// File size (bytes parsed into string)
-	Size string `json:"size,omitempty"`
-
-	// Uploader information
-	Owner `json:"owner,omitempty"`
-
-	// Timing information
-	Time `json:"time,omitempty"`
-
-	// Downloads information
-	Downloads `json:"downloads,omitempty"`
-
-	// File content
-	Data []byte `json:"data,omitempty"`
 }
 
 // File owner information

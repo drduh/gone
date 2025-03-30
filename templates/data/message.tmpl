@@ -25,7 +25,7 @@
   </div>
   <div class="box">
     {{ range .Storage.Messages }}
-    <div class="message"><b>{{ .Count }}</b>{{ .Data }}
+    <div class="message"><b>{{ .Count }}</b> {{ .Data }}
       <span class="owner">{{ .Owner.Address }} at {{ .Time.Allow }}</span>
     </div>
     <br>
