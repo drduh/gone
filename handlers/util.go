@@ -3,7 +3,6 @@ package handlers
 import (
 	"encoding/json"
 	"net/http"
-	"strings"
 
 	"github.com/drduh/gone/auth"
 	"github.com/drduh/gone/config"
@@ -18,29 +17,17 @@ func deny(w http.ResponseWriter, app *config.App, r *Request) {
 
 // Returns true if auth for route path is required and allowed
 func isAllowed(app *config.App, r *http.Request) bool {
+	reqs := map[string]bool{
+		app.Paths.Download: app.Auth.Require.Download,
+		app.Paths.Message:  app.Auth.Require.Message,
+		app.Paths.List:     app.Auth.Require.List,
+		app.Paths.Upload:   app.Auth.Require.Upload,
+	}
 	app.Log.Debug("checking auth", "path", r.URL.Path)
-
-	required := true
-	if r.URL.Path == app.Settings.Paths.Message {
-		required = app.Settings.Auth.Require.Message
-	}
-	if strings.Contains(r.URL.Path, app.Settings.Paths.Download) {
-		required = app.Settings.Auth.Require.Download
-	}
-	if strings.Contains(r.URL.Path, app.Settings.Paths.List) {
-		required = app.Settings.Auth.Require.List
-	}
-	if strings.Contains(r.URL.Path, app.Settings.Paths.Message) {
-		required = app.Settings.Auth.Require.Message
-	}
-	if strings.Contains(r.URL.Path, app.Settings.Paths.Upload) {
-		required = app.Settings.Auth.Require.Upload
-	}
-
-	if !required {
+	required, exists := reqs[r.URL.Path]
+	if !exists || !required {
 		return true
 	}
-
 	return isAuthenticated(app, r)
 }
 
