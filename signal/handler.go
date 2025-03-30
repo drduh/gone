@@ -4,7 +4,6 @@ import (
 	"os"
 	"os/signal"
 	"syscall"
-	"time"
 
 	"github.com/drduh/gone/config"
 )
@@ -12,14 +11,10 @@ import (
 // Logs and exits on terminal signals
 func Setup(app *config.App) {
 	sigChan := make(chan os.Signal, 1)
-	signal.Notify(sigChan,
-		os.Interrupt, syscall.SIGTERM, syscall.SIGQUIT)
-
+	signals := []os.Signal{os.Interrupt, syscall.SIGTERM, syscall.SIGQUIT}
+	signal.Notify(sigChan, signals...)
 	go func() {
 		s := <-sigChan
-		app.Log.Error("handled signal",
-			"signal", s.String(),
-			"uptime", time.Since(app.Start).String())
-		os.Exit(0)
+		app.Stop(s.String())
 	}()
 }
