@@ -17,8 +17,11 @@ type Heartbeat struct {
 	// TCP port server is listening on
 	Port int `json:"port"`
 
-	// Number of files in storage
+	// Number of Files in storage
 	FileCount int `json:"files"`
+
+	// Number of Messages in storage
+	MessageCount int `json:"messages"`
 
 	// Limits configuration
 	config.Limits `json:"limits"`
