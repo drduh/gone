@@ -22,8 +22,8 @@ func Upload(app *config.App) http.HandlerFunc {
 		}
 
 		if !app.Allow(app.Settings.Limits.PerMinute) {
-			writeJSON(w, http.StatusTooManyRequests, errorJSON(app.Error.RateLimit))
-			app.Log.Error(app.Error.RateLimit, "user", req)
+			writeJSON(w, http.StatusTooManyRequests, errorJSON(app.RateLimit))
+			app.Log.Error(app.RateLimit, "user", req)
 			return
 		}
 
@@ -57,9 +57,8 @@ func Upload(app *config.App) http.HandlerFunc {
 
 		var buf bytes.Buffer
 		if _, err := io.Copy(&buf, content); err != nil {
-			writeJSON(w, http.StatusInternalServerError, errorJSON(app.Error.Copy))
-			app.Log.Error("upload copy failed",
-				"error", err.Error(), "user", req)
+			writeJSON(w, http.StatusInternalServerError, errorJSON(app.Copy))
+			app.Log.Error(app.Copy, "error", err.Error(), "user", req)
 			return
 		}
 

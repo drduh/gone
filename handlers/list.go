@@ -16,7 +16,7 @@ func List(app *config.App) http.HandlerFunc {
 			return
 		}
 
-		if !app.Allow(app.Settings.Limits.PerMinute) {
+		if !app.Allow(app.Limits.PerMinute) {
 			writeJSON(w, http.StatusTooManyRequests, errorJSON(app.RateLimit))
 			app.Log.Error(app.RateLimit, "user", req)
 			return
@@ -32,7 +32,7 @@ func List(app *config.App) http.HandlerFunc {
 					"downloads", file.Total)
 			} else {
 				file.Time.Remain = file.TimeRemaining().String()
-				app.Storage.Files[file.Name] = file
+				app.Files[file.Name] = file
 				f := config.File{
 					Name: file.Name,
 					Size: file.Size,
@@ -46,7 +46,7 @@ func List(app *config.App) http.HandlerFunc {
 					},
 					Downloads: config.Downloads{
 						Allow:  file.Downloads.Allow,
-						Total:  file.Downloads.Total,
+						Total:  file.Total,
 						Remain: file.NumRemaining(),
 					},
 				}

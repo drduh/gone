@@ -30,7 +30,7 @@ func expireFiles(app *config.App) {
 			app.Log.Info("removed file",
 				"reason", reason, "filename", f.Name,
 				"available", lifetime.String(),
-				"downloads", f.Downloads.Total)
+				"downloads", f.Total)
 		}
 	}
 }

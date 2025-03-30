@@ -15,9 +15,9 @@ func Index(app *config.App) http.HandlerFunc {
 		req := parseRequest(r)
 		app.Log.Info("serving index", "user", req)
 
-		theme := getTheme(app.Index.Theme)
+		theme := getTheme(app.Theme)
 
-		if app.Settings.Index.ThemePick {
+		if app.ThemePick {
 			cookieDuration := app.Cookie.Time.GetDuration()
 			cookieNew := &http.Cookie{
 				Name:    app.Cookie.Id,
@@ -31,7 +31,7 @@ func Index(app *config.App) http.HandlerFunc {
 				cookieNew.Value = theme
 				http.SetCookie(w, cookieNew)
 			} else {
-				cookie, err := r.Cookie(app.Settings.Index.Cookie.Id)
+				cookie, err := r.Cookie(app.Cookie.Id)
 				if err != nil || cookie.Value == "" {
 					cookieNew.Value = theme
 					http.SetCookie(w, cookieNew)
@@ -65,8 +65,8 @@ func Index(app *config.App) http.HandlerFunc {
 		}
 
 		if err = tmpl.Execute(w, response); err != nil {
-			writeJSON(w, http.StatusInternalServerError, errorJSON(app.Error.TmplExec))
-			app.Log.Error(app.Error.TmplExec,
+			writeJSON(w, http.StatusInternalServerError, errorJSON(app.TmplExec))
+			app.Log.Error(app.TmplExec,
 				"template", tmplName, "error", err.Error(), "user", req)
 			return
 		}

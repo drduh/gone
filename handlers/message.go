@@ -19,12 +19,12 @@ func Message(app *config.App) http.HandlerFunc {
 
 		if r.Method == http.MethodPost {
 			if r.FormValue("clear") != "" {
-				app.Storage.ClearMessages()
+				app.ClearMessages()
 				app.Log.Debug("cleared messages", "user", req)
 			}
 
 			message := config.Message{
-				Count: app.Storage.CountMessages(),
+				Count: app.CountMessages(),
 				Owner: config.Owner{
 					Address: req.Address,
 					Agent:   req.Agent,
