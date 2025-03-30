@@ -39,6 +39,7 @@ func (a *App) Start() {
 	a.StartTime = time.Now()
 }
 
+// Exits application with uptime log
 func (a *App) Stop(reason string) {
 	a.Log.Info("stopping application",
 		"reason", reason, "uptime", a.Uptime())

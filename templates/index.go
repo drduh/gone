@@ -18,6 +18,12 @@ type Index struct {
 	// CSS theme
 	Theme string
 
+	// Server name
+	Hostname string
+
+	// Time since server start
+	Uptime string
+
 	// Application version/build information
 	Version map[string]string
 

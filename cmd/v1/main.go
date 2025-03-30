@@ -25,8 +25,7 @@ func Run() {
 	signal.Setup(app)
 
 	if err := server.Serve(app); err != nil {
-		app.Log.Error("failed to start server",
-			"error", err.Error())
+		app.Log.Error("server failed", "error", err.Error())
 		os.Exit(1)
 	}
 }

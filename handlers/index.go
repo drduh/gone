@@ -13,6 +13,7 @@ import (
 func Index(app *config.App) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		req := parseRequest(r)
+		app.Log.Info("serving index", "user", req)
 
 		theme := getTheme(app.Settings.Index.Theme)
 
@@ -52,13 +53,15 @@ func Index(app *config.App) http.HandlerFunc {
 		response := templates.Index{
 			Auth:            app.Auth,
 			DefaultDuration: app.Expiration.Duration.String(),
+			Hostname:        app.Hostname,
 			Index:           app.Index,
 			Limits:          app.Limits,
 			Paths:           app.Paths,
 			Storage:         app.Storage,
 			Theme:           theme,
 			ThemePick:       app.ThemePick,
-			Version:         app.VersionFull,
+			Uptime:          app.Uptime(),
+			Version:         app.Version,
 		}
 
 		if err = tmpl.Execute(w, response); err != nil {
@@ -67,7 +70,5 @@ func Index(app *config.App) http.HandlerFunc {
 				"template", tmplName, "error", err.Error(), "user", req)
 			return
 		}
-
-		app.Log.Info("served index", "user", req)
 	}
 }
