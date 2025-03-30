@@ -4,7 +4,8 @@
 }
 
 body {
-  background-color: var(--bg-dark);
+  background: var(--bg-light);
+  background: linear-gradient(0deg, var(--bg-light) 0%, var(--bg-dark) 100%);
   background-attachment: fixed;
   color: var(--fg-dark);
   display: flex;
@@ -23,6 +24,7 @@ a:visited {
 
 a:active,
 a:hover {
+  color: var(--fg-light);
   text-decoration: underline;
 }
 
@@ -35,7 +37,7 @@ a:hover {
 .box {
   background-color: var(--bg-norm-half);
   border: 1px solid var(--fg-dark);
-  border-radius: 6px;
+  border-radius: var(--box-radius);
   box-sizing: border-box;
   color: var(--fg-dark);
   flex: 1;
@@ -50,14 +52,13 @@ a:hover {
 
 .footer {
   bottom: 10px;
-  font-size: 1em;
   position: fixed;
   text-align: center;
   width: 100%;
 }
 
 *, button, input, select, a {
-  transition: all 0.2s ease;
+  transition: all var(--animation) ease;
 }
 
 button[type="submit"],
@@ -70,7 +71,7 @@ input::file-selector-button,
 select {
   background-color: var(--bg-dark);
   border: none;
-  border-radius: 6px;
+  border-radius: var(--box-radius);
   color: var(--fg-light);
   cursor: pointer;
   margin: 10px;
@@ -111,17 +112,17 @@ input[type="number"] {
 
 .message .owner {
   background-color: var(--bg-light);
-  border-radius: 6px;
-  bottom: 125%;
+  border-radius: var(--box-radius);
+  bottom: 2rem;
   color: var(--fg-light);
   left: 50%;
-  margin-left: -60px;
+  margin-left: -12rem;
   opacity: 0;
   padding: 6px 0;
   position: absolute;
   text-align: center;
   visibility: hidden;
-  width: 12em;
+  width: 24em;
   z-index: 1;
 }
 

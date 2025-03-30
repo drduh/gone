@@ -10,7 +10,7 @@
     {{ template "csp" . }}
     {{ end }}
     {{ if .Theme }}
-    <link rel="stylesheet" href="/assets/style.css">
+    <link rel="stylesheet" type="text/css" href="/assets/style.css">
     <style>
       :root {
         {{ template "theme" . }}
@@ -19,4 +19,5 @@
     {{ end }}
     <title>{{ .Index.Title }}</title>
   </head>
+  <body>
 {{ end }}

@@ -19,18 +19,18 @@ func Message(app *config.App) http.HandlerFunc {
 
 		if r.Method == http.MethodPost {
 			if r.FormValue("clear") != "" {
-				app.Storage.ClearMessages()
+				app.ClearMessages()
 				app.Log.Debug("cleared messages", "user", req)
 			}
 
 			message := config.Message{
-				Count: app.Storage.CountMessages(),
+				Count: app.CountMessages(),
 				Owner: config.Owner{
 					Address: req.Address,
 					Agent:   req.Agent,
 				},
 				Time: config.Time{
-					Allow: time.Now().Format(app.Settings.Audit.TimeFormat),
+					Allow: time.Now().Format(app.TimeFormat),
 				},
 			}
 
@@ -38,7 +38,7 @@ func Message(app *config.App) http.HandlerFunc {
 			if content != "" {
 				message.Count++
 				message.Data = content
-				app.Storage.Messages[message.Count] = &message
+				app.Messages[message.Count] = &message
 				app.Log.Debug("added message",
 					"message", content, "user", req)
 			}
@@ -46,6 +46,6 @@ func Message(app *config.App) http.HandlerFunc {
 			http.Redirect(w, r, "/", http.StatusSeeOther)
 		}
 
-		writeJSON(w, http.StatusOK, app.Storage.Messages)
+		writeJSON(w, http.StatusOK, app.Messages)
 	}
 }

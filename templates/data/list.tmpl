@@ -9,9 +9,7 @@
       {{ else }}
       {{ range .Storage.Files }}
       <div class="message">{{ .Name }}
-        <span class="owner">
-        {{ .Owner.Address }}
-        </span>
+        <span class="owner">{{ .Size }} ({{ .Owner.Address }})</span>
       </div>
       <br>
       {{ end }}

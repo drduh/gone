@@ -1,38 +1,38 @@
 <!-- message.tmpl -->
 {{ define "message" }}
-  <div class="container">
-    <div class="box">
-      <form action="{{ .Paths.Message }}"
-            method="post"
-           enctype="application/x-www-form-urlencoded">
-        <input type="text"
-              class="selectMessage"
-               name="message"
-          maxlength="{{ .Limits.MsgChars }}"
-        placeholder="{{ .Index.Placeholder.Message }}">
-        <input type="checkbox"
-              class="selectClear"
-               name="clear">
-        <br>
-        {{ if .Auth.Require.Message }}
-          {{ template "auth" . }}
-        {{ end }}
-        <input type="submit"
-              class="selectSubmit"
-              value="post">
-      </form>
-    </div>
-    <div class="box">
-      {{ range .Storage.Messages }}
-      <div class="message"><b>{{ .Count }}</b> {{ .Data }}
-        <span class="owner">{{ .Owner.Address }} at {{ .Time.Allow }}</span>
-      </div>
+  <div class="box">
+    <form action="{{ .Paths.Message }}"
+         enctype="application/x-www-form-urlencoded"
+          method="post">
+
+      <input class="selectMessage"
+              name="message"
+         maxlength="{{ .Limits.MsgChars }}"
+       placeholder="{{ .Index.Placeholder.Message }}"
+              type="text">
+
+      <input class="selectClear"
+              name="clear"
+              type="checkbox">
       <br>
+      {{ if .Auth.Require.Message }}
+      {{ template "auth" . }}
       {{ end }}
-      <form action="">
-        <button type="submit"
-               class="selectRefresh">refresh</button>
-      </form>
+      <input type="submit"
+            class="selectSubmit"
+            value="post">
+    </form>
+  </div>
+  <div class="box">
+    {{ range .Storage.Messages }}
+    <div class="message"><b>{{ .Count }}</b> {{ .Data }}
+      <span class="owner">{{ .Owner.Address }} at {{ .Time.Allow }}</span>
     </div>
+    <br>
+    {{ end }}
+    <form action="">
+      <button class="selectRefresh"
+              type="submit">refresh</button>
+    </form>
   </div>
 {{ end }}

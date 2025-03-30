@@ -26,7 +26,7 @@ func (a *Auditor) Handle(ctx context.Context, r slog.Record) error {
 		return err
 	}
 
-	a.Logger.Println(string(jsonEvent))
+	a.Println(string(jsonEvent))
 
 	return nil
 }

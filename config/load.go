@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"log"
 	"os"
-	"time"
 
 	_ "embed"
 
@@ -18,7 +17,9 @@ var defaultSettings []byte
 // Returns loaded application configuration
 func Load() *App {
 	app := App{}
-	app.Modes.Debug = modeDebug
+	app.Start()
+
+	app.Debug = modeDebug
 	app.Modes.Version = modeVersion
 
 	var settings Settings
@@ -31,9 +32,9 @@ func Load() *App {
 	app.Settings = settings
 
 	auditor, err := audit.Start(&audit.Config{
-		Debug:      app.Modes.Debug,
-		TimeFormat: settings.Audit.TimeFormat,
-		Filename:   settings.Audit.Filename,
+		Debug:      app.Debug,
+		TimeFormat: settings.TimeFormat,
+		Filename:   settings.Filename,
 	})
 	if err != nil {
 		log.Fatalf("failed to start auditor: %v", err)
@@ -41,9 +42,7 @@ func Load() *App {
 	app.Log = auditor.Log
 
 	app.Hostname = getHostname()
-	app.Version = version.Short()
-	app.VersionFull = version.Full()
-	app.Start = time.Now()
+	app.Version = version.Full()
 	app.Storage = Storage{
 		Files:    make(map[string]*File),
 		Messages: make(map[int]*Message),

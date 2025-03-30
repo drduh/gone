@@ -16,17 +16,17 @@ func Download(app *config.App) http.HandlerFunc {
 			return
 		}
 
-		fileName := getFilename(r, len(app.Settings.Paths.Download))
+		fileName := getFilename(r, len(app.Download))
 		if fileName == "" {
-			writeJSON(w, http.StatusNotFound, errorJSON(app.Error.NoFilename))
-			app.Log.Error(app.Error.NoFilename, "user", req)
+			writeJSON(w, http.StatusNotFound, errorJSON(app.NoFilename))
+			app.Log.Error(app.NoFilename, "user", req)
 			return
 		}
 
 		var file *config.File
 		var found bool
 
-		for _, rec := range app.Storage.Files {
+		for _, rec := range app.Files {
 			if rec.Name == fileName {
 				file = rec
 				found = true
@@ -35,24 +35,23 @@ func Download(app *config.App) http.HandlerFunc {
 		}
 
 		if !found {
-			writeJSON(w, http.StatusNotFound, errorJSON(app.Error.NotFound))
-			app.Log.Error(app.Error.NotFound,
-				"filename", fileName, "user", req)
+			writeJSON(w, http.StatusNotFound, errorJSON(app.NotFound))
+			app.Log.Error(app.NotFound, "filename", fileName, "user", req)
 			return
 		}
 
 		writeFile(w, file)
-		file.Downloads.Total++
+		file.Total++
 		app.Log.Info("served file",
 			"filename", file.Name, "size", file.Size,
-			"downloads", file.Downloads.Total, "user", req)
+			"downloads", file.Total, "user", req)
 
 		reason := file.IsExpired(app.Settings)
 		if reason != "" {
-			app.Storage.Expire(file)
+			app.Expire(file)
 			app.Log.Info("removed file",
 				"reason", reason, "filename", file.Name,
-				"downloads", file.Downloads.Total)
+				"downloads", file.Total)
 		}
 	}
 }

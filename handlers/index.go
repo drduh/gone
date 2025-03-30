@@ -13,13 +13,14 @@ import (
 func Index(app *config.App) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		req := parseRequest(r)
+		app.Log.Info("serving index", "user", req)
 
-		theme := getTheme(app.Settings.Index.Theme)
+		theme := getTheme(app.Theme)
 
-		if app.Settings.Index.ThemePick {
-			cookieDuration := app.Settings.Index.Cookie.Time.GetDuration()
+		if app.ThemePick {
+			cookieDuration := app.Cookie.Time.GetDuration()
 			cookieNew := &http.Cookie{
-				Name:    app.Settings.Index.Cookie.Id,
+				Name:    app.Cookie.Id,
 				Expires: time.Now().Add(cookieDuration),
 				Path:    "/",
 			}
@@ -30,7 +31,7 @@ func Index(app *config.App) http.HandlerFunc {
 				cookieNew.Value = theme
 				http.SetCookie(w, cookieNew)
 			} else {
-				cookie, err := r.Cookie(app.Settings.Index.Cookie.Id)
+				cookie, err := r.Cookie(app.Cookie.Id)
 				if err != nil || cookie.Value == "" {
 					cookieNew.Value = theme
 					http.SetCookie(w, cookieNew)
@@ -43,31 +44,31 @@ func Index(app *config.App) http.HandlerFunc {
 		tmplName := "index.tmpl"
 		tmpl, err := template.New(tmplName).ParseFS(templates.All, "data/*.tmpl")
 		if err != nil {
-			writeJSON(w, http.StatusInternalServerError, errorJSON(app.Error.TmplParse))
-			app.Log.Error(app.Error.TmplParse,
+			writeJSON(w, http.StatusInternalServerError, errorJSON(app.TmplParse))
+			app.Log.Error(app.TmplParse,
 				"template", tmplName, "error", err.Error(), "user", req)
 			return
 		}
 
 		response := templates.Index{
 			Auth:            app.Auth,
-			DefaultDuration: app.Expiration.Duration.String(),
+			DefaultDuration: app.Expiration.String(),
+			Hostname:        app.Hostname,
 			Index:           app.Index,
 			Limits:          app.Limits,
 			Paths:           app.Paths,
 			Storage:         app.Storage,
 			Theme:           theme,
 			ThemePick:       app.ThemePick,
-			Version:         app.VersionFull,
+			Uptime:          app.Uptime(),
+			Version:         app.Version,
 		}
 
 		if err = tmpl.Execute(w, response); err != nil {
-			writeJSON(w, http.StatusInternalServerError, errorJSON(app.Error.TmplExec))
-			app.Log.Error(app.Error.TmplExec,
+			writeJSON(w, http.StatusInternalServerError, errorJSON(app.TmplExec))
+			app.Log.Error(app.TmplExec,
 				"template", tmplName, "error", err.Error(), "user", req)
 			return
 		}
-
-		app.Log.Info("served index", "user", req)
 	}
 }

@@ -1,8 +1,6 @@
 <!-- index.tmpl -->
 {{ template "header" . }}
-  <body>
-    <div class="container">
-
+  <div class="container">
     {{ if .Paths.Upload }}
     {{ template "upload" . }}
     {{ end }}
@@ -14,13 +12,10 @@
     {{ if .Paths.List }}
     {{ template "list" . }}
     {{ end }}
-
-    </div>
-
+  </div>
+  <div class="container">
     {{ if .Paths.Message }}
     {{ template "message" . }}
     {{ end }}
-
-    {{ template "footer" . }}
-  </body>
-</html>
+  </div>
+{{ template "footer" . }}
