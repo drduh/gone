@@ -52,7 +52,7 @@ type Auth struct {
 	// Route authentication requirements
 	Require struct {
 
-		// Whether to require authentication to dowload files
+		// Whether to require authentication to download files
 		Download bool `json:"download"`
 
 		// Whether to require authentication to list files
@@ -69,13 +69,13 @@ type Auth struct {
 // Error response
 type Error struct {
 
-	// Failure to copy file
+	// Failed to copy file
 	Copy string `json:"copy"`
 
 	// Deny (not authorized)
 	Deny string `json:"deny"`
 
-	// File exceeds Storage Limits
+	// File exceeds size limit
 	FileSize string `json:"fileSize"`
 
 	// Upload form error
