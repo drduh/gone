@@ -1,5 +1,7 @@
 package config
 
+import "fmt"
+
 // Application settings
 type Settings struct {
 
@@ -179,4 +181,9 @@ type Paths struct {
 
 	// File upload ("/upload")
 	Upload string `json:"upload"`
+}
+
+// Returns address string based on port
+func (s *Settings) GetAddr() string {
+	return fmt.Sprintf(":%d", s.Port)
 }

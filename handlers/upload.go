@@ -21,7 +21,7 @@ func Upload(app *config.App) http.HandlerFunc {
 			return
 		}
 
-		if throttle(app) {
+		if !app.Throttle.Allow(app.Settings.Limits.PerMinute) {
 			writeJSON(w, http.StatusTooManyRequests, errorJSON(app.Error.RateLimit))
 			app.Log.Error(app.Error.RateLimit, "user", req)
 			return

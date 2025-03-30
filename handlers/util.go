@@ -33,7 +33,7 @@ func isAllowed(app *config.App, r *http.Request) bool {
 
 // Returns true if authentication is successful
 func isAuthenticated(app *config.App, r *http.Request) bool {
-	return auth.Basic(app.Settings.Auth.Header, app.Settings.Auth.Token, r)
+	return auth.Basic(app.Auth.Header, app.Auth.Token, r)
 }
 
 // Returns error in string map

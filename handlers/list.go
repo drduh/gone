@@ -16,7 +16,7 @@ func List(app *config.App) http.HandlerFunc {
 			return
 		}
 
-		if throttle(app) {
+		if !app.Throttle.Allow(app.Settings.Limits.PerMinute) {
 			writeJSON(w, http.StatusTooManyRequests, errorJSON(app.Error.RateLimit))
 			app.Log.Error(app.Error.RateLimit, "user", req)
 			return
@@ -52,8 +52,8 @@ func List(app *config.App) http.HandlerFunc {
 			}
 		}
 
-		writeJSON(w, http.StatusOK, files)
-		app.Log.Info("served list",
+		app.Log.Info("serving file list",
 			"files", len(files), "user", req)
+		writeJSON(w, http.StatusOK, files)
 	}
 }
