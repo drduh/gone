@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"log"
 	"os"
-	"time"
 
 	_ "embed"
 
@@ -18,6 +17,8 @@ var defaultSettings []byte
 // Returns loaded application configuration
 func Load() *App {
 	app := App{}
+	app.Start()
+
 	app.Modes.Debug = modeDebug
 	app.Modes.Version = modeVersion
 
@@ -41,9 +42,7 @@ func Load() *App {
 	app.Log = auditor.Log
 
 	app.Hostname = getHostname()
-	app.Version = version.Short()
-	app.VersionFull = version.Full()
-	app.Start = time.Now()
+	app.Version = version.Full()
 	app.Storage = Storage{
 		Files:    make(map[string]*File),
 		Messages: make(map[int]*Message),
