@@ -38,7 +38,7 @@ func Message(app *config.App) http.HandlerFunc {
 			if content != "" {
 				message.Count++
 				message.Data = content
-				app.Storage.Messages[message.Count] = &message
+				app.Messages[message.Count] = &message
 				app.Log.Debug("added message",
 					"message", content, "user", req)
 			}

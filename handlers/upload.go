@@ -62,14 +62,14 @@ func Upload(app *config.App) http.HandlerFunc {
 			return
 		}
 
-		downloadLimit := app.Settings.Limits.Downloads
+		downloadLimit := app.Limits.Downloads
 		downloadLimitInput := r.FormValue("downloads")
 		if limit, err := strconv.Atoi(downloadLimitInput); err == nil {
 			downloadLimit = limit
 			app.Log.Debug("got form value", "downloads", downloadLimit)
 		}
 
-		durationLimit := app.Settings.Limits.Expiration.Duration
+		durationLimit := app.Limits.Expiration.Duration
 		durationLimitInput := r.FormValue("duration")
 		if limit, err := time.ParseDuration(durationLimitInput); err == nil {
 			durationLimit = limit
