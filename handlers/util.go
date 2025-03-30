@@ -11,8 +11,8 @@ import (
 
 // JSON response helper for deny (auth fail)
 func deny(w http.ResponseWriter, app *config.App, r *Request) {
-	writeJSON(w, http.StatusUnauthorized, errorJSON(app.Error.Deny))
-	app.Log.Error(app.Error.Deny, "user", r)
+	writeJSON(w, http.StatusUnauthorized, errorJSON(app.Deny))
+	app.Log.Error(app.Deny, "user", r)
 }
 
 // Returns true if auth for route path is required and allowed

@@ -16,7 +16,7 @@ func List(app *config.App) http.HandlerFunc {
 			return
 		}
 
-		if !app.Allow(app.Limits.PerMinute) {
+		if !app.Allow(app.PerMinute) {
 			writeJSON(w, http.StatusTooManyRequests, errorJSON(app.RateLimit))
 			app.Log.Error(app.RateLimit, "user", req)
 			return

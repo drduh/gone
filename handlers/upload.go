@@ -21,13 +21,13 @@ func Upload(app *config.App) http.HandlerFunc {
 			return
 		}
 
-		if !app.Allow(app.Settings.Limits.PerMinute) {
+		if !app.Allow(app.PerMinute) {
 			writeJSON(w, http.StatusTooManyRequests, errorJSON(app.RateLimit))
 			app.Log.Error(app.RateLimit, "user", req)
 			return
 		}
 
-		maxBytes := int64(app.Settings.Limits.MaxSizeMb) << 20
+		maxBytes := int64(app.MaxSizeMb) << 20
 		if r.ContentLength > maxBytes {
 			writeJSON(w, http.StatusRequestEntityTooLarge, errorJSON(app.FileSize))
 			app.Log.Error(app.FileSize,
@@ -92,7 +92,7 @@ func Upload(app *config.App) http.HandlerFunc {
 				Allow: downloadLimit,
 			},
 		}
-		app.Storage.Files[file.Name] = file
+		app.Files[file.Name] = file
 
 		response := config.File{
 			Name: file.Name,

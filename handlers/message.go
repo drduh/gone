@@ -30,7 +30,7 @@ func Message(app *config.App) http.HandlerFunc {
 					Agent:   req.Agent,
 				},
 				Time: config.Time{
-					Allow: time.Now().Format(app.Settings.Audit.TimeFormat),
+					Allow: time.Now().Format(app.TimeFormat),
 				},
 			}
 
@@ -46,6 +46,6 @@ func Message(app *config.App) http.HandlerFunc {
 			http.Redirect(w, r, "/", http.StatusSeeOther)
 		}
 
-		writeJSON(w, http.StatusOK, app.Storage.Messages)
+		writeJSON(w, http.StatusOK, app.Messages)
 	}
 }
