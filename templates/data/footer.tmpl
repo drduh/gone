@@ -1,15 +1,18 @@
 <!-- footer.tmpl -->
 {{ define "footer" }}
-  <div class="footer">
-    <div class="message">{{ .Version.id }}
-      <span class="owner">
-      <a href="https://github.com/drduh/gone">{{ .Version.id }}-{{ .Version.vers }}</a>
-      <br>built by {{ .Version.user }} on {{ .Version.os }}
-      ({{ .Version.arch }}) using {{ .Version.go }} at {{ .Version.time }}
-      </span>
-    </div>
-    {{ if .ThemePick }}
+    <div class="footer">
+      <div class="message">{{ .Version.id }}
+        <span class="owner">
+          <a href="https://github.com/drduh/gone">{{ .Version.id }}-{{ .Version.vers }}</a>
+          <br>built by {{ .Version.user }} on {{ .Version.os }}
+          ({{ .Version.arch }}) using {{ .Version.go }} at {{ .Version.time }}
+          running on {{ .Hostname }} for {{ .Uptime }}
+        </span>
+      </div>
+      {{ if .ThemePick }}
       {{ template "themeSelect" }}
-    {{ end }}
-  </div>
+      {{ end }}
+    </div>
+  </body>
+</html>
 {{ end }}
