@@ -119,10 +119,10 @@ func (s *Storage) Expire(f *File) {
 
 // Returns reason if File is expired
 func (f *File) IsExpired(s Settings) string {
-	if f.Downloads.Total >= f.Downloads.Allow {
+	if f.Total >= f.Downloads.Allow {
 		return "limit downloads"
 	}
-	if time.Since(f.Time.Upload) > f.Time.Duration {
+	if time.Since(f.Upload) > f.Time.Duration {
 		return "limit duration"
 	}
 	return ""
@@ -130,7 +130,7 @@ func (f *File) IsExpired(s Settings) string {
 
 // Returns number of remaining downloads until expiration
 func (f *File) NumRemaining() int {
-	return f.Downloads.Allow - f.Downloads.Total
+	return f.Downloads.Allow - f.Total
 }
 
 // Returns File content type based on extension

@@ -52,7 +52,7 @@ func Index(app *config.App) http.HandlerFunc {
 
 		response := templates.Index{
 			Auth:            app.Auth,
-			DefaultDuration: app.Expiration.Duration.String(),
+			DefaultDuration: app.Expiration.String(),
 			Hostname:        app.Hostname,
 			Index:           app.Index,
 			Limits:          app.Limits,

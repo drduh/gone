@@ -19,11 +19,11 @@ func Heartbeat(app *config.App) http.HandlerFunc {
 		response := templates.Heartbeat{
 			Hostname:     app.Hostname,
 			Version:      version.Short(),
-			Port:         app.Settings.Port,
+			Port:         app.Port,
 			Uptime:       uptime,
-			FileCount:    app.Storage.CountFiles(),
-			MessageCount: app.Storage.CountMessages(),
-			Limits:       app.Settings.Limits,
+			FileCount:    app.CountFiles(),
+			MessageCount: app.CountMessages(),
+			Limits:       app.Limits,
 			Owner: config.Owner{
 				Address: req.Address,
 				Headers: r.Header,

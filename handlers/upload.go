@@ -21,7 +21,7 @@ func Upload(app *config.App) http.HandlerFunc {
 			return
 		}
 
-		if !app.Throttle.Allow(app.Settings.Limits.PerMinute) {
+		if !app.Allow(app.Settings.Limits.PerMinute) {
 			writeJSON(w, http.StatusTooManyRequests, errorJSON(app.Error.RateLimit))
 			app.Log.Error(app.Error.RateLimit, "user", req)
 			return
@@ -95,12 +95,12 @@ func Upload(app *config.App) http.HandlerFunc {
 			Name: file.Name,
 			Size: file.Size,
 			Owner: config.Owner{
-				Address: file.Owner.Address,
-				Agent:   file.Owner.Agent,
+				Address: file.Address,
+				Agent:   file.Agent,
 			},
 			Time: config.Time{
 				Upload: file.Upload,
-				Allow:  file.Time.Duration.String(),
+				Allow:  file.Duration.String(),
 			},
 			Downloads: config.Downloads{
 				Allow: file.Downloads.Allow,

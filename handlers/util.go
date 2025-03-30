@@ -18,10 +18,10 @@ func deny(w http.ResponseWriter, app *config.App, r *Request) {
 // Returns true if auth for route path is required and allowed
 func isAllowed(app *config.App, r *http.Request) bool {
 	reqs := map[string]bool{
-		app.Paths.Download: app.Auth.Require.Download,
-		app.Paths.Message:  app.Auth.Require.Message,
-		app.Paths.List:     app.Auth.Require.List,
-		app.Paths.Upload:   app.Auth.Require.Upload,
+		app.Download: app.Auth.Require.Download,
+		app.Message:  app.Auth.Require.Message,
+		app.List:     app.Auth.Require.List,
+		app.Upload:   app.Auth.Require.Upload,
 	}
 	app.Log.Debug("checking auth", "path", r.URL.Path)
 	required, exists := reqs[r.URL.Path]
@@ -33,7 +33,7 @@ func isAllowed(app *config.App, r *http.Request) bool {
 
 // Returns true if authentication is successful
 func isAuthenticated(app *config.App, r *http.Request) bool {
-	return auth.Basic(app.Auth.Header, app.Auth.Token, r)
+	return auth.Basic(app.Header, app.Token, r)
 }
 
 // Returns error in string map

@@ -21,7 +21,7 @@ func expireFiles(app *config.App) {
 		lifetime := time.Since(f.Time.Upload).Round(time.Second)
 		app.Log.Debug("checking expiration",
 			"filename", f.Name,
-			"allowed", f.Time.Duration.String(),
+			"allowed", f.Duration.String(),
 			"available", lifetime.String(),
 			"remaining", f.TimeRemaining().String())
 		reason := f.IsExpired(app.Settings)
