@@ -3,7 +3,6 @@ package handlers
 import (
 	"html/template"
 	"net/http"
-	"time"
 
 	"github.com/drduh/gone/config"
 	"github.com/drduh/gone/templates"
@@ -16,15 +15,9 @@ func Index(app *config.App) http.HandlerFunc {
 		app.Log.Info("serving index", "user", req)
 
 		theme := getTheme(app.Theme)
-
 		if app.ThemePick {
-			cookieDuration := app.Cookie.Time.GetDuration()
-			cookieNew := &http.Cookie{
-				Name:    app.Cookie.Id,
-				Expires: time.Now().Add(cookieDuration),
-				Path:    "/",
-			}
-
+			cookieNew := newCookie(app.Cookie.Id,
+				app.Cookie.Time.GetDuration())
 			themeForm := r.FormValue("theme")
 			if themeForm != "" {
 				theme = themeForm
