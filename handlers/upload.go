@@ -109,6 +109,8 @@ func Upload(app *config.App) http.HandlerFunc {
 				Allow: file.Downloads.Allow,
 			},
 		}
+		http.Redirect(w, r, "/", http.StatusSeeOther)
+
 		writeJSON(w, http.StatusOK, response)
 
 		app.Log.Info("file uploaded",

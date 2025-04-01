@@ -11,9 +11,9 @@ import (
 func Static(app *config.App) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		req := parseRequest(r)
+		app.Log.Info("serving static content", "user", req)
 		writeJSON(w, http.StatusOK, templates.Static{
 			Data: templates.StaticData,
 		})
-		app.Log.Info("served static content", "user", req)
 	}
 }
