@@ -43,7 +43,7 @@ func Load() *App {
 
 	app.Hostname = util.GetHostname()
 	app.Version = version.Full()
-	app.Storage.Clear()
+	app.Clear()
 
 	return &app
 }

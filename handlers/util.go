@@ -80,7 +80,7 @@ func writeJSON(w http.ResponseWriter, code int, data interface{}) {
 	err := json.NewEncoder(w).Encode(data)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
-		json.NewEncoder(w).Encode(errorJSON(err.Error()))
+		_ = json.NewEncoder(w).Encode(errorJSON(err.Error()))
 		return
 	}
 }

@@ -15,7 +15,7 @@ func (a *Auditor) Handle(ctx context.Context, r slog.Record) error {
 	})
 
 	event, err := json.Marshal(&Event{
-		Time:    r.Time.Format(a.Config.TimeFormat),
+		Time:    r.Time.Format(a.TimeFormat),
 		Level:   r.Level.String(),
 		Message: r.Message,
 		Data:    data,
