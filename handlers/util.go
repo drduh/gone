@@ -28,7 +28,7 @@ func isAllowed(app *config.App, r *http.Request) bool {
 	if !exists || !required {
 		return true
 	}
-	return isAuthenticated(app.Header, app.Token, r)
+	return isAuthenticated(app.Basic.Field, app.Basic.Token, r)
 }
 
 // Returns true if authentication is successful
@@ -44,7 +44,7 @@ func errorJSON(s string) map[string]string {
 }
 
 // Returns CSS theme based on current time of day if unset
-func getTheme(theme string) string {
+func getDefaultTheme(theme string) string {
 	if theme != "" {
 		return theme
 	}
@@ -63,11 +63,26 @@ func parseRequest(r *http.Request) *Request {
 	}
 }
 
+// Returns parsed http Request struct, if allowed
+func authRequest(w http.ResponseWriter, r *http.Request, app *config.App) (*Request, bool) {
+	req := parseRequest(r)
+	if !isAllowed(app, r) {
+		deny(w, app, req)
+		return nil, false
+	}
+	return req, true
+}
+
 // Writes JSON response
 func writeJSON(w http.ResponseWriter, code int, data interface{}) {
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 	w.WriteHeader(code)
-	_ = json.NewEncoder(w).Encode(data)
+	err := json.NewEncoder(w).Encode(data)
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		json.NewEncoder(w).Encode(errorJSON(err.Error()))
+		return
+	}
 }
 
 // Writes File response with content
