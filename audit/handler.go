@@ -14,19 +14,17 @@ func (a *Auditor) Handle(ctx context.Context, r slog.Record) error {
 		return true
 	})
 
-	event := Event{
-		Time:    r.Time.Format(cfg.TimeFormat),
+	event, err := json.Marshal(&Event{
+		Time:    r.Time.Format(a.Config.TimeFormat),
 		Level:   r.Level.String(),
 		Message: r.Message,
 		Data:    data,
-	}
-
-	jsonEvent, err := json.Marshal(event)
+	})
 	if err != nil {
 		return err
 	}
 
-	a.Println(string(jsonEvent))
+	a.Println(string(event))
 
 	return nil
 }
