@@ -43,9 +43,6 @@ type Auth struct {
 	// Header key name ("X-Auth")
 	Header string `json:"header"`
 
-	// Form field placeholder ("secret required")
-	Holder string `json:"holder"`
-
 	// String-based token
 	Token string `json:"token"`
 
@@ -149,7 +146,7 @@ type Limits struct {
 	Ticker Duration `json:"ticker,omitempty"`
 
 	// Maximum file size (in Megabytes)
-	MaxSizeMb int `json:"maxSizeMb,omitempty"`
+	MaxSizeMb int64 `json:"maxSizeMb,omitempty"`
 
 	// Message character length
 	MsgChars int `json:"msgChars,omitempty"`
@@ -186,4 +183,9 @@ type Paths struct {
 // Returns address string based on port
 func (s *Settings) GetAddr() string {
 	return fmt.Sprintf(":%d", s.Port)
+}
+
+// Returns Mb size to bytes
+func (l *Limits) GetMaxBytes() int64 {
+	return l.MaxSizeMb << 20
 }

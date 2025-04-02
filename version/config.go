@@ -20,6 +20,6 @@ var (
 	// Golang tool version ("go1.24.1")
 	Go = "unknown"
 
-	// Build time
+	// Build time ("2025-12-31T12:00:00")
 	Time = "unknown"
 )

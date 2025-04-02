@@ -28,12 +28,12 @@ func isAllowed(app *config.App, r *http.Request) bool {
 	if !exists || !required {
 		return true
 	}
-	return isAuthenticated(app, r)
+	return isAuthenticated(app.Header, app.Token, r)
 }
 
 // Returns true if authentication is successful
-func isAuthenticated(app *config.App, r *http.Request) bool {
-	return auth.Basic(app.Header, app.Token, r)
+func isAuthenticated(header, token string, r *http.Request) bool {
+	return auth.Basic(header, token, r)
 }
 
 // Returns error in string map

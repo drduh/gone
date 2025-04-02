@@ -27,7 +27,7 @@ func Upload(app *config.App) http.HandlerFunc {
 			return
 		}
 
-		maxBytes := int64(app.MaxSizeMb) << 20
+		maxBytes := app.GetMaxBytes()
 		if r.ContentLength > maxBytes {
 			writeJSON(w, http.StatusRequestEntityTooLarge, errorJSON(app.FileSize))
 			app.Log.Error(app.FileSize,
@@ -109,6 +109,8 @@ func Upload(app *config.App) http.HandlerFunc {
 				Allow: file.Downloads.Allow,
 			},
 		}
+		http.Redirect(w, r, "/", http.StatusSeeOther)
+
 		writeJSON(w, http.StatusOK, response)
 
 		app.Log.Info("file uploaded",
