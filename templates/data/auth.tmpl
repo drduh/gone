@@ -1,7 +1,7 @@
 <!-- auth.tmpl -->
 {{ define "auth" }}
   <input class="selectToken"
-          name="{{ .Auth.Header }}"
+          name="{{ .Auth.Basic.Field }}"
    placeholder="{{ .Index.Placeholder.Auth }}"
          title="authentication required"
           type="text" required>
