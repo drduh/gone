@@ -14,24 +14,10 @@ func Index(app *config.App) http.HandlerFunc {
 		req := parseRequest(r)
 		app.Log.Info("serving index", "user", req)
 
-		theme := getTheme(app.Theme)
+		theme := getDefaultTheme(app.Theme)
 		if app.ThemePick {
-			cookieNew := newCookie(app.Cookie.Id,
-				app.Cookie.Time.GetDuration())
-			themeForm := r.FormValue("theme")
-			if themeForm != "" {
-				theme = themeForm
-				cookieNew.Value = theme
-				http.SetCookie(w, cookieNew)
-			} else {
-				cookie, err := r.Cookie(app.Cookie.Id)
-				if err != nil || cookie.Value == "" {
-					cookieNew.Value = theme
-					http.SetCookie(w, cookieNew)
-				} else {
-					theme = cookie.Value
-				}
-			}
+			theme = getTheme(w, r, theme,
+				app.Cookie.Id, app.Cookie.Time.GetDuration())
 		}
 
 		tmplName := "index.tmpl"
