@@ -5,21 +5,11 @@ import (
 	"log/slog"
 )
 
-// Auditor configuration
-type Config struct {
-
-	// Whether to output verbose debug messages
-	Debug bool
-
-	// Format for datetime in events
-	TimeFormat string
-
-	// Name of log file to write
-	Filename string
-}
-
 // Monitor for application events
 type Auditor struct {
+
+	// Configured options
+	Config
 
 	// Structured logger with custom handler
 	Log *slog.Logger
@@ -27,7 +17,20 @@ type Auditor struct {
 	*log.Logger
 }
 
-// An audit event
+// Auditor configuration
+type Config struct {
+
+	// Whether to set debug logging level
+	Debug bool
+
+	// Format for time field
+	TimeFormat string
+
+	// File to write events to (stdout if unset)
+	Filename string
+}
+
+// Audit Event
 type Event struct {
 
 	// Time of event
@@ -36,9 +39,9 @@ type Event struct {
 	// Severity level ("INFO", "DEBUG", etc.)
 	Level string `json:"level"`
 
-	// Message summary (short)
+	// Short summary
 	Message string `json:"message"`
 
-	// Event data (full)
+	// Full event
 	Data map[string]interface{} `json:"data"`
 }

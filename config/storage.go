@@ -97,6 +97,17 @@ type Downloads struct {
 	Total int `json:"total,omitempty"`
 }
 
+// Clears Files and Messages from Storage
+func (s *Storage) Clear() {
+	s.ClearFiles()
+	s.ClearMessages()
+}
+
+// Clears Files from Storage
+func (s *Storage) ClearFiles() {
+	s.Files = make(map[string]*File)
+}
+
 // Clears Messages from Storage
 func (s *Storage) ClearMessages() {
 	s.Messages = make(map[int]*Message)

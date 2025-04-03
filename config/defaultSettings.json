@@ -1,17 +1,19 @@
 {
+  "audit": {
+    "logFile":    "",
+    "timeFormat": "Monday Jan 2 15:04"
+  },
   "auth": {
-    "header":     "X-Auth",
+    "basic": {
+      "field":    "X-Auth",
+      "token":    "mySecret"
+    },
     "require": {
       "download": true,
       "list":     false,
       "message":  false,
       "upload":   false
-    },
-    "token":      "mySecret"
-  },
-  "audit": {
-    "logFile":    "",
-    "timeFormat": "Monday Jan 2 15:04"
+    }
   },
   "error": {
     "copy":       "file copy fail",

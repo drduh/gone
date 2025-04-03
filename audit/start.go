@@ -7,23 +7,20 @@ import (
 	"github.com/drduh/gone/util"
 )
 
-var cfg = &Config{}
-
 // Returns initialized Auditor ready for logging
 func Start(c *Config) (*Auditor, error) {
-	cfg = c
-
 	opts := slog.HandlerOptions{}
-	if cfg.Debug {
+	if c.Debug {
 		opts.Level = slog.LevelDebug
 	}
 
-	dest, err := util.GetOutput(cfg.Filename)
+	dest, err := util.GetOutput(c.Filename)
 	if err != nil {
 		return nil, err
 	}
 
 	handler := &Auditor{
+		Config:  *c,
 		Handler: slog.NewJSONHandler(dest, &opts),
 		Logger:  log.New(dest, "", 0),
 	}

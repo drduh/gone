@@ -8,6 +8,7 @@ import (
 	_ "embed"
 
 	"github.com/drduh/gone/audit"
+	"github.com/drduh/gone/util"
 	"github.com/drduh/gone/version"
 )
 
@@ -18,13 +19,12 @@ var defaultSettings []byte
 func Load() *App {
 	app := App{}
 	app.Start()
-
 	app.Debug = modeDebug
 	app.Modes.Version = modeVersion
 
 	var settings Settings
 	if err := json.Unmarshal(defaultSettings, &settings); err != nil {
-		log.Fatalf("failed to load default settings: %v", err)
+		log.Fatalf("failed loading default settings: %v", err)
 	}
 	if pathConfig != "" {
 		settings = loadFromFile(pathConfig)
@@ -37,16 +37,13 @@ func Load() *App {
 		Filename:   settings.Filename,
 	})
 	if err != nil {
-		log.Fatalf("failed to start auditor: %v", err)
+		log.Fatalf("failed starting auditor: %v", err)
 	}
 	app.Log = auditor.Log
 
-	app.Hostname = getHostname()
+	app.Hostname = util.GetHostname()
 	app.Version = version.Full()
-	app.Storage = Storage{
-		Files:    make(map[string]*File),
-		Messages: make(map[int]*Message),
-	}
+	app.Clear()
 
 	return &app
 }
@@ -64,13 +61,4 @@ func loadFromFile(path string) Settings {
 	}
 
 	return settings
-}
-
-// Returns OS hostname or exits with error
-func getHostname() string {
-	hostname, err := os.Hostname()
-	if err != nil {
-		log.Fatalf("failed to get hostname: %v", err)
-	}
-	return hostname
 }

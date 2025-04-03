@@ -40,11 +40,15 @@ type Audit struct {
 // Authentication properties
 type Auth struct {
 
-	// Header key name ("X-Auth")
-	Header string `json:"header"`
+	// String-based check
+	Basic struct {
 
-	// String-based token
-	Token string `json:"token"`
+		// Header or form field name ("X-Auth")
+		Field string `json:"field"`
+
+		// String-based token
+		Token string `json:"token"`
+	} `json:"basic"`
 
 	// Route authentication requirements
 	Require struct {
@@ -112,11 +116,11 @@ type Index struct {
 	// Cookie management
 	Cookie struct {
 
-		// Time cookie is valid for ("192h")
-		Time Duration `json:"time"`
-
 		// Label ("goneTheme")
 		Id string `json:"id"`
+
+		// Time cookie is valid for ("192h")
+		Time Duration `json:"time"`
 	} `json:"cookie"`
 
 	// Index form placeholder text
