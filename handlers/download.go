@@ -23,25 +23,14 @@ func Download(app *config.App) http.HandlerFunc {
 			return
 		}
 
-		var file *config.File
-		var found bool
-
-		for _, f := range app.Files {
-			if f.Name == fileName {
-				file = f
-				found = true
-				break
-			}
-		}
-
-		if !found {
+		file := app.FindFile(fileName)
+		if file == nil {
 			writeJSON(w, http.StatusNotFound, errorJSON(app.NotFound))
 			app.Log.Error(app.NotFound, "filename", fileName, "user", req)
 			return
 		}
 
-		writeFile(w, file)
-		file.Total++
+		file.Serve(w)
 		app.Log.Info("served file",
 			"filename", file.Name, "size", file.Size,
 			"downloads", file.Total, "user", req)

@@ -17,8 +17,9 @@ func Message(app *config.App) http.HandlerFunc {
 
 		if r.Method == http.MethodPost {
 			if r.FormValue("clear") != "" {
+				app.Log.Debug("clearing messages",
+					"count", app.CountMessages(), "user", req)
 				app.ClearMessages()
-				app.Log.Debug("cleared messages", "user", req)
 			}
 
 			message := config.Message{
@@ -38,10 +39,18 @@ func Message(app *config.App) http.HandlerFunc {
 				message.Data = content
 				app.Messages[message.Count] = &message
 				app.Log.Debug("added message",
-					"message", content, "user", req)
+					"count", message.Count,
+					"content", message.Data, "user", req)
 			}
 
 			http.Redirect(w, r, "/", http.StatusSeeOther)
+		}
+
+		if r.URL.Query().Get("download") == "all" {
+			app.Log.Debug("serving all messages",
+				"count", app.CountMessages(), "user", req)
+			app.ServeMessages(w)
+			return
 		}
 
 		writeJSON(w, http.StatusOK, app.Messages)

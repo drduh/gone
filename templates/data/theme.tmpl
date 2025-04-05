@@ -1,104 +1,104 @@
 <!-- theme.tmpl -->
 {{ define "theme" }}
-    --box-radius:   6px;
-    --animation:    0.2s;
+        --animation:    0.2s;
+        --box-radius:   6px;
 {{ if eq .Theme "dark" }}
-    --bg-dark:      rgba(  0,  43,  54,   1);
-    --bg-norm:      rgba(  7,  54,  66,   1);
-    --bg-norm-half: rgba(  7,  54,  66, 0.5);
-    --bg-light:     rgba(101, 123, 131,   1);
-    --fg-dark:      rgba(131, 148, 150,   1);
-    --fg-light:     rgba(253, 246, 227,   1);
+        --bg-dark:      rgba(  0,  43,  54,   1);
+        --bg-norm:      rgba(  7,  54,  66,   1);
+        --bg-norm-half: rgba(  7,  54,  66, 0.5);
+        --bg-light:     rgba(101, 123, 131,   1);
+        --fg-dark:      rgba(131, 148, 150,   1);
+        --fg-light:     rgba(253, 246, 227,   1);
 {{ else if eq .Theme "light" }}
-    --bg-dark:      rgba(253, 246, 227,   1);
-    --bg-norm:      rgba(147, 161, 161,   1);
-    --bg-norm-half: rgba(147, 161, 161, 0.5);
-    --bg-light:     rgba(238, 232, 213,   1);
-    --fg-dark:      rgba(  0   43,  54,   1);
-    --fg-light:     rgba(  0,  43,  54,   1);
+        --bg-dark:      rgba(253, 246, 227,   1);
+        --bg-norm:      rgba(147, 161, 161,   1);
+        --bg-norm-half: rgba(147, 161, 161, 0.5);
+        --bg-light:     rgba(238, 232, 213,   1);
+        --fg-dark:      rgba(  0   43,  54,   1);
+        --fg-light:     rgba(  0,  43,  54,   1);
 {{ else if eq .Theme "gold" }}
-    --bg-dark:      rgba(166, 124,   0,   1);
-    --bg-norm:      rgba(255, 191,   0,   1);
-    --bg-norm-half: rgba(255, 191,   0, 0.5);
-    --bg-light:     rgba(255, 212,  71,   1);
-    --fg-dark:      rgba(255, 232, 120,   1);
-    --fg-light:     rgba(255, 220, 115,   1);
+        --bg-dark:      rgba(166, 124,   0,   1);
+        --bg-norm:      rgba(255, 191,   0,   1);
+        --bg-norm-half: rgba(255, 191,   0, 0.5);
+        --bg-light:     rgba(255, 212,  71,   1);
+        --fg-dark:      rgba(255, 232, 120,   1);
+        --fg-light:     rgba(255, 220, 115,   1);
 {{ else if eq .Theme "navy" }}
-    --bg-dark:      rgba(  1,  31,  75,   1);
-    --bg-norm:      rgba(  3,  57, 108,   1);
-    --bg-norm-half: rgba(  3,  57, 108, 0.5);
-    --bg-light:     rgba(  0,  91, 150,   1);
-    --fg-dark:      rgba(100, 151, 177,   1);
-    --fg-light:     rgba(179, 205, 224,   1);
+        --bg-dark:      rgba(  1,  31,  75,   1);
+        --bg-norm:      rgba(  3,  57, 108,   1);
+        --bg-norm-half: rgba(  3,  57, 108, 0.5);
+        --bg-light:     rgba(  0,  91, 150,   1);
+        --fg-dark:      rgba(100, 151, 177,   1);
+        --fg-light:     rgba(179, 205, 224,   1);
 {{ else if eq .Theme "rose" }}
-    --bg-dark:      rgba(175,  83,  83,   1);
-    --bg-norm:      rgba(208, 124, 124,   1);
-    --bg-norm-half: rgba(208, 124, 124, 0.5);
-    --bg-light:     rgba(223, 145, 145,   1);
-    --fg-dark:      rgba(244, 168, 168,   1);
-    --fg-light:     rgba(254, 181, 181,   1);
+        --bg-dark:      rgba(175,  83,  83,   1);
+        --bg-norm:      rgba(208, 124, 124,   1);
+        --bg-norm-half: rgba(208, 124, 124, 0.5);
+        --bg-light:     rgba(223, 145, 145,   1);
+        --fg-dark:      rgba(244, 168, 168,   1);
+        --fg-light:     rgba(254, 181, 181,   1);
 {{ else if eq .Theme "lime" }}
-    --bg-dark:      rgba(172, 221, 163,   1);
-    --bg-norm:      rgba(188, 227, 181,   1);
-    --bg-norm-half: rgba(188, 227, 181, 0.5);
-    --bg-light:     rgba(205, 234, 199,   1);
-    --fg-dark:      rgba(221, 241, 218,   1);
-    --fg-light:     rgba(238, 248, 236,   1);
+        --bg-dark:      rgba(172, 221, 163,   1);
+        --bg-norm:      rgba(188, 227, 181,   1);
+        --bg-norm-half: rgba(188, 227, 181, 0.5);
+        --bg-light:     rgba(205, 234, 199,   1);
+        --fg-dark:      rgba(221, 241, 218,   1);
+        --fg-light:     rgba(238, 248, 236,   1);
 {{ else if eq .Theme "green" }}
-    --bg-dark:      rgba( 35,  77,  32,   1);
-    --bg-norm:      rgba( 54, 128,  45,   1);
-    --bg-norm-half: rgba( 54, 128,  45, 0.5);
-    --bg-light:     rgba(119, 171,  89,   1);
-    --fg-dark:      rgba(201, 223, 138,   1);
-    --fg-light:     rgba(240, 247, 218,   1);
+        --bg-dark:      rgba( 35,  77,  32,   1);
+        --bg-norm:      rgba( 54, 128,  45,   1);
+        --bg-norm-half: rgba( 54, 128,  45, 0.5);
+        --bg-light:     rgba(119, 171,  89,   1);
+        --fg-dark:      rgba(201, 223, 138,   1);
+        --fg-light:     rgba(240, 247, 218,   1);
 {{ else if eq .Theme "purple" }}
-    --bg-dark:      rgba(156, 163, 214,   1);
-    --bg-norm:      rgba(207, 193, 232,   1);
-    --bg-norm-half: rgba(207, 193, 232, 0.5);
-    --bg-light:     rgba(242, 213, 239,   1);
-    --fg-dark:      rgba(247, 239, 218,   1);
-    --fg-light:     rgba(179, 221, 196,   1);
+        --bg-dark:      rgba(156, 163, 214,   1);
+        --bg-norm:      rgba(207, 193, 232,   1);
+        --bg-norm-half: rgba(207, 193, 232, 0.5);
+        --bg-light:     rgba(242, 213, 239,   1);
+        --fg-dark:      rgba(247, 239, 218,   1);
+        --fg-light:     rgba(179, 221, 196,   1);
 {{ else if eq .Theme "night" }}
-    --bg-dark:      rgba(  0,   0,   0,   1);
-    --bg-norm:      rgba( 64,   0,   0,   1);
-    --bg-norm-half: rgba( 64,   0,   0, 0.5);
-    --bg-light:     rgba(128,   0,   0,   1);
-    --fg-dark:      rgba(191,   0,   0,   1);
-    --fg-light:     rgba(255,   0,   0,   1);
+        --bg-dark:      rgba(  0,   0,   0,   1);
+        --bg-norm:      rgba( 64,   0,   0,   1);
+        --bg-norm-half: rgba( 64,   0,   0, 0.5);
+        --bg-light:     rgba(128,   0,   0,   1);
+        --fg-dark:      rgba(191,   0,   0,   1);
+        --fg-light:     rgba(255,   0,   0,   1);
 {{ else if eq .Theme "pink" }}
-    --bg-dark:      rgba(255, 132, 182,   1);
-    --bg-norm:      rgba(255, 192, 159,   1);
-    --bg-norm-half: rgba(255, 192, 159, 0.5);
-    --bg-light:     rgba(208, 188, 255,   1);
-    --fg-dark:      rgba(131, 127, 255,   1);
-    --fg-light:     rgba(255, 229, 142,   1);
+        --bg-dark:      rgba(255, 132, 182,   1);
+        --bg-norm:      rgba(255, 192, 159,   1);
+        --bg-norm-half: rgba(255, 192, 159, 0.5);
+        --bg-light:     rgba(208, 188, 255,   1);
+        --fg-dark:      rgba(131, 127, 255,   1);
+        --fg-light:     rgba(255, 229, 142,   1);
 {{ else if eq .Theme "lush" }}
-    --bg-dark:      rgba( 26, 184, 126,   1);
-    --bg-norm:      rgba( 23, 255, 227,   1);
-    --bg-norm-half: rgba( 23, 255, 227, 0.5);
-    --bg-light:     rgba(169, 132, 248,   1);
-    --fg-dark:      rgba(239, 105,  46,   1);
-    --fg-light:     rgba(249, 155, 197,   1);
+        --bg-dark:      rgba( 26, 184, 126,   1);
+        --bg-norm:      rgba( 23, 255, 227,   1);
+        --bg-norm-half: rgba( 23, 255, 227, 0.5);
+        --bg-light:     rgba(169, 132, 248,   1);
+        --fg-dark:      rgba(239, 105,  46,   1);
+        --fg-light:     rgba(249, 155, 197,   1);
 {{ else if eq .Theme "dusk" }}
-    --bg-dark:      rgba( 38,  36,  48,   1);
-    --bg-norm:      rgba( 42,  45,  84,   1);
-    --bg-norm-half: rgba( 42,  45,  84, 0.5);
-    --bg-light:     rgba(255, 190, 111,   1);
-    --fg-dark:      rgba(166, 129, 186,   1);
-    --fg-light:     rgba(211,  65,  59,   1);
+        --bg-dark:      rgba( 38,  36,  48,   1);
+        --bg-norm:      rgba( 42,  45,  84,   1);
+        --bg-norm-half: rgba( 42,  45,  84, 0.5);
+        --bg-light:     rgba(255, 190, 111,   1);
+        --fg-dark:      rgba(166, 129, 186,   1);
+        --fg-light:     rgba(211,  65,  59,   1);
 {{ else if eq .Theme "beach" }}
-    --bg-dark:      rgba( 66, 142, 186,   1);
-    --bg-norm:      rgba( 72, 202, 240,   1);
-    --bg-norm-half: rgba( 72, 202, 240, 0.5);
-    --bg-light:     rgba(246,  97,  81,   1);
-    --fg-dark:      rgba(249, 240, 107,   1);
-    --fg-light:     rgba(249, 240, 107,   1);
+        --bg-dark:      rgba( 66, 142, 186,   1);
+        --bg-norm:      rgba( 72, 202, 240,   1);
+        --bg-norm-half: rgba( 72, 202, 240, 0.5);
+        --bg-light:     rgba(246,  97,  81,   1);
+        --fg-dark:      rgba(249, 240, 107,   1);
+        --fg-light:     rgba(249, 240, 107,   1);
 {{ else if eq .Theme "neon" }}
-    --bg-dark:      rgba(  0,   0,   0,   1);
-    --bg-norm:      rgba( 18,  18,  37,   1);
-    --bg-norm-half: rgba( 18,  18,  37, 0.5);
-    --bg-light:     rgba(146,  21, 245,   1);
-    --fg-dark:      rgba(250,  23, 138,   1);
-    --fg-light:     rgba(200, 247,  30,   1);
+        --bg-dark:      rgba(  0,   0,   0,   1);
+        --bg-norm:      rgba( 18,  18,  37,   1);
+        --bg-norm-half: rgba( 18,  18,  37, 0.5);
+        --bg-light:     rgba(146,  21, 245,   1);
+        --fg-dark:      rgba(250,  23, 138,   1);
+        --fg-light:     rgba(200, 247,  30,   1);
 {{ end }}
 {{ end }}

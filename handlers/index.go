@@ -20,7 +20,7 @@ func Index(app *config.App) http.HandlerFunc {
 				app.Cookie.Id, app.Cookie.Time.GetDuration())
 		}
 
-		tmplName := "index.tmpl"
+		tmplName := "index"
 		tmpl, err := template.New(tmplName).ParseFS(templates.All, "data/*.tmpl")
 		if err != nil {
 			writeJSON(w, http.StatusInternalServerError, errorJSON(app.TmplParse))
