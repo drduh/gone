@@ -1,21 +1,13 @@
 <!-- index.tmpl -->
-{{ template "header" . }}
+{{ define "index" }}
+{{- template "header" . -}}
   <div class="container">
-    {{ if .Paths.Upload }}
-    {{ template "upload" . }}
-    {{ end }}
-
-    {{ if .Paths.Download }}
-    {{ template "download" . }}
-    {{ end }}
-
-    {{ if .Paths.List }}
-    {{ template "list" . }}
-    {{ end }}
+    {{ if .Paths.Upload }}    {{- template "upload" . -}}    {{ end }}
+    {{ if .Paths.Download }}  {{- template "download" . -}}  {{ end }}
+    {{ if .Paths.List }}      {{- template "list" . -}}      {{ end }}
   </div>
   <div class="container">
-    {{ if .Paths.Message }}
-    {{ template "message" . }}
-    {{ end }}
+    {{ if .Paths.Message }}   {{- template "message" . -}}   {{ end }}
   </div>
-{{ template "footer" . }}
+{{- template "footer" . -}}
+{{ end }}

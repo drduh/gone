@@ -15,9 +15,7 @@
               name="clear"
               type="checkbox">
       <br>
-      {{ if .Auth.Require.Message }}
-      {{ template "auth" . }}
-      {{ end }}
+      {{ if .Auth.Require.Message }} {{ template "auth" . }} {{ end }}
       <input type="submit"
             class="selectSubmit"
             value="post">
@@ -34,5 +32,14 @@
       <button class="selectRefresh"
               type="submit">refresh</button>
     </form>
+    {{ if .Storage.Messages }}
+    <form action="{{ .Paths.Message }}">
+      <input type="hidden"
+             name="download"
+            value="all">
+      <button class="selectRefresh"
+               type="submit">download</button>
+    </form>
+    {{ end }}
   </div>
 {{ end }}

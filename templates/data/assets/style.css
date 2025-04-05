@@ -3,8 +3,11 @@
   box-sizing: border-box;
 }
 
+button, input, select {
+  transition: all var(--animation) ease;
+}
+
 body {
-  background: var(--bg-light);
   background: linear-gradient(0deg, var(--bg-light) 0%, var(--bg-dark) 100%);
   background-attachment: fixed;
   color: var(--fg-dark);
@@ -16,14 +19,12 @@ body {
   padding: 0;
 }
 
-a:link,
-a:visited {
+a:link, a:visited {
   color: var(--fg-light);
   text-decoration: none;
 }
 
-a:active,
-a:hover {
+a:active, a:hover {
   color: var(--fg-light);
   text-decoration: underline;
 }
@@ -55,10 +56,6 @@ a:hover {
   position: fixed;
   text-align: center;
   width: 100%;
-}
-
-*, button, input, select, a {
-  transition: all var(--animation) ease;
 }
 
 button[type="submit"],
@@ -115,15 +112,13 @@ input[type="number"] {
   border-radius: var(--box-radius);
   bottom: 2rem;
   color: var(--fg-light);
-  left: 50%;
-  margin-left: -12rem;
-  opacity: 0;
   padding: 6px 0;
   position: absolute;
   text-align: center;
+  transform: translateX(-55%);
   visibility: hidden;
   width: 24em;
-  z-index: 1;
+  z-index: 10;
 }
 
 .message .owner::after {

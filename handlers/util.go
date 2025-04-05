@@ -19,8 +19,8 @@ func deny(w http.ResponseWriter, app *config.App, r *Request) {
 func isAllowed(app *config.App, r *http.Request) bool {
 	reqs := map[string]bool{
 		app.Download: app.Require.Download,
-		app.Message:  app.Require.Message,
 		app.List:     app.Require.List,
+		app.Message:  app.Require.Message,
 		app.Upload:   app.Require.Upload,
 	}
 	app.Log.Debug("checking auth", "path", r.URL.Path)
@@ -83,12 +83,4 @@ func writeJSON(w http.ResponseWriter, code int, data interface{}) {
 		_ = json.NewEncoder(w).Encode(errorJSON(err.Error()))
 		return
 	}
-}
-
-// Writes File response with content
-func writeFile(w http.ResponseWriter, f *config.File) {
-	w.Header().Set("Content-Type", f.MimeType())
-	w.Header().Set("Content-Disposition", "attachment; filename="+f.Name)
-	w.WriteHeader(http.StatusOK)
-	_, _ = w.Write(f.Data)
 }

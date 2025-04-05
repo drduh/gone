@@ -9,9 +9,7 @@
                       name="file"
                      title="file to upload">
       <br>
-      {{ if .Auth.Require.Upload }}
-        {{ template "auth" . }}
-      {{ end }}
+      {{ if .Auth.Require.Upload }} {{ template "auth" . }} {{ end }}
       <input type="number"
             class="selectDownloads"
               max="9999"
