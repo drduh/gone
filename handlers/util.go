@@ -84,11 +84,3 @@ func writeJSON(w http.ResponseWriter, code int, data interface{}) {
 		return
 	}
 }
-
-// Writes File response with content
-func writeFile(w http.ResponseWriter, f *config.File) {
-	w.Header().Set("Content-Type", f.MimeType())
-	w.Header().Set("Content-Disposition", "attachment; filename="+f.Name)
-	w.WriteHeader(http.StatusOK)
-	_, _ = w.Write(f.Data)
-}
