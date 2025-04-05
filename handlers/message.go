@@ -44,6 +44,11 @@ func Message(app *config.App) http.HandlerFunc {
 			http.Redirect(w, r, "/", http.StatusSeeOther)
 		}
 
+		if r.URL.Query().Get("download") == "all" {
+			app.Storage.ServeMessages(w)
+			return
+		}
+
 		writeJSON(w, http.StatusOK, app.Messages)
 	}
 }

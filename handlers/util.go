@@ -19,8 +19,8 @@ func deny(w http.ResponseWriter, app *config.App, r *Request) {
 func isAllowed(app *config.App, r *http.Request) bool {
 	reqs := map[string]bool{
 		app.Download: app.Require.Download,
-		app.Message:  app.Require.Message,
 		app.List:     app.Require.List,
+		app.Message:  app.Require.Message,
 		app.Upload:   app.Require.Upload,
 	}
 	app.Log.Debug("checking auth", "path", r.URL.Path)

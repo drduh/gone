@@ -1,6 +1,7 @@
 package config
 
 import (
+	"fmt"
 	"mime"
 	"net/http"
 	"path/filepath"
@@ -176,6 +177,18 @@ func (f *File) Serve(w http.ResponseWriter) {
 	w.Header().Set("Content-Type", f.MimeType())
 	w.Header().Set("Content-Disposition", "attachment; filename="+f.Name)
 	w.WriteHeader(http.StatusOK)
-	w.Write(f.Data)
+	_, _ = w.Write(f.Data)
 	f.Total++
+}
+
+// Serves Messages as HTTP response
+func (s *Storage) ServeMessages(w http.ResponseWriter) {
+	w.Header().Set("Content-Type", "text/plain")
+	w.Header().Set("Content-Disposition", "attachment; filename=messages.txt")
+	for _, msg := range s.Messages {
+		_, err := fmt.Fprintf(w, "%d. %s\n", msg.Count, msg.Data)
+		if err != nil {
+			return
+		}
+	}
 }
