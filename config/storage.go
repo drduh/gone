@@ -158,3 +158,24 @@ func (f *File) TimeRemaining() time.Duration {
 	return time.Until(
 		f.Time.Upload.Add(f.Time.Duration)).Round(time.Second)
 }
+
+// Returns File, if found by name
+func (s *Storage) FindFile(name string) *File {
+	var file *File
+	for _, f := range s.Files {
+		if f.Name == name {
+			file = f
+			break
+		}
+	}
+	return file
+}
+
+// Serves File as HTTP response
+func (f *File) Serve(w http.ResponseWriter) {
+	w.Header().Set("Content-Type", f.MimeType())
+	w.Header().Set("Content-Disposition", "attachment; filename="+f.Name)
+	w.WriteHeader(http.StatusOK)
+	w.Write(f.Data)
+	f.Total++
+}
