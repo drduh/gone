@@ -2,33 +2,33 @@
 
 gone is an ephemeral content sharing server written in Go.
 
-The primary goal is to enable sharing of a link, document or other file to another device on the network.
+The primary goal is to enable sharing of a file or short text message to another device with access to the application.
 
 ## Features
 
-- In-memory storage - no file artifacts after program exits
+- In-memory storage - no residual content artifacts after program exits
 - Share files with upload, download and list functionality
 - Files expire (removed) after a number of downloads or duration of time
 - JSON-based configuration, logging and server responses
 - Token (string-based) authentication
 - Request rate and size limits
-- Basic user interface without scripts
+- Basic HTML user interface (index) without scripts
 - Share and clear short text messages
 - No third-party dependencies
 
 ## Security
 
-gone has not yet been subject to security audit and has several obvious vulnerabilities, such as lack of input validation.
+gone has not yet been subject to security audit and may lack adequate user input validation.
 
 Therefore, gone is only intended for use on a secure network with trusted devices, such as a private LAN.
 
 # Development
 
-gone requires [Go 1.24.1](https://go.dev/doc/install) to develop.
+gone requires [Go](https://go.dev/doc/install) to develop.
 
 ## Build
 
-To build the application on Linux:
+To build gone on Linux:
 
 ```
 make build
@@ -38,7 +38,7 @@ Binaries are built to `release` for distribution and installation.
 
 ## Run
 
-To run the application on Linux:
+To run gone on Linux:
 
 ```
 make run
@@ -46,7 +46,7 @@ make run
 
 ## Debug
 
-To run the application on Linux in debug mode:
+To run gone on Linux in debug mode:
 
 ```
 make debug
@@ -118,12 +118,10 @@ curl http://localhost:8080/list
 
 ## Download
 
-Download file (the default configuration requires basic authentication):
+Download file (the [default configuration](https://github.com/drduh/gone/blob/main/config/defaultSettings.json) requires basic authentication):
 
 ```
 curl -H "X-Auth: mySecret" "http://localhost:8080/download/test.txt"
-
-curl -H "X-Auth: mySecret" "http://localhost:8080/download?name=test.txt"
 ```
 
 Get static (never expires) content:
