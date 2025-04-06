@@ -43,9 +43,9 @@ func errorJSON(s string) map[string]string {
 	}
 }
 
-// Returns CSS theme based on current time of day if unset
+// Returns CSS theme based on current time of day if set to "auto"
 func getDefaultTheme(theme string) string {
-	if theme != "" {
+	if theme != "auto" {
 		return theme
 	}
 	if util.IsDaytime() {
