@@ -104,12 +104,6 @@ type Index struct {
 	// Whether to enable Content Security Policy (CSP)
 	CSP bool `json:"csp"`
 
-	// Whether to allow theme selection
-	ThemePick bool `json:"themePick"`
-
-	// CSS theme to style with (leave empty for auto selection)
-	Theme string `json:"theme"`
-
 	// Page title ("gone")
 	Title string `json:"title"`
 
@@ -122,6 +116,19 @@ type Index struct {
 		// Time cookie is valid for ("192h")
 		Time Duration `json:"time"`
 	} `json:"cookie"`
+
+	// CSS style options
+	Style struct {
+
+		// Whether to allow theme selection
+		AllowPick bool `json:"allowPick"`
+
+		// Theme to style with (leave empty for auto selection)
+		Theme string `json:"theme"`
+
+		// List of available themes to choose from, if allowed
+		Available []string `json:"available"`
+	} `json:"style"`
 
 	// Index form placeholder text
 	Placeholder struct {

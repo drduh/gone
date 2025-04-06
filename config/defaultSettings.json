@@ -1,62 +1,79 @@
 {
   "audit": {
-    "logFile":    "",
-    "timeFormat": "Monday Jan 2 15:04"
+    "logFile":     "",
+    "timeFormat":  "Monday Jan 2 15:04"
   },
   "auth": {
     "basic": {
-      "field":    "X-Auth",
-      "token":    "mySecret"
+      "field":     "X-Auth",
+      "token":     "mySecret"
     },
     "require": {
-      "download": true,
-      "list":     false,
-      "message":  false,
-      "upload":   false
+      "download":  true,
+      "list":      false,
+      "message":   false,
+      "upload":    false
     }
   },
   "error": {
-    "copy":       "file copy fail",
-    "deny":       "not authorized",
-    "fileSize":   "file too large",
-    "form":       "file form fail",
-    "notFound":   "file not found",
-    "noFilename": "need file name",
-    "tmplExec":   "failed to exec",
-    "tmplParse":  "failed parsing",
-    "rateLimit":  "limit exceeded"
+    "copy":        "file copy fail",
+    "deny":        "not authorized",
+    "fileSize":    "file too large",
+    "form":        "file form fail",
+    "noFilename":  "need file name",
+    "notFound":    "file not found",
+    "rateLimit":   "limit exceeded",
+    "tmplExec":    "failed to exec",
+    "tmplParse":   "failed parsing"
   },
   "index": {
     "cookie": {
-      "id":       "goneTheme",
-      "time":     "192h"
+      "id":        "goneTheme",
+      "time":      "192h"
     },
-    "csp":        true,
+    "csp":         true,
     "placeholder": {
-      "auth":     "secret required",
-      "filename": "enter filename",
-      "message":  "enter message"
+      "auth":      "secret required",
+      "filename":  "enter filename",
+      "message":   "enter message"
     },
-    "theme":      "",
-    "themePick":  true,
-    "title":      "gone"
+    "style": {
+      "allowPick": true,
+      "available": [
+        "dark",
+        "light",
+        "navy",
+        "rose",
+        "green",
+        "lime",
+        "pink",
+        "gold",
+        "purple",
+        "lush",
+        "beach",
+        "dusk",
+        "neon",
+        "night"
+      ],
+      "theme":     "auto"
+    }
   },
   "limits": {
-    "downloads":  1,
-    "duration":   "2m",
-    "maxSizeMb":  20,
-    "msgChars":   128,
-    "perMinute":  10,
-    "ticker":     "30s"
+    "downloads":   1,
+    "duration":    "2m",
+    "maxSizeMb":   20,
+    "msgChars":    128,
+    "perMinute":   10,
+    "ticker":      "30s"
   },
   "paths": {
-    "assets":     "/assets/",
-    "download":   "/download/",
-    "heartbeat":  "/heartbeat",
-    "list":       "/list",
-    "message":    "/msg",
-    "static":     "/static",
-    "upload":     "/upload"
+    "assets":      "/assets/",
+    "download":    "/download/",
+    "heartbeat":   "/heartbeat",
+    "list":        "/list",
+    "message":     "/msg",
+    "static":      "/static",
+    "upload":      "/upload"
   },
-  "port":         8080
+  "port":          8080
 }
