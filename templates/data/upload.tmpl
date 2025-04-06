@@ -2,27 +2,26 @@
 {{ define "upload" }}
   <div class="box">
     <form action="{{ .Paths.Upload }}"
-          method="post"
-         enctype="multipart/form-data">
-      <input required type="file"
-                     class="selectFile"
-                      name="file"
-                     title="file to upload">
+         enctype="multipart/form-data"
+          method="post">
+      <input type="file"
+            class="selectFile"
+             name="file"
+            title="file to upload" required>
       <br>
-      {{ if .Auth.Require.Upload }} {{ template "auth" . }} {{ end }}
       <input type="number"
             class="selectDownloads"
-              max="9999"
-              min="1"
+              min="1" max="9999"
              name="downloads"
              step="1"
             title="number of allowed downloads"
-      placeholder="1">
+      placeholder="{{ .Limits.Downloads }}">
       <input type="text"
             class="selectDuration"
              name="duration"
-            title="expire file after duration"
-      placeholder="{{ .DefaultDuration }}">
+      placeholder="{{ .DefaultDuration }}"
+            title="expire file after duration">
+      {{ if .Auth.Require.Upload }} {{ template "auth" . }} {{ end }}
       <br>
       <input type="submit"
             class="selectSubmit"

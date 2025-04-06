@@ -3,17 +3,14 @@
   <div class="box">
     <form action="{{ .Paths.List }}"
           method="get">
-      <br>
-      {{ if .Auth.Require.List }}
-      {{ template "auth" . }}
-      {{ else }}
+      {{ if .Auth.Require.List }} {{ template "auth" . }} {{ else }}
       {{ range .Storage.Files }}
       <div class="message">{{ .Name }}
         <span class="owner">{{ .Size }} ({{ .Owner.Address }})</span>
       </div>
+      {{ end }}
+      {{ end }}
       <br>
-      {{ end }}
-      {{ end }}
       <input type="submit"
             class="selectSubmit"
             value="list">

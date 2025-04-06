@@ -3,15 +3,14 @@
     <div class="footer">
       <div class="message">{{ .Version.id }}
         <span class="owner">
-          <a href="https://github.com/drduh/gone">{{ .Version.id }}-{{ .Version.vers }}</a>
-          <br>built by {{ .Version.user }} on {{ .Version.os }}
-          ({{ .Version.arch }}) using {{ .Version.go }} at {{ .Version.time }}
-          running on {{ .Hostname }} for {{ .Uptime }}
+          <a href="https://github.com/drduh/gone">
+            {{ .Version.id }}-{{ .Version.vers }}</a>
+          <br>built by {{ .Version.user }} on {{ .Version.arch }} {{ .Version.os }}
+          <br>at {{ .Version.time }} using <a href="https://go.dev/">{{ .Version.go }}</a>
+          <br>up {{ .Uptime}} on {{ .Hostname }}
         </span>
       </div>
-      {{ if .ThemePick }}
-      {{ template "themeSelect" }}
-      {{ end }}
+      {{ if .ThemePick }} {{ template "themeSelect" }} {{ end }}
     </div>
   </body>
 </html>
