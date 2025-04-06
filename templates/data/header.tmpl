@@ -11,9 +11,7 @@
     {{ if .Theme }}
     <link rel="stylesheet" type="text/css" href="/assets/style.css">
     <style>
-      :root {
-        {{- template "theme" . }}
-      }
+      {{- template "theme" . }}
     </style>
     {{ end }}
   </head>

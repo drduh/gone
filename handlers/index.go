@@ -14,18 +14,18 @@ func Index(app *config.App) http.HandlerFunc {
 		req := parseRequest(r)
 		app.Log.Info("serving index", "user", req)
 
-		theme := getDefaultTheme(app.Theme)
-		if app.ThemePick {
+		theme := getDefaultTheme(app.Style.Theme)
+		app.Log.Debug("got theme", "default", theme)
+		if app.Style.AllowPick {
 			theme = getTheme(w, r, theme,
 				app.Cookie.Id, app.Cookie.Time.GetDuration())
+			app.Log.Debug("got theme", "selected", theme)
 		}
 
-		tmplName := "index"
-		tmpl, err := template.New(tmplName).ParseFS(templates.All, "data/*.tmpl")
+		tmpl, err := template.New("index").ParseFS(templates.All, "data/*.tmpl")
 		if err != nil {
 			writeJSON(w, http.StatusInternalServerError, errorJSON(app.TmplParse))
-			app.Log.Error(app.TmplParse,
-				"template", tmplName, "error", err.Error(), "user", req)
+			app.Log.Error(app.TmplParse, "error", err.Error(), "user", req)
 			return
 		}
 
@@ -38,15 +38,13 @@ func Index(app *config.App) http.HandlerFunc {
 			Paths:           app.Paths,
 			Storage:         app.Storage,
 			Theme:           theme,
-			ThemePick:       app.ThemePick,
 			Uptime:          app.Uptime(),
 			Version:         app.Version,
 		}
 
 		if err = tmpl.Execute(w, response); err != nil {
 			writeJSON(w, http.StatusInternalServerError, errorJSON(app.TmplExec))
-			app.Log.Error(app.TmplExec,
-				"template", tmplName, "error", err.Error(), "user", req)
+			app.Log.Error(app.TmplExec, "error", err.Error(), "user", req)
 			return
 		}
 	}

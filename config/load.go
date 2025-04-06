@@ -2,6 +2,7 @@ package config
 
 import (
 	"encoding/json"
+	"fmt"
 	"log"
 	"os"
 
@@ -23,11 +24,13 @@ func Load() *App {
 	app.Modes.Version = modeVersion
 
 	var settings Settings
-	if err := json.Unmarshal(defaultSettings, &settings); err != nil {
+	if err := loadSettings(defaultSettings, &settings); err != nil {
 		log.Fatalf("failed loading default settings: %v", err)
 	}
 	if pathConfig != "" {
-		settings = loadFromFile(pathConfig)
+		if err := loadSettingsFromFile(pathConfig, &settings); err != nil {
+			log.Fatalf("failed loading settings from file: %v", err)
+		}
 	}
 	app.Settings = settings
 
@@ -48,17 +51,19 @@ func Load() *App {
 	return &app
 }
 
-// Returns application settings from file at path
-func loadFromFile(path string) Settings {
+// loadSettings unmarshals settings from a JSON byte slice
+func loadSettings(data []byte, settings *Settings) error {
+	if err := json.Unmarshal(data, settings); err != nil {
+		return fmt.Errorf("failed to unmarshal settings: %w", err)
+	}
+	return nil
+}
+
+// loadSettingsFromFile loads settings from a file
+func loadSettingsFromFile(path string, settings *Settings) error {
 	data, err := os.ReadFile(path)
 	if err != nil {
-		log.Fatalf("failed to read %s: %v", path, err)
+		return fmt.Errorf("failed to read %s: %w", path, err)
 	}
-
-	var settings Settings
-	if err := json.Unmarshal(data, &settings); err != nil {
-		log.Fatalf("failed to load settings: %v", err)
-	}
-
-	return settings
+	return loadSettings(data, settings)
 }

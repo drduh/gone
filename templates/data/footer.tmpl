@@ -10,7 +10,7 @@
           <br>up {{ .Uptime}} on {{ .Hostname }}
         </span>
       </div>
-      {{ if .ThemePick }} {{ template "themeSelect" }} {{ end }}
+      {{ if .Style.AllowPick }} {{ template "themeSelect" . }} {{ end }}
     </div>
   </body>
 </html>

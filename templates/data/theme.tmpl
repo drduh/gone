@@ -1,5 +1,6 @@
 <!-- theme.tmpl -->
 {{ define "theme" }}
+    :root {
         --animation:    0.2s;
         --box-radius:   6px;
 {{ if eq .Theme "dark" }}
@@ -101,4 +102,5 @@
         --fg-dark:      rgba(250,  23, 138,   1);
         --fg-light:     rgba(200, 247,  30,   1);
 {{ end }}
+      }
 {{ end }}
