@@ -8,10 +8,8 @@
                       name="name"
                placeholder="{{ .Index.Placeholder.Filename }}"
                      title="download file by name">
+      {{ if .Auth.Require.Download }} {{ template "auth" . }} {{ end }}
       <br>
-      {{ if .Auth.Require.Download }}
-      {{ template "auth" . }}
-      {{ end }}
       <input type="submit"
             class="selectSubmit"
             title="download requested file"

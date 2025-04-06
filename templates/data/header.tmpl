@@ -6,9 +6,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="{{ .Version.id }}-{{ .Version.vers }}">
-    {{ if .Index.CSP }}
-    {{- template "csp" . -}}
-    {{ end }}
+    <title>{{ .Index.Title }}</title>
+    {{ if .Index.CSP }} {{- template "csp" . -}} {{ end }}
     {{ if .Theme }}
     <link rel="stylesheet" type="text/css" href="/assets/style.css">
     <style>
@@ -17,7 +16,6 @@
       }
     </style>
     {{ end }}
-    <title>{{ .Index.Title }}</title>
   </head>
   <body>
 {{ end }}
