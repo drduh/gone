@@ -4,21 +4,15 @@
     <form action="{{ .Paths.Message }}"
          enctype="application/x-www-form-urlencoded"
           method="post">
-
       <input class="selectMessage"
               name="message"
          maxlength="{{ .Limits.MsgChars }}"
        placeholder="{{ .Index.Placeholder.Message }}"
               type="text">
-
-      <input class="selectClear"
-              name="clear"
-              type="checkbox">
-      <br>
       {{ if .Auth.Require.Message }} {{ template "auth" . }} {{ end }}
-      <input type="submit"
-            class="selectSubmit"
-            value="post">
+      <input class="selectPost"
+              type="submit"
+             value="post">
     </form>
   </div>
   <div class="box">
@@ -30,16 +24,25 @@
     {{ end }}
     <form action="">
       <button class="selectRefresh"
-              type="submit">refresh</button>
+               type="submit">refresh</button>
     </form>
-    {{ if .Storage.Messages }}
+    <form action="{{ .Paths.Message }}" method="post">
+      <input type="hidden"
+             name="clear"
+            value="true">
+      <button type="submit"
+      {{ if not .Storage.Messages }} disabled {{ end }}
+             class="selectClear">clear
+      </button>
+    </form>
     <form action="{{ .Paths.Message }}">
       <input type="hidden"
              name="download"
             value="all">
-      <button class="selectRefresh"
-               type="submit">download</button>
+      <button type="submit"
+      {{ if not .Storage.Messages }} disabled {{ end }}
+             class="selectRefresh">download
+      </button>
     </form>
-    {{ end }}
   </div>
 {{ end }}
