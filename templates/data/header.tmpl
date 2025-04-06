@@ -8,7 +8,7 @@
     <meta name="description" content="{{ .Version.id }}-{{ .Version.vers }}">
     <title>{{ .Index.Title }}</title>
     {{ if .Index.CSP }} {{- template "csp" . -}} {{ end }}
-    {{ if .Style.Theme }}
+    {{ if .Theme }}
     <link rel="stylesheet" type="text/css" href="/assets/style.css">
     <style>
       {{- template "theme" . }}

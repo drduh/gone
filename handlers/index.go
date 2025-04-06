@@ -15,11 +15,12 @@ func Index(app *config.App) http.HandlerFunc {
 		app.Log.Info("serving index", "user", req)
 
 		theme := getDefaultTheme(app.Style.Theme)
+		app.Log.Debug("got theme", "default", theme)
 		if app.Style.AllowPick {
 			theme = getTheme(w, r, theme,
 				app.Cookie.Id, app.Cookie.Time.GetDuration())
+			app.Log.Debug("got theme", "selected", theme)
 		}
-		app.Style.Theme = theme
 
 		tmpl, err := template.New("index").ParseFS(templates.All, "data/*.tmpl")
 		if err != nil {
@@ -36,6 +37,7 @@ func Index(app *config.App) http.HandlerFunc {
 			Limits:          app.Limits,
 			Paths:           app.Paths,
 			Storage:         app.Storage,
+			Theme:           theme,
 			Uptime:          app.Uptime(),
 			Version:         app.Version,
 		}

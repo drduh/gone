@@ -12,10 +12,7 @@ var All embed.FS
 // Index HTML page elements
 type Index struct {
 
-	// Whether to allow theme selection
-	ThemePick bool
-
-	// CSS theme
+	// Selected CSS theme
 	Theme string
 
 	// Server name
@@ -42,6 +39,6 @@ type Index struct {
 	// Configured route paths
 	config.Paths
 
-	// Configured storage (files and messages)
+	// Configured storage (Files and Messages)
 	config.Storage
 }

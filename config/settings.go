@@ -123,11 +123,11 @@ type Index struct {
 		// Whether to allow theme selection
 		AllowPick bool `json:"allowPick"`
 
-		// Theme to style with ("auto" for time-based option)
-		Theme string `json:"theme"`
-
 		// List of available themes to choose from, if allowed
 		Available []string `json:"available"`
+
+		// Theme to style with ("auto" for time-based option)
+		Theme string `json:"theme"`
 	} `json:"style"`
 
 	// Index form placeholder text
