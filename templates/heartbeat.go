@@ -6,7 +6,7 @@ import "github.com/drduh/gone/config"
 type Heartbeat struct {
 
 	// Application version
-	Version string `json:"version"`
+	Version map[string]string `json:"version"`
 
 	// Server hostname
 	Hostname string `json:"hostname"`

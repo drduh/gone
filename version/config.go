@@ -17,7 +17,7 @@ var (
 	// CPU architecture ("x86_64", "arm64", etc.)
 	Arch = "unknown"
 
-	// Golang tool version ("go1.24.1")
+	// Golang tool version ("go1.24.2")
 	Go = "unknown"
 
 	// Build time ("2025-12-31T12:00:00")
