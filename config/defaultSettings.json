@@ -27,11 +27,12 @@
     "tmplParse":   "failed parsing"
   },
   "index": {
+    "csp":         true,
+    "title":       "gone",
     "cookie": {
       "id":        "goneTheme",
       "time":      "192h"
     },
-    "csp":         true,
     "placeholder": {
       "auth":      "secret required",
       "filename":  "enter filename",
@@ -39,6 +40,7 @@
     },
     "style": {
       "allowPick": true,
+      "theme":     "auto",
       "available": [
         "dark",
         "light",
@@ -54,8 +56,7 @@
         "dusk",
         "neon",
         "night"
-      ],
-      "theme":     "auto"
+      ]
     }
   },
   "limits": {
