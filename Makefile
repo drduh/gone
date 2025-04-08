@@ -1,31 +1,32 @@
 ROOT      = gone
+APPNAME  ?= $(ROOT)
 AUTHOR   ?= drduh
-
-APP      ?= $(ROOT)
 GIT      ?= github.com/$(AUTHOR)
-GO       ?= go
 VERSION  ?= $(shell date +"%Y.%m.%d")
 
 CMD       = cmd
 SRC       = $(CMD)/main.go
 OUT       = release
 
-BINARY    = $(APP)-$(VERSION)
-BUILDUSER = $(shell whoami)
-BUILDOS   = $(shell $(GO) env GOHOSTOS)
+GO       ?= go
+
+BUILDPKG  = $(GIT)/$(APPNAME)/version
 BUILDARCH = $(shell $(GO) env GOHOSTARCH)
-BUILDTIME = $(shell date +"%Y-%m-%dT%H:%M:%S")
 BUILDVERS = $(shell $(GO) env GOVERSION)
-BUILDPKG  = $(GIT)/$(APP)/version
-BUILDFLAG = -X "$(BUILDPKG).Id=$(APP)" \
-            -X "$(BUILDPKG).Version=$(VERSION)" \
-            -X "$(BUILDPKG).User=$(BUILDUSER)" \
-            -X "$(BUILDPKG).OS=$(BUILDOS)" \
-            -X "$(BUILDPKG).Arch=$(BUILDARCH)" \
-            -X "$(BUILDPKG).Time=$(BUILDTIME)" \
-            -X "$(BUILDPKG).Go=$(BUILDVERS)"
+BUILDOS   = $(shell $(GO) env GOHOSTOS)
+BUILDTIME = $(shell date +"%Y-%m-%dT%H:%M:%S")
+BUILDFLAG = \
+  -X "$(BUILDPKG).Arch=$(BUILDARCH)" \
+  -X "$(BUILDPKG).Go=$(BUILDVERS)" \
+  -X "$(BUILDPKG).Host=$(shell hostname -f)" \
+  -X "$(BUILDPKG).Id=$(APPNAME)" \
+  -X "$(BUILDPKG).Path=$(shell pwd)" \
+  -X "$(BUILDPKG).OS=$(BUILDOS)" \
+  -X "$(BUILDPKG).Time=$(BUILDTIME)" \
+  -X "$(BUILDPKG).User=$(shell whoami)" \
+  -X "$(BUILDPKG).Version=$(VERSION)"
 BUILDCMD  = $(GO) build -ldflags '-s -w $(BUILDFLAG)'
-BINLINUX  = $(BINARY)-$(BUILDOS)-$(BUILDARCH)
+BINLINUX  = $(APPNAME)-$(BUILDOS)-$(BUILDARCH)-$(VERSION)
 BLDLINUX  = GOOS=$(BUILDOS) GOARCH=$(BUILDARCH) \
             $(BUILDCMD) -o $(OUT)/$(BINLINUX) $(SRC)
 

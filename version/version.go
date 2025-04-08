@@ -6,9 +6,11 @@ func Full() map[string]string {
 		"id":   Id,
 		"vers": Version,
 		"user": User,
+		"host": Host,
 		"os":   OS,
 		"arch": Arch,
 		"go":   Go,
+		"path": Path,
 		"time": Time,
 	}
 }
