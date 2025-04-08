@@ -45,8 +45,8 @@ func Load() *App {
 	app.Log = auditor.Log
 
 	app.Hostname = util.GetHostname()
-	app.Version = version.Full()
-	app.Clear()
+	app.Version = version.Get()
+	app.ClearStorage()
 
 	return &app
 }

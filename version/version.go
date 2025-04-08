@@ -1,7 +1,7 @@
 package version
 
-// Returns full version as string map
-func Full() map[string]string {
+// Get returns the application version and build information
+func Get() map[string]string {
 	return map[string]string{
 		"id":   Id,
 		"vers": Version,
