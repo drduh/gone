@@ -9,6 +9,7 @@ SRC       = $(CMD)/main.go
 OUT       = release
 
 GO       ?= go
+GODOC    ?= ${HOME}/go/bin/godoc
 
 BUILDPKG  = $(GIT)/$(APPNAME)/version
 BUILDARCH = $(shell $(GO) env GOHOSTARCH)
@@ -60,3 +61,6 @@ test-verbose:
 
 clean:
 	@rm -rf $(OUT)
+
+doc:
+	@$(GODOC) -http :8000
