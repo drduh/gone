@@ -12,6 +12,13 @@ import (
 func Index(app *config.App) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		req := parseRequest(r)
+
+		if !app.Allow(app.PerMinute) {
+			writeJSON(w, http.StatusTooManyRequests, errorJSON(app.RateLimit))
+			app.Log.Error(app.RateLimit, "user", req)
+			return
+		}
+
 		app.Log.Info("serving index", "user", req)
 
 		theme := getDefaultTheme(app.Style.Theme)
