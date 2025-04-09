@@ -7,7 +7,7 @@ import (
 
 // Pretty prints full version data
 func Print() {
-	vers := Full()
+	vers := Get()
 	printJSON(vers)
 }
 

@@ -1,20 +1,5 @@
-<!-- message.tmpl -->
-{{ define "message" }}
-  <div class="box">
-    <form action="{{ .Paths.Message }}"
-         enctype="application/x-www-form-urlencoded"
-          method="post">
-      <input class="selectMessage"
-              name="message"
-         maxlength="{{ .Limits.MsgChars }}"
-       placeholder="{{ .Index.Placeholder.Message }}"
-              type="text">
-      {{ if .Auth.Require.Message }} {{ template "auth" . }} {{ end }}
-      <input class="selectPost"
-              type="submit"
-             value="post">
-    </form>
-  </div>
+<!-- messageRead.tmpl -->
+{{ define "messageRead" }}
   <div class="box">
     {{ range .Storage.Messages }}
     <div class="message"><b>{{ .Count }}</b> {{ .Data }}

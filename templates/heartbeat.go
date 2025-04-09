@@ -26,6 +26,9 @@ type Heartbeat struct {
 	// Limits configuration
 	config.Limits `json:"limits"`
 
+	// Index configuration
+	config.Index `json:"index"`
+
 	// File owner information
 	config.Owner `json:"owner"`
 }

@@ -17,17 +17,18 @@ func Heartbeat(app *config.App) http.HandlerFunc {
 			"uptime", uptime, "user", req)
 
 		response := templates.Heartbeat{
-			Hostname:     app.Hostname,
-			Version:      version.Full(),
-			Port:         app.Port,
-			Uptime:       uptime,
 			FileCount:    app.CountFiles(),
-			MessageCount: app.CountMessages(),
+			Hostname:     app.Hostname,
+			Index:        app.Index,
 			Limits:       app.Limits,
+			MessageCount: app.CountMessages(),
 			Owner: config.Owner{
 				Address: req.Address,
 				Headers: r.Header,
 			},
+			Port:    app.Port,
+			Uptime:  uptime,
+			Version: version.Get(),
 		}
 
 		writeJSON(w, http.StatusOK, response)
