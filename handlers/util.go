@@ -10,7 +10,7 @@ import (
 	"github.com/drduh/gone/util"
 )
 
-// deny serves a SON response for deny (auth fail)
+// deny serves a JSON response for deny (auth fail)
 func deny(w http.ResponseWriter, app *config.App, r *Request) {
 	writeJSON(w, http.StatusUnauthorized, errorJSON(app.Deny))
 	app.Log.Error(app.Deny, "user", r)
@@ -35,7 +35,7 @@ func isAllowed(app *config.App, r *http.Request) bool {
 	return isAuthenticated(app.Basic.Field, app.Basic.Token, r)
 }
 
-// isAuthentication returns true if an authentication is successful
+// isAuthentication returns true if authentication is successful
 func isAuthenticated(header, token string, r *http.Request) bool {
 	return auth.Basic(header, token, r)
 }

@@ -8,7 +8,7 @@ import (
 	"github.com/drduh/gone/handlers"
 )
 
-// Configures HTTP handler routes
+// getHandler configures HTTP handler routes to serve
 func getHandler(app *config.App) http.Handler {
 	mux := http.NewServeMux()
 
@@ -21,7 +21,7 @@ func getHandler(app *config.App) http.Handler {
 	handle("/", handlers.Index(app))
 
 	if app.Assets != "" {
-		assets := "templates/data/assets/"
+		assets := "assets"
 		if _, err := os.Stat(assets); err == nil {
 			mux.Handle(app.Assets, http.StripPrefix(
 				app.Assets, http.FileServer(http.Dir(assets))))
