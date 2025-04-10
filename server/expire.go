@@ -6,7 +6,7 @@ import (
 	"github.com/drduh/gone/config"
 )
 
-// expiryWorker runs an expiration check on a configured schedule
+// expiryWorker runs an expiration check on a configured schedule.
 func expiryWorker(app *config.App) {
 	ticker := time.NewTicker(app.Ticker.Duration)
 	defer ticker.Stop()
@@ -15,7 +15,7 @@ func expiryWorker(app *config.App) {
 	}
 }
 
-// expireFiles removes expired Files from Storage
+// expireFiles removes expired Files from Storage.
 func expireFiles(app *config.App) {
 	for _, f := range app.Files {
 		lifetime := f.GetLifetime()

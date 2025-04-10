@@ -8,7 +8,7 @@ import (
 	"github.com/drduh/gone/handlers"
 )
 
-// getHandler configures HTTP handler routes to serve
+// getHandler configures HTTP handler routes to serve.
 func getHandler(app *config.App) http.Handler {
 	mux := http.NewServeMux()
 

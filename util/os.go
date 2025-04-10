@@ -2,7 +2,7 @@ package util
 
 import "os"
 
-// Returns hostname, if known
+// GetHostname returns the OS hostname, or "unknown".
 func GetHostname() string {
 	h, err := os.Hostname()
 	if err != nil {

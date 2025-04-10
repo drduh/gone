@@ -5,8 +5,8 @@ import (
 	"time"
 )
 
-// GetCookie returns a cookie value,
-// creating one with the defaultValue if none exists.
+// GetCookie returns a cookie value, creating one with
+// the defaultValue, if none exists.
 func GetCookie(w http.ResponseWriter, r *http.Request,
 	defaultValue, id string, t time.Duration) string {
 	cookie, err := r.Cookie(id)
@@ -17,8 +17,8 @@ func GetCookie(w http.ResponseWriter, r *http.Request,
 	return cookie.Value
 }
 
-// NewCookie returns an HTTP cookie with
-// a requested id, value and expiration.
+// NewCookie returns an HTTP cookie with the requested
+// id, value and duration/expiration.
 func NewCookie(value, id string, t time.Duration) *http.Cookie {
 	return &http.Cookie{
 		Name:    id,
