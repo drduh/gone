@@ -5,15 +5,10 @@ import (
 	"fmt"
 )
 
-// Pretty prints full version data
+// Print outputs version data in JSON format.
 func Print() {
 	vers := Get()
-	printJSON(vers)
-}
-
-// Pretty prints JSON interface
-func printJSON(d interface{}) {
-	data, err := json.Marshal(d)
+	data, err := json.Marshal(vers)
 	if err != nil {
 		return
 	}

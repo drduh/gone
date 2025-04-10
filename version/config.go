@@ -1,3 +1,5 @@
+// Package version contains application version and
+// compilation information provided by the build system.
 package version
 
 var (
@@ -19,7 +21,7 @@ var (
 	// Go version ("go1.24.2")
 	Go = "unknown"
 
-	// Build path
+	// Build path ("/home/git/gone")
 	Path = "unknown"
 
 	// Build time ("2025-12-31T12:00:00")
