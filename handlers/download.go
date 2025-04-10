@@ -22,6 +22,7 @@ func Download(app *config.App) http.HandlerFunc {
 			app.Log.Error(app.NoFilename, "user", req)
 			return
 		}
+		app.Log.Debug("file requested", "filename", fileName, "user", req)
 
 		file := app.FindFile(fileName)
 		if file == nil {
@@ -29,6 +30,7 @@ func Download(app *config.App) http.HandlerFunc {
 			app.Log.Error(app.NotFound, "filename", fileName, "user", req)
 			return
 		}
+		app.Log.Debug("file found", "filename", file.Name, "user", req)
 
 		file.Serve(w)
 		app.Log.Info("served file",

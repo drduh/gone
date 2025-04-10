@@ -134,15 +134,15 @@ func (f *File) IsExpired(s Settings) string {
 	if f.Total >= f.Downloads.Allow {
 		return "limit downloads"
 	}
-	if time.Since(f.Upload) > f.Duration {
+	if f.GetLifetime() > f.Duration {
 		return "limit duration"
 	}
 	return ""
 }
 
-// NumRemaining returns the number of downloads remaining until expiration
-func (f *File) NumRemaining() int {
-	return f.Downloads.Allow - f.Total
+// GetLifetime returns the duration since a File was uploaded
+func (f *File) GetLifetime() time.Duration {
+	return time.Since(f.Time.Upload).Round(time.Second)
 }
 
 // GetType returns File content type based on extension
@@ -152,6 +152,11 @@ func (f *File) GetType() string {
 		t = "application/octet-stream"
 	}
 	return t
+}
+
+// NumRemaining returns the number of downloads remaining until expiration
+func (f *File) NumRemaining() int {
+	return f.Downloads.Allow - f.Total
 }
 
 // TimeRemaining returns the relative duration remaining until expiration
