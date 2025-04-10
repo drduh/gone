@@ -7,7 +7,8 @@ import (
 	"github.com/drduh/gone/config"
 )
 
-// Handle text messages
+// Message handles requests to post, read, clear
+// and download Messages from Storage.
 func Message(app *config.App) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		req, allowed := authRequest(w, r, app)

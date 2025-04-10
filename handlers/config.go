@@ -1,7 +1,7 @@
-// Package handlers defines how the server should handle configured routes
+// Package handlers defines how the server handles configured routes
 package handlers
 
-// Request contains the server HTTP request attributes to log
+// Request contains relevant HTTP request attributes to log.
 type Request struct {
 
 	// Handler path ("/")

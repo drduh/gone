@@ -6,7 +6,7 @@ import (
 	"github.com/drduh/gone/config"
 )
 
-// Returns list of file records
+// List handles requests to list Files in Storage.
 func List(app *config.App) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		req := parseRequest(r)
