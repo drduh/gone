@@ -5,7 +5,7 @@ import _ "embed"
 //go:embed data/static.txt
 var StaticData string
 
-// Static data response
+// Static contains embedded data.
 type Static struct {
 
 	// Content data

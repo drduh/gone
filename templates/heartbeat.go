@@ -2,7 +2,7 @@ package templates
 
 import "github.com/drduh/gone/config"
 
-// Server status response
+// Heartbeat contains the server status response.
 type Heartbeat struct {
 
 	// Application version
