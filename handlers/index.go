@@ -8,7 +8,7 @@ import (
 	"github.com/drduh/gone/templates"
 )
 
-// Serves index page with app routing features
+// Index serves a page with avaliable app features
 func Index(app *config.App) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		req := parseRequest(r)
