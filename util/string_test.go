@@ -25,3 +25,27 @@ func TestIsNumeric(t *testing.T) {
 		})
 	}
 }
+
+func TestGetBasePath(t *testing.T) {
+	tests := []struct {
+		input    string
+		expected string
+	}{
+		{"/", "/"},
+		{"/foo", "/foo"},
+		{"/foo/bar", "/foo/"},
+		{"foo/bar", "foo/"},
+		{"foo", "foo"},
+		{"foo/bar/zoo", "foo/"},
+		{"", ""},
+		{"foo///bar", "foo/"},
+		{"foo/bar  ", "foo/"},
+	}
+
+	for _, tt := range tests {
+		got := GetBasePath(tt.input)
+		if got != tt.expected {
+			t.Errorf("%q=%q; expect %q", tt.input, got, tt.expected)
+		}
+	}
+}
