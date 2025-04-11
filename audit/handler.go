@@ -6,7 +6,7 @@ import (
 	"log/slog"
 )
 
-// Auditor log handler
+// Handle formats and outputs audit events in JSON format.
 func (a *Auditor) Handle(ctx context.Context, r slog.Record) error {
 	data := make(map[string]interface{}, r.NumAttrs())
 	r.Attrs(func(attr slog.Attr) bool {

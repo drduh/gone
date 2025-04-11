@@ -34,19 +34,19 @@ type App struct {
 	Throttle
 }
 
-// Record start time
+// Start records the application start time.
 func (a *App) Start() {
 	a.StartTime = time.Now()
 }
 
-// Exits application with uptime log
+// Stop logs uptime and exits the application.
 func (a *App) Stop(reason string) {
 	a.Log.Info("stopping application",
 		"reason", reason, "uptime", a.Uptime())
 	os.Exit(0)
 }
 
-// Returns rounded duration since app start
+// Uptime returns the rounded duration since app start.
 func (a *App) Uptime() string {
 	return time.Since(a.StartTime).Round(
 		time.Second).String()

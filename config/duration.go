@@ -15,7 +15,7 @@ type Duration struct {
 	time.Duration
 }
 
-// Parse strings like "10", "10s", "30m", "24h", etc.
+// UnmarshalJSON parses strings like "10", "10s", "30m", "24h".
 func (d *Duration) UnmarshalJSON(b []byte) error {
 	var s string
 	if err := json.Unmarshal(b, &s); err != nil {
@@ -35,7 +35,7 @@ func (d *Duration) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
-// Convert back to time.Duration
+// GetDuration converts a Duration to time.Duration.
 func (d *Duration) GetDuration() time.Duration {
 	return time.Duration(d.Duration)
 }

@@ -160,3 +160,11 @@ $ gone_put test.txt 1 20m
   }
 }
 ```
+
+# Documentation
+
+Application documentation is available with [godoc](https://go.dev/blog/godoc):
+
+```
+make doc
+```
