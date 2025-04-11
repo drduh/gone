@@ -1,3 +1,5 @@
+// Package signal handles OS signals received by the application
+// (such as SIGTERM), gracefully handling and logging them.
 package signal
 
 import (
@@ -8,7 +10,8 @@ import (
 	"github.com/drduh/gone/config"
 )
 
-// Logs and exits on terminal signals
+// Setup configures and listens for terminal signals,
+// logging them before successfully exiting.
 func Setup(app *config.App) {
 	sigChan := make(chan os.Signal, 1)
 	signals := []os.Signal{os.Interrupt, syscall.SIGTERM, syscall.SIGQUIT}

@@ -6,7 +6,7 @@ import (
 	"github.com/drduh/gone/config"
 )
 
-// Serve starts the HTTP server with configured routes
+// Serve starts the HTTP server using configured routes.
 func Serve(app *config.App) error {
 	go expiryWorker(app)
 	app.Log.Info("starting server", "port", app.Port)

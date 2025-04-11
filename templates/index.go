@@ -1,15 +1,8 @@
 package templates
 
-import (
-	"embed"
+import "github.com/drduh/gone/config"
 
-	"github.com/drduh/gone/config"
-)
-
-//go:embed data/*.tmpl
-var All embed.FS
-
-// Index HTML page elements
+// Index contains the main HTML page elements.
 type Index struct {
 
 	// Selected CSS theme

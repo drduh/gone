@@ -15,7 +15,7 @@ type Throttle struct {
 	Lease sync.Mutex
 }
 
-// Returns true if Throttle limit is not exceeded
+// Allow returns true if the Throttle limit is not exceeded.
 func (t *Throttle) Allow(limit int) bool {
 	if limit <= 0 {
 		return true
@@ -44,7 +44,7 @@ func (t *Throttle) Allow(limit int) bool {
 	return true
 }
 
-// Returns Throttle window cutoff (1 minute)
+// getCutoff returns the Throttle window cutoff (1 minute).
 func getCutoff(t time.Time) time.Time {
 	return t.Add(-1 * time.Minute)
 }

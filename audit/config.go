@@ -1,3 +1,5 @@
+// Package audit provides a JSON-based structured logger
+// to output application events for monitoring.
 package audit
 
 import (

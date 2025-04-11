@@ -6,7 +6,7 @@ import (
 	"os"
 )
 
-// Returns formatted file size based on bytes
+// FormatSize returns a formatted file size from bytes.
 func FormatSize(bytes int) string {
 	if bytes == 0 {
 		return "0 Bytes"
@@ -21,12 +21,13 @@ func FormatSize(bytes int) string {
 	return fmt.Sprintf("%.2f %s", size, units[unitIndex])
 }
 
-// Returns file or stdout IO writer
+// GetOutput returns the destination file or stdout IO writer.
 func GetOutput(filename string) (io.Writer, error) {
 	if filename == "" {
 		return os.Stdout, nil
 	}
-	dest, err := os.OpenFile(filename, os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0600)
+	dest, err := os.OpenFile(
+		filename, os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0600)
 	if err != nil {
 		return nil, fmt.Errorf("failed to open %s: %w", filename, err)
 	}

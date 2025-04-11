@@ -1,3 +1,4 @@
+// Package v1 implements the original application design.
 package v1
 
 import (
@@ -9,6 +10,8 @@ import (
 	"github.com/drduh/gone/version"
 )
 
+// Run loads the application configuration, sets up the
+// signal handler and starts the HTTP server.
 func Run() {
 	app := config.Load()
 

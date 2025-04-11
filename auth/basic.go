@@ -2,7 +2,8 @@ package auth
 
 import "net/http"
 
-// Returns true if request header contains valid token
+// Basic returns true if an HTTP request header contains
+// the valid header and token combination.
 func Basic(header, token string, r *http.Request) bool {
 
 	// Always allow access if token is not configured

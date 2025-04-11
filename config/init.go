@@ -1,3 +1,5 @@
+// Package config provides required application settings,
+// and helper functions necessary to enforce them.
 package config
 
 import "flag"

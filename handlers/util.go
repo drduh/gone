@@ -3,20 +3,21 @@ package handlers
 import (
 	"encoding/json"
 	"net/http"
-	"strings"
+	"time"
 
 	"github.com/drduh/gone/auth"
 	"github.com/drduh/gone/config"
 	"github.com/drduh/gone/util"
 )
 
-// deny serves a JSON response for deny (auth fail)
+// deny serves a JSON response for deny (auth fail).
 func deny(w http.ResponseWriter, app *config.App, r *Request) {
 	writeJSON(w, http.StatusUnauthorized, errorJSON(app.Deny))
 	app.Log.Error(app.Deny, "user", r)
 }
 
-// isAllowed returns true if auth for route path is required and allowed
+// isAllowed returns true if authentication for a route
+// is required and allowed.
 func isAllowed(app *config.App, r *http.Request) bool {
 	reqs := map[string]bool{
 		app.Download: app.Require.Download,
@@ -24,7 +25,7 @@ func isAllowed(app *config.App, r *http.Request) bool {
 		app.Message:  app.Require.Message,
 		app.Upload:   app.Require.Upload,
 	}
-	path := getBasePath(r.URL.Path)
+	path := util.GetBasePath(r.URL.Path)
 	required, exists := reqs[path]
 	app.Log.Debug("checking auth",
 		"path", path, "required", required, "exists", exists)
@@ -35,19 +36,20 @@ func isAllowed(app *config.App, r *http.Request) bool {
 	return isAuthenticated(app.Basic.Field, app.Basic.Token, r)
 }
 
-// isAuthentication returns true if authentication is successful
+// isAuthentication returns true if authentication is successful.
 func isAuthenticated(header, token string, r *http.Request) bool {
 	return auth.Basic(header, token, r)
 }
 
-// errorJSON returns an error string map
+// errorJSON returns an error string map containing the string.
 func errorJSON(s string) map[string]string {
 	return map[string]string{
 		"error": s,
 	}
 }
 
-// getDefaultTheme Returns a theme based on current time of day if set to "auto"
+// getDefaultTheme returns a theme based on
+// the current time of day if set to "auto".
 func getDefaultTheme(theme string) string {
 	if theme != "auto" {
 		return theme
@@ -58,7 +60,7 @@ func getDefaultTheme(theme string) string {
 	return "dark"
 }
 
-// parseRequest returns parsed a HTTP Request struct for log
+// parseRequest returns a parsed HTTP Request struct for log.
 func parseRequest(r *http.Request) *Request {
 	return &Request{
 		Action:  r.URL.String(),
@@ -67,7 +69,7 @@ func parseRequest(r *http.Request) *Request {
 	}
 }
 
-// authRequest returns an allowed parsed http Request struct
+// authRequest returns only an allowed parsed http Request struct.
 func authRequest(w http.ResponseWriter, r *http.Request, app *config.App) (*Request, bool) {
 	req := parseRequest(r)
 	if !isAllowed(app, r) {
@@ -77,7 +79,7 @@ func authRequest(w http.ResponseWriter, r *http.Request, app *config.App) (*Requ
 	return req, true
 }
 
-// writeJSON serves a JSON response with data
+// writeJSON serves a JSON response with data.
 func writeJSON(w http.ResponseWriter, code int, data interface{}) {
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 	w.WriteHeader(code)
@@ -89,11 +91,14 @@ func writeJSON(w http.ResponseWriter, code int, data interface{}) {
 	}
 }
 
-// getBasePath returns the string up to and including the first "/"
-func getBasePath(s string) string {
-	i := strings.Index(s[1:], "/")
-	if i == -1 {
-		return s
+// getTheme returns the CSS theme based on cookie preference,
+// setting the cookie value if none exists.
+func getTheme(w http.ResponseWriter, r *http.Request,
+	defaultTheme, id string, t time.Duration) string {
+	theme := r.FormValue("theme")
+	if theme != "" {
+		http.SetCookie(w, auth.NewCookie(theme, id, t))
+		return theme
 	}
-	return s[:i+2]
+	return auth.GetCookie(w, r, defaultTheme, id, t)
 }

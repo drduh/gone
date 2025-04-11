@@ -8,7 +8,7 @@ import (
 	"github.com/drduh/gone/version"
 )
 
-// Returns server status response
+// Heartbeat handles requests for server status/configuration.
 func Heartbeat(app *config.App) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		req := parseRequest(r)

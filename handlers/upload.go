@@ -11,7 +11,7 @@ import (
 	"github.com/drduh/gone/util"
 )
 
-// Accepts content uploads
+// Upload handles requests to upload a File into Storage.
 func Upload(app *config.App) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		req := parseRequest(r)

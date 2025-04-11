@@ -6,7 +6,7 @@ import (
 	"github.com/drduh/gone/config"
 )
 
-// Returns content by file name
+// Download handles requests to download a File from Storage by name.
 func Download(app *config.App) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		req := parseRequest(r)
