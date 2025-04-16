@@ -6,7 +6,6 @@ import (
 	"mime/multipart"
 	"net/http"
 	"strconv"
-	"strings"
 	"sync"
 	"time"
 
@@ -85,18 +84,6 @@ func Upload(app *config.App) http.HandlerFunc {
 						return
 					}
 				}()
-
-				var fileName string
-				fileName = fileHeader.Header.Get("Content-Disposition")
-				if fileName != "" {
-					parts := strings.Split(fileName, ";")
-					for _, part := range parts {
-						if strings.Contains(part, "filename=") {
-							fileName = strings.TrimSpace(strings.SplitN(part, "=", 2)[1])
-							break
-						}
-					}
-				}
 
 				var buf bytes.Buffer
 				if _, err := io.Copy(&buf, file); err != nil {
