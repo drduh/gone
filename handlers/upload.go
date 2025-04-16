@@ -41,6 +41,7 @@ func Upload(app *config.App) http.HandlerFunc {
 
 		r.Body = http.MaxBytesReader(w, r.Body, maxBytes)
 		if err := r.ParseMultipartForm(maxBytes); err != nil {
+			writeJSON(w, http.StatusInternalServerError, errorJSON(app.Copy))
 			app.Log.Error("upload failed", "error", err.Error(), "user", req)
 			return
 		}
