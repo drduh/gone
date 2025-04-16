@@ -79,15 +79,20 @@ func Upload(app *config.App) http.HandlerFunc {
 				if err != nil {
 					app.Log.Error(app.Copy, "error", err.Error(), "user", req)
 				}
-				defer file.Close()
+				defer func() {
+					if err := file.Close(); err != nil {
+						app.Log.Error(app.Form, "error", err.Error(), "user", req)
+						return
+					}
+				}()
 
-				fileName := fileHeader.Header.Get("Content-Disposition")
+				var fileName string
+				fileName = fileHeader.Header.Get("Content-Disposition")
 				if fileName != "" {
 					parts := strings.Split(fileName, ";")
 					for _, part := range parts {
 						if strings.Contains(part, "filename=") {
-							fileName = strings.TrimSpace(
-								strings.SplitN(part, "=", 2)[1])
+							fileName = strings.TrimSpace(strings.SplitN(part, "=", 2)[1])
 							break
 						}
 					}

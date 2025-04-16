@@ -1,26 +1,42 @@
-<!-- messageRead.tmpl -->
-{{ define "messageRead" }}
+<!-- message.tmpl -->
+{{ define "message" }}
   <div class="box">
+    <form action="{{ .Paths.Message }}"
+         enctype="application/x-www-form-urlencoded"
+          method="post">
+      <input class="selectMessage"
+              name="message"
+         maxlength="{{ .Limits.MsgChars }}"
+       placeholder="{{ .Index.Placeholder.Message }}"
+              type="text">
+      {{ if .Auth.Require.Message }} {{ template "auth" . }} {{ end }}
+      <input class="selectPost"
+              type="submit"
+             value="post">
+    </form>
     {{ range .Storage.Messages }}
     <div class="message"><b>{{ .Count }}</b> {{ .Data }}
       <span class="owner">{{ .Owner.Address }} at {{ .Time.Allow }}</span>
     </div>
     <br>
     {{ end }}
-    <form action="">
+    <form action="" style="display: inline;">
       <button class="selectRefresh"
                type="submit">refresh</button>
     </form>
-    <form action="{{ .Paths.Message }}" method="post">
+    <form action="{{ .Paths.Message }}"
+          method="post"
+           style="display:inline;">
       <input type="hidden"
              name="clear"
-            value="true">
+            value="true" >
       <button type="submit"
       {{ if not .Storage.Messages }} disabled {{ end }}
              class="selectClear">clear
       </button>
     </form>
-    <form action="{{ .Paths.Message }}">
+    <form action="{{ .Paths.Message }}"
+           style="display:inline;">
       <input type="hidden"
              name="download"
             value="all">
