@@ -3,17 +3,21 @@ package handlers
 import (
 	"bytes"
 	"io"
+	"mime/multipart"
 	"net/http"
 	"strconv"
+	"strings"
+	"sync"
 	"time"
 
 	"github.com/drduh/gone/config"
 	"github.com/drduh/gone/util"
 )
 
-// Upload handles requests to upload a File into Storage.
+// Upload handles requests to upload File(s) into Storage.
 func Upload(app *config.App) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
+
 		req := parseRequest(r)
 
 		if !isAllowed(app, r) {
@@ -37,28 +41,7 @@ func Upload(app *config.App) http.HandlerFunc {
 
 		r.Body = http.MaxBytesReader(w, r.Body, maxBytes)
 		if err := r.ParseMultipartForm(maxBytes); err != nil {
-			app.Log.Error("upload failed",
-				"error", err.Error(), "user", req)
-			return
-		}
-
-		content, handler, err := r.FormFile("file")
-		if err != nil {
-			writeJSON(w, http.StatusBadRequest, errorJSON(app.Form))
-			app.Log.Error(app.Form, "error", err.Error(), "user", req)
-			return
-		}
-		defer func() {
-			if err := content.Close(); err != nil {
-				app.Log.Error(app.Form, "error", err.Error(), "user", req)
-				return
-			}
-		}()
-
-		var buf bytes.Buffer
-		if _, err := io.Copy(&buf, content); err != nil {
-			writeJSON(w, http.StatusInternalServerError, errorJSON(app.Copy))
-			app.Log.Error(app.Copy, "error", err.Error(), "user", req)
+			app.Log.Error("upload failed", "error", err.Error(), "user", req)
 			return
 		}
 
@@ -76,44 +59,89 @@ func Upload(app *config.App) http.HandlerFunc {
 			app.Log.Debug("got form value", "duration", durationLimit.String())
 		}
 
-		file := &config.File{
-			Name: handler.Filename,
-			Size: util.FormatSize(len(buf.Bytes())),
-			Data: buf.Bytes(),
-			Owner: config.Owner{
-				Address: req.Address,
-				Agent:   req.Agent,
-			},
-			Time: config.Time{
-				Duration: durationLimit,
-				Upload:   time.Now(),
-			},
-			Downloads: config.Downloads{
-				Allow: downloadLimit,
-			},
-		}
-		app.Files[file.Name] = file
+		var upload config.File
+		var uploads []config.File
+		var wg sync.WaitGroup
 
-		response := config.File{
-			Name: file.Name,
-			Size: file.Size,
-			Owner: config.Owner{
-				Address: file.Address,
-				Agent:   file.Agent,
-			},
-			Time: config.Time{
-				Upload: file.Upload,
-				Allow:  file.Duration.String(),
-			},
-			Downloads: config.Downloads{
-				Allow: file.Downloads.Allow,
-			},
+		files := r.MultipartForm.File["file"]
+		if files == nil {
+			writeJSON(w, http.StatusBadRequest, errorJSON(app.Form))
+			app.Log.Error(app.Form, "user", req)
+			return
 		}
+		wg.Add(len(files))
+
+		for _, fileHeader := range files {
+			go func(fileHeader *multipart.FileHeader) {
+				defer wg.Done()
+				file, err := fileHeader.Open()
+				if err != nil {
+					app.Log.Error(app.Copy, "error", err.Error(), "user", req)
+				}
+				defer file.Close()
+
+				fileName := fileHeader.Header.Get("Content-Disposition")
+				if fileName != "" {
+					parts := strings.Split(fileName, ";")
+					for _, part := range parts {
+						if strings.Contains(part, "filename=") {
+							fileName = strings.TrimSpace(
+								strings.SplitN(part, "=", 2)[1])
+							break
+						}
+					}
+				}
+
+				var buf bytes.Buffer
+				if _, err := io.Copy(&buf, file); err != nil {
+					writeJSON(w, http.StatusInternalServerError, errorJSON(app.Copy))
+					app.Log.Error(app.Copy, "error", err.Error(), "user", req)
+					return
+				}
+
+				f := &config.File{
+					Name: fileHeader.Filename,
+					Size: util.FormatSize(len(buf.Bytes())),
+					Data: buf.Bytes(),
+					Owner: config.Owner{
+						Address: req.Address,
+						Agent:   req.Agent,
+					},
+					Time: config.Time{
+						Duration: durationLimit,
+						Upload:   time.Now(),
+					},
+					Downloads: config.Downloads{
+						Allow: downloadLimit,
+					},
+				}
+				app.Files[f.Name] = f
+
+				upload = config.File{
+					Name: f.Name,
+					Size: f.Size,
+					Owner: config.Owner{
+						Address: f.Address,
+						Agent:   f.Agent,
+					},
+					Time: config.Time{
+						Upload: f.Upload,
+						Allow:  f.Duration.String(),
+					},
+					Downloads: config.Downloads{
+						Allow: f.Downloads.Allow,
+					},
+				}
+				uploads = append(uploads, upload)
+			}(fileHeader)
+		}
+		wg.Wait()
+
 		http.Redirect(w, r, "/", http.StatusSeeOther)
 
-		writeJSON(w, http.StatusOK, response)
+		writeJSON(w, http.StatusOK, uploads)
 
-		app.Log.Info("file uploaded",
-			"filename", file.Name, "size", file.Size, "user", req)
+		app.Log.Info("file(s) uploaded",
+			"files", uploads, "user", req)
 	}
 }
