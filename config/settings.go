@@ -79,7 +79,7 @@ type Error struct {
 	// File exceeds size limit
 	FileSize string `json:"fileSize"`
 
-	// Upload form error
+	// Upload form not valid
 	Form string `json:"form"`
 
 	// Filename not provided
@@ -144,17 +144,14 @@ type Index struct {
 	} `json:"placeholder"`
 }
 
-// Download and upload limits
+// Content sharing limits
 type Limits struct {
 
-	// Number of allowed downloads before file expiration
+	// Number of allowed downloads before File expiration
 	Downloads int `json:"downloads,omitempty"`
 
-	// Maximum period of time to keep files
+	// Period of time before removing Files
 	Expiration Duration `json:"duration,omitempty"`
-
-	// Frequency of file expiration check
-	Ticker Duration `json:"ticker,omitempty"`
 
 	// Maximum file size (in Megabytes)
 	MaxSizeMb int64 `json:"maxSizeMb,omitempty"`
@@ -164,6 +161,9 @@ type Limits struct {
 
 	// Number of requests per minute to rate limit
 	PerMinute int `json:"perMinute,omitempty"`
+
+	// Frequency of File expiration check
+	Ticker Duration `json:"ticker,omitempty"`
 }
 
 // Paths to route
