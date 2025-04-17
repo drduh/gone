@@ -8,8 +8,7 @@
   </div>
   <div class="container">
     {{ if .Paths.Message }}
-      {{- template "messagePost" . -}}
-      {{- template "messageRead" . -}}
+      {{- template "message" . -}}
     {{ end }}
   </div>
 {{- template "footer" . -}}

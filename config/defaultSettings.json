@@ -1,4 +1,5 @@
 {
+  "port":          8080,
   "audit": {
     "logFile":     "",
     "timeFormat":  "Monday Jan 2 15:04"
@@ -61,7 +62,7 @@
   },
   "limits": {
     "downloads":   1,
-    "duration":    "2m",
+    "duration":    "5m",
     "maxSizeMb":   20,
     "msgChars":    128,
     "perMinute":   30,
@@ -75,6 +76,5 @@
     "message":     "/msg",
     "static":      "/static",
     "upload":      "/upload"
-  },
-  "port":          8080
+  }
 }

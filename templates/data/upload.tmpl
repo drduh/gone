@@ -4,10 +4,10 @@
     <form action="{{ .Paths.Upload }}"
          enctype="multipart/form-data"
           method="post">
-      <input type="file"
+      <input type="file" multiple required
             class="selectFile"
              name="file"
-            title="file to upload" required>
+            title="file(s) to upload">
       <br>
       <input type="number"
             class="selectDownloads"

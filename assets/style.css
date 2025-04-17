@@ -1,6 +1,7 @@
 /* style.css */
 * {
   box-sizing: border-box;
+  font-family: "Open Sans", "Helvetica Neue", "Helvetica", "Arial", sans-serif;
 }
 
 body {
@@ -9,7 +10,6 @@ body {
   color: var(--fg-dark);
   display: flex;
   flex-direction: column;
-  font-family: "Open Sans", "Helvetica Neue", "Helvetica", "Arial", sans-serif;
   font-size: 1em;
   margin: 0;
   padding: 0;
