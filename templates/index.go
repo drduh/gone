@@ -1,6 +1,9 @@
 package templates
 
-import "github.com/drduh/gone/config"
+import (
+	"github.com/drduh/gone/config"
+	"github.com/drduh/gone/storage"
+)
 
 // Index contains the main HTML page elements.
 type Index struct {
@@ -33,5 +36,5 @@ type Index struct {
 	config.Paths
 
 	// Configured storage (Files and Messages)
-	config.Storage
+	storage.Storage
 }

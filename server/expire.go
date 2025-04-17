@@ -24,7 +24,7 @@ func expireFiles(app *config.App) {
 			"allowed", f.Duration.String(),
 			"available", lifetime.String(),
 			"remaining", f.TimeRemaining().String())
-		reason := f.IsExpired(app.Settings)
+		reason := f.IsExpired()
 		if reason != "" {
 			app.Expire(f)
 			app.Log.Info("removed file",

@@ -4,6 +4,8 @@ import (
 	"log/slog"
 	"os"
 	"time"
+
+	"github.com/drduh/gone/storage"
 )
 
 // Global application configuration
@@ -28,7 +30,7 @@ type App struct {
 	Settings
 
 	// Uploaded content storage
-	Storage
+	storage.Storage
 
 	// Rate limit throttle for requests
 	Throttle
