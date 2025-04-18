@@ -6,7 +6,7 @@ import (
 	"github.com/drduh/gone/config"
 )
 
-// Wall handles wall form submissions and adds content to Storage.
+// Wall handles wall form submissions and updates content in Storage.
 func Wall(app *config.App) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		if r.Method == http.MethodPost {

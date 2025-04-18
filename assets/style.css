@@ -75,6 +75,7 @@ input[type="number"],
 input[type="submit"],
 input[type="text"],
 input::file-selector-button,
+.wallContent,
 select {
   background-color: var(--bg-dark);
   border: none;
@@ -154,6 +155,7 @@ input[type="number"] {
 .selectSubmit:hover,
 .selectTheme:hover,
 .selectToken:hover,
+.wallContent:hover,
 input[type="file"]:hover,
 input[type="file"]::file-selector-button:hover {
   background-color: var(--fg-light);
