@@ -10,6 +10,7 @@ import (
 	"time"
 
 	"github.com/drduh/gone/config"
+	"github.com/drduh/gone/storage"
 	"github.com/drduh/gone/util"
 )
 
@@ -59,8 +60,8 @@ func Upload(app *config.App) http.HandlerFunc {
 			app.Log.Debug("got form value", "duration", durationLimit.String())
 		}
 
-		var upload config.File
-		var uploads []config.File
+		var upload storage.File
+		var uploads []storage.File
 		var wg sync.WaitGroup
 
 		files := r.MultipartForm.File["file"]
@@ -92,36 +93,36 @@ func Upload(app *config.App) http.HandlerFunc {
 					return
 				}
 
-				f := &config.File{
+				f := &storage.File{
 					Name: fileHeader.Filename,
 					Size: util.FormatSize(len(buf.Bytes())),
 					Data: buf.Bytes(),
-					Owner: config.Owner{
+					Owner: storage.Owner{
 						Address: req.Address,
 						Agent:   req.Agent,
 					},
-					Time: config.Time{
+					Time: storage.Time{
 						Duration: durationLimit,
 						Upload:   time.Now(),
 					},
-					Downloads: config.Downloads{
+					Downloads: storage.Downloads{
 						Allow: downloadLimit,
 					},
 				}
 				app.Files[f.Name] = f
 
-				upload = config.File{
+				upload = storage.File{
 					Name: f.Name,
 					Size: f.Size,
-					Owner: config.Owner{
+					Owner: storage.Owner{
 						Address: f.Address,
 						Agent:   f.Agent,
 					},
-					Time: config.Time{
+					Time: storage.Time{
 						Upload: f.Upload,
 						Allow:  f.Duration.String(),
 					},
-					Downloads: config.Downloads{
+					Downloads: storage.Downloads{
 						Allow: f.Downloads.Allow,
 					},
 				}

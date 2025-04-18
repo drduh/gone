@@ -96,6 +96,12 @@ Upload file:
 curl -F "file=@test.txt" http://localhost:8080/upload
 ```
 
+Upload multiple files:
+
+```
+curl -F "file=@test.txt" -F "file=@test2.txt" http://localhost:8080/upload
+```
+
 With 3 allowed downloads before file expiration:
 
 ```

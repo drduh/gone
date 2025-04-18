@@ -4,6 +4,7 @@ import (
 	"net/http"
 
 	"github.com/drduh/gone/config"
+	"github.com/drduh/gone/storage"
 	"github.com/drduh/gone/templates"
 	"github.com/drduh/gone/version"
 )
@@ -22,7 +23,7 @@ func Heartbeat(app *config.App) http.HandlerFunc {
 			Index:        app.Index,
 			Limits:       app.Limits,
 			MessageCount: app.CountMessages(),
-			Owner: config.Owner{
+			Owner: storage.Owner{
 				Address: req.Address,
 				Headers: r.Header,
 			},

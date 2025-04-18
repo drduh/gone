@@ -5,6 +5,7 @@ import (
 	"time"
 
 	"github.com/drduh/gone/config"
+	"github.com/drduh/gone/storage"
 )
 
 // Message handles requests to post, read, clear
@@ -23,13 +24,13 @@ func Message(app *config.App) http.HandlerFunc {
 				app.ClearMessages()
 			}
 
-			message := config.Message{
+			message := storage.Message{
 				Count: app.CountMessages(),
-				Owner: config.Owner{
+				Owner: storage.Owner{
 					Address: req.Address,
 					Agent:   req.Agent,
 				},
-				Time: config.Time{
+				Time: storage.Time{
 					Allow: time.Now().Format(app.TimeFormat),
 				},
 			}

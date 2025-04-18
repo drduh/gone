@@ -4,6 +4,7 @@ import (
 	"net/http"
 
 	"github.com/drduh/gone/config"
+	"github.com/drduh/gone/storage"
 )
 
 // List handles requests to list Files in Storage.
@@ -22,9 +23,9 @@ func List(app *config.App) http.HandlerFunc {
 			return
 		}
 
-		files := make([]config.File, 0, len(app.Files))
+		files := make([]storage.File, 0, len(app.Files))
 		for _, file := range app.Files {
-			reason := file.IsExpired(app.Settings)
+			reason := file.IsExpired()
 			if reason != "" {
 				app.Expire(file)
 				app.Log.Info("removed file",
@@ -33,18 +34,18 @@ func List(app *config.App) http.HandlerFunc {
 			} else {
 				file.Time.Remain = file.TimeRemaining().String()
 				app.Files[file.Name] = file
-				f := config.File{
+				f := storage.File{
 					Name: file.Name,
 					Size: file.Size,
-					Owner: config.Owner{
+					Owner: storage.Owner{
 						Address: file.Address,
 						Agent:   file.Agent,
 					},
-					Time: config.Time{
+					Time: storage.Time{
 						Upload: file.Upload,
 						Remain: file.Time.Remain,
 					},
-					Downloads: config.Downloads{
+					Downloads: storage.Downloads{
 						Allow:  file.Downloads.Allow,
 						Total:  file.Total,
 						Remain: file.NumRemaining(),

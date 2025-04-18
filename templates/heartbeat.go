@@ -1,6 +1,9 @@
 package templates
 
-import "github.com/drduh/gone/config"
+import (
+	"github.com/drduh/gone/config"
+	"github.com/drduh/gone/storage"
+)
 
 // Heartbeat contains the server status response.
 type Heartbeat struct {
@@ -30,5 +33,5 @@ type Heartbeat struct {
 	config.Index `json:"index"`
 
 	// File owner information
-	config.Owner `json:"owner"`
+	storage.Owner `json:"owner"`
 }
