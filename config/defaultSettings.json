@@ -13,7 +13,8 @@
       "download":  true,
       "list":      false,
       "message":   false,
-      "upload":    false
+      "upload":    false,
+      "wall":      false
     }
   },
   "error": {
@@ -75,6 +76,7 @@
     "list":        "/list",
     "message":     "/msg",
     "static":      "/static",
-    "upload":      "/upload"
+    "upload":      "/upload",
+    "wall":        "/wall"
   }
 }

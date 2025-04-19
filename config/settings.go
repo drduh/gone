@@ -64,6 +64,9 @@ type Auth struct {
 
 		// Whether to require authentication to upload files
 		Upload bool `json:"upload"`
+
+		// Whether to require authentication to edit shared content
+		Wall bool `json:"wall"`
 	} `json:"require"`
 }
 
@@ -189,6 +192,9 @@ type Paths struct {
 
 	// File upload ("/upload")
 	Upload string `json:"upload"`
+
+	// Shared content for edit ("/wall")
+	Wall string `json:"wall"`
 }
 
 // GetAddr returns the server address based on configured port.

@@ -7,9 +7,8 @@
     {{ if .Paths.List }}      {{- template "list" . -}}      {{ end }}
   </div>
   <div class="container">
-    {{ if .Paths.Message }}
-      {{- template "message" . -}}
-    {{ end }}
+    {{ if .Paths.Message }}   {{- template "message" . -}}   {{ end }}
+    {{ if .Paths.Wall }}      {{- template "wall" . -}}      {{ end }}
   </div>
 {{- template "footer" . -}}
 {{ end }}

@@ -1,0 +1,22 @@
+<!-- wall.tmpl -->
+{{ define "wall" }}
+  <div class="box">
+    <form action="{{ .Paths.Wall }}"
+         enctype="application/x-www-form-urlencoded"
+              id="wall"
+          method="post">
+      <textarea class="wallContent"
+                 form="wall"
+                   id="wall"
+                 name="wall"
+                 rows="12" cols="40">
+      {{ .Storage.WallContent }}
+      </textarea>
+      <br>
+      {{ if .Auth.Require.Wall }} {{ template "auth" . }} {{ end }}
+      <input class="selectPost"
+              type="submit"
+             value="save">
+    </form>
+  </div>
+{{ end }}
