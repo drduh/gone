@@ -9,10 +9,8 @@ import (
 // Download handles requests to download a File from Storage by name.
 func Download(app *config.App) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		req := parseRequest(r)
-
-		if !isAllowed(app, r) {
-			deny(w, app, req)
+		req, allowed := authRequest(w, r, app)
+		if !allowed {
 			return
 		}
 

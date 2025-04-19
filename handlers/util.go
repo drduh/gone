@@ -24,8 +24,11 @@ func isAllowed(app *config.App, r *http.Request) bool {
 		app.List:     app.Require.List,
 		app.Message:  app.Require.Message,
 		app.Upload:   app.Require.Upload,
+		app.Wall:     app.Require.Wall,
 	}
+
 	path := util.GetBasePath(r.URL.Path)
+
 	required, exists := reqs[path]
 	app.Log.Debug("checking auth",
 		"path", path, "required", required, "exists", exists)
@@ -33,10 +36,11 @@ func isAllowed(app *config.App, r *http.Request) bool {
 		app.Log.Debug("auth not required", "path", r.URL.Path)
 		return true
 	}
+
 	return isAuthenticated(app.Basic.Field, app.Basic.Token, r)
 }
 
-// isAuthentication returns true if authentication is successful.
+// isAuthentication returns true if basic authentication is successful.
 func isAuthenticated(header, token string, r *http.Request) bool {
 	return auth.Basic(header, token, r)
 }

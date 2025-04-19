@@ -93,25 +93,25 @@ curl localhost:8080/heartbeat
 Upload file:
 
 ```
-curl -F "file=@test.txt" http://localhost:8080/upload
+curl -F "file=@test.txt" localhost:8080/upload
 ```
 
 Upload multiple files:
 
 ```
-curl -F "file=@test.txt" -F "file=@test2.txt" http://localhost:8080/upload
+curl -F "file=@test.txt" -F "file=@test2.txt" localhost:8080/upload
 ```
 
 With 3 allowed downloads before file expiration:
 
 ```
-curl -F "downloads=3" -F "file=@test.txt" http://localhost:8080/upload
+curl -F "downloads=3" -F "file=@test.txt" localhost:8080/upload
 ```
 
 With a 15 minutes file expiration:
 
 ```
-curl -F "duration=15m" -F "file=@test.txt" http://localhost:8080/upload
+curl -F "duration=15m" -F "file=@test.txt" localhost:8080/upload
 ```
 
 ## List
@@ -119,7 +119,7 @@ curl -F "duration=15m" -F "file=@test.txt" http://localhost:8080/upload
 List uploaded files:
 
 ```
-curl http://localhost:8080/list
+curl localhost:8080/list
 ```
 
 ## Download
@@ -127,22 +127,31 @@ curl http://localhost:8080/list
 Download file (the [default configuration](https://github.com/drduh/gone/blob/main/config/defaultSettings.json) requires basic authentication):
 
 ```
-curl -H "X-Auth: mySecret" "http://localhost:8080/download/test.txt"
+curl -H "X-Auth: mySecret" "localhost:8080/download/test.txt"
 ```
 
 Get static (never expires) content:
 
 ```
-curl http://localhost:8080/static
+curl localhost:8080/static
 ```
 
 ## Message
 
-Post a message to index:
+Post a message (use single quotes to wrap special characters):
 
 ```
-curl -s -F 'message=hello, world!' http://localhost:8080/msg >/dev/null
+curl -s -F 'message=hello, world!' localhost:8080/msg >/dev/null
 ```
+
+## Wall
+
+Post multi-line text for shared edit:
+
+```
+curl -F "wall=$(cat /etc/dnsmasq.conf)" localhost:8080/wall >/dev/null
+```
+
 
 ## Functions
 
