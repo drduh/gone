@@ -18,10 +18,10 @@ func Heartbeat(app *config.App) http.HandlerFunc {
 			"uptime", uptime, "user", req)
 
 		response := templates.Heartbeat{
-			FileCount:    app.CountFiles(),
 			Hostname:     app.Hostname,
 			Index:        app.Index,
 			Limits:       app.Limits,
+			FileCount:    app.CountFiles(),
 			MessageCount: app.CountMessages(),
 			Owner: storage.Owner{
 				Address: req.Address,

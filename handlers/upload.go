@@ -17,11 +17,8 @@ import (
 // Upload handles requests to upload File(s) into Storage.
 func Upload(app *config.App) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-
-		req := parseRequest(r)
-
-		if !isAllowed(app, r) {
-			deny(w, app, req)
+		req, allowed := authRequest(w, r, app)
+		if !allowed {
 			return
 		}
 
