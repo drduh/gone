@@ -1,19 +1,6 @@
-package config
+package throttle
 
-import (
-	"sync"
-	"time"
-)
-
-// Throttle requests by time
-type Throttle struct {
-
-	// Record times to rate limit
-	Times []time.Time
-
-	// Throttle lock
-	Lease sync.Mutex
-}
+import "time"
 
 // Allow returns true if the Throttle limit is not exceeded.
 func (t *Throttle) Allow(limit int) bool {

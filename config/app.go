@@ -5,6 +5,7 @@ import (
 	"time"
 
 	"github.com/drduh/gone/storage"
+	"github.com/drduh/gone/throttle"
 )
 
 // Global application configuration
@@ -32,5 +33,5 @@ type App struct {
 	storage.Storage
 
 	// Rate limit throttle for requests
-	Throttle
+	throttle.Throttle
 }
