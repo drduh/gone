@@ -187,7 +187,7 @@ type Paths struct {
 	// Message post and read ("/msg")
 	Message string `json:"message"`
 
-	// Random output ("/random")
+	// Random output ("/random/")
 	Random string `json:"random"`
 
 	// Embedded/static file ("/static")
