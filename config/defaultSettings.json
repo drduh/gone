@@ -75,6 +75,7 @@
     "heartbeat":   "/heartbeat",
     "list":        "/list",
     "message":     "/msg",
+    "random":      "/random",
     "static":      "/static",
     "upload":      "/upload",
     "wall":        "/wall"
