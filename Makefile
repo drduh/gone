@@ -31,6 +31,8 @@ BINLINUX  = $(APPNAME)-$(BUILDOS)-$(BUILDARCH)-$(VERSION)
 BLDLINUX  = GOOS=$(BUILDOS) GOARCH=$(BUILDARCH) \
             $(BUILDCMD) -o $(OUT)/$(BINLINUX) $(SRC)
 
+TESTCOVER = testCoverage
+
 all: fmt test build
 
 run: build
@@ -59,8 +61,16 @@ test:
 test-verbose:
 	@$(GO) test -v ./...
 
-clean:
-	@rm -rf $(OUT)
+test-cover:
+	@$(GO) test -coverprofile=$(TESTCOVER) ./...
+
+cover: test-cover
+	@$(GO) tool cover -html=$(TESTCOVER) \
+		-o $(TESTCOVER).html
 
 doc:
 	@$(GODOC) -http :8000
+
+clean:
+	@rm -rf $(OUT) \
+		$(TESTCOVER) $(TESTCOVER).html
