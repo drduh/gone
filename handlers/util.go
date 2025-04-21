@@ -95,6 +95,19 @@ func writeJSON(w http.ResponseWriter, code int, data interface{}) {
 	}
 }
 
+// getParam return a parameter (such as filename)
+// from an HTTP request, as URL, query or form value.
+func getParam(r *http.Request, pathLen int, fieldName string) string {
+	p := r.URL.Path[pathLen:]
+	if p == "" {
+		p = r.URL.Query().Get(fieldName)
+	}
+	if p == "" {
+		p = r.FormValue(fieldName)
+	}
+	return p
+}
+
 // getTheme returns the CSS theme based on cookie preference,
 // setting the cookie value if none exists.
 func getTheme(w http.ResponseWriter, r *http.Request,
