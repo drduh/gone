@@ -14,6 +14,14 @@ var names = []string{
 	"Uma", "Victor", "Wendy", "Xavier", "Yvonne", "Zack",
 }
 
+var nato = []string{
+	"Alpha", "Bravo", "Charlie", "Delta", "Echo", "Foxtrot",
+	"Golf", "Hotel", "India", "Juliett", "Kilo", "Lima",
+	"Mike", "November", "Oscar", "Papa", "Quebec", "Romeo",
+	"Sierra", "Tango", "Uniform", "Victor", "Whiskey", "X-ray",
+	"Yankee", "Zulu",
+}
+
 // randomInt returns a random int64 up to max, or -1 on error.
 func randomInt(max int64) int64 {
 	n, err := rand.Int(rand.Reader, big.NewInt(max))
@@ -21,6 +29,15 @@ func randomInt(max int64) int64 {
 		return -1
 	}
 	return n.Int64()
+}
+
+// pickRandom returns a random string from list, or fallback on error.
+func pickRandom(list []string, fallback string) string {
+	i := randomInt(int64(len(list)))
+	if i < 0 {
+		return fallback
+	}
+	return list[i]
 }
 
 // RandomNumber returns a zero-padded 3-digit string,
@@ -36,9 +53,11 @@ func RandomNumber() string {
 // RandomName returns a random string from the names list,
 // like "Alice", "Zack", or "Bob" on error.
 func RandomName() string {
-	i := randomInt(int64(len(names)))
-	if i < 0 {
-		return "Bob"
-	}
-	return names[i]
+	return pickRandom(names, "Bob")
+}
+
+// RandomNato returns a random string from the nato list,
+// like "Alpha", "Zulu", or "Bravo" on error.
+func RandomNato() string {
+	return pickRandom(nato, "Bravo")
 }

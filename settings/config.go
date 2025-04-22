@@ -1,3 +1,5 @@
+// Package settings provides user-supplied and default
+// application settings.
 package settings
 
 // Application settings

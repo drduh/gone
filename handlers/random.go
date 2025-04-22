@@ -14,10 +14,13 @@ func Random(app *config.App) http.HandlerFunc {
 		app.Log.Info("serving random", "user", req)
 
 		var response string
+
 		path := getParam(r, len(app.Random), "random")
 		switch path {
 		case "name":
 			response = util.RandomName()
+		case "nato":
+			response = util.RandomNato()
 		case "number":
 			response = util.RandomNumber()
 		default:
