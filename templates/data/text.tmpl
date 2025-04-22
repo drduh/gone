@@ -1,0 +1,5 @@
+<!-- text.tmpl -->
+{{ define "text" }}
+    {{ if .Paths.Message }}   {{- template "message" . -}}   {{ end }}
+    {{ if .Paths.Wall }}      {{- template "wall" . -}}      {{ end }}
+{{ end }}

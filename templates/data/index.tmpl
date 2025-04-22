@@ -2,13 +2,10 @@
 {{ define "index" }}
 {{- template "header" . -}}
   <div class="container">
-    {{ if .Paths.Upload }}    {{- template "upload" . -}}    {{ end }}
-    {{ if .Paths.Download }}  {{- template "download" . -}}  {{ end }}
-    {{ if .Paths.List }}      {{- template "list" . -}}      {{ end }}
+    {{- template "files" . -}}
   </div>
   <div class="container">
-    {{ if .Paths.Message }}   {{- template "message" . -}}   {{ end }}
-    {{ if .Paths.Wall }}      {{- template "wall" . -}}      {{ end }}
+    {{- template "text" . -}}
   </div>
 {{- template "footer" . -}}
 {{ end }}
