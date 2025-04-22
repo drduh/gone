@@ -19,8 +19,8 @@ func Load() *App {
 
 	auditor, err := audit.Start(&audit.Config{
 		Debug:      app.Debug,
-		TimeFormat: app.Settings.TimeFormat,
-		Filename:   app.Settings.Filename,
+		Filename:   app.Filename,
+		TimeFormat: app.TimeFormat,
 	})
 	if err != nil {
 		log.Fatalf("failed starting auditor: %v", err)
