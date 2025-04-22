@@ -4,6 +4,7 @@ import (
 	"log/slog"
 	"time"
 
+	"github.com/drduh/gone/settings"
 	"github.com/drduh/gone/storage"
 	"github.com/drduh/gone/throttle"
 )
@@ -27,7 +28,7 @@ type App struct {
 	Modes
 
 	// Loaded and validated application settings
-	Settings
+	settings.Settings
 
 	// Uploaded content storage
 	storage.Storage
