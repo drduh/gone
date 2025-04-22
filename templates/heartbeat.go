@@ -1,7 +1,7 @@
 package templates
 
 import (
-	"github.com/drduh/gone/config"
+	"github.com/drduh/gone/settings"
 	"github.com/drduh/gone/storage"
 )
 
@@ -27,10 +27,10 @@ type Heartbeat struct {
 	MessageCount int `json:"messages"`
 
 	// Limits configuration
-	config.Limits `json:"limits"`
+	settings.Limits `json:"limits"`
 
 	// Index configuration
-	config.Index `json:"index"`
+	settings.Index `json:"index"`
 
 	// File owner information
 	storage.Owner `json:"owner"`

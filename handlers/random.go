@@ -17,6 +17,8 @@ func Random(app *config.App) http.HandlerFunc {
 
 		path := getParam(r, len(app.Random), "random")
 		switch path {
+		case "coin":
+			response = util.FlipCoin()
 		case "name":
 			response = util.RandomName()
 		case "nato":

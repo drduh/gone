@@ -40,14 +40,12 @@ func pickRandom(list []string, fallback string) string {
 	return list[i]
 }
 
-// RandomNumber returns a zero-padded 3-digit string,
-// like "007", "123", "999", or "000" on error.
-func RandomNumber() string {
-	n := randomInt(1000)
-	if n < 0 {
-		return "000"
+// FlipCoin returns "heads" or "tails" at random.
+func FlipCoin() string {
+	if f := randomInt(2); f == 0 {
+		return "heads"
 	}
-	return fmt.Sprintf("%03d", n)
+	return "tails"
 }
 
 // RandomName returns a random string from the names list,
@@ -60,4 +58,14 @@ func RandomName() string {
 // like "Alpha", "Zulu", or "Bravo" on error.
 func RandomNato() string {
 	return pickRandom(nato, "Bravo")
+}
+
+// RandomNumber returns a zero-padded 3-digit string,
+// like "007", "123", "999", or "000" on error.
+func RandomNumber() string {
+	n := randomInt(1000)
+	if n < 0 {
+		return "000"
+	}
+	return fmt.Sprintf("%03d", n)
 }
