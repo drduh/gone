@@ -14,7 +14,7 @@ func Download(app *config.App) http.HandlerFunc {
 			return
 		}
 
-		fileName := getFilename(r, len(app.Download))
+		fileName := getParam(r, len(app.Download), "name")
 		if fileName == "" {
 			writeJSON(w, http.StatusNotFound, errorJSON(app.NoFilename))
 			app.Log.Error(app.NoFilename, "user", req)
@@ -43,16 +43,4 @@ func Download(app *config.App) http.HandlerFunc {
 				"downloads", file.Total)
 		}
 	}
-}
-
-// Returns filename value from request
-func getFilename(r *http.Request, pathLen int) string {
-	f := r.URL.Path[pathLen:]
-	if f == "" {
-		f = r.URL.Query().Get("name")
-	}
-	if f == "" {
-		f = r.FormValue("name")
-	}
-	return f
 }

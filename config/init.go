@@ -21,6 +21,4 @@ func init() {
 	flag.StringVar(&pathConfig, "config", "", "Path to settings file")
 	flag.StringVar(&pathConfig, "conf", "", "Shortcut for -config")
 	flag.StringVar(&pathConfig, "c", "", "Shortcut for -config")
-
-	flag.Parse()
 }

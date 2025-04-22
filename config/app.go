@@ -2,10 +2,10 @@ package config
 
 import (
 	"log/slog"
-	"os"
 	"time"
 
 	"github.com/drduh/gone/storage"
+	"github.com/drduh/gone/throttle"
 )
 
 // Global application configuration
@@ -33,23 +33,5 @@ type App struct {
 	storage.Storage
 
 	// Rate limit throttle for requests
-	Throttle
-}
-
-// Start records the application start time.
-func (a *App) Start() {
-	a.StartTime = time.Now()
-}
-
-// Stop logs uptime and exits the application.
-func (a *App) Stop(reason string) {
-	a.Log.Info("stopping application",
-		"reason", reason, "uptime", a.Uptime())
-	os.Exit(0)
-}
-
-// Uptime returns the rounded duration since app start.
-func (a *App) Uptime() string {
-	return time.Since(a.StartTime).Round(
-		time.Second).String()
+	throttle.Throttle
 }

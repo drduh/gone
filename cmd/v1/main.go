@@ -2,6 +2,7 @@
 package v1
 
 import (
+	"flag"
 	"os"
 
 	"github.com/drduh/gone/config"
@@ -13,6 +14,8 @@ import (
 // Run loads the application configuration, sets up the
 // signal handler and starts the HTTP server.
 func Run() {
+	flag.Parse()
+
 	app := config.Load()
 
 	if app.Modes.Version {
