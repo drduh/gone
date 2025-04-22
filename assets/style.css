@@ -5,7 +5,9 @@
 }
 
 body {
-  background: linear-gradient(0deg, var(--bg-light) 0%, var(--bg-dark) 100%);
+  animation: var(--bg-animation);
+  background: var(--bg-gradient);
+  background-size: var(--bg-size);
   background-attachment: fixed;
   color: var(--fg-dark);
   display: flex;
