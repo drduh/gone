@@ -152,6 +152,18 @@ Post multi-line text for shared edit:
 curl -F "wall=$(cat /etc/dnsmasq.conf)" localhost:8080/wall >/dev/null
 ```
 
+## Random
+
+Get a random string:
+
+```
+curl localhost:8080/random/
+
+curl localhost:8080/random/name
+
+curl localhost:8080/random/number
+```
+
 
 ## Functions
 
