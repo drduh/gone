@@ -1,20 +1,19 @@
 # Design
 
-gone is an ephemeral content sharing server written in Go.
+gone is an ephemeral content hosting server written in Go.
 
-The primary goal is to enable sharing of a file or short text message to another device with access to the application.
+The primary goal is to enable sharing of files and text using command-line API or simple HTML user interface.
 
 ## Features
 
-- In-memory storage - no residual content artifacts after program exits
-- Share files with upload, download and list functionality
-- Files expire (removed) after a number of downloads or duration of time
-- JSON-based configuration, logging and server responses
-- Token (string-based) authentication
-- Request rate and size limits
-- Basic HTML user interface (index) without scripts
-- Share and clear short text messages
-- No third-party dependencies
+- No disk storage (memory only) - content cleared on exit
+- No third-party dependencies - only Go required to build
+- No Javascript required to use HTML-based user interface
+- Share multiple files: upload, download and list feature
+- Files expire after number of downloads or time duration
+- Share short text messages and shared text area for edit
+- JSON-based configurations, logging and server responses
+- Token (string-based) authentication and request limiter
 
 ## Security
 
@@ -28,17 +27,17 @@ gone requires [Go](https://go.dev/doc/install) to develop.
 
 ## Build
 
-To build gone on Linux:
+To build on Linux:
 
 ```
 make build
 ```
 
-Binaries are built to `release` for distribution and installation.
+Binaries are built to the `release` directory for distribution and installation.
 
 ## Run
 
-To run gone on Linux:
+To run on Linux:
 
 ```
 make run
@@ -46,7 +45,7 @@ make run
 
 ## Debug
 
-To run gone on Linux in debug mode:
+To run in debug mode on Linux:
 
 ```
 make debug
@@ -60,7 +59,7 @@ Application output is structured in JSON format and can be parsed with `jq` for 
 ./gone | jq .data
 ```
 
-The optional `-debug` flag can be used for debug mode (additional verbose program output).
+The optional `-debug` flag can be used for debug mode (provides additional application output).
 
 # Configuration
 
@@ -149,7 +148,13 @@ curl -s -F 'message=hello, world!' localhost:8080/msg >/dev/null
 Post multi-line text for shared edit:
 
 ```
-curl -F "wall=$(cat /etc/dnsmasq.conf)" localhost:8080/wall >/dev/null
+curl -s -F "wall=$(cat /etc/dnsmasq.conf)" localhost:8080/wall >/dev/null
+```
+
+Get shared multi-line text:
+
+```
+curl localhost:8080/wall | jq -r
 ```
 
 ## Random
@@ -166,28 +171,29 @@ curl localhost:8080/random/number
 curl localhost:8080/random/coin
 ```
 
-
 ## Functions
 
 See [config/zshrc](https://github.com/drduh/config/blob/main/zshrc#L541) for alias and function examples, such as:
 
 ```
 $ gone_put test.txt 1 20m
-{
-  "name": "test.txt",
-  "size": "6.00 Bytes",
-  "owner": {
-    "address": "127.0.0.1:4306",
-    "agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/132.0.0.0 Safari/537.3"
-  },
-  "time": {
-    "allow": "20m0s",
-    "upload": "2025-03-20T10:00:00.00"
-  },
-  "downloads": {
-    "allow": 1
+[
+  {
+    "name": "test.txt",
+    "downloads": {
+      "allow": 1
+    },
+    "size": "6.00 Bytes",
+    "owner": {
+      "address": "127.0.0.1:4306",
+      "agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/132.0.0.0 Safari/537.3"
+    },
+    "time": {
+      "allow": "10m0s",
+      "upload": "2025-04-22T10:00:00"
+    }
   }
-}
+]
 ```
 
 # Documentation

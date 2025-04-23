@@ -7,60 +7,57 @@ import (
 	"time"
 )
 
+const (
+	cookieId    = "test-cookie"
+	cookieTime  = time.Hour
+	cookieValue = "cookie-value"
+)
+
 // TestCookieExists tests GetCookie reads a cookie when it exists.
 func TestCookieExists(t *testing.T) {
-	id := "test-cookie"
-	expectedValue := "cookie-value"
-
 	req := httptest.NewRequest("GET", "/", nil)
-	req.AddCookie(&http.Cookie{Name: id, Value: expectedValue})
+	req.AddCookie(&http.Cookie{Name: cookieId, Value: cookieValue})
 	rr := httptest.NewRecorder()
 
-	result := GetCookie(rr, req, "default-value", id, time.Hour)
-	if result != expectedValue {
-		t.Errorf("Expected %q, got %q", expectedValue, result)
+	result := GetCookie(rr, req, "default-value", cookieId, time.Hour)
+	if result != cookieValue {
+		t.Errorf("Expected %q, got %q", cookieValue, result)
 	}
 }
 
 // TestCookieNotExists tests GetCookie sets and reads a cookie
 // when it does not exist.
 func TestCookieNotExists(t *testing.T) {
-	id := "test-cookie"
-	defaultValue := "default-value"
-
 	req := httptest.NewRequest("GET", "/", nil)
 	rr := httptest.NewRecorder()
 
-	result := GetCookie(rr, req, defaultValue, id, time.Hour)
-	if result != defaultValue {
-		t.Errorf("Expected default value %q, got %q", defaultValue, result)
+	result := GetCookie(rr, req, cookieValue, cookieId, time.Hour)
+	if result != cookieValue {
+		t.Errorf("Expected %q, got %q", cookieValue, result)
 	}
 
 	cookies := rr.Result().Cookies()
 	if len(cookies) != 1 ||
-		cookies[0].Name != id ||
-		cookies[0].Value != defaultValue {
+		cookies[0].Name != cookieId ||
+		cookies[0].Value != cookieValue {
 		t.Errorf("Cookie was not set correctly")
 	}
 }
 
 // TestNewCookie tests NewCookie correctly sets a cookie.
 func TestNewCookie(t *testing.T) {
-	id := "test-cookie"
-	value := "cookie-value"
-	duration := time.Hour
-
-	cookie := NewCookie(value, id, duration)
-	if cookie.Name != id {
-		t.Errorf("Expected %q, got %q", id, cookie.Name)
-	}
-	if cookie.Value != value {
-		t.Errorf("Expected %q, got %q", value, cookie.Value)
-	}
+	cookie := NewCookie(cookieValue, cookieId, cookieTime)
 	if cookie.Path != "/" {
 		t.Errorf("Expected %q, got %q", "/", cookie.Path)
 	}
-	if cookie.Expires.Before(time.Now().Add(duration - time.Second)) {
+	if cookie.Name != cookieId {
+		t.Errorf("Expected %q, got %q", cookieId, cookie.Name)
+	}
+	if cookie.Value != cookieValue {
+		t.Errorf("Expected %q, got %q", cookieValue, cookie.Value)
+	}
+	if cookie.Expires.Before(
+		time.Now().Add(cookieTime - time.Second)) {
 		t.Errorf("Cookie expiration is invalid")
 	}
 }
