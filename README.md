@@ -64,7 +64,7 @@ The optional `-debug` flag can be used for debug mode (additional verbose progra
 
 # Configuration
 
-gone uses an embedded JSON-based configuration [config/defaultSettings.json](https://github.com/drduh/gone/blob/main/config/defaultSettings.json) as default settings.
+gone uses an embedded JSON-based configuration [defaultSettings.json](https://github.com/drduh/gone/blob/main/settings/defaultSettings.json) as default settings.
 
 Copy the JSON file and use the `-config` flag to set server options:
 
