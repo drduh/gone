@@ -1,7 +1,7 @@
 package templates
 
 import (
-	"github.com/drduh/gone/config"
+	"github.com/drduh/gone/settings"
 	"github.com/drduh/gone/storage"
 )
 
@@ -24,16 +24,16 @@ type Index struct {
 	DefaultDuration string
 
 	// Authentication configuration
-	config.Auth
+	settings.Auth
 
 	// Page properties
-	config.Index
+	settings.Index
 
 	// Page restrictions and limits
-	config.Limits
+	settings.Limits
 
 	// Configured route paths
-	config.Paths
+	settings.Paths
 
 	// Configured storage (Files and Messages)
 	storage.Storage
