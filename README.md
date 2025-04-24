@@ -15,12 +15,6 @@ The primary goal is to enable sharing of files and text using command-line API o
 - JSON-based configurations, logging and server responses
 - Token (string-based) authentication and request limiter
 
-## Security
-
-gone has not yet been subject to security audit and may lack adequate user input validation.
-
-Therefore, gone is only intended for use on a secure network with trusted devices, such as a private LAN.
-
 # Development
 
 gone requires [Go](https://go.dev/doc/install) to develop.
@@ -65,7 +59,7 @@ The optional `-debug` flag can be used for debug mode (provides additional appli
 
 gone uses an embedded JSON-based configuration [defaultSettings.json](https://github.com/drduh/gone/blob/main/settings/defaultSettings.json) as default settings.
 
-Copy the JSON file and use the `-config` flag to set server options:
+To change application settings, copy the default settings JSON file and use the `-config` flag:
 
 ```
 ./gone -config=mySettings.json
