@@ -189,7 +189,7 @@ $ gone_put test.txt 1 20m
       "agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/132.0.0.0 Safari/537.3"
     },
     "time": {
-      "allow": "10m0s",
+      "allow": "20m0s",
       "upload": "2025-04-22T10:00:00"
     }
   }
@@ -202,4 +202,20 @@ Application documentation is available with [godoc](https://go.dev/blog/godoc):
 
 ```
 make doc
+```
+
+# Testing
+
+Unit tests are validated by GitHub Actions on repository changes, or can be run manually:
+
+```
+make test
+
+make test-verbose
+```
+
+Test coverage is also available - to generate an HTML report:
+
+```
+make cover
 ```
