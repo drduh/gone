@@ -33,6 +33,9 @@ func randomInt(max int64) int64 {
 
 // pickRandom returns a random string from list, or fallback on error.
 func pickRandom(list []string, fallback string) string {
+	if len(list) == 0 {
+		return fallback
+	}
 	i := randomInt(int64(len(list)))
 	if i < 0 {
 		return fallback
