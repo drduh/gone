@@ -6,7 +6,7 @@ import (
 	"time"
 )
 
-// Storage contains Files and Messages from users
+// Storage contains file and text content uploaded by users.
 type Storage struct {
 
 	// Uploaded files
@@ -19,7 +19,7 @@ type Storage struct {
 	WallContent string
 }
 
-// An uploaded file
+// File represents a user-uploaded file.
 type File struct {
 
 	// Provided filename
@@ -41,7 +41,7 @@ type File struct {
 	Time `json:"time,omitempty"`
 }
 
-// A submitted text message
+// Message represents a user-submitted text message.
 type Message struct {
 
 	// Counter (to order messages)
@@ -57,7 +57,7 @@ type Message struct {
 	Time
 }
 
-// File owner information
+// Owner contains metadata about a user.
 type Owner struct {
 
 	// Remote IP address
@@ -70,7 +70,7 @@ type Owner struct {
 	Headers http.Header `json:"headers,omitempty"`
 }
 
-// Timing information
+// Time represents user content time metadata.
 type Time struct {
 
 	// Duration of file lifetime
@@ -86,7 +86,7 @@ type Time struct {
 	Upload time.Time `json:"upload,omitempty"`
 }
 
-// Downloads information
+// Downloads represents user content downloads metadata.
 type Downloads struct {
 
 	// Number of allowed downloads

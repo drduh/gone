@@ -1,6 +1,6 @@
 # Design
 
-gone is an ephemeral content hosting server written in Go.
+gone is an ephemeral content hosting server written in [Go](https://go.dev/).
 
 The primary goal is to enable sharing of files and text using command-line API or simple HTML user interface.
 
@@ -159,12 +159,14 @@ curl localhost:8080/wall | jq -r
 
 ## Random
 
-Get a random value of certain type:
+Get a [random value](https://github.com/drduh/gone/blob/main/util/random.go) of certain type:
 
 ```
 curl localhost:8080/random/
 
 curl localhost:8080/random/name
+
+curl localhost:8080/random/nato
 
 curl localhost:8080/random/number
 
@@ -206,7 +208,7 @@ make doc
 
 # Testing
 
-Unit tests are validated by GitHub Actions on repository changes, or can be run manually:
+Unit tests are validated by a [workflow](https://github.com/drduh/gone/blob/main/.github/workflows/test-and-lint.yml) on repository changes. They can also be run manually:
 
 ```
 make test
@@ -214,7 +216,7 @@ make test
 make test-verbose
 ```
 
-Test coverage is also available - to generate an HTML report:
+Test coverage is also available - to generate an HTML report (`testCoverage.html`):
 
 ```
 make cover
