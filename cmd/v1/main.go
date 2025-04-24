@@ -1,4 +1,4 @@
-// Package v1 implements the original application design.
+// Package v1 implements the original (circa 2025) design.
 package v1
 
 import (
