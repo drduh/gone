@@ -1,6 +1,6 @@
 # Design
 
-gone is an ephemeral content hosting server written in Go.
+gone is an ephemeral content hosting server written in [Go](https://go.dev/).
 
 The primary goal is to enable sharing of files and text using command-line API or simple HTML user interface.
 
@@ -14,12 +14,6 @@ The primary goal is to enable sharing of files and text using command-line API o
 - Share short text messages and shared text area for edit
 - JSON-based configurations, logging and server responses
 - Token (string-based) authentication and request limiter
-
-## Security
-
-gone has not yet been subject to security audit and may lack adequate user input validation.
-
-Therefore, gone is only intended for use on a secure network with trusted devices, such as a private LAN.
 
 # Development
 
@@ -65,7 +59,7 @@ The optional `-debug` flag can be used for debug mode (provides additional appli
 
 gone uses an embedded JSON-based configuration [defaultSettings.json](https://github.com/drduh/gone/blob/main/settings/defaultSettings.json) as default settings.
 
-Copy the JSON file and use the `-config` flag to set server options:
+To change application settings, copy the default settings JSON file and use the `-config` flag:
 
 ```
 ./gone -config=mySettings.json
@@ -159,12 +153,14 @@ curl localhost:8080/wall | jq -r
 
 ## Random
 
-Get a random value of certain type:
+Get a [random value](https://github.com/drduh/gone/blob/main/util/random.go) of certain type:
 
 ```
 curl localhost:8080/random/
 
 curl localhost:8080/random/name
+
+curl localhost:8080/random/nato
 
 curl localhost:8080/random/number
 
@@ -189,7 +185,7 @@ $ gone_put test.txt 1 20m
       "agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/132.0.0.0 Safari/537.3"
     },
     "time": {
-      "allow": "10m0s",
+      "allow": "20m0s",
       "upload": "2025-04-22T10:00:00"
     }
   }
@@ -202,4 +198,20 @@ Application documentation is available with [godoc](https://go.dev/blog/godoc):
 
 ```
 make doc
+```
+
+# Testing
+
+Unit tests are validated by a [workflow](https://github.com/drduh/gone/blob/main/.github/workflows/test-and-lint.yml) on repository changes. They can also be run manually:
+
+```
+make test
+
+make test-verbose
+```
+
+Test coverage is also available - to generate an HTML report (`testCoverage.html`):
+
+```
+make cover
 ```
