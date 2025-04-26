@@ -72,3 +72,21 @@ func RandomNumber() string {
 	}
 	return fmt.Sprintf("%03d", n)
 }
+
+// GetRandom returns a requested random string by path.
+func GetRandom(path string) string {
+	var response string
+	switch path {
+	case "coin":
+		response = FlipCoin()
+	case "name":
+		response = RandomName()
+	case "nato":
+		response = RandomNato()
+	case "number":
+		response = RandomNumber()
+	default:
+		response = RandomName() + RandomNumber()
+	}
+	return response
+}
