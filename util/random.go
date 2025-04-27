@@ -72,3 +72,38 @@ func RandomNumber() string {
 	}
 	return fmt.Sprintf("%03d", n)
 }
+
+// RandomPass returns a passphrase of a given length.
+func RandomPass(length int) string {
+	const charset = "ABCDEFGHJKLMNPQRTVWXYZabcdefghijkmnpqrtvwxyz2346789"
+	password := make([]byte, length)
+	for i := range password {
+		n := randomInt(int64(len(charset)))
+		if n < 0 {
+			password[i] = 'a'
+		} else {
+			password[i] = charset[n]
+		}
+	}
+	return string(password)
+}
+
+// GetRandom returns a requested random string by path.
+func GetRandom(path string) string {
+	var response string
+	switch path {
+	case "coin":
+		response = FlipCoin()
+	case "name":
+		response = RandomName()
+	case "nato":
+		response = RandomNato()
+	case "number":
+		response = RandomNumber()
+	case "pass":
+		response = RandomPass(20)
+	default:
+		response = RandomName() + RandomNumber()
+	}
+	return response
+}

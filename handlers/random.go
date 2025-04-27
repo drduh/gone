@@ -11,24 +11,8 @@ import (
 func Random(app *config.App) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		req := parseRequest(r)
-		app.Log.Info("serving random", "user", req)
-
-		var response string
-
 		path := getParam(r, len(app.Random), "random")
-		switch path {
-		case "coin":
-			response = util.FlipCoin()
-		case "name":
-			response = util.RandomName()
-		case "nato":
-			response = util.RandomNato()
-		case "number":
-			response = util.RandomNumber()
-		default:
-			response = util.RandomName() + util.RandomNumber()
-		}
-
-		writeJSON(w, http.StatusOK, response)
+		app.Log.Info("serving random", "user", req, "path", path)
+		writeJSON(w, http.StatusOK, util.GetRandom(path))
 	}
 }
