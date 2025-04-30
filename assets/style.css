@@ -183,10 +183,10 @@ td, th {
 
 th {
   background-color: var(--bg-dark);
-  color: var(--fg-light);
-  text-transform: uppercase;
-  letter-spacing: 0.15em;
   border-bottom: 2px solid var(--fg-dark);
+  color: var(--fg-light);
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
 }
 
 tr:nth-child(even) {

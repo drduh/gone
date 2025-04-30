@@ -21,9 +21,10 @@ func GetCookie(w http.ResponseWriter, r *http.Request,
 // id, value and duration/expiration.
 func NewCookie(value, id string, t time.Duration) *http.Cookie {
 	return &http.Cookie{
-		Name:    id,
-		Expires: time.Now().Add(t),
-		Path:    "/",
-		Value:   value,
+		Name:     id,
+		Expires:  time.Now().Add(t),
+		Path:     "/",
+		SameSite: http.SameSiteStrictMode,
+		Value:    value,
 	}
 }
