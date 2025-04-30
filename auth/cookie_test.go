@@ -9,6 +9,7 @@ import (
 
 const (
 	cookieId    = "test-cookie"
+	cookieMode  = http.SameSiteStrictMode
 	cookieTime  = time.Hour
 	cookieValue = "cookie-value"
 )
@@ -56,8 +57,8 @@ func TestNewCookie(t *testing.T) {
 	if cookie.Value != cookieValue {
 		t.Errorf("Expected Value=%q, got %q", cookieValue, cookie.Value)
 	}
-	if cookie.SameSite != http.SameSiteStrictMode {
-		t.Errorf("Expected SameSite=%d, got %d", http.SameSiteLaxMode, cookie.SameSite)
+	if cookie.SameSite != cookieMode {
+		t.Errorf("Expected SameSite=%d, got %d", cookieMode, cookie.SameSite)
 	}
 	if cookie.Expires.Before(
 		time.Now().Add(cookieTime - time.Second)) {

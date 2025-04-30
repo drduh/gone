@@ -11,9 +11,10 @@
           <th>Size</th>
           <th>Owner</th>
         </tr>
+        {{ $root := . }}
         {{ range .Storage.Files }}
         <tr>
-          <td><a href="/download/{{ .Name }}">{{ .Name }}</a></td>
+          <td><a href="/{{ $root.Paths.Download }}/{{ .Name }}">{{ .Name }}</a></td>
           <td>{{ .Size }}</td>
           <td>{{ .Owner.Address }}</td>
         </tr>
