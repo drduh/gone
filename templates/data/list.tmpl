@@ -4,12 +4,23 @@
     <form action="{{ .Paths.List }}"
           method="get">
       {{ if .Auth.Require.List }} {{ template "auth" . }} {{ else }}
-      {{ range .Storage.Files }}
-      <div class="message">{{ .Name }}
-        <span class="owner">{{ .Size }} ({{ .Owner.Address }})</span>
-      </div>
+      {{ if .Storage.Files }}
+      <table>
+        <tr>
+          <th>Name</th>
+          <th>Size</th>
+          <th>Owner</th>
+        </tr>
+        {{ range .Storage.Files }}
+        <tr>
+          <td><a href="/download/{{ .Name }}">{{ .Name }}</a></td>
+          <td>{{ .Size }}</td>
+          <td>{{ .Owner.Address }}</td>
+        </tr>
+        {{end}}
+      </table>
+      {{end}}
       <br>
-      {{ end }}
       {{ end }}
       <input class="selectSubmit"
               type="submit"
