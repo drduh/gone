@@ -163,3 +163,41 @@ input[type="file"]::file-selector-button:hover {
   background-color: var(--fg-light);
   color: var(--bg-dark);
 }
+
+table {
+  border-collapse: collapse;
+  border-radius: var(--box-radius);
+  margin: 1em auto;
+  overflow: hidden;
+  width: 80%;
+}
+
+td {
+  color: var(--fg-light);
+}
+
+td, th {
+  padding: var(--table-pad);
+  text-align: center;
+}
+
+th {
+  background-color: var(--bg-dark);
+  border-bottom: 2px solid var(--fg-dark);
+  color: var(--fg-light);
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+}
+
+tr:nth-child(even) {
+  background-color: var(--bg-norm);
+}
+
+tr:nth-child(odd) {
+  background-color: var(--bg-dark);
+}
+
+tr:hover {
+  background-color: var(--bg-light);
+  transition: background-color var(--animation) ease;
+}
