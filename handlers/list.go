@@ -21,40 +21,45 @@ func List(app *config.App) http.HandlerFunc {
 			return
 		}
 
-		files := make([]storage.File, 0, len(app.Files))
-		for _, file := range app.Files {
-			reason := file.IsExpired()
-			if reason != "" {
-				app.Expire(file)
-				app.Log.Info("removed file",
-					"reason", reason, "filename", file.Name,
-					"downloads", file.Total)
-			} else {
-				file.Time.Remain = file.TimeRemaining().String()
-				app.Files[file.Name] = file
-				f := storage.File{
-					Name: file.Name,
-					Size: file.Size,
-					Owner: storage.Owner{
-						Address: file.Address,
-						Agent:   file.Agent,
-					},
-					Time: storage.Time{
-						Upload: file.Upload,
-						Remain: file.Time.Remain,
-					},
-					Downloads: storage.Downloads{
-						Allow:  file.Downloads.Allow,
-						Total:  file.Total,
-						Remain: file.NumRemaining(),
-					},
-				}
-				files = append(files, f)
-			}
-		}
+		app.UpdateTime()
+		files := getFiles(app)
 
 		app.Log.Info("serving file list",
 			"files", len(files), "user", req)
 		writeJSON(w, http.StatusOK, files)
 	}
+}
+
+// getFiles returns a list of non-expired Files in Storage.
+func getFiles(app *config.App) []storage.File {
+	files := make([]storage.File, 0, len(app.Files))
+	for _, file := range app.Files {
+		reason := file.IsExpired()
+		if reason != "" {
+			app.Expire(file)
+			app.Log.Info("removed file",
+				"reason", reason, "filename", file.Name,
+				"downloads", file.Total)
+			break
+		}
+		f := storage.File{
+			Name: file.Name,
+			Size: file.Size,
+			Owner: storage.Owner{
+				Address: file.Address,
+				Agent:   file.Agent,
+			},
+			Time: storage.Time{
+				Upload: file.Upload,
+				Remain: file.Time.Remain,
+			},
+			Downloads: storage.Downloads{
+				Allow:  file.Downloads.Allow,
+				Total:  file.Total,
+				Remain: file.NumRemaining(),
+			},
+		}
+		files = append(files, f)
+	}
+	return files
 }

@@ -115,3 +115,11 @@ func (s *Storage) ServeMessages(w http.ResponseWriter) {
 		}
 	}
 }
+
+// UpdateTime updates time until expiration of each File in Storage.
+func (s *Storage) UpdateTime() {
+	for _, file := range s.Files {
+		file.Time.Remain = file.TimeRemaining().String()
+		s.Files[file.Name] = file
+	}
+}
