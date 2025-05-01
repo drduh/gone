@@ -10,13 +10,15 @@
           <th>Name</th>
           <th>Size</th>
           <th>Owner</th>
+          <th>Remain</th>
         </tr>
         {{ $root := . }}
         {{ range .Storage.Files }}
         <tr>
-          <td><a href="/{{ $root.Paths.Download }}/{{ .Name }}">{{ .Name }}</a></td>
+          <td><a href="{{ $root.Paths.Download }}/{{ .Name }}">{{ .Name }}</a></td>
           <td>{{ .Size }}</td>
           <td>{{ .Owner.Address }}</td>
+          <td>{{ .Time.Remain }}</td>
         </tr>
         {{end}}
       </table>
