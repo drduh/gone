@@ -37,6 +37,8 @@ func Index(app *config.App) http.HandlerFunc {
 			return
 		}
 
+		app.UpdateTime()
+
 		response := templates.Index{
 			Auth:            app.Auth,
 			DefaultDuration: app.Expiration.String(),
