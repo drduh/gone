@@ -3,31 +3,50 @@
   <div class="box">
     <form action="{{ .Paths.List }}"
           method="get">
+      {{ if .Auth.Require.List }} {{ template "auth" . }} {{ end }}
+      <input class="selectSubmit"
+              type="submit"
+             value="list">
+    </form>
+    <form action="{{ .Paths.Download }}"
+          method="get">
+      <br>
       {{ if .Auth.Require.List }} {{ template "auth" . }} {{ else }}
       {{ if .Storage.Files }}
       <table>
-        <tr>
-          <th>Name</th>
-          <th>Size</th>
-          <th>Owner</th>
-          <th>Remain</th>
-        </tr>
-        {{ $root := . }}
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Size</th>
+            <th>Owner</th>
+            <th>Time</th>
+          </tr>
+        </thead>
+        <tbody>
         {{ range .Storage.Files }}
-        <tr>
-          <td><a href="{{ $root.Paths.Download }}/{{ .Name }}">{{ .Name }}</a></td>
+        <tr class="list-row">
+          <td>
+            <label for="{{ .Name }}">{{ .Name }}</label>
+            <input id="{{ .Name }}"
+                 name="name"
+                 type="radio"
+                value="{{ .Name }}" required>
+          </td>
           <td>{{ .Size }}</td>
           <td>{{ .Owner.Address }}</td>
           <td>{{ .Time.Remain }}</td>
         </tr>
-        {{end}}
+        {{ end }}
+        </tbody>
       </table>
-      {{end}}
+      {{ end }}
       <br>
       {{ end }}
+      {{ if .Auth.Require.Download }} {{ template "auth" . }} {{ end }}
       <input class="selectSubmit"
+             title="download selected file"
               type="submit"
-             value="list">
+             value="download">
     </form>
   </div>
 {{ end }}
