@@ -1,6 +1,7 @@
 <!-- list.tmpl -->
 {{ define "list" }}
   <div class="box">
+    {{ if .Storage.Files }}
     <form action="{{ .Paths.List }}"
           method="get">
       {{ if .Auth.Require.List }} {{ template "auth" . }} {{ end }}
@@ -12,7 +13,6 @@
           method="get">
       <br>
       {{ if .Auth.Require.List }} {{ template "auth" . }} {{ else }}
-      {{ if .Storage.Files }}
       <table>
         <thead>
           <tr>
@@ -41,12 +41,14 @@
       </table>
       {{ end }}
       <br>
-      {{ end }}
       {{ if .Auth.Require.Download }} {{ template "auth" . }} {{ end }}
       <input class="selectSubmit"
              title="download selected file"
               type="submit"
              value="download">
     </form>
+    {{ else }}
+    <p>no files available</p>
+    {{ end }}
   </div>
 {{ end }}
