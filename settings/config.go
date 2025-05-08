@@ -150,6 +150,12 @@ type Index struct {
 // Content sharing limits
 type Limits struct {
 
+	// Message character length
+	CharsMsg int `json:"charsMsg,omitempty"`
+
+	// Wall character length
+	CharsWall int `json:"charsWall,omitempty"`
+
 	// Number of allowed downloads before File expiration
 	Downloads int `json:"downloads,omitempty"`
 
@@ -158,9 +164,6 @@ type Limits struct {
 
 	// Maximum file size (in Megabytes)
 	MaxSizeMb int64 `json:"maxSizeMb,omitempty"`
-
-	// Message character length
-	MsgChars int `json:"msgChars,omitempty"`
 
 	// Number of requests per minute to rate limit
 	PerMinute int `json:"perMinute,omitempty"`
