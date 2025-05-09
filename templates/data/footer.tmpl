@@ -2,11 +2,9 @@
 {{ define "footer" }}
     <div class="footer">
       <div class="message">{{ .Version.id }}
-        <span class="owner">
-        {{ template "version" . }}
-        </span>
+        <span class="owner"> {{ template "version" . }} </span>
       </div>
-      {{ if .Style.AllowPick }} {{ template "themeSelect" . }} {{ end }}
+      {{ if .Style.AllowPick }} {{ template "selectTheme" . }} {{ end }}
     </div>
   </body>
 </html>

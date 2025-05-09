@@ -8,9 +8,10 @@
       <textarea class="wallContent"
                  form="wall"
                    id="wall"
+            maxlength="{{ .Limits.CharsWall }}"
                  name="wall"
-                 rows="12" cols="40">
-      {{ .Storage.WallContent }}
+                 cols="40" rows="12">
+      {{- .Storage.WallContent -}}
       </textarea>
       <br>
       {{ if .Auth.Require.Wall }} {{ template "auth" . }} {{ end }}
