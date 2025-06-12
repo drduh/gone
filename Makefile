@@ -31,6 +31,8 @@ BINLINUX  = $(APPNAME)-$(BUILDOS)-$(BUILDARCH)-$(VERSION)
 BLDLINUX  = GOOS=$(BUILDOS) GOARCH=$(BUILDARCH) \
             $(BUILDCMD) -o $(OUT)/$(BINLINUX) $(SRC)
 
+INSTALL  ?= /usr/local/bin/$(APPNAME)
+
 TESTCOVER = testCoverage
 
 all: fmt test build
@@ -51,6 +53,10 @@ linux:
 
 prep:
 	@mkdir -p $(OUT)
+
+install: build
+	@sudo install -Dm755 $(OUT)/$(BINLINUX) $(INSTALL)
+	@printf "Installed $(INSTALL)\n"
 
 fmt:
 	@$(GO) fmt ./...
