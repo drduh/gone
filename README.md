@@ -15,6 +15,7 @@ The primary goal is to enable sharing of files and text using command-line API o
 - JSON-based configurations, logging and server responses
 - Token (string-based) authentication and request limiter
 
+
 # Development
 
 gone requires [Go](https://go.dev/doc/install) to develop.
@@ -45,15 +46,25 @@ To run in debug mode on Linux:
 make debug
 ```
 
+## Install
+
+To install as a service on Linux:
+
+```
+make install
+```
+
+
 # Output
 
 Application output is structured in JSON format and can be parsed with `jq` for convenience, for example:
 
 ```
-./gone | jq .data
+gone | jq .data
 ```
 
 The optional `-debug` flag can be used for debug mode (provides additional application output).
+
 
 # Configuration
 
@@ -62,10 +73,11 @@ gone uses an embedded JSON-based configuration [defaultSettings.json](https://gi
 To change application settings, copy the default settings JSON file and use the `-config` flag:
 
 ```
-./gone -config=mySettings.json
+gone -config mySettings.json
 ```
 
-# Client
+
+# Clients
 
 The server provides a basic user interface for uploading, downloading and listing files at the default path (`/`):
 
@@ -117,7 +129,7 @@ curl localhost:8080/list
 
 ## Download
 
-Download file (the [default configuration](https://github.com/drduh/gone/blob/main/config/defaultSettings.json) requires basic authentication):
+Download a file (the [default configuration](https://github.com/drduh/gone/blob/main/settings/defaultSettings.json) requires basic authentication):
 
 ```
 curl -H "X-Auth: mySecret" "localhost:8080/download/test.txt"
@@ -169,7 +181,7 @@ curl localhost:8080/random/coin
 
 ## Functions
 
-See [config/zshrc](https://github.com/drduh/config/blob/main/zshrc#L541) for alias and function examples, such as:
+See [config/zshrc](https://github.com/drduh/config/blob/main/zshrc#L562) for alias and function examples, such as:
 
 ```
 $ gone_put test.txt 1 20m
@@ -192,6 +204,7 @@ $ gone_put test.txt 1 20m
 ]
 ```
 
+
 # Documentation
 
 Application documentation is available with [godoc](https://go.dev/blog/godoc):
@@ -199,6 +212,7 @@ Application documentation is available with [godoc](https://go.dev/blog/godoc):
 ```
 make doc
 ```
+
 
 # Testing
 
@@ -210,7 +224,7 @@ make test
 make test-verbose
 ```
 
-Test coverage is also available - to generate an HTML report (`testCoverage.html`):
+Test coverage is also available - to generate an HTML report as `testCoverage.html`:
 
 ```
 make cover
