@@ -1,0 +1,11 @@
+[Unit]
+Description=gone ephemeral content server
+After=network.target
+
+[Service]
+WorkingDirectory=/etc/gone
+ExecStart=/usr/local/bin/gone -config /etc/gone/config
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target
