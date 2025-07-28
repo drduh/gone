@@ -1,9 +1,11 @@
 package util
 
 import (
+	"bufio"
 	"fmt"
 	"io"
 	"os"
+	"strings"
 )
 
 // FormatSize returns a formatted file size from bytes.
@@ -32,4 +34,25 @@ func GetOutput(filename string) (io.Writer, error) {
 		return nil, fmt.Errorf("failed to open %s: %w", filename, err)
 	}
 	return dest, nil
+}
+
+// Returns trimmed names from file or default names list.
+func loadNames(filename string) []string {
+	f, err := os.Open(filename)
+	if err != nil {
+		return defaultNames
+	}
+	defer f.Close()
+	var fileNames []string
+	scanner := bufio.NewScanner(f)
+	for scanner.Scan() {
+		name := strings.TrimSpace(scanner.Text())
+		if name != "" {
+			fileNames = append(fileNames, name)
+		}
+	}
+	if len(fileNames) == 0 {
+		return defaultNames
+	}
+	return fileNames
 }
