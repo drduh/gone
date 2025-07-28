@@ -42,7 +42,6 @@ func loadNames(filename string) []string {
 	if err != nil {
 		return defaultNames
 	}
-	defer f.Close()
 	var fileNames []string
 	scanner := bufio.NewScanner(f)
 	for scanner.Scan() {
@@ -50,6 +49,9 @@ func loadNames(filename string) []string {
 		if name != "" {
 			fileNames = append(fileNames, name)
 		}
+	}
+	if err := f.Close(); err != nil {
+		return defaultNames
 	}
 	if len(fileNames) == 0 {
 		return defaultNames

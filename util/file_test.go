@@ -2,8 +2,23 @@ package util
 
 import (
 	"fmt"
+	"os"
 	"testing"
 )
+
+var namesFile = "names.txt"
+
+func setupNames(filename, content string) {
+	if content == "" {
+		os.Remove(filename)
+	} else {
+		f, _ := os.Create(filename)
+		if f != nil {
+			f.WriteString(content)
+			_ = f.Close()
+		}
+	}
+}
 
 func TestFormatSize(t *testing.T) {
 	tests := []struct {
@@ -24,5 +39,37 @@ func TestFormatSize(t *testing.T) {
 				t.Errorf("%d=%v; expect %v", tt.input, got, tt.expect)
 			}
 		})
+	}
+}
+
+func TestLoadNamesExist(t *testing.T) {
+	setupNames(namesFile, "Sun\nEarth\nMoon\n")
+	defer os.Remove(namesFile)
+	names := loadNames(namesFile)
+	expected := []string{"Sun", "Earth", "Moon"}
+	if len(names) != len(expected) {
+		t.Errorf("expected %d names, got %d", len(expected), len(names))
+	}
+	for i := range expected {
+		if names[i] != expected[i] {
+			t.Errorf("expected %s, got %s", expected[i], names[i])
+		}
+	}
+}
+
+func TestLoadNamesMissing(t *testing.T) {
+	setupNames(namesFile, "")
+	names := loadNames(namesFile)
+	if len(names) != len(defaultNames) {
+		t.Errorf("expected %d default names, got %d", len(defaultNames), len(names))
+	}
+}
+
+func TestLoadNamesEmpty(t *testing.T) {
+	setupNames(namesFile, "\n\n")
+	defer os.Remove(namesFile)
+	names := loadNames(namesFile)
+	if len(names) != len(defaultNames) {
+		t.Errorf("expected names, got %d empty lines", len(names))
 	}
 }
