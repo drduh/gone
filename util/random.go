@@ -6,13 +6,15 @@ import (
 	"math/big"
 )
 
-var names = []string{
+var defaultNames = []string{
 	"Alice", "Bob", "Charlie", "Diana", "Eve",
 	"Frank", "Grace", "Henry", "Ivan", "Judy",
 	"Ken", "Laura", "Mallory", "Nancy", "Olivia",
 	"Peggy", "Quentin", "Rupert", "Sam", "Trent",
 	"Uma", "Victor", "Wendy", "Xavier", "Yvonne", "Zack",
 }
+
+var names = loadNames("/etc/gone/assets/names.txt")
 
 var nato = []string{
 	"Alpha", "Bravo", "Charlie", "Delta", "Echo", "Foxtrot",

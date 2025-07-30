@@ -82,6 +82,7 @@ install-bin: build
 
 install-service:
 	@sudo install -Dm $(MOD_FILE) $(SERVICE) $(DEST_SERV)
+	@sudo systemctl enable $(SERVICE)
 	@printf "Installed $(DEST_SERV)\n"
 
 reload-service:

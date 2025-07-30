@@ -32,9 +32,9 @@
                  type="radio"
                 value="{{ .Name }}" required>
           </td>
-          <td>{{ .Size }}</td>
-          <td>{{ .Owner.Address }}</td>
-          <td>{{ .Time.Remain }}</td>
+          <td> <label for="{{ .Name }}">{{ .Size }}</label>          </td>
+          <td> <label for="{{ .Name }}">{{ .Owner.Address }}</label> </td>
+          <td> <label for="{{ .Name }}">{{ .Time.Remain }}</label>   </td>
         </tr>
         {{ end }}
         </tbody>
