@@ -22,8 +22,6 @@ gone requires [Go](https://go.dev/doc/install) to develop.
 
 ## Build
 
-To build on Linux:
-
 ```
 make build
 ```
@@ -32,15 +30,11 @@ Binaries are built to the `release` directory for distribution and installation.
 
 ## Run
 
-To run on Linux:
-
 ```
 make run
 ```
 
 ## Debug
-
-To run in debug mode on Linux:
 
 ```
 make debug

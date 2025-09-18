@@ -27,9 +27,9 @@ BUILDFLAG = \
   -X "$(BUILDPKG).User=$(shell whoami)" \
   -X "$(BUILDPKG).Version=$(VERSION)"
 BUILDCMD  = $(GO) build -ldflags '-s -w $(BUILDFLAG)'
-BINLINUX  = $(APPNAME)-$(BUILDOS)-$(BUILDARCH)-$(VERSION)
-BLDLINUX  = GOOS=$(BUILDOS) GOARCH=$(BUILDARCH) \
-            $(BUILDCMD) -o $(OUT)/$(BINLINUX) $(SRC)
+BINNAME   = $(APPNAME)-$(BUILDOS)-$(BUILDARCH)-$(VERSION)
+GOBUILD   = GOOS=$(BUILDOS) GOARCH=$(BUILDARCH) \
+            $(BUILDCMD) -o $(OUT)/$(BINNAME) $(SRC)
 
 SERVICE   = $(APPNAME).service
 
@@ -52,19 +52,17 @@ all: fmt test build
 prep:
 	@mkdir -p $(OUT)
 
-build-linux:
-	@$(BLDLINUX)
-
-build: prep build-linux
+build: prep
+	@$(GOBUILD)
 
 run: build
-	@$(OUT)/$(BINLINUX)
+	@$(OUT)/$(BINNAME)
 
 debug: build
-	@$(OUT)/$(BINLINUX) -debug
+	@$(OUT)/$(BINNAME) -debug
 
 version: build
-	@$(OUT)/$(BINLINUX) -version
+	@$(OUT)/$(BINNAME) -version
 
 install: install-assets install-config install-bin install-service reload-service
 
@@ -77,7 +75,7 @@ install-config:
 	@printf "Installed $(DEST_CONF)\n"
 
 install-bin: build
-	@sudo install -Dm $(MOD_BIN) $(OUT)/$(BINLINUX) $(DEST_BIN)
+	@sudo install -Dm $(MOD_BIN) $(OUT)/$(BINNAME) $(DEST_BIN)
 	@printf "Installed $(DEST_BIN)\n"
 
 install-service:
