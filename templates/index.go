@@ -8,6 +8,9 @@ import (
 // Index contains the main HTML page elements.
 type Index struct {
 
+	// Whether to display build, uptime and version in footer
+	ShowBuild bool
+
 	// Selected CSS theme
 	Theme string
 
@@ -20,7 +23,7 @@ type Index struct {
 	// Application version/build information
 	Version map[string]string
 
-	// Form field placeholder for duration
+	// Placeholder text for duration form field
 	DefaultDuration string
 
 	// Authentication configuration

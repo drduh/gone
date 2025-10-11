@@ -46,6 +46,7 @@ func Index(app *config.App) http.HandlerFunc {
 			Index:           app.Index,
 			Limits:          app.Limits,
 			Paths:           app.Paths,
+			ShowBuild:       app.ShowBuild,
 			Storage:         app.Storage,
 			Theme:           theme,
 			Uptime:          app.Uptime(),

@@ -104,6 +104,9 @@ type Error struct {
 // Index HTML index page properties
 type Index struct {
 
+	// Whether to display build, uptime and version in footer
+	ShowBuild bool `json:"showBuild"`
+
 	// Whether to enable Content Security Policy (CSP)
 	CSP bool `json:"csp"`
 
@@ -192,6 +195,9 @@ type Paths struct {
 
 	// Random output ("/random/")
 	Random string `json:"random"`
+
+	// Default root path ("/")
+	Root string `json:"root"`
 
 	// Embedded/static file ("/static")
 	Static string `json:"static"`
