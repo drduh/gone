@@ -109,7 +109,8 @@ func (s *Storage) ServeMessages(w http.ResponseWriter) {
 	w.Header().Set("Content-Type", "text/plain")
 	w.Header().Set("Content-Disposition", "attachment; filename=messages.txt")
 	for _, msg := range s.Messages {
-		_, err := fmt.Fprintf(w, "%d. %s\n", msg.Count, msg.Data)
+		msgFormat := "%d (%s) - %s\n"
+		_, err := fmt.Fprintf(w, msgFormat, msg.Count, msg.Time.Allow, msg.Data)
 		if err != nil {
 			return
 		}
