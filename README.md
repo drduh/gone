@@ -70,6 +70,11 @@ To change application settings, copy the default settings JSON file and use the 
 gone -config mySettings.json
 ```
 
+To disable a feature, set the path to an empty value. For example, to disallow file uploads:
+
+```
+"upload": "",
+```
 
 # Clients
 
