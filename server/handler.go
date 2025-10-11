@@ -18,7 +18,7 @@ func getHandler(app *config.App) http.Handler {
 		}
 	}
 
-	handle("/", handlers.Index(app))
+	handle(app.Root, handlers.Index(app))
 
 	if app.Assets != "" {
 		assets := "assets"

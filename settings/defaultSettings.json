@@ -78,6 +78,7 @@
     "list":        "/list",
     "message":     "/msg",
     "random":      "/random/",
+    "root":        "/",
     "static":      "/static",
     "upload":      "/upload",
     "wall":        "/wall"
