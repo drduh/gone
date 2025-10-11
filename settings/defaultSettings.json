@@ -30,6 +30,7 @@
   },
   "index": {
     "csp":         true,
+    "showBuild":   true,
     "title":       "gone",
     "cookie": {
       "id":        "goneTheme",
