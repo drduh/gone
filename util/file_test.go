@@ -42,6 +42,37 @@ func TestFormatSize(t *testing.T) {
 	}
 }
 
+// TestGetOutput tests output destinations and errors.
+func TestGetOutput(t *testing.T) {
+	writer, err := GetOutput("")
+	if err != nil {
+		t.Fatalf("empty filename error: %v", err)
+	}
+	if writer != os.Stdout {
+		t.Errorf("expected stdout writer, got %v", writer)
+	}
+	testFile := "test.txt"
+	writer, err = GetOutput(testFile)
+	if err != nil {
+		t.Fatalf("got error: %v", err)
+	}
+	file, ok := writer.(*os.File)
+	if !ok {
+		t.Errorf("expected file writer, got %v", writer)
+	} else {
+		file.Close()
+		os.Remove(testFile)
+	}
+	badFile := string([]byte{0})
+	writer, err = GetOutput(badFile)
+	if err == nil {
+		t.Errorf("did not receive error")
+	}
+	if writer != nil {
+		t.Errorf("did not expect writer")
+	}
+}
+
 func TestLoadNamesEmpty(t *testing.T) {
 	setupNames(namesFile, "\n\n")
 	defer func() { _ = os.Remove(namesFile) }()

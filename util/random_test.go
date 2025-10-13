@@ -10,6 +10,20 @@ func TestRandomInt(t *testing.T) {
 	}
 }
 
+// TestRandomPass tests generated strings for length and uniqueness.
+func TestRandomPass(t *testing.T) {
+	lengths := []int{0, 1, 8, 16, 32, 64}
+	for _, l := range lengths {
+		pass := RandomPass(l)
+		if len(pass) != l {
+			t.Errorf("RandomPass(%d) returned %d, want %d", l, len(pass), l)
+		}
+	}
+	if RandomPass(16) == RandomPass(16) {
+		t.Error("expected different pass")
+	}
+}
+
 // TestPickRandom tests pickRandom returns value from list or fallback.
 func TestPickRandom(t *testing.T) {
 	list := []string{"foo", "bar", "zoo"}
@@ -23,11 +37,9 @@ func TestPickRandom(t *testing.T) {
 			break
 		}
 	}
-
 	if !found && result != fallback {
 		t.Errorf("pickRandom returned %s", result)
 	}
-
 	result = pickRandom([]string{}, fallback)
 	if result != fallback {
 		t.Errorf("pickRandom did not return fallback (%s)", result)
@@ -52,7 +64,6 @@ func TestRandomName(t *testing.T) {
 			break
 		}
 	}
-
 	if !found && result != "Bob" {
 		t.Errorf("RandomName returned %s", result)
 	}
@@ -68,7 +79,6 @@ func TestRandomNato(t *testing.T) {
 			break
 		}
 	}
-
 	if !found && result != "Bravo" {
 		t.Errorf("RandomNato returned %s", result)
 	}
