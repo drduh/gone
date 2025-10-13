@@ -20,6 +20,7 @@ func setupNames(filename, content string) {
 	}
 }
 
+// TestFormatSize tests size integer conversion to readable string.
 func TestFormatSize(t *testing.T) {
 	tests := []struct {
 		input  int
@@ -32,7 +33,6 @@ func TestFormatSize(t *testing.T) {
 		{1048576, "1.00 MB"},
 		{5242880, "5.00 MB"},
 	}
-
 	for _, tt := range tests {
 		t.Run(fmt.Sprintf("input: %d", tt.input), func(t *testing.T) {
 			if got := FormatSize(tt.input); got != tt.expect {
@@ -70,6 +70,6 @@ func TestLoadNamesMissing(t *testing.T) {
 	setupNames(namesFile, "")
 	names := loadNames(namesFile)
 	if len(names) != len(defaultNames) {
-		t.Errorf("expected %d default names, got %d", len(defaultNames), len(names))
+		t.Errorf("expected %d names, got %d", len(defaultNames), len(names))
 	}
 }
