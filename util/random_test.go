@@ -19,7 +19,9 @@ func TestRandomPass(t *testing.T) {
 			t.Errorf("RandomPass(%d) returned %d, want %d", l, len(pass), l)
 		}
 	}
-	if RandomPass(16) == RandomPass(16) {
+	pass1 := RandomPass(16)
+	pass2 := RandomPass(16)
+	if pass1 == pass2 {
 		t.Error("expected different pass")
 	}
 }

@@ -60,8 +60,12 @@ func TestGetOutput(t *testing.T) {
 	if !ok {
 		t.Errorf("expected file writer, got %v", writer)
 	} else {
-		file.Close()
-		os.Remove(testFile)
+		if err := file.Close(); err != nil {
+			t.Errorf("error closing file: %v", err)
+		}
+		if err := os.Remove(testFile); err != nil {
+			t.Errorf("error removing file: %v", err)
+		}
 	}
 	badFile := string([]byte{0})
 	writer, err = GetOutput(badFile)

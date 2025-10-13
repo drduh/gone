@@ -108,7 +108,7 @@ func Upload(app *config.App) http.HandlerFunc {
 				}
 				app.Files[f.Name] = f
 				if app.UserMask {
-					f.Owner.Mask()
+					f.Mask()
 				}
 
 				upload = storage.File{

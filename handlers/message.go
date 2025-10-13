@@ -35,7 +35,7 @@ func Message(app *config.App) http.HandlerFunc {
 				},
 			}
 			if app.UserMask {
-				message.Owner.Mask()
+				message.Mask()
 			}
 
 			content := r.FormValue("message")
