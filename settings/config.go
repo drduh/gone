@@ -25,6 +25,9 @@ type Settings struct {
 
 	// TCP port to listen on
 	Port int `json:"port"`
+
+	// Whether to replace user IP address
+	UserMask bool `json:"userMask"`
 }
 
 // Auditor logging preferences

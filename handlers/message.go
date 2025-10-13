@@ -34,6 +34,9 @@ func Message(app *config.App) http.HandlerFunc {
 					Allow: time.Now().Format(app.TimeFormat),
 				},
 			}
+			if app.UserMask {
+				message.Owner.Mask()
+			}
 
 			content := r.FormValue("message")
 			if content != "" {
