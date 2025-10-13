@@ -2,6 +2,7 @@ package util
 
 import "testing"
 
+// TestGetBasePath tests strings for path trims.
 func TestGetBasePath(t *testing.T) {
 	tests := []struct {
 		input    string
@@ -17,7 +18,6 @@ func TestGetBasePath(t *testing.T) {
 		{"foo///bar", "foo/"},
 		{"foo/bar  ", "foo/"},
 	}
-
 	for _, tt := range tests {
 		got := GetBasePath(tt.input)
 		if got != tt.expected {
@@ -26,6 +26,7 @@ func TestGetBasePath(t *testing.T) {
 	}
 }
 
+// TestIsNumeric tests strings for numeric characters.
 func TestIsNumeric(t *testing.T) {
 	tests := []struct {
 		input  string
@@ -40,7 +41,6 @@ func TestIsNumeric(t *testing.T) {
 		{"100000000000a", false},
 		{"", false},
 	}
-
 	for _, tt := range tests {
 		t.Run(tt.input, func(t *testing.T) {
 			if got := IsNumeric(tt.input); got != tt.expect {

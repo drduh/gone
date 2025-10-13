@@ -1,5 +1,6 @@
 {
   "port":          8080,
+  "userMask":      true,
   "audit": {
     "logFile":     "",
     "timeFormat":  "Monday Jan 2 15:04"

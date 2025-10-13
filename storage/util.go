@@ -6,6 +6,8 @@ import (
 	"net/http"
 	"path/filepath"
 	"time"
+
+	"github.com/drduh/gone/util"
 )
 
 // ClearStorage removes all Files and Messages from Storage.
@@ -123,4 +125,9 @@ func (s *Storage) UpdateTime() {
 		file.Time.Remain = file.TimeRemaining().String()
 		s.Files[file.Name] = file
 	}
+}
+
+// Mask replaces the owner address string.
+func (o *Owner) Mask() {
+	o.Address = util.Mask(o.Address)
 }

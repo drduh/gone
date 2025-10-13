@@ -10,14 +10,14 @@ func (a *App) Start() {
 	a.StartTime = time.Now()
 }
 
-// Stop logs uptime and exits the application.
+// Stop records uptime and exits the application.
 func (a *App) Stop(reason string) {
 	a.Log.Info("stopping application",
 		"reason", reason, "uptime", a.Uptime())
 	os.Exit(0)
 }
 
-// Uptime returns the rounded duration since app start.
+// Uptime returns the rounded duration since start.
 func (a *App) Uptime() string {
 	return time.Since(a.StartTime).Round(
 		time.Second).String()
