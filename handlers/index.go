@@ -45,6 +45,7 @@ func Index(app *config.App) http.HandlerFunc {
 			Hostname:        app.Hostname,
 			Index:           app.Index,
 			Limits:          app.Limits,
+			NoFiles:         app.NoFiles,
 			Paths:           app.Paths,
 			ShowBuild:       app.ShowBuild,
 			Storage:         app.Storage,

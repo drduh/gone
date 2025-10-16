@@ -24,6 +24,7 @@
     "fileSize":    "file too large",
     "form":        "file form fail",
     "noFilename":  "need file name",
+    "noFiles":     "no files found",
     "notFound":    "file not found",
     "rateLimit":   "limit exceeded",
     "tmplExec":    "failed to exec",
