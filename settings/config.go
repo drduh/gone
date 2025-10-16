@@ -91,6 +91,9 @@ type Error struct {
 	// Filename not provided
 	NoFilename string `json:"noFilename"`
 
+	// No files available
+	NoFiles string `json:"noFiles"`
+
 	// File not found in Storage
 	NotFound string `json:"notFound"`
 

@@ -3,6 +3,7 @@ package storage
 import (
 	"fmt"
 	"mime"
+	"net"
 	"net/http"
 	"path/filepath"
 	"time"
@@ -129,5 +130,9 @@ func (s *Storage) UpdateTime() {
 
 // Mask replaces the owner address string.
 func (o *Owner) Mask() {
-	o.Address = util.Mask(o.Address)
+	address, _, err := net.SplitHostPort(o.Address)
+	if err != nil {
+		return
+	}
+	o.Address = util.Mask(address)
 }

@@ -5,7 +5,7 @@ import (
 	"github.com/drduh/gone/storage"
 )
 
-// Index contains the main HTML page elements.
+// Index contains index HTML page elements.
 type Index struct {
 
 	// Whether to display build, uptime and version in footer
@@ -20,11 +20,14 @@ type Index struct {
 	// Time since server start
 	Uptime string
 
-	// Application version/build information
-	Version map[string]string
-
 	// Placeholder text for duration form field
 	DefaultDuration string
+
+	// Message indicating no files available
+	NoFiles string
+
+	// Application version/build information
+	Version map[string]string
 
 	// Authentication configuration
 	settings.Auth
