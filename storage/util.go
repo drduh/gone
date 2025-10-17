@@ -64,13 +64,18 @@ func (f *File) GetLifetime() time.Duration {
 	return time.Since(f.Time.Upload).Round(time.Second)
 }
 
-// GetType returns the File content type based on extension.
-func (f *File) GetType() string {
+// GetSize sets File size as a human-readable string.
+func (f *File) GetSize() {
+	f.Size = util.FormatSize(len(f.Data))
+}
+
+// GetType sets File content type based on filename extension.
+func (f *File) GetType() {
 	t := mime.TypeByExtension(filepath.Ext(f.Name))
 	if t == "" {
 		t = "application/octet-stream"
 	}
-	return t
+	f.Type = t
 }
 
 // NumRemaining returns the number of downloads remaining
@@ -100,7 +105,7 @@ func (s *Storage) FindFile(name string) *File {
 
 // Serve writes File as an HTTP response.
 func (f *File) Serve(w http.ResponseWriter) {
-	w.Header().Set("Content-Type", f.GetType())
+	w.Header().Set("Content-Type", f.Type)
 	w.Header().Set("Content-Disposition", "attachment; filename="+f.Name)
 	w.WriteHeader(http.StatusOK)
 	_, _ = w.Write(f.Data)
