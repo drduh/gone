@@ -48,7 +48,7 @@ func Message(app *config.App) http.HandlerFunc {
 					"content", message.Data, "user", req)
 			}
 
-			toRoot(w, r, app.Paths.Root)
+			toRoot(w, r, app.Root)
 		}
 
 		if r.URL.Query().Get("download") == "all" {

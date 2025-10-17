@@ -47,11 +47,6 @@
       </table>
       <br>
       {{ end }}
-      <input class="selectToken"
-                id="name"
-              name="name"
-       placeholder="{{ .Placeholder.Filename}}"
-              type="text" required>
       {{ if .Auth.Require.Download }} {{ template "auth" . }} {{ end }}
       <input class="selectSubmit"
              title="download selected file"

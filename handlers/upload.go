@@ -132,7 +132,7 @@ func Upload(app *config.App) http.HandlerFunc {
 		}
 		wg.Wait()
 
-		toRoot(w, r, app.Paths.Root)
+		toRoot(w, r, app.Root)
 		writeJSON(w, http.StatusOK, uploads)
 		app.Log.Info("file(s) uploaded",
 			"files", uploads, "user", req)

@@ -22,7 +22,7 @@ func Wall(app *config.App) http.HandlerFunc {
 					"length", len(app.WallContent), "user", req)
 			}
 
-			toRoot(w, r, app.Paths.Root)
+			toRoot(w, r, app.Root)
 		}
 
 		writeJSON(w, http.StatusOK, app.WallContent)
