@@ -32,11 +32,14 @@ type Index struct {
 	// Authentication configuration
 	settings.Auth
 
+	// Content sharing defaults
+	settings.Default
+
 	// Page properties
 	settings.Index
 
-	// Page restrictions and limits
-	settings.Limits
+	// Content limits
+	settings.Limit
 
 	// Configured route paths
 	settings.Paths

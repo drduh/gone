@@ -45,18 +45,19 @@ func getFiles(app *config.App) []storage.File {
 		f := storage.File{
 			Name: file.Name,
 			Size: file.Size,
+			Type: file.Type,
 			Owner: storage.Owner{
 				Address: file.Address,
 				Agent:   file.Agent,
 			},
 			Time: storage.Time{
-				Upload: file.Upload,
 				Remain: file.Time.Remain,
+				Upload: file.Upload,
 			},
 			Downloads: storage.Downloads{
 				Allow:  file.Downloads.Allow,
-				Total:  file.Total,
 				Remain: file.NumRemaining(),
+				Total:  file.Total,
 			},
 		}
 		files = append(files, f)

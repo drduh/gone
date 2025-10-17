@@ -20,7 +20,8 @@ func Heartbeat(app *config.App) http.HandlerFunc {
 		response := templates.Heartbeat{
 			Hostname:     app.Hostname,
 			Index:        app.Index,
-			Limits:       app.Limits,
+			Default:      app.Default,
+			Limit:        app.Limit,
 			FileCount:    app.CountFiles(),
 			MessageCount: app.CountMessages(),
 			Owner: storage.Owner{
