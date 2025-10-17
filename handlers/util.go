@@ -16,6 +16,11 @@ func deny(w http.ResponseWriter, app *config.App, r *Request) {
 	app.Log.Error(app.Deny, "user", r)
 }
 
+// toRoot redirects an HTTP request to the root/index handler.
+func toRoot(w http.ResponseWriter, r *http.Request, rootPath string) {
+	http.Redirect(w, r, rootPath, http.StatusSeeOther)
+}
+
 // isAllowed returns true if authentication for a route
 // is required and allowed.
 func isAllowed(app *config.App, r *http.Request) bool {
