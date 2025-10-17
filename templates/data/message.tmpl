@@ -6,8 +6,8 @@
           method="post">
       <input class="selectMessage"
               name="message"
-         maxlength="{{ .Limits.CharsMsg }}"
-       placeholder="{{ .Index.Placeholder.Message }}"
+         maxlength="{{ .Limit.CharsMsg }}"
+       placeholder="{{ .Placeholder.Message }}"
               type="text">
       {{ if .Auth.Require.Message }} {{ template "auth" . }} {{ end }}
       <input class="selectPost"
