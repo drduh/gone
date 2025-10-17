@@ -17,8 +17,11 @@ type Settings struct {
 	// User interface options
 	Index `json:"index"`
 
-	// Limit routes
-	Limits `json:"limits"`
+	// Content sharing defaults
+	Default `json:"default"`
+
+	// Content limits
+	Limit `json:"limit"`
 
 	// Paths to route
 	Paths `json:"paths"`
@@ -156,20 +159,24 @@ type Index struct {
 	} `json:"placeholder"`
 }
 
-// Content sharing limits
-type Limits struct {
-
-	// Message character length
-	CharsMsg int `json:"charsMsg,omitempty"`
-
-	// Wall character length
-	CharsWall int `json:"charsWall,omitempty"`
+// Content sharing defaults
+type Default struct {
 
 	// Number of allowed downloads before File expiration
 	Downloads int `json:"downloads,omitempty"`
 
 	// Period of time before removing Files
 	Expiration Duration `json:"duration,omitempty"`
+}
+
+// Content sharing limits
+type Limit struct {
+
+	// Message character length
+	CharsMsg int `json:"charsMsg,omitempty"`
+
+	// Wall character length
+	CharsWall int `json:"charsWall,omitempty"`
 
 	// Maximum file size (in Megabytes)
 	MaxSizeMb int64 `json:"maxSizeMb,omitempty"`
