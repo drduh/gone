@@ -115,8 +115,14 @@ func (f *File) Serve(w http.ResponseWriter) {
 	w.Header().Set("Content-Length", f.Length)
 	w.Header().Set("Content-Type", f.Type)
 	w.WriteHeader(http.StatusOK)
-	_, _ = w.Write(f.Data)
-	f.Total++
+
+	n, err := w.Write(f.Data)
+	if err != nil {
+		return
+	}
+	if n == len(f.Data) {
+		f.Total++
+	}
 }
 
 // ServeMessages writes all Messages as an HTTP response.
