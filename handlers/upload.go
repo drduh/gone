@@ -105,6 +105,7 @@ func Upload(app *config.App) http.HandlerFunc {
 					},
 				}
 
+				f.GetLength()
 				f.GetSize()
 				f.GetType()
 				if app.UserMask {
