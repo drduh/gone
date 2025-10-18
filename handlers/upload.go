@@ -11,7 +11,6 @@ import (
 
 	"github.com/drduh/gone/config"
 	"github.com/drduh/gone/storage"
-	"github.com/drduh/gone/util"
 )
 
 // Upload handles requests to upload File(s) into Storage.
@@ -92,7 +91,6 @@ func Upload(app *config.App) http.HandlerFunc {
 
 				f := &storage.File{
 					Name: fileHeader.Filename,
-					Size: util.FormatSize(len(buf.Bytes())),
 					Data: buf.Bytes(),
 					Owner: storage.Owner{
 						Address: req.Address,
@@ -106,10 +104,13 @@ func Upload(app *config.App) http.HandlerFunc {
 						Allow: downloadLimit,
 					},
 				}
-				app.Files[f.Name] = f
+
+				f.GetSize()
+				f.GetType()
 				if app.UserMask {
 					f.Mask()
 				}
+				app.Files[f.Name] = f
 
 				upload = storage.File{
 					Name: f.Name,
@@ -131,10 +132,8 @@ func Upload(app *config.App) http.HandlerFunc {
 		}
 		wg.Wait()
 
-		http.Redirect(w, r, "/", http.StatusSeeOther)
-
+		toRoot(w, r, app.Root)
 		writeJSON(w, http.StatusOK, uploads)
-
 		app.Log.Info("file(s) uploaded",
 			"files", uploads, "user", req)
 	}

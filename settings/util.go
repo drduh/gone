@@ -8,6 +8,6 @@ func (s *Settings) GetAddr() string {
 }
 
 // GetMaxBytes returns the maximum allowed file size in bytes.
-func (l *Limits) GetMaxBytes() int64 {
+func (l *Limit) GetMaxBytes() int64 {
 	return l.MaxSizeMb << 20
 }

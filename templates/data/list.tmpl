@@ -1,23 +1,28 @@
 <!-- list.tmpl -->
 {{ define "list" }}
   <div class="box">
-    {{ if .Storage.Files }}
+    {{ if not .Storage.Files }}
+    <p>{{ .NoFiles }}</p>
+    {{ else }}
+    {{ if .Auth.Require.List }}
     <form action="{{ .Paths.List }}"
           method="get">
-      {{ if .Auth.Require.List }} {{ template "auth" . }} {{ end }}
+      {{ template "auth" . }}
       <input class="selectSubmit"
               type="submit"
              value="list">
     </form>
+    {{ end }}
     <form action="{{ .Paths.Download }}"
           method="get">
       <br>
-      {{ if .Auth.Require.List }} {{ template "auth" . }} {{ else }}
+      {{ if not .Auth.Require.List }}
       <table>
         <thead>
           <tr>
             <th>Name</th>
             <th>Size</th>
+            <th>Type</th>
             <th>Owner</th>
             <th>Time</th>
           </tr>
@@ -33,22 +38,27 @@
                 value="{{ .Name }}" required>
           </td>
           <td> <label for="{{ .Name }}">{{ .Size }}</label>          </td>
+          <td> <label for="{{ .Name }}">{{ .Type }}</label>          </td>
           <td> <label for="{{ .Name }}">{{ .Owner.Address }}</label> </td>
           <td> <label for="{{ .Name }}">{{ .Time.Remain }}</label>   </td>
         </tr>
         {{ end }}
         </tbody>
       </table>
-      {{ end }}
       <br>
+      {{ else }}
+      <input class="selectToken"
+                id="name"
+              name="name"
+       placeholder="{{ .Placeholder.Filename}}"
+              type="text" required>
+      {{ end }}
       {{ if .Auth.Require.Download }} {{ template "auth" . }} {{ end }}
       <input class="selectSubmit"
              title="download selected file"
               type="submit"
              value="download">
     </form>
-    {{ else }}
-    <p>{{ .NoFiles }}</p>
     {{ end }}
   </div>
 {{ end }}

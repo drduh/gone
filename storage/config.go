@@ -34,6 +34,9 @@ type File struct {
 	// File size (bytes parsed to string)
 	Size string `json:"size,omitempty"`
 
+	// File type (based on name extension)
+	Type string `json:"type,omitempty"`
+
 	// Uploader information
 	Owner `json:"owner,omitempty"`
 

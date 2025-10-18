@@ -26,8 +26,11 @@ type Heartbeat struct {
 	// Number of Messages in storage
 	MessageCount int `json:"messages"`
 
+	// Defaults configuration
+	settings.Default `json:"default"`
+
 	// Limits configuration
-	settings.Limits `json:"limits"`
+	settings.Limit `json:"limit"`
 
 	// Index configuration
 	settings.Index `json:"index"`
