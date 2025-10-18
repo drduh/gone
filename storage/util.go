@@ -6,6 +6,7 @@ import (
 	"net"
 	"net/http"
 	"path/filepath"
+	"strconv"
 	"time"
 
 	"github.com/drduh/gone/util"
@@ -64,6 +65,11 @@ func (f *File) GetLifetime() time.Duration {
 	return time.Since(f.Time.Upload).Round(time.Second)
 }
 
+// GetLength sets File length for Content-Length headers.
+func (f *File) GetLength() {
+	f.Length = strconv.Itoa(len(f.Data))
+}
+
 // GetSize sets File size as a human-readable string.
 func (f *File) GetSize() {
 	f.Size = util.FormatSize(len(f.Data))
@@ -105,8 +111,9 @@ func (s *Storage) FindFile(name string) *File {
 
 // Serve writes File as an HTTP response.
 func (f *File) Serve(w http.ResponseWriter) {
-	w.Header().Set("Content-Type", f.Type)
 	w.Header().Set("Content-Disposition", "attachment; filename="+f.Name)
+	w.Header().Set("Content-Length", f.Length)
+	w.Header().Set("Content-Type", f.Type)
 	w.WriteHeader(http.StatusOK)
 	_, _ = w.Write(f.Data)
 	f.Total++
