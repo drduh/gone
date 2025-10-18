@@ -46,6 +46,12 @@
         </tbody>
       </table>
       <br>
+      {{ else }}
+      <input class="selectToken"
+                id="name"
+              name="name"
+       placeholder="{{ .Placeholder.Filename}}"
+              type="text" required>
       {{ end }}
       {{ if .Auth.Require.Download }} {{ template "auth" . }} {{ end }}
       <input class="selectSubmit"
