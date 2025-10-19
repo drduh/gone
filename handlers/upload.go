@@ -94,6 +94,7 @@ func Upload(app *config.App) http.HandlerFunc {
 					Data: buf.Bytes(),
 					Owner: storage.Owner{
 						Address: req.Address,
+						Mask:    req.Mask,
 						Agent:   req.Agent,
 					},
 					Time: storage.Time{
@@ -105,12 +106,8 @@ func Upload(app *config.App) http.HandlerFunc {
 					},
 				}
 
-				f.GetLength()
 				f.GetSize()
 				f.GetType()
-				if app.UserMask {
-					f.Mask()
-				}
 				app.Files[f.Name] = f
 
 				upload = storage.File{
@@ -118,6 +115,7 @@ func Upload(app *config.App) http.HandlerFunc {
 					Size: f.Size,
 					Owner: storage.Owner{
 						Address: f.Address,
+						Mask:    f.Mask,
 						Agent:   f.Agent,
 					},
 					Time: storage.Time{

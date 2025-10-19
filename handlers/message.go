@@ -27,15 +27,12 @@ func Message(app *config.App) http.HandlerFunc {
 			message := storage.Message{
 				Count: app.CountMessages(),
 				Owner: storage.Owner{
-					Address: req.Address,
-					Agent:   req.Agent,
+					Agent: req.Agent,
+					Mask:  req.Mask,
 				},
 				Time: storage.Time{
 					Allow: time.Now().Format(app.TimeFormat),
 				},
-			}
-			if app.UserMask {
-				message.Mask()
 			}
 
 			content := r.FormValue("message")

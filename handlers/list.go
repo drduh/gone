@@ -42,13 +42,14 @@ func getFiles(app *config.App) []storage.File {
 				"downloads", file.Total)
 			break
 		}
+
 		f := storage.File{
 			Name: file.Name,
 			Size: file.Size,
 			Type: file.Type,
 			Owner: storage.Owner{
-				Address: file.Address,
-				Agent:   file.Agent,
+				Agent: file.Agent,
+				Mask:  file.Mask,
 			},
 			Time: storage.Time{
 				Remain: file.Time.Remain,
