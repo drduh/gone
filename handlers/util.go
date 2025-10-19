@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"encoding/json"
+	"net"
 	"net/http"
 	"time"
 
@@ -69,11 +70,16 @@ func getDefaultTheme(theme string) string {
 	return "dark"
 }
 
-// parseRequest returns a parsed HTTP Request struct for log.
+// parseRequest returns a Request with masked address.
 func parseRequest(r *http.Request) *Request {
+	address, _, err := net.SplitHostPort(r.RemoteAddr)
+	if err != nil {
+		address = "unknown address"
+	}
 	return &Request{
 		Action:  r.URL.String(),
 		Address: r.RemoteAddr,
+		Mask:    util.Mask(address),
 		Agent:   r.UserAgent(),
 	}
 }
