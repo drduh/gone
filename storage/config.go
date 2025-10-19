@@ -31,7 +31,10 @@ type File struct {
 	// Downloads information
 	Downloads `json:"downloads,omitempty"`
 
-	// File size (bytes parsed to string)
+	// File length (for Content-Length header)
+	Length string `json:"length,omitempty"`
+
+	// File size (human-readable string)
 	Size string `json:"size,omitempty"`
 
 	// File type (based on name extension)
