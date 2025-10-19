@@ -3,7 +3,6 @@ package storage
 import (
 	"fmt"
 	"mime"
-	"net"
 	"net/http"
 	"path/filepath"
 	"strconv"
@@ -65,14 +64,11 @@ func (f *File) GetLifetime() time.Duration {
 	return time.Since(f.Time.Upload).Round(time.Second)
 }
 
-// GetLength sets File length for Content-Length headers.
-func (f *File) GetLength() {
-	f.Length = strconv.Itoa(len(f.Data))
-}
-
-// GetSize sets File size as a human-readable string.
+// GetSize sets content length and readable file size.
 func (f *File) GetSize() {
-	f.Size = util.FormatSize(len(f.Data))
+	size := len(f.Data)
+	f.Length = strconv.Itoa(size)
+	f.Size = util.FormatSize(size)
 }
 
 // GetType sets File content type based on filename extension.
@@ -144,13 +140,4 @@ func (s *Storage) UpdateTime() {
 		file.Time.Remain = file.TimeRemaining().String()
 		s.Files[file.Name] = file
 	}
-}
-
-// Mask replaces the owner address string.
-func (o *Owner) Mask() {
-	address, _, err := net.SplitHostPort(o.Address)
-	if err != nil {
-		return
-	}
-	o.Address = util.Mask(address)
 }

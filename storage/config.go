@@ -50,24 +50,27 @@ type File struct {
 // Message represents a user-submitted text message.
 type Message struct {
 
-	// Counter (to order messages)
-	Count int
+	// Message count/order
+	Count int `json:"count,omitempty"`
 
 	// Message content
-	Data string
+	Data string `json:"data,omitempty"`
 
 	// Owner information
-	Owner
+	Owner `json:"owner,omitempty"`
 
 	// Timing information
-	Time
+	Time `json:"time,omitempty"`
 }
 
 // Owner contains metadata about a user.
 type Owner struct {
 
-	// Remote IP address
+	// IP address with port
 	Address string `json:"address,omitempty"`
+
+	// Masked IP address
+	Mask string `json:"mask,omitempty"`
 
 	// User Agent header
 	Agent string `json:"agent,omitempty"`
