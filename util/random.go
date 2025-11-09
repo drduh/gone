@@ -2,8 +2,10 @@ package util
 
 import (
 	"crypto/rand"
+	"encoding/hex"
 	"fmt"
 	"math/big"
+	"strings"
 )
 
 var defaultNames = []string{
@@ -53,20 +55,31 @@ func FlipCoin() string {
 	return "tails"
 }
 
+// RandomHex returns a random string with hexadecimal
+// characters only; or "0" on error.
+func RandomHex(length int) string {
+	bytes := make([]byte, length)
+	if _, err := rand.Read(bytes); err != nil {
+		return strings.Repeat("0", length)
+	}
+	result := hex.EncodeToString(bytes)
+	return result[:length]
+}
+
 // RandomName returns a random string from the names list,
-// like "Alice", "Zack", or "Bob" on error.
+// like "Alice", "Zack"; or "Bob" on error.
 func RandomName() string {
 	return pickRandom(names, "Bob")
 }
 
 // RandomNato returns a random string from the nato list,
-// like "Alpha", "Zulu", or "Bravo" on error.
+// like "Alpha", "Zulu"; or "Bravo" on error.
 func RandomNato() string {
 	return pickRandom(nato, "Bravo")
 }
 
 // RandomNumber returns a zero-padded 3-digit string,
-// like "007", "123", "999", or "000" on error.
+// like "007", "123", "999"; or "000" on error.
 func RandomNumber() string {
 	n := randomInt(1000)
 	if n < 0 {
@@ -75,19 +88,19 @@ func RandomNumber() string {
 	return fmt.Sprintf("%03d", n)
 }
 
-// RandomPass returns a passphrase of a given length.
+// Random returns a random string of a given length.
 func Random(length int) string {
 	const charset = "ABCDEFGHJKLMNPQRTVWXYZabcdefghijkmnpqrtvwxyz2346789"
-	password := make([]byte, length)
-	for i := range password {
+	bytes := make([]byte, length)
+	for i := range bytes {
 		n := randomInt(int64(len(charset)))
 		if n < 0 {
-			password[i] = 'a'
+			bytes[i] = 'a'
 		} else {
-			password[i] = charset[n]
+			bytes[i] = charset[n]
 		}
 	}
-	return string(password)
+	return string(bytes)
 }
 
 // GetRandom returns a requested random string by path.
@@ -96,6 +109,8 @@ func GetRandom(path string) string {
 	switch path {
 	case "coin":
 		response = FlipCoin()
+	case "hex":
+		response = RandomHex(20)
 	case "name":
 		response = RandomName()
 	case "nato":

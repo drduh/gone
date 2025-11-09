@@ -66,17 +66,17 @@ func (f *File) GetLifetime() time.Duration {
 
 // SetId sets the identifier with length.
 func (f *File) SetId(length int) {
-	f.Id = util.Random(length)
+	f.Id = util.RandomHex(length)
 }
 
-// SetSize sets content length and readable file size.
+// SetSize sets the content length and readable file size.
 func (f *File) SetSize() {
 	size := len(f.Data)
 	f.Length = strconv.Itoa(size)
 	f.Size = util.FormatSize(size)
 }
 
-// SetSum sets the SHA-256 hash sum.
+// SetSum sets the content SHA-256 hash sum.
 func (f *File) SetSum() {
 	f.Sum = util.Sum(f.Data)
 }
@@ -103,11 +103,11 @@ func (f *File) TimeRemaining() time.Duration {
 		f.Time.Upload.Add(f.Time.Duration)).Round(time.Second)
 }
 
-// FindFile returns the requested File, if found by name.
-func (s *Storage) FindFile(name string) *File {
+// FindFile returns a File found by id or name.
+func (s *Storage) FindFile(id string) *File {
 	var file *File
 	for _, f := range s.Files {
-		if f.Name == name {
+		if f.Id == id || f.Name == id {
 			file = f
 			break
 		}
