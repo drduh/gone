@@ -110,7 +110,7 @@ func Upload(app *config.App) http.HandlerFunc {
 				f.SetType()
 
 				f.SetSum()
-				f.SetId(10)
+				f.SetId(app.IdLength)
 
 				app.Files[f.Name] = f
 
