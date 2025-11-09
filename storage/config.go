@@ -22,14 +22,17 @@ type Storage struct {
 // File represents a user-uploaded file.
 type File struct {
 
-	// Identifier (based on content)
+	// Unique identifier
 	Id string `json:"id,omitempty"`
 
 	// Provided filename
 	Name string `json:"name,omitempty"`
 
-	// File content
+	// Contents of upload
 	Data []byte `json:"data,omitempty"`
+
+	// Content hash sum
+	Sum string `json:"sum,omitempty"`
 
 	// Downloads information
 	Downloads `json:"downloads,omitempty"`

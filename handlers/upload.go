@@ -108,6 +108,10 @@ func Upload(app *config.App) http.HandlerFunc {
 
 				f.SetSize()
 				f.SetType()
+
+				f.SetSum()
+				f.SetId(10)
+
 				app.Files[f.Name] = f
 
 				upload = storage.File{

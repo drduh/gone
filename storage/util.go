@@ -64,11 +64,24 @@ func (f *File) GetLifetime() time.Duration {
 	return time.Since(f.Time.Upload).Round(time.Second)
 }
 
+// SetId sets the identifier.
+func (f *File) SetId(length int) {
+	if length <= 0 || length > len(f.Sum) {
+		length = len(f.Sum)
+	}
+	f.Id = f.Sum[:length]
+}
+
 // SetSize sets content length and readable file size.
 func (f *File) SetSize() {
 	size := len(f.Data)
 	f.Length = strconv.Itoa(size)
 	f.Size = util.FormatSize(size)
+}
+
+// SetSum sets the SHA-256 hash sum.
+func (f *File) SetSum() {
+	f.Sum = util.Sum(f.Data)
 }
 
 // SetType sets File content type based on filename extension.

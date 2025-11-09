@@ -44,8 +44,10 @@ func getFiles(app *config.App) []storage.File {
 		}
 
 		f := storage.File{
+			Id: file.Id,
 			Name: file.Name,
 			Size: file.Size,
+			Sum: file.Sum,
 			Type: file.Type,
 			Owner: storage.Owner{
 				Agent: file.Agent,
