@@ -6,7 +6,7 @@ import (
 	"time"
 )
 
-// Storage contains file and text content uploaded by users.
+// Storage represents content uploaded by users.
 type Storage struct {
 
 	// Uploaded files
@@ -21,6 +21,9 @@ type Storage struct {
 
 // File represents a user-uploaded file.
 type File struct {
+
+	// Identifier (based on content)
+	Id string `json:"id,omitempty"`
 
 	// Provided filename
 	Name string `json:"name,omitempty"`
@@ -63,7 +66,7 @@ type Message struct {
 	Time `json:"time,omitempty"`
 }
 
-// Owner contains metadata about a user.
+// Owner represents metadata about a user.
 type Owner struct {
 
 	// IP address with port

@@ -64,15 +64,15 @@ func (f *File) GetLifetime() time.Duration {
 	return time.Since(f.Time.Upload).Round(time.Second)
 }
 
-// GetSize sets content length and readable file size.
-func (f *File) GetSize() {
+// SetSize sets content length and readable file size.
+func (f *File) SetSize() {
 	size := len(f.Data)
 	f.Length = strconv.Itoa(size)
 	f.Size = util.FormatSize(size)
 }
 
-// GetType sets File content type based on filename extension.
-func (f *File) GetType() {
+// SetType sets File content type based on filename extension.
+func (f *File) SetType() {
 	t := mime.TypeByExtension(filepath.Ext(f.Name))
 	if t == "" {
 		t = "application/octet-stream"

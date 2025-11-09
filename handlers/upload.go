@@ -106,8 +106,8 @@ func Upload(app *config.App) http.HandlerFunc {
 					},
 				}
 
-				f.GetSize()
-				f.GetType()
+				f.SetSize()
+				f.SetType()
 				app.Files[f.Name] = f
 
 				upload = storage.File{
