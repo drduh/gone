@@ -76,7 +76,7 @@ func RandomNumber() string {
 }
 
 // RandomPass returns a passphrase of a given length.
-func RandomPass(length int) string {
+func Random(length int) string {
 	const charset = "ABCDEFGHJKLMNPQRTVWXYZabcdefghijkmnpqrtvwxyz2346789"
 	password := make([]byte, length)
 	for i := range password {
@@ -103,7 +103,7 @@ func GetRandom(path string) string {
 	case "number":
 		response = RandomNumber()
 	case "pass":
-		response = RandomPass(20)
+		response = Random(20)
 	default:
 		response = RandomName() + RandomNumber()
 	}

@@ -64,12 +64,9 @@ func (f *File) GetLifetime() time.Duration {
 	return time.Since(f.Time.Upload).Round(time.Second)
 }
 
-// SetId sets the identifier.
+// SetId sets the identifier with length.
 func (f *File) SetId(length int) {
-	if length <= 0 || length > len(f.Sum) {
-		length = len(f.Sum)
-	}
-	f.Id = f.Sum[:length]
+	f.Id = util.Random(length)
 }
 
 // SetSize sets content length and readable file size.

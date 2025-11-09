@@ -10,17 +10,17 @@ func TestRandomInt(t *testing.T) {
 	}
 }
 
-// TestRandomPass tests generated strings for length and uniqueness.
-func TestRandomPass(t *testing.T) {
+// TestRandom tests generated strings for length and uniqueness.
+func TestRandom(t *testing.T) {
 	lengths := []int{0, 1, 8, 16, 32, 64}
 	for _, l := range lengths {
-		pass := RandomPass(l)
+		pass := Random(l)
 		if len(pass) != l {
-			t.Errorf("RandomPass(%d) returned %d, want %d", l, len(pass), l)
+			t.Errorf("Random(%d) returned %d, want %d", l, len(pass), l)
 		}
 	}
-	pass1 := RandomPass(16)
-	pass2 := RandomPass(16)
+	pass1 := Random(20)
+	pass2 := Random(20)
 	if pass1 == pass2 {
 		t.Error("expected different pass")
 	}
