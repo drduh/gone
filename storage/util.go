@@ -1,15 +1,6 @@
 package storage
 
-import (
-	"fmt"
-	"mime"
-	"net/http"
-	"path/filepath"
-	"strconv"
-	"time"
-
-	"github.com/drduh/gone/util"
-)
+import "time"
 
 // ClearStorage removes all Files and Messages from Storage.
 func (s *Storage) ClearStorage() {
@@ -64,32 +55,6 @@ func (f *File) GetLifetime() time.Duration {
 	return time.Since(f.Time.Upload).Round(time.Second)
 }
 
-// SetId sets the identifier with length.
-func (f *File) SetId(length int) {
-	f.Id = util.RandomHex(length)
-}
-
-// SetSize sets the content length and readable file size.
-func (f *File) SetSize() {
-	size := len(f.Data)
-	f.Length = strconv.Itoa(size)
-	f.Size = util.FormatSize(size)
-}
-
-// SetSum sets the content SHA-256 hash sum.
-func (f *File) SetSum() {
-	f.Sum = util.Sum(f.Data)
-}
-
-// SetType sets File content type based on filename extension.
-func (f *File) SetType() {
-	t := mime.TypeByExtension(filepath.Ext(f.Name))
-	if t == "" {
-		t = "application/octet-stream"
-	}
-	f.Type = t
-}
-
 // NumRemaining returns the number of downloads remaining
 // until File expiration.
 func (f *File) NumRemaining() int {
@@ -113,35 +78,6 @@ func (s *Storage) FindFile(id string) *File {
 		}
 	}
 	return file
-}
-
-// Serve writes File as an HTTP response.
-func (f *File) Serve(w http.ResponseWriter) {
-	w.Header().Set("Content-Disposition", "attachment; filename="+f.Name)
-	w.Header().Set("Content-Length", f.Length)
-	w.Header().Set("Content-Type", f.Type)
-	w.WriteHeader(http.StatusOK)
-
-	n, err := w.Write(f.Data)
-	if err != nil {
-		return
-	}
-	if n == len(f.Data) {
-		f.Total++
-	}
-}
-
-// ServeMessages writes all Messages as an HTTP response.
-func (s *Storage) ServeMessages(w http.ResponseWriter) {
-	w.Header().Set("Content-Type", "text/plain")
-	w.Header().Set("Content-Disposition", "attachment; filename=messages.txt")
-	msgFormat := "%d (%s) - %s\n"
-	for _, msg := range s.Messages {
-		_, err := fmt.Fprintf(w, msgFormat, msg.Count, msg.Allow, msg.Data)
-		if err != nil {
-			return
-		}
-	}
 }
 
 // UpdateTime updates time until expiration of each File in Storage.

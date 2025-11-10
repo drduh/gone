@@ -1,4 +1,4 @@
-// Package storage defines user uploaded content.
+// Package storage defines uploaded content.
 package storage
 
 import (
@@ -12,7 +12,7 @@ type Storage struct {
 	// Uploaded files
 	Files map[string]*File
 
-	// Submitted text messages
+	// Posted text messages
 	Messages map[int]*Message
 
 	// Shared edit content
