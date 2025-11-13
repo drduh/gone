@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"net"
 	"net/http"
+	"slices"
 	"time"
 
 	"github.com/drduh/gone/auth"
@@ -120,11 +121,14 @@ func getParam(r *http.Request, pathLen int, fieldName string) string {
 }
 
 // getTheme returns the CSS theme based on cookie preference,
-// setting the cookie value if none exists.
+// setting the cookie value if none exists, or is invalid.
 func getTheme(w http.ResponseWriter, r *http.Request,
-	defaultTheme, id string, t time.Duration) string {
+	defaultTheme, id string, t time.Duration, themes []string) string {
 	theme := r.FormValue("theme")
 	if theme != "" {
+		if !slices.Contains(themes, theme) {
+			theme = getDefaultTheme("auto")
+		}
 		http.SetCookie(w, auth.NewCookie(theme, id, t))
 		return theme
 	}
