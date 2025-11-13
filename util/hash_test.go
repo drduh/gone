@@ -29,7 +29,7 @@ func TestSum(t *testing.T) {
 		tt := tt
 		t.Run(tt.name, func(t *testing.T) {
 			got := Sum(tt.data)
-			if got != tt.hash{
+			if got != tt.hash {
 				t.Fatalf("Sum(%q) = %q; expect %q", tt.data, got, tt.hash)
 			}
 		})

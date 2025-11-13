@@ -10,6 +10,7 @@ OUT       = release
 
 GO       ?= go
 GODOC    ?= ${HOME}/go/bin/godoc
+GOLINT   ?= golangci-lint
 
 BUILDPKG  = $(GIT)/$(APPNAME)/version
 BUILDARCH = $(shell $(GO) env GOHOSTARCH)
@@ -47,7 +48,7 @@ MOD_FILE  = 0644
 
 TESTCOVER = testCoverage
 
-all: fmt test build
+all: fmt test lint build
 
 prep:
 	@mkdir -p $(OUT)
@@ -102,6 +103,12 @@ test-verbose:
 
 test-cover:
 	@$(GO) test -coverprofile=$(TESTCOVER) ./...
+
+lint:
+	@$(GOLINT) run ./...
+
+lint-verbose:
+	@$(GOLINT) run -v ./...
 
 cover: test-cover
 	@$(GO) tool cover -html=$(TESTCOVER) -o $(TESTCOVER).html
