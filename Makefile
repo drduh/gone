@@ -94,6 +94,9 @@ fmt:
 test:
 	@$(GO) test ./...
 
+test-race:
+	@$(GO) test -race ./...
+
 test-verbose:
 	@$(GO) test -v ./...
 

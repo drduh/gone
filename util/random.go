@@ -8,6 +8,8 @@ import (
 	"strings"
 )
 
+const defaultLength = 20
+
 var defaultNames = []string{
 	"Alice", "Bob", "Charlie", "Diana", "Eve",
 	"Frank", "Grace", "Henry", "Ivan", "Judy",
@@ -26,7 +28,7 @@ var nato = []string{
 	"Yankee", "Zulu",
 }
 
-// randomInt returns a random int64 up to max, or -1 on error.
+// randomInt returns a random int64 up to max; or -1 on error.
 func randomInt(max int64) int64 {
 	n, err := rand.Int(rand.Reader, big.NewInt(max))
 	if err != nil {
@@ -35,7 +37,7 @@ func randomInt(max int64) int64 {
 	return n.Int64()
 }
 
-// pickRandom returns a random string from list, or fallback on error.
+// pickRandom returns a random string from list; or fallback on error.
 func pickRandom(list []string, fallback string) string {
 	if len(list) == 0 {
 		return fallback
@@ -103,14 +105,14 @@ func Random(length int) string {
 	return string(bytes)
 }
 
-// GetRandom returns a requested random string by path.
+// GetRandom returns a random string by requested path.
 func GetRandom(path string) string {
 	var response string
 	switch path {
 	case "coin":
 		response = FlipCoin()
 	case "hex":
-		response = RandomHex(20)
+		response = RandomHex(defaultLength)
 	case "name":
 		response = RandomName()
 	case "nato":
@@ -118,7 +120,7 @@ func GetRandom(path string) string {
 	case "number":
 		response = RandomNumber()
 	case "pass":
-		response = Random(20)
+		response = Random(defaultLength)
 	default:
 		response = RandomName() + RandomNumber()
 	}
