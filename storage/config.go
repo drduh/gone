@@ -1,4 +1,4 @@
-// Package storage defines user uploaded content.
+// Package storage defines uploaded content.
 package storage
 
 import (
@@ -6,13 +6,13 @@ import (
 	"time"
 )
 
-// Storage contains file and text content uploaded by users.
+// Storage represents content uploaded by users.
 type Storage struct {
 
 	// Uploaded files
 	Files map[string]*File
 
-	// Submitted text messages
+	// Posted text messages
 	Messages map[int]*Message
 
 	// Shared edit content
@@ -22,11 +22,17 @@ type Storage struct {
 // File represents a user-uploaded file.
 type File struct {
 
+	// Unique identifier
+	Id string `json:"id,omitempty"`
+
 	// Provided filename
 	Name string `json:"name,omitempty"`
 
-	// File content
+	// Contents of upload
 	Data []byte `json:"data,omitempty"`
+
+	// Content hash sum
+	Sum string `json:"sum,omitempty"`
 
 	// Downloads information
 	Downloads `json:"downloads,omitempty"`
@@ -63,7 +69,7 @@ type Message struct {
 	Time `json:"time,omitempty"`
 }
 
-// Owner contains metadata about a user.
+// Owner represents metadata about a user.
 type Owner struct {
 
 	// IP address with port

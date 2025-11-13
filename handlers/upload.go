@@ -13,7 +13,7 @@ import (
 	"github.com/drduh/gone/storage"
 )
 
-// Upload handles requests to upload File(s) into Storage.
+// Upload handles requests to upload Files to Storage.
 func Upload(app *config.App) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		req, allowed := authRequest(w, r, app)
@@ -106,11 +106,11 @@ func Upload(app *config.App) http.HandlerFunc {
 					},
 				}
 
-				f.GetSize()
-				f.GetType()
+				f.Scan(app.IdLength)
 				app.Files[f.Name] = f
 
 				upload = storage.File{
+					Id:   f.Id,
 					Name: f.Name,
 					Size: f.Size,
 					Owner: storage.Owner{
