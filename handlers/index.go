@@ -26,7 +26,9 @@ func Index(app *config.App) http.HandlerFunc {
 		app.Log.Debug("got theme", "default", theme)
 		if app.Style.AllowPick {
 			theme = getTheme(w, r, theme,
-				app.Cookie.Id, app.Cookie.Time.GetDuration())
+				app.Cookie.Id,
+				app.Cookie.Time.GetDuration(),
+				app.Style.Available)
 			app.Log.Debug("got theme", "selected", theme)
 		}
 
