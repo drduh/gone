@@ -140,24 +140,27 @@ input[type="number"] {
 .selectDuration,
 .selectPost {
   text-align: center;
-  width: var(--width-small);
+  width: var(--width-xsmall);
 }
 
 .selectClear,
-.selectFile,
-.selectFilename,
-.selectToken,
-.selectRefresh {
+.selectRefresh,
+.selectSubmit {
+  width: var(--width-small);
+}
+
+.selectTheme {
+  width: var(--width-medium);
+}
+
+.selectToken {
   width: var(--width-large);
 }
 
+.selectFile,
+.selectFilename,
 .selectMessage {
   width: var(--width-xlarge);
-}
-
-.selectSubmit,
-.selectTheme {
-  width: var(--width-medium);
 }
 
 .selectClear:hover,
