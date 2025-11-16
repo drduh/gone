@@ -9,7 +9,9 @@
     <title>{{ .Index.Title }}</title>
     {{ if .Index.CSP }} {{- template "csp" . -}} {{ end }}
     {{ if .Theme }}
-    <link rel="stylesheet" type="text/css" href="/assets/style.css">
+    <link href="{{ .Paths.Assets }}/style.css"
+           rel="stylesheet"
+          type="text/css">
     <style>
       {{- template "theme" . }}
     </style>
