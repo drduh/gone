@@ -62,3 +62,34 @@ func TestClearWall(t *testing.T) {
 		t.Fatalf("WallContent = %q; want empty string", s.WallContent)
 	}
 }
+
+// TestClearStorage tests removal of all Storage contents.
+func TestClearStorage(t *testing.T) {
+	s := &Storage{
+		Files: map[string]*File{
+			"file1": {},
+			"file2": {},
+		},
+		Messages: map[int]*Message{
+			1: {},
+			2: {},
+		},
+		WallContent: "test wall content",
+	}
+	s.ClearStorage()
+	if s.Files == nil {
+		t.Fatalf("Files is nil; want empty map")
+	}
+	if got := len(s.Files); got != 0 {
+		t.Fatalf("Files length = %d; want 0", got)
+	}
+	if s.Messages == nil {
+		t.Fatalf("Messages is nil; want empty map")
+	}
+	if got := len(s.Messages); got != 0 {
+		t.Fatalf("Messages length = %d; want 0", got)
+	}
+	if s.WallContent != "" {
+		t.Fatalf("WallContent = %q; want empty string", s.WallContent)
+	}
+}
