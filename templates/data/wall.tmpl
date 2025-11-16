@@ -6,16 +6,18 @@
               id="wall"
           method="post">
       <textarea class="wallContent"
+                 cols="40" rows="12"
                  form="wall"
                    id="wall"
             maxlength="{{ .Limit.CharsWall }}"
                  name="wall"
-                 cols="40" rows="12">
+                title="add or edit content">
       {{- .Storage.WallContent -}}
       </textarea>
       <br>
       {{ if .Auth.Require.Wall }} {{ template "auth" . }} {{ end }}
       <input class="selectPost"
+             title="save contents"
               type="submit"
              value="save">
     </form>

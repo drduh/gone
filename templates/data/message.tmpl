@@ -8,9 +8,11 @@
               name="message"
          maxlength="{{ .Limit.CharsMsg }}"
        placeholder="{{ .Placeholder.Message }}"
-              type="text">
+             title="message text content"
+              type="text" required>
       {{ if .Auth.Require.Message }} {{ template "auth" . }} {{ end }}
       <input class="selectPost"
+             title="post message"
               type="submit"
              value="post">
     </form>
@@ -22,28 +24,23 @@
     {{ end }}
     <form action="" style="display:inline;">
       <button class="selectRefresh"
+              title="refresh messages"
                type="submit">refresh</button>
     </form>
     <form action="{{ .Paths.Message }}"
           method="post"
            style="display:inline;">
-      <input type="hidden"
-             name="clear"
-            value="true">
-      <button type="submit"
-      {{ if not .Storage.Messages }} disabled {{ end }}
-             class="selectClear">clear
-      </button>
+      <input type="hidden" name="clear" value="true">
+      <button class="selectClear" {{ if not .Storage.Messages }} disabled {{ end }}
+              title="clear messages"
+               type="submit">clear</button>
     </form>
     <form action="{{ .Paths.Message }}"
            style="display:inline;">
-      <input type="hidden"
-             name="download"
-            value="all">
-      <button type="submit"
-      {{ if not .Storage.Messages }} disabled {{ end }}
-             class="selectRefresh">download
-      </button>
+      <input type="hidden" name="download" value="all">
+      <button class="selectRefresh" {{ if not .Storage.Messages }} disabled {{ end }}
+              title="download messages"
+               type="submit">download</button>
     </form>
   </div>
 {{ end }}
