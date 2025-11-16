@@ -48,6 +48,8 @@ MOD_FILE  = 0644
 
 TESTCOVER = testCoverage
 
+WARN      = tput setaf 3 ; printf "%s\n" "${1}" ; tput sgr0
+
 all: fmt test lint build
 
 prep:
@@ -105,7 +107,11 @@ test-cover:
 	@$(GO) test -coverprofile=$(TESTCOVER) ./...
 
 lint:
-	@$(GOLINT) run ./...
+	@if command -v $(GOLINT) >/dev/null 2>&1 ; then \
+		$(GOLINT) run ./... ; \
+	else \
+		$(call WARN,skipping lint - '$(GOLINT)' not found); \
+	fi
 
 lint-verbose:
 	@$(GOLINT) run -v ./...
@@ -118,3 +124,9 @@ doc:
 
 clean:
 	@rm -rf $(OUT) $(TESTCOVER) $(TESTCOVER).html
+
+clena: clean
+
+tset: test
+
+urn: run
