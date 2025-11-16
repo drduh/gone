@@ -149,7 +149,7 @@ type Index struct {
 		Auth string `json:"auth"`
 
 		// File selection field
-		Filename string `json:"filename"`
+		File string `json:"file"`
 
 		// Message input field
 		Message string `json:"message"`

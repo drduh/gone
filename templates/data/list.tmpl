@@ -47,10 +47,11 @@
       </table>
       <br>
       {{ else }}
-      <input class="selectToken"
+      <input class="selectFilename"
                 id="name"
               name="name"
-       placeholder="{{ .Placeholder.Filename}}"
+       placeholder="{{ .Placeholder.File }}"
+             title="download file by id or name"
               type="text" required>
       {{ end }}
       {{ if .Auth.Require.Download }} {{ template "auth" . }} {{ end }}

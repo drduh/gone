@@ -42,8 +42,8 @@
       "time":      "192h"
     },
     "placeholder": {
-      "auth":      "secret required",
-      "filename":  "enter filename",
+      "auth":      "enter secret",
+      "file":      "enter name or id",
       "message":   "enter message"
     },
     "style": {
