@@ -9,9 +9,10 @@ import (
 	"github.com/drduh/gone/version"
 )
 
-// Returns loaded application configuration
+// Load returns the application configuration.
 func Load() *App {
 	app := App{}
+
 	app.Start()
 	app.Debug = modeDebug
 	app.Modes.Version = modeVersion

@@ -46,17 +46,21 @@ body {
   width: 100%;
 }
 
-a:link, a:visited {
+a:link,
+a:visited {
   color: var(--fg-light);
   text-decoration: none;
 }
 
-a:active, a:hover {
+a:active,
+a:hover {
   color: var(--fg-light);
   text-decoration: underline;
 }
 
-button, input, select {
+button,
+input,
+select {
   transition: all var(--animation) ease;
 }
 
@@ -65,7 +69,9 @@ button[disabled] {
   pointer-events: none;
 }
 
-button:focus, input:focus, select:focus {
+button:focus,
+input:focus,
+select:focus {
   outline: 1px solid var(--fg-light);
   outline-offset: 2px;
 }
@@ -130,21 +136,31 @@ input[type="number"] {
   visibility: visible;
 }
 
-.selectDownloads, .selectDuration, .selectPost {
+.selectDownloads,
+.selectDuration,
+.selectPost {
   text-align: center;
+  width: var(--width-xsmall);
+}
+
+.selectClear,
+.selectRefresh,
+.selectSubmit {
   width: var(--width-small);
 }
 
-.selectClear, .selectFile, .selectFilename, .selectToken, .selectRefresh {
+.selectTheme {
+  width: var(--width-medium);
+}
+
+.selectToken {
   width: var(--width-large);
 }
 
+.selectFile,
+.selectFilename,
 .selectMessage {
   width: var(--width-xlarge);
-}
-
-.selectSubmit, selectTheme {
-  width: var(--width-medium);
 }
 
 .selectClear:hover,
@@ -180,7 +196,8 @@ td {
   color: var(--fg-light);
 }
 
-td, th {
+td,
+th {
   padding: var(--table-pad);
   text-align: center;
 }
