@@ -1,7 +1,8 @@
 <!-- index.tmpl -->
 {{ define "index" }}
 {{- template "header" . -}}
-  <div class="container"> {{- template "files"  . -}} </div>
-  <div class="container"> {{- template "text"   . -}} </div>
+{{- template "files"  . -}}
+{{- template "text"   . -}}
+{{- template "config" . -}}
 {{- template "footer" . -}}
 {{ end }}

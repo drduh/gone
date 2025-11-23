@@ -70,8 +70,7 @@
   "limit": {
     "charsMsg":    128,
     "charsWall":   1280,
-    "idLength":    32,
-    "maxSizeMb":   20,
+    "maxSizeMb":   256,
     "perMinute":   30,
     "ticker":      "30s"
   },

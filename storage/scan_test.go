@@ -1,21 +1,19 @@
 package storage
 
 import (
-	"regexp"
 	"strings"
 	"testing"
 )
 
-// TestSetId tests File id is a valid hex string.
+// TestSetId tests File id is a valid string.
 func TestSetId(t *testing.T) {
 	f := &File{}
-	f.setId(32)
+	f.setId()
 	if f.Id == "" {
-		t.Fatalf("Id is empty; want hex string")
+		t.Fatalf("Id is empty")
 	}
-	valid := regexp.MustCompile(`^[0-9a-fA-F]+$`)
-	if !valid.MatchString(f.Id) {
-		t.Fatalf("Id = %q; want hex characters", f.Id)
+	if len(f.Id) != 44 {
+		t.Fatalf("Id is wrong size: %v", len(f.Id))
 	}
 }
 

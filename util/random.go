@@ -2,13 +2,12 @@ package util
 
 import (
 	"crypto/rand"
+	"encoding/base64"
 	"encoding/hex"
 	"fmt"
 	"math/big"
 	"strings"
 )
-
-const defaultLength = 20
 
 var defaultNames = []string{
 	"Alice", "Bob", "Charlie", "Diana", "Eve",
@@ -90,6 +89,16 @@ func RandomNumber() string {
 	return fmt.Sprintf("%03d", n)
 }
 
+// RandomId returns a 32-byte URL-encoded random string;
+// or "unknown" on error.
+func RandomId() string {
+	bytes := make([]byte, 32)
+	if _, err := rand.Read(bytes); err != nil {
+		return "unknown"
+	}
+	return base64.RawURLEncoding.EncodeToString(bytes)
+}
+
 // Random returns a random string of a given length.
 func Random(length int) string {
 	const charset = "ABCDEFGHJKLMNPQRTVWXYZabcdefghijkmnpqrtvwxyz2346789"
@@ -107,12 +116,15 @@ func Random(length int) string {
 
 // GetRandom returns a random string by requested path.
 func GetRandom(path string) string {
+	const defaultLength = 20
 	var response string
 	switch path {
 	case "coin":
 		response = FlipCoin()
 	case "hex":
 		response = RandomHex(defaultLength)
+	case "id":
+		response = RandomId()
 	case "name":
 		response = RandomName()
 	case "nato":

@@ -9,16 +9,16 @@ import (
 )
 
 // Scan identifies and sets File attributes.
-func (f *File) Scan(idLength int) {
-	f.setId(idLength)
+func (f *File) Scan() {
+	f.setId()
 	f.setSize()
 	f.setSum()
 	f.setType()
 }
 
-// SetId sets the identifier with length.
-func (f *File) setId(length int) {
-	f.Id = util.RandomHex(length)
+// SetId sets versioned File id with encoded entropy bytes.
+func (f *File) setId() {
+	f.Id = storageVersion + util.RandomId()
 }
 
 // SetSize sets the content length and readable file size.

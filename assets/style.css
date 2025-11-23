@@ -1,10 +1,12 @@
 /* style.css */
+
 * {
   box-sizing: border-box;
   font-family: "Open Sans", "Helvetica Neue", "Helvetica", "Arial", sans-serif;
 }
 
 body {
+  align-items: center;
   animation: var(--bg-animation);
   background: var(--bg-gradient);
   background-size: var(--bg-size);
@@ -13,14 +15,8 @@ body {
   display: flex;
   flex-direction: column;
   font-size: 1em;
-  margin: 0;
-  padding: 0;
-}
-
-.container {
-  display: flex;
-  justify-content: space-between;
-  padding: 1em;
+  margin: 1em auto;
+  max-width: 80%;
 }
 
 .box {
@@ -30,8 +26,8 @@ body {
   box-sizing: border-box;
   color: var(--fg-dark);
   flex: 1;
-  margin: 10px;
-  padding: 20px;
+  margin: 1em;
+  padding: 1em;
   text-align: center;
 }
 
@@ -228,4 +224,21 @@ tr:hover,
 .list-row:has(input[type="radio"]:checked) {
   background-color: var(--bg-light);
   transition: background-color var(--animation) ease;
+}
+
+details {
+  padding: 1em;
+  text-align: center;
+}
+
+summary {
+  border-bottom: 1px dotted var(--fg-light);
+  color: var(--fg-light);
+  cursor: pointer;
+  display: inline;
+}
+
+summary::marker {
+  content: "";
+  display: none;
 }

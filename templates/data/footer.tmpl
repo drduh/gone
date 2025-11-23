@@ -1,13 +1,12 @@
 <!-- footer.tmpl -->
 {{ define "footer" }}
-    <div class="footer">
-      {{ if .ShowBuild }}
-      <div class="message">{{ .Version.id }}
-        <span class="owner"> {{ template "version" . }} </span>
-      </div>
-      {{ end }}
-      {{ if .Style.AllowPick }} {{ template "selectTheme" . }} {{ end }}
+  {{ if .ShowBuild }}
+  <div class="footer">
+    <div class="message">{{ .Version.id }}
+      <span class="owner">{{ template "version" . }}</span>
     </div>
+  </div>
+  {{ end }}
   </body>
 </html>
 {{ end }}

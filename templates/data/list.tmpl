@@ -37,10 +37,10 @@
                  type="radio"
                 value="{{ .Id }}" required>
           </td>
-          <td> <label for="{{ .Id }}">{{ .Size }}</label>          </td>
-          <td> <label for="{{ .Id }}">{{ .Type }}</label>          </td>
-          <td> <label for="{{ .Id }}">{{ .Owner.Mask }}</label>    </td>
-          <td> <label for="{{ .Id }}">{{ .Time.Remain }}</label>   </td>
+          <td><label for="{{ .Id }}">{{ .Size }}</label></td>
+          <td><label for="{{ .Id }}">{{ .Type }}</label></td>
+          <td><label for="{{ .Id }}">{{ .Owner.Mask }}</label></td>
+          <td><label for="{{ .Id }}">{{ .Time.Remain }}</label></td>
         </tr>
         {{ end }}
         </tbody>
