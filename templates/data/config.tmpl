@@ -1,0 +1,10 @@
+<!-- config.tmpl -->
+{{ define "config" }}
+  {{ if .Style.AllowPick }} 
+    <details><summary>config</summary>
+      <div class="box">
+        {{ template "selectTheme" . }}
+      </div>
+  </details>
+  {{ end }}
+{{ end }}
