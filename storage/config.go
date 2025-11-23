@@ -6,6 +6,8 @@ import (
 	"time"
 )
 
+const storageVersion = "1"
+
 // Storage represents content uploaded by users.
 type Storage struct {
 
