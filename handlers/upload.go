@@ -106,7 +106,7 @@ func Upload(app *config.App) http.HandlerFunc {
 					},
 				}
 
-				f.Scan(app.IdLength)
+				f.Scan()
 				app.Files[f.Name] = f
 
 				upload = storage.File{

@@ -175,9 +175,6 @@ type Limit struct {
 	// Wall character length
 	CharsWall int `json:"charsWall,omitempty"`
 
-	// File identification string length
-	IdLength int `json:"idLength,omitempty"`
-
 	// Maximum file size (in Megabytes)
 	MaxSizeMb int64 `json:"maxSizeMb,omitempty"`
 
