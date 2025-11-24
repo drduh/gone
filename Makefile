@@ -58,6 +58,9 @@ prep:
 build: prep
 	@$(GOBUILD)
 
+release: build
+	@printf "built: %s\n" "$$(file $(OUT)/$(BINNAME))"
+
 run: build
 	@$(OUT)/$(BINNAME)
 
@@ -126,6 +129,8 @@ clean:
 	@rm -rf $(OUT) $(TESTCOVER) $(TESTCOVER).html
 
 clena: clean
+
+coverage: cover
 
 tset: test
 

@@ -1,8 +1,6 @@
-# Design
-
 gone is an ephemeral content hosting server written in [Go](https://go.dev/).
 
-The primary goal is to enable sharing of files and text using command-line API or simple HTML user interface.
+The primary goal is to share files or text using an HTML interface or an API.
 
 ## Features
 
@@ -15,10 +13,11 @@ The primary goal is to enable sharing of files and text using command-line API o
 - JSON-based configurations, logging and server responses
 - Token (string-based) authentication and request limiter
 
-
 # Development
 
 gone requires [Go](https://go.dev/doc/install) to develop.
+
+[Makefile](https://github.com/drduh/gone/blob/main/Makefile) provides functionality to build, run and test the application.
 
 ## Build
 
@@ -42,47 +41,41 @@ make debug
 
 ## Install
 
-To install as a service on Linux:
+To install as a service on systemd Linux:
 
 ```
 make install
 ```
 
-
 # Output
 
-Application output is structured in JSON format and can be parsed with `jq` for convenience, for example:
+Output is in JSON format and can be parsed with `jq`:
 
 ```
-gone | jq .data
+gone | jq '.message'
 ```
 
-The optional `-debug` flag can be used for debug mode (provides additional application output).
+# Settings
 
-
-# Configuration
-
-gone uses an embedded JSON-based configuration [defaultSettings.json](https://github.com/drduh/gone/blob/main/settings/defaultSettings.json) as default settings.
-
-To change application settings, copy the default settings JSON file and use the `-config` flag:
+[Default settings](https://github.com/drduh/gone/blob/main/settings/defaultSettings.json) are embedded into the application. To make changes, copy and pass a modified settings file using `-config`:
 
 ```
 gone -config mySettings.json
 ```
 
-To disable a feature, set the path to an empty value. For example, to disallow file uploads:
+Set an empty handler path to disable it; for example, to turn off text features:
 
 ```
-"upload": "",
+"paths": {
+  "message": "",
+  "wall": ""
 ```
 
 # Clients
 
-The server provides a basic user interface for uploading, downloading and listing files at the default path (`/`):
+A basic HTML user interface is available at the `root` path (`/` by default) - [localhost:8080](http://localhost:8080/) when running locally.
 
-[localhost:8080](http://localhost:8080)
-
-All features are also available using command line programs such as curl:
+Features are also available using command-line programs such as curl:
 
 ## Status
 
@@ -128,7 +121,7 @@ curl localhost:8080/list
 
 ## Download
 
-Download a file (the [default configuration](https://github.com/drduh/gone/blob/main/settings/defaultSettings.json) requires basic authentication):
+Download a file ([default settings](https://github.com/drduh/gone/blob/main/settings/defaultSettings.json) require token-based authentication):
 
 ```
 curl -H "X-Auth: mySecret" "localhost:8080/download/test.txt"
@@ -142,7 +135,7 @@ curl localhost:8080/static
 
 ## Message
 
-Post a message (use single quotes to wrap special characters):
+Post a short text message (use single quotes to wrap special characters):
 
 ```
 curl -s -F 'message=hello, world!' localhost:8080/msg >/dev/null
@@ -169,13 +162,13 @@ Get a [random value](https://github.com/drduh/gone/blob/main/util/random.go) of 
 ```
 curl localhost:8080/random/
 
+curl localhost:8080/random/coin
+
 curl localhost:8080/random/name
 
 curl localhost:8080/random/nato
 
 curl localhost:8080/random/number
-
-curl localhost:8080/random/coin
 ```
 
 ## Functions
@@ -194,7 +187,7 @@ $ gonePut test.txt 3 30m
     "owner": {
       "address": "127.0.0.1:1234",
       "mask": "Bob123",
-      "agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/132.0.0.0 Safari/537.36"
+      "agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)"
     },
     "time": {
       "allow": "30m0s",
@@ -204,7 +197,6 @@ $ gonePut test.txt 3 30m
 ]
 ```
 
-
 # Documentation
 
 Application documentation is available with [godoc](https://go.dev/blog/godoc):
@@ -213,15 +205,18 @@ Application documentation is available with [godoc](https://go.dev/blog/godoc):
 make doc
 ```
 
-
 # Testing
 
-Unit tests are validated by a [workflow](https://github.com/drduh/gone/blob/main/.github/workflows/test-and-lint.yml) on repository changes. They can also be run manually:
+Tests and lint are validated with a [workflow](https://github.com/drduh/gone/blob/main/.github/workflows/test-and-lint.yml) on changes, or manually:
 
 ```
+make lint
+
 make test
 
 make test-verbose
+
+make test-race
 ```
 
 Test coverage is also available - to generate an HTML report as `testCoverage.html`:
