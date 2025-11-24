@@ -8,6 +8,9 @@ import (
 
 // TestBasic tests authentication with header and form values.
 func TestBasic(t *testing.T) {
+	orig := Tarpit
+	t.Cleanup(func() { SetTarpit(orig) })
+	SetTarpit(0)
 	headerName := "X-Auth"
 	tests := []struct {
 		testName    string
