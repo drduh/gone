@@ -113,6 +113,7 @@ func Upload(app *config.App) http.HandlerFunc {
 					Id:   f.Id,
 					Name: f.Name,
 					Size: f.Size,
+					Type: f.Type,
 					Owner: storage.Owner{
 						Address: f.Address,
 						Mask:    f.Mask,
