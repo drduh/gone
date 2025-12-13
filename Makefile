@@ -19,6 +19,7 @@ BUILDOS   = $(shell $(GO) env GOHOSTOS)
 BUILDTIME = $(shell date +"%Y-%m-%dT%H:%M:%S")
 BUILDFLAG = \
   -X "$(BUILDPKG).Arch=$(BUILDARCH)" \
+  -X "$(BUILDPKG).Commit=$(shell git log -1 --format=%h)" \
   -X "$(BUILDPKG).Go=$(BUILDVERS)" \
   -X "$(BUILDPKG).Host=$(shell hostname -f)" \
   -X "$(BUILDPKG).Id=$(APPNAME)" \

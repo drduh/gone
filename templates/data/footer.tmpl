@@ -3,7 +3,9 @@
   {{ if .ShowBuild }}
   <div class="footer">
     <div class="message">{{ .Version.id }}
-      <span class="owner">{{ template "version" . }}</span>
+      <span class="owner">
+        {{- template "version" . }}
+      </span>
     </div>
   </div>
   {{ end }}

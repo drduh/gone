@@ -1,16 +1,17 @@
 package version
 
-// Get returns application version and build information.
+// Get returns application version and build details.
 func Get() map[string]string {
 	return map[string]string{
-		"id":   Id,
-		"vers": Version,
-		"user": User,
-		"host": Host,
-		"os":   OS,
-		"arch": Arch,
-		"go":   Go,
-		"path": Path,
-		"time": Time,
+		"id":      Id,
+		"version": Version,
+		"arch":    Arch,
+		"go":      Go,
+		"commit":  Commit,
+		"path":    Path,
+		"time":    Time,
+		"host":    Host,
+		"os":      OS,
+		"user":    User,
 	}
 }
