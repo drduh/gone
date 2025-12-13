@@ -1,19 +1,19 @@
 <!-- header.tmpl -->
-{{ define "header" }}
+{{ define "header" -}}
 <!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="{{ .Version.id }}-{{ .Version.vers }}">
+    <meta name="description" content="{{ .Version.id }}-{{ .Version.version }}">
     <title>{{ .Index.Title }}</title>
     {{ if .Index.CSP }} {{- template "csp" . -}} {{ end }}
-    {{ if .Theme }}
+    {{ if .Theme -}}
     <link href="{{ .Paths.Assets }}/style.css"
            rel="stylesheet"
           type="text/css">
     <style>
-      {{- template "theme" . }}
+      {{ template "theme" . }}
     </style>
     {{ end }}
   </head>

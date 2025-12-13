@@ -2,12 +2,12 @@
 {{ define "files" }}
   {{ if .Paths.Upload }}
   <details><summary>upload</summary>
-    {{- template "upload" . -}}
+    {{- template "upload" . }}
   </details>
   {{ end }}
   {{ if .Paths.List }}
   <details><summary>download</summary>
-    {{- template "list" . -}}
+    {{- template "list" . }}
   </details>
   {{ end }}
 {{ end }}
