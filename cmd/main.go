@@ -1,4 +1,4 @@
-// Package main provides the primary command-line
+// Package cmd provides the primary command
 // entrypoint into the application.
 package main
 

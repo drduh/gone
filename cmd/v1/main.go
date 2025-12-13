@@ -1,4 +1,4 @@
-// Package v1 implements the original (circa 2025) design.
+// Package v1 implements the original design circa 2025.
 package v1
 
 import (
@@ -17,7 +17,6 @@ func Run() {
 	flag.Parse()
 
 	app := config.Load()
-
 	if app.Modes.Version {
 		version.Print()
 		os.Exit(0)
