@@ -12,7 +12,7 @@ import (
 	"github.com/drduh/gone/util"
 )
 
-// deny serves a JSON response for deny (auth fail).
+// deny serves a JSON response for unauthorized requests.
 func deny(w http.ResponseWriter, app *config.App, r *Request) {
 	writeJSON(w, http.StatusUnauthorized, errorJSON(app.Deny))
 	app.Log.Error(app.Deny, "user", r)
