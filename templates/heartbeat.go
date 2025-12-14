@@ -8,23 +8,26 @@ import (
 // Heartbeat contains the server status response.
 type Heartbeat struct {
 
-	// Application version
+	// Application version and build information
 	Version map[string]string `json:"version"`
 
-	// Server hostname
+	// Server hostname ("system")
 	Hostname string `json:"hostname"`
 
-	// Time since start ("3m45s")
+	// Formatted time since start ("3m45s")
 	Uptime string `json:"uptime"`
 
-	// TCP port server is listening on
+	// TCP port the server is listening on (8080)
 	Port int `json:"port"`
 
-	// Number of Files in storage
+	// Number of Files in Storage
 	FileCount int `json:"files"`
 
-	// Number of Messages in storage
+	// Number of Messages in Storage
 	MessageCount int `json:"messages"`
+
+	// Length of Wall content in Storage
+	WallCount int `json:"wall"`
 
 	// Defaults configuration
 	settings.Default `json:"default"`

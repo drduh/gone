@@ -10,7 +10,7 @@ func (s *Storage) CountMessages() int {
 	return len(s.Messages)
 }
 
-// CountWall returns the size of Wall contents in Storage.
+// CountWall returns the length of Wall contents in Storage.
 func (s *Storage) CountWall() int {
 	return len(s.WallContent)
 }

@@ -24,6 +24,7 @@ func Heartbeat(app *config.App) http.HandlerFunc {
 			Limit:        app.Limit,
 			FileCount:    app.CountFiles(),
 			MessageCount: app.CountMessages(),
+			WallCount:    app.CountWall(),
 			Owner: storage.Owner{
 				Address: req.Address,
 				Headers: r.Header,

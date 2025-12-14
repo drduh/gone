@@ -8,8 +8,7 @@ import (
 	"github.com/drduh/gone/storage"
 )
 
-// Message handles requests to post, read, clear
-// and download Messages from Storage.
+// Message handles requests to read and modify Messages in Storage.
 func Message(app *config.App) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		req, allowed := authRequest(w, r, app)
@@ -22,6 +21,7 @@ func Message(app *config.App) http.HandlerFunc {
 				app.Log.Debug("clearing messages",
 					"count", app.CountMessages(), "user", req)
 				app.ClearMessages()
+				app.Log.Info("cleared messages", "user", req)
 			}
 
 			message := storage.Message{
@@ -39,10 +39,11 @@ func Message(app *config.App) http.HandlerFunc {
 			if content != "" {
 				message.Count++
 				message.Data = content
-				app.Messages[message.Count] = &message
-				app.Log.Debug("added message",
+				app.Log.Debug("adding message",
 					"count", message.Count,
 					"content", message.Data, "user", req)
+				app.Messages[message.Count] = &message
+				app.Log.Info("added message", "user", req)
 			}
 
 			toRoot(w, r, app.Root)
