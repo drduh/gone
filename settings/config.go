@@ -29,7 +29,8 @@ type Settings struct {
 	// TCP port to listen on
 	Port int `json:"port"`
 
-	// Show build details in status and footer
+	// Show build details in status response
+	// and index footer
 	ShowBuild bool `json:"showBuild"`
 }
 
@@ -59,19 +60,19 @@ type Auth struct {
 	// Route authentication requirements
 	Require struct {
 
-		// Whether to require authentication to download files
+		// Require authentication to download files
 		Download bool `json:"download"`
 
-		// Whether to require authentication to list files
+		// Require authentication to list files
 		List bool `json:"list"`
 
-		// Whether to require authentication to post messages
+		// Require authentication to post messages
 		Message bool `json:"message"`
 
-		// Whether to require authentication to upload files
+		// Require authentication to upload files
 		Upload bool `json:"upload"`
 
-		// Whether to require authentication to edit shared content
+		// Require authentication to edit shared content
 		Wall bool `json:"wall"`
 	} `json:"require"`
 }
@@ -113,7 +114,7 @@ type Error struct {
 // Index HTML index page properties
 type Index struct {
 
-	// Whether to enable Content Security Policy (CSP)
+	// Enable Content Security Policy (CSP)
 	CSP bool `json:"csp"`
 
 	// Page title ("gone")
@@ -132,7 +133,7 @@ type Index struct {
 	// CSS style options
 	Style struct {
 
-		// Whether to allow theme selection
+		// Allow theme selection
 		AllowPick bool `json:"allowPick"`
 
 		// List of available themes to choose from, if allowed

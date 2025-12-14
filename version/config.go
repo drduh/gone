@@ -29,7 +29,7 @@ var (
 	Host = "unknown"
 
 	// Build system ("darwin")
-	OS = "unknown"
+	System = "unknown"
 
 	// Build user ("user")
 	User = "unknown"

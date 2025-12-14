@@ -8,17 +8,20 @@ import (
 // Status contains the server status and configuration response.
 type Status struct {
 
-	// Application version and build information
-	Version map[string]string `json:"version"`
+	// Formatted time since start ("3m45s")
+	Uptime string `json:"uptime"`
 
 	// Server hostname ("system")
 	Hostname string `json:"hostname"`
 
-	// Formatted time since start ("3m45s")
-	Uptime string `json:"uptime"`
-
 	// TCP port the server is listening on (8080)
 	Port int `json:"port"`
+
+	// Application version and build information
+	Version map[string]string `json:"version"`
+
+	// Storage content total sizes
+	storage.Sizes `json:"sizes"`
 
 	// Defaults configuration
 	settings.Default `json:"default"`
@@ -31,7 +34,4 @@ type Status struct {
 
 	// Storage content owner information
 	storage.Owner `json:"owner"`
-
-	// Storage content total sizes
-	storage.Sizes `json:"sizes"`
 }

@@ -2,6 +2,8 @@ gone is an ephemeral content hosting server written in [Go](https://go.dev/).
 
 The primary goal is to share files or text using an HTML interface or an API.
 
+[![test-and-lint](https://github.com/drduh/gone/actions/workflows/test-and-lint.yml/badge.svg)](https://github.com/drduh/gone/actions/workflows/test-and-lint.yml)
+
 ## Features
 
 - No disk storage (memory only) - content cleared on exit

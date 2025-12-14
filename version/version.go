@@ -11,7 +11,7 @@ func Get() map[string]string {
 		"path":    Path,
 		"time":    Time,
 		"host":    Host,
-		"os":      OS,
+		"system":  System,
 		"user":    User,
 	}
 }

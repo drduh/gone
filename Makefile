@@ -24,7 +24,7 @@ BUILDFLAG = \
   -X "$(BUILDPKG).Host=$(shell hostname -f)" \
   -X "$(BUILDPKG).Id=$(APPNAME)" \
   -X "$(BUILDPKG).Path=$(shell pwd)" \
-  -X "$(BUILDPKG).OS=$(BUILDOS)" \
+  -X "$(BUILDPKG).System=$(BUILDOS)" \
   -X "$(BUILDPKG).Time=$(BUILDTIME)" \
   -X "$(BUILDPKG).User=$(shell whoami)" \
   -X "$(BUILDPKG).Version=$(VERSION)"
@@ -51,7 +51,7 @@ TESTCOVER = testCoverage
 
 WARN      = tput setaf 3 ; printf "%s\n" "${1}" ; tput sgr0
 
-all: fmt test lint build
+all: fmt build test lint
 
 prep:
 	@mkdir -p $(OUT)
@@ -71,19 +71,20 @@ debug: build
 version: build
 	@$(OUT)/$(BINNAME) -version
 
-install: install-assets install-config install-bin install-service reload-service
+install: install-assets install-bin install-config install-service \
+	reload-service
 
 install-assets:
 	@sudo install -Dm $(MOD_FILE) $(ASSET_CSS) $(DEST_CSS)
 	@printf "Installed $(DEST_CSS)\n"
 
-install-config:
-	@sudo install -Dm $(MOD_FILE) $(SETTINGS) $(DEST_CONF)
-	@printf "Installed $(DEST_CONF)\n"
-
 install-bin: build
 	@sudo install -Dm $(MOD_BIN) $(OUT)/$(BINNAME) $(DEST_BIN)
 	@printf "Installed $(DEST_BIN)\n"
+
+install-config:
+	@sudo install -Dm $(MOD_FILE) $(SETTINGS) $(DEST_CONF)
+	@printf "Installed $(DEST_CONF)\n"
 
 install-service:
 	@sudo install -Dm $(MOD_FILE) $(SERVICE) $(DEST_SERV)
