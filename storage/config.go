@@ -19,6 +19,9 @@ type Storage struct {
 
 	// Shared edit content
 	WallContent string
+
+	// Storage content total sizes
+	Sizes `json:"id,sizes"`
 }
 
 // File represents a user-uploaded file.
@@ -116,15 +119,15 @@ type Downloads struct {
 	Total int `json:"total,omitempty"`
 }
 
-// Size represents Storage content sizes.
-type Size struct {
+// Sizes represents Storage content sizes.
+type Sizes struct {
 
 	// Number of Files in Storage
-	Files int `json:"files"`
+	NumFiles int `json:"numFiles"`
 
 	// Number of Messages in Storage
-	Messages int `json:"messages"`
+	NumMessages int `json:"numMessages"`
 
 	// Length of Wall content in Storage
-	Wall int `json:"wallChars"`
+	CharsWall int `json:"charsWall"`
 }

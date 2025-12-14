@@ -8,6 +8,8 @@ import (
 	"github.com/drduh/gone/storage"
 )
 
+const formFieldMessage = "message"
+
 // Message handles requests to read and modify Messages in Storage.
 func Message(app *config.App) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
@@ -16,16 +18,18 @@ func Message(app *config.App) http.HandlerFunc {
 			return
 		}
 
+		app.CountMessages()
+
 		if r.Method == http.MethodPost {
 			if r.FormValue("clear") != "" {
 				app.Log.Debug("clearing messages",
-					"count", app.CountMessages(), "user", req)
+					"count", app.NumMessages, "user", req)
 				app.ClearMessages()
 				app.Log.Info("cleared messages", "user", req)
 			}
 
 			message := storage.Message{
-				Count: app.CountMessages(),
+				Count: app.NumMessages,
 				Owner: storage.Owner{
 					Agent: req.Agent,
 					Mask:  req.Mask,
@@ -35,10 +39,10 @@ func Message(app *config.App) http.HandlerFunc {
 				},
 			}
 
-			content := r.FormValue("message")
-			if content != "" {
+			formContent := r.FormValue(formFieldMessage)
+			if formContent != "" {
 				message.Count++
-				message.Data = content
+				message.Data = formContent
 				app.Log.Debug("adding message",
 					"count", message.Count,
 					"content", message.Data, "user", req)
@@ -51,7 +55,7 @@ func Message(app *config.App) http.HandlerFunc {
 
 		if r.URL.Query().Get("download") == "all" {
 			app.Log.Debug("serving all messages",
-				"count", app.CountMessages(), "user", req)
+				"count", app.NumMessages, "user", req)
 			app.ServeMessages(w)
 			return
 		}

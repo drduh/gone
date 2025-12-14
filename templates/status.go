@@ -32,6 +32,6 @@ type Status struct {
 	// Storage content owner information
 	storage.Owner `json:"owner"`
 
-	// Storage content size
-	storage.Size `json:"count"`
+	// Storage content total sizes
+	storage.Sizes `json:"sizes"`
 }

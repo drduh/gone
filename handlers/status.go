@@ -22,6 +22,7 @@ func Status(app *config.App) http.HandlerFunc {
 			}
 		}
 
+		app.CountStorage()
 		response := templates.Status{
 			Version:  versionInfo,
 			Port:     app.Port,
@@ -34,10 +35,10 @@ func Status(app *config.App) http.HandlerFunc {
 				Address: req.Address,
 				Headers: r.Header,
 			},
-			Size: storage.Size{
-				Files:    app.CountFiles(),
-				Messages: app.CountMessages(),
-				Wall:     app.CountWall(),
+			Sizes: storage.Sizes{
+				NumFiles:    app.NumFiles,
+				NumMessages: app.NumMessages,
+				CharsWall:   app.CharsWall,
 			},
 		}
 

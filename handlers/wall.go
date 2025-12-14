@@ -6,6 +6,8 @@ import (
 	"github.com/drduh/gone/config"
 )
 
+const formFieldWall = "wall"
+
 // Wall handles requests to read and modify Wall content in Storage.
 func Wall(app *config.App) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
@@ -14,19 +16,21 @@ func Wall(app *config.App) http.HandlerFunc {
 			return
 		}
 
+		app.CountWall()
+
 		if r.Method == http.MethodPost {
 			if r.FormValue("clear") != "" {
 				app.Log.Debug("clearing wall",
-					"length", app.CountWall(), "user", req)
+					"length", app.CharsWall, "user", req)
 				app.ClearWall()
 				app.Log.Info("cleared wall", "user", req)
 			}
 
-			wallContent := r.FormValue("wall")
-			if wallContent != "" {
+			formContent := r.FormValue(formFieldWall)
+			if formContent != "" {
 				app.Log.Debug("updating wall",
-					"length", app.CountWall(), "user", req)
-				app.WallContent = wallContent
+					"length", len(formContent), "user", req)
+				app.WallContent = formContent
 				app.Log.Info("updated wall", "user", req)
 			}
 

@@ -169,14 +169,14 @@ type Default struct {
 // Content sharing limits
 type Limit struct {
 
-	// Message character length
-	CharsMsg int `json:"charsMsg,omitempty"`
+	// Maximum text message size
+	MaxSizeMsg int `json:"maxSizeMsg,omitempty"`
 
-	// Wall character length
-	CharsWall int `json:"charsWall,omitempty"`
+	// Maximum wall content size
+	MaxSizeWall int `json:"maxSizeWall,omitempty"`
 
 	// Maximum file size (in Megabytes)
-	MaxSizeMb int64 `json:"maxSizeMb,omitempty"`
+	MaxSizeFileMb int64 `json:"maxSizeFileMb,omitempty"`
 
 	// Number of requests per minute to rate limit
 	PerMinute int `json:"perMinute,omitempty"`

@@ -27,16 +27,16 @@ func Upload(app *config.App) http.HandlerFunc {
 			return
 		}
 
-		maxBytes := app.GetMaxBytes()
-		if r.ContentLength > maxBytes {
+		maxFileBytes := app.GetMaxFileBytes()
+		if r.ContentLength > maxFileBytes {
 			writeJSON(w, http.StatusRequestEntityTooLarge, errorJSON(app.FileSize))
 			app.Log.Error(app.FileSize,
-				"sizeMb", r.ContentLength/(1<<20), "user", req)
+				"fileSizeMb", r.ContentLength/(1<<20), "user", req)
 			return
 		}
 
-		r.Body = http.MaxBytesReader(w, r.Body, maxBytes)
-		if err := r.ParseMultipartForm(maxBytes); err != nil {
+		r.Body = http.MaxBytesReader(w, r.Body, maxFileBytes)
+		if err := r.ParseMultipartForm(maxFileBytes); err != nil {
 			writeJSON(w, http.StatusInternalServerError, errorJSON(app.Copy))
 			app.Log.Error("upload failed", "error", err.Error(), "user", req)
 			return
