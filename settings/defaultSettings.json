@@ -11,6 +11,7 @@
       "token":     "mySecret"
     },
     "require": {
+      "clear":     true,
       "download":  true,
       "list":      false,
       "message":   false,
@@ -76,6 +77,7 @@
   },
   "paths": {
     "assets":      "/assets/",
+    "clear":       "/clear",
     "download":    "/download/",
     "list":        "/list",
     "message":     "/msg",

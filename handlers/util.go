@@ -27,6 +27,7 @@ func toRoot(w http.ResponseWriter, r *http.Request, rootPath string) {
 // is required and allowed.
 func isAllowed(app *config.App, r *http.Request) bool {
 	reqs := map[string]bool{
+		app.Clear:    app.Require.Clear,
 		app.Download: app.Require.Download,
 		app.List:     app.Require.List,
 		app.Message:  app.Require.Message,
@@ -85,8 +86,9 @@ func parseRequest(r *http.Request) *Request {
 	}
 }
 
-// authRequest returns only an allowed parsed http Request struct.
-func authRequest(w http.ResponseWriter, r *http.Request, app *config.App) (*Request, bool) {
+// authRequest returns only allowed parsed http Requests.
+func authRequest(w http.ResponseWriter,
+	r *http.Request, app *config.App) (*Request, bool) {
 	req := parseRequest(r)
 	if !isAllowed(app, r) {
 		deny(w, app, req)

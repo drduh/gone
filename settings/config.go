@@ -60,6 +60,9 @@ type Auth struct {
 	// Route authentication requirements
 	Require struct {
 
+		// Require authentication to clear uploads
+		Clear bool `json:"clear"`
+
 		// Require authentication to download files
 		Download bool `json:"download"`
 
@@ -191,6 +194,9 @@ type Paths struct {
 
 	// Assets for HTML pages ("/assets/")
 	Assets string `json:"assets"`
+
+	// Remove content ("/clear")
+	Clear string `json:"clear"`
 
 	// File download ("/download/")
 	Download string `json:"download"`

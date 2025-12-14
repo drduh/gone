@@ -13,7 +13,8 @@ func (s *Storage) CountStorage() {
 	s.CountWall()
 }
 
-// CountFiles counts the number of Files.
+// CountFiles counts the number of Files and
+// their total combined size.
 func (s *Storage) CountFiles() {
 	s.NumFiles = len(s.Files)
 	total := 0
@@ -42,7 +43,7 @@ func (s *Storage) CountWall() {
 	if s.WallContent == "" {
 		s.LinesWall = 0
 	} else {
-		s.LinesWall = len(strings.Split(
-			s.WallContent, "\n"))
+		s.LinesWall = len(
+			strings.Split(s.WallContent, "\n"))
 	}
 }
