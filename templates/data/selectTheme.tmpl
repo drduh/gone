@@ -1,18 +1,18 @@
 <!-- selectTheme.tmpl -->
 {{ define "selectTheme" }}
-  <div class="dropdown">
-    <form action="">
-      <select class="selectTheme"
-               name="theme"
-              title="select a theme">
-        <option value="">select theme</option>
-        {{ range .Style.Available -}}
-        <option value="{{ . }}">{{ . }}</option>
-        {{ end }}
-      </select>
-      <button class="selectTheme"
-              title="apply selected theme"
-               type="submit">apply theme</button>
-    </form>
-  </div>
+    <div class="dropdown">
+      <form action="">
+        <select class="selectTheme"
+                 name="theme"
+                title="select a theme">
+          <option value="">select theme</option>
+          {{ range .Style.Available -}}
+          <option value="{{ . }}">{{ . }}</option>
+          {{ end }}
+        </select>
+        <button class="selectTheme"
+                title="apply selected theme"
+                 type="submit">apply theme</button>
+      </form>
+    </div>
 {{ end }}

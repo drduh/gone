@@ -27,33 +27,35 @@ func Upload(app *config.App) http.HandlerFunc {
 			return
 		}
 
-		maxBytes := app.GetMaxBytes()
-		if r.ContentLength > maxBytes {
+		maxFileBytes := app.GetMaxFileBytes()
+		if r.ContentLength > maxFileBytes {
 			writeJSON(w, http.StatusRequestEntityTooLarge, errorJSON(app.FileSize))
 			app.Log.Error(app.FileSize,
-				"sizeMb", r.ContentLength/(1<<20), "user", req)
+				"fileSizeMb", r.ContentLength/(1<<20), "user", req)
 			return
 		}
 
-		r.Body = http.MaxBytesReader(w, r.Body, maxBytes)
-		if err := r.ParseMultipartForm(maxBytes); err != nil {
+		r.Body = http.MaxBytesReader(w, r.Body, maxFileBytes)
+		if err := r.ParseMultipartForm(maxFileBytes); err != nil {
 			writeJSON(w, http.StatusInternalServerError, errorJSON(app.Copy))
 			app.Log.Error("upload failed", "error", err.Error(), "user", req)
 			return
 		}
 
 		downloadLimit := app.Downloads
-		downloadLimitInput := r.FormValue("downloads")
+		downloadLimitInput := r.FormValue(formFieldDownloads)
 		if limit, err := strconv.Atoi(downloadLimitInput); err == nil {
 			downloadLimit = limit
-			app.Log.Debug("got form value", "downloads", downloadLimit)
+			app.Log.Debug("got form value",
+				formFieldDownloads, downloadLimit)
 		}
 
 		durationLimit := app.Expiration.Duration
-		durationLimitInput := r.FormValue("duration")
+		durationLimitInput := r.FormValue(formFieldDuration)
 		if limit, err := time.ParseDuration(durationLimitInput); err == nil {
 			durationLimit = limit
-			app.Log.Debug("got form value", "duration", durationLimit.String())
+			app.Log.Debug("got form value",
+				formFieldDuration, durationLimit.String())
 		}
 
 		var upload storage.File

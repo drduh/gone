@@ -5,32 +5,56 @@ import "testing"
 // TestCountFiles tests File counts in Storage.
 func TestCountFiles(t *testing.T) {
 	var s Storage
-	if got := s.CountFiles(); got != 0 {
-		t.Fatalf("CountFiles = %d; want 0", got)
+	s.CountFiles()
+	if s.NumFiles != 0 {
+		t.Fatalf("NumFiles = %d; want 0", s.NumFiles)
 	}
 	s.Files = map[string]*File{
 		"file1": {},
 		"file2": {},
 	}
-	if got := s.CountFiles(); got != 2 {
-		t.Fatalf("CountFiles = %d; want 2", got)
+	s.CountFiles()
+	if s.NumFiles != 2 {
+		t.Fatalf("NumFiles = %d; want 2", s.NumFiles)
 	}
 }
 
 // TestCountMessages tests Messages counts in Storage.
 func TestCountMessages(t *testing.T) {
 	var s Storage
-	if got := s.CountMessages(); got != 0 {
-		t.Fatalf("CountMessages = %d; want 0", got)
+	s.CountMessages()
+	if s.NumMessages != 0 {
+		t.Fatalf("NumMessages = %d; want 0", s.NumMessages)
 	}
 	s.Messages = map[int]*Message{
 		1: {},
 	}
-	if got := s.CountMessages(); got != 1 {
-		t.Fatalf("CountMessages = %d; want 1", got)
+	s.CountMessages()
+	if s.NumMessages != 1 {
+		t.Fatalf("NumMessages = %d; want 1", s.NumMessages)
 	}
 	s.Messages[2] = &Message{}
-	if got := s.CountMessages(); got != 2 {
-		t.Fatalf("CountMessages = %d; want 2", got)
+	s.CountMessages()
+	if s.NumMessages != 2 {
+		t.Fatalf("NumMessages = %d; want 2", s.NumMessages)
+	}
+}
+
+// TestCountWall tests Wall content counts in Storage.
+func TestCountWall(t *testing.T) {
+	var s Storage
+	s.CountWall()
+	if s.CharsWall != 0 {
+		t.Fatalf("CountWall = %d; want 0", s.CharsWall)
+	}
+	s.WallContent = "test\r\nwall"
+	s.CountWall()
+	if s.CharsWall != 10 {
+		t.Fatalf("CharsWall = %d; want 10", s.CharsWall)
+	}
+	s.WallContent = ""
+	s.CountWall()
+	if s.CharsWall != 0 {
+		t.Fatalf("CharsWall = %d; want 0", s.CharsWall)
 	}
 }

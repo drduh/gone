@@ -1,6 +1,6 @@
 package storage
 
-// ClearStorage removes all Files and Messages from Storage.
+// ClearStorage removes all content from Storage.
 func (s *Storage) ClearStorage() {
 	s.ClearFiles()
 	s.ClearMessages()

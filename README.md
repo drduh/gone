@@ -82,7 +82,7 @@ Features are also available using command-line programs such as curl:
 Get server status:
 
 ```
-curl localhost:8080/heartbeat
+curl localhost:8080/status
 ```
 
 ## Upload

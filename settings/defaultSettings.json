@@ -1,5 +1,6 @@
 {
   "port":          8080,
+  "showBuild":     true,
   "audit": {
     "logFile":     "",
     "timeFormat":  "Monday Jan 2 15:04"
@@ -35,7 +36,6 @@
   },
   "index": {
     "csp":         true,
-    "showBuild":   true,
     "title":       "gone",
     "cookie": {
       "id":        "goneTheme",
@@ -68,21 +68,21 @@
     }
   },
   "limit": {
-    "charsMsg":    128,
-    "charsWall":   1280,
-    "maxSizeMb":   256,
-    "perMinute":   30,
-    "ticker":      "30s"
+    "maxSizeMsg":    128,
+    "maxSizeWall":   1280,
+    "maxSizeFileMb": 256,
+    "perMinute":     30,
+    "ticker":        "30s"
   },
   "paths": {
     "assets":      "/assets/",
     "download":    "/download/",
-    "heartbeat":   "/heartbeat",
     "list":        "/list",
     "message":     "/msg",
     "random":      "/random/",
     "root":        "/",
     "static":      "/static",
+    "status":      "/status",
     "upload":      "/upload",
     "wall":        "/wall"
   }

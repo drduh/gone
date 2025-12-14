@@ -8,14 +8,19 @@ import (
 	"github.com/drduh/gone/util"
 )
 
-// Time-based file expiration
-type Duration struct {
+const defaultInterval = "s" // seconds
 
-	// Wrap time.Duration for JSON parsing
+// Duration wraps time.Duration for parsing time interval strings.
+type Duration struct {
 	time.Duration
 }
 
-// UnmarshalJSON parses strings like "10", "10s", "30m", "24h".
+// GetDuration converts a Duration to time.Duration.
+func (d *Duration) GetDuration() time.Duration {
+	return time.Duration(d.Duration)
+}
+
+// UnmarshalJSON parses strings like "10", "10s", "30m", "20h".
 func (d *Duration) UnmarshalJSON(b []byte) error {
 	var s string
 	if err := json.Unmarshal(b, &s); err != nil {
@@ -23,7 +28,7 @@ func (d *Duration) UnmarshalJSON(b []byte) error {
 	}
 
 	if util.IsNumeric(s) {
-		s += "s"
+		s += defaultInterval
 	}
 
 	duration, err := time.ParseDuration(s)
@@ -33,9 +38,4 @@ func (d *Duration) UnmarshalJSON(b []byte) error {
 	d.Duration = duration
 
 	return nil
-}
-
-// GetDuration converts a Duration to time.Duration.
-func (d *Duration) GetDuration() time.Duration {
-	return time.Duration(d.Duration)
 }

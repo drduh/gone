@@ -29,11 +29,11 @@ func getHandler(app *config.App) http.Handler {
 	}
 
 	handle(app.Download, handlers.Download(app))
-	handle(app.Heartbeat, handlers.Heartbeat(app))
 	handle(app.List, handlers.List(app))
 	handle(app.Message, handlers.Message(app))
 	handle(app.Random, handlers.Random(app))
 	handle(app.Static, handlers.Static(app))
+	handle(app.Status, handlers.Status(app))
 	handle(app.Upload, handlers.Upload(app))
 	handle(app.Wall, handlers.Wall(app))
 

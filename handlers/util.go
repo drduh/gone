@@ -124,9 +124,10 @@ func getParam(r *http.Request, pathLen int, fieldName string) string {
 // setting the cookie value if none exists, or is invalid.
 func getTheme(w http.ResponseWriter, r *http.Request,
 	defaultTheme, id string, t time.Duration, themes []string) string {
-	theme := r.FormValue("theme")
-	if theme != "" {
-		if !slices.Contains(themes, theme) {
+	formContent := r.FormValue(formFieldTheme)
+	if formContent != "" {
+		theme := formContent
+		if !slices.Contains(themes, formContent) {
 			theme = getDefaultTheme("auto")
 		}
 		http.SetCookie(w, auth.NewCookie(theme, id, t))

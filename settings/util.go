@@ -7,7 +7,7 @@ func (s *Settings) GetAddr() string {
 	return fmt.Sprintf(":%d", s.Port)
 }
 
-// GetMaxBytes returns the maximum allowed file size in bytes.
-func (l *Limit) GetMaxBytes() int64 {
-	return l.MaxSizeMb << 20
+// GetMaxFileBytes returns the maximum allowed file size in bytes.
+func (l *Limit) GetMaxFileBytes() int64 {
+	return l.MaxSizeFileMb << 20
 }

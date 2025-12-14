@@ -6,7 +6,7 @@ import (
 	"github.com/drduh/gone/config"
 )
 
-// Wall handles wall form submissions and updates content in Storage.
+// Wall handles requests to read and modify Wall content in Storage.
 func Wall(app *config.App) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		req, allowed := authRequest(w, r, app)
@@ -14,12 +14,22 @@ func Wall(app *config.App) http.HandlerFunc {
 			return
 		}
 
+		app.CountWall()
+
 		if r.Method == http.MethodPost {
-			wallContent := r.FormValue("wall")
-			if wallContent != "" {
-				app.WallContent = wallContent
-				app.Log.Debug("got wall content",
-					"length", len(app.WallContent), "user", req)
+			if r.FormValue(formFieldClear) != "" {
+				app.Log.Debug("clearing wall",
+					"length", app.CharsWall, "user", req)
+				app.ClearWall()
+				app.Log.Info("cleared wall", "user", req)
+			}
+
+			formContent := r.FormValue(formFieldWall)
+			if formContent != "" {
+				app.Log.Debug("updating wall",
+					"length", len(formContent), "user", req)
+				app.WallContent = formContent
+				app.Log.Info("updated wall", "user", req)
 			}
 
 			toRoot(w, r, app.Root)

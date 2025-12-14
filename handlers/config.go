@@ -1,7 +1,17 @@
-// Package handlers defines how the server handles configured routes
+// Package handlers provides server operations
+// on configured routes.
 package handlers
 
-// Request contains relevant HTTP request attributes to log.
+const (
+	formFieldClear     = "clear"
+	formFieldDownloads = "downloads"
+	formFieldDuration  = "duration"
+	formFieldMessage   = "message"
+	formFieldTheme     = "theme"
+	formFieldWall      = "wall"
+)
+
+// Request contains server operation metadata.
 type Request struct {
 
 	// Handler path ("/")

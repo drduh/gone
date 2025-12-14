@@ -6,7 +6,7 @@
           method="post">
       <input class="selectMessage"
               name="message"
-         maxlength="{{ .Limit.CharsMsg }}"
+         maxlength="{{ .Limit.MaxSizeMsg }}"
        placeholder="{{ .Placeholder.Message }}"
              title="message text content"
               type="text" required>
@@ -17,8 +17,11 @@
              value="post">
     </form>
     {{ range .Storage.Messages }}
-    <div class="message"><b>{{ .Count }}</b> {{ .Data }}
-      <span class="owner">{{ .Owner.Mask }} at {{ .Time.Allow }}</span>
+    <div class="message">
+      <b>{{ .Count }}</b> {{ .Data }}
+      <span class="owner">
+        {{ .Owner.Mask }} at {{ .Time.Allow }}
+      </span>
     </div>
     <br>
     {{ end }}
@@ -38,7 +41,7 @@
     <form action="{{ .Paths.Message }}"
            style="display:inline;">
       <input type="hidden" name="download" value="all">
-      <button class="selectRefresh" {{ if not .Storage.Messages }} disabled {{ end }}
+      <button class="selectDownload" {{ if not .Storage.Messages }} disabled {{ end }}
               title="download messages"
                type="submit">download</button>
     </form>

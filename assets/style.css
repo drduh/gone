@@ -132,14 +132,15 @@ input[type="number"] {
   visibility: visible;
 }
 
-.selectDownloads,
-.selectDuration,
+.selectAllowDownloads,
+.selectAllowDuration,
 .selectPost {
   text-align: center;
   width: var(--width-xsmall);
 }
 
 .selectClear,
+.selectDownload,
 .selectRefresh,
 .selectSubmit {
   width: var(--width-small);
@@ -160,8 +161,9 @@ input[type="number"] {
 }
 
 .selectClear:hover,
-.selectDownloads:hover,
-.selectDuration:hover,
+.selectAllowDownloads:hover,
+.selectAllowDuration:hover,
+.selectDownload:hover,
 .selectFilename:hover,
 .selectMessage:hover,
 .selectPost:hover,

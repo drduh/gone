@@ -1,11 +1,23 @@
 package storage
 
-// CountFiles returns the number of Files in Storage.
-func (s *Storage) CountFiles() int {
-	return len(s.Files)
+// CountStorage performs all Storage counts.
+func (s *Storage) CountStorage() {
+	s.CountFiles()
+	s.CountMessages()
+	s.CountWall()
 }
 
-// CountMessages returns the number of Messages in Storage.
-func (s *Storage) CountMessages() int {
-	return len(s.Messages)
+// CountFiles counts the number of Files in Storage.
+func (s *Storage) CountFiles() {
+	s.NumFiles = len(s.Files)
+}
+
+// CountMessages counts the number of Messages in Storage.
+func (s *Storage) CountMessages() {
+	s.NumMessages = len(s.Messages)
+}
+
+// CountWall counts the length of Wall contents in Storage.
+func (s *Storage) CountWall() {
+	s.CharsWall = len(s.WallContent)
 }
