@@ -41,7 +41,7 @@
     <form action="{{ .Paths.Message }}"
            style="display:inline;">
       <input type="hidden" name="download" value="all">
-      <button class="selectRefresh" {{ if not .Storage.Messages }} disabled {{ end }}
+      <button class="selectDownload" {{ if not .Storage.Messages }} disabled {{ end }}
               title="download messages"
                type="submit">download</button>
     </form>

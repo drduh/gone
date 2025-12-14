@@ -21,5 +21,13 @@
               type="submit"
              value="save">
     </form>
+    <form action="{{ .Paths.Wall }}"
+          method="post"
+           style="display:inline;">
+      <input type="hidden" name="clear" value="true">
+      <button class="selectClear" {{ if not .Storage.WallContent }} disabled {{ end }}
+              title="clear wall"
+               type="submit">clear</button>
+    </form>
   </div>
 {{ end }}

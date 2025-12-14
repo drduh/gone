@@ -34,3 +34,19 @@ func TestCountMessages(t *testing.T) {
 		t.Fatalf("CountMessages = %d; want 2", got)
 	}
 }
+
+// TestCountWall tests Wall content counts in Storage.
+func TestCountWall(t *testing.T) {
+	var s Storage
+	if got := s.CountWall(); got != 0 {
+		t.Fatalf("CountWall = %d; want 0", got)
+	}
+	s.WallContent = "test\r\nwall"
+	if got := s.CountWall(); got != 10 {
+		t.Fatalf("CountWall= %d; want 10", got)
+	}
+	s.WallContent = ""
+	if got := s.CountWall(); got != 0 {
+		t.Fatalf("CountWall= %d; want 0", got)
+	}
+}

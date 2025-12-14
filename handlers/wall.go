@@ -15,11 +15,17 @@ func Wall(app *config.App) http.HandlerFunc {
 		}
 
 		if r.Method == http.MethodPost {
+			if r.FormValue("clear") != "" {
+				app.Log.Debug("clearing wall",
+					"length", app.CountWall(), "user", req)
+				app.ClearWall()
+			}
+
 			wallContent := r.FormValue("wall")
 			if wallContent != "" {
 				app.WallContent = wallContent
-				app.Log.Debug("got wall content",
-					"length", len(app.WallContent), "user", req)
+				app.Log.Debug("updated wall content",
+					"length", app.CountWall(), "user", req)
 			}
 
 			toRoot(w, r, app.Root)
