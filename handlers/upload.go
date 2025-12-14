@@ -62,15 +62,15 @@ func Upload(app *config.App) http.HandlerFunc {
 		var uploads []storage.File
 		var wg sync.WaitGroup
 
-		files := r.MultipartForm.File["file"]
-		if files == nil {
+		formFileContent := r.MultipartForm.File["file"]
+		if formFileContent == nil {
 			writeJSON(w, http.StatusBadRequest, errorJSON(app.Form))
 			app.Log.Error(app.Form, "user", req)
 			return
 		}
-		wg.Add(len(files))
+		wg.Add(len(formFileContent))
 
-		for _, fileHeader := range files {
+		for _, fileHeader := range formFileContent {
 			go func(fileHeader *multipart.FileHeader) {
 				defer wg.Done()
 				file, err := fileHeader.Open()
@@ -109,7 +109,8 @@ func Upload(app *config.App) http.HandlerFunc {
 				}
 
 				f.Scan()
-				app.Files[f.Name] = f
+
+				app.Files[f.Id] = f
 
 				upload = storage.File{
 					Id:   f.Id,

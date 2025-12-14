@@ -2,7 +2,8 @@ package storage
 
 import "time"
 
-// GetLifetime returns the duration since File was uploaded.
+// GetLifetime returns the rounded duration since a
+// File was uploaded.
 func (f *File) GetLifetime() time.Duration {
 	return time.Since(f.Time.Upload).Round(time.Second)
 }
@@ -32,16 +33,16 @@ func (f *File) TimeRemaining() time.Duration {
 		f.Time.Upload.Add(f.Time.Duration)).Round(time.Second)
 }
 
-// Expire removes a File from Storage by name.
+// Expire removes a File from Storage by id.
 func (s *Storage) Expire(f *File) {
-	delete(s.Files, f.Name)
+	delete(s.Files, f.Id)
 }
 
-// UpdateTime updates the time until expiration of each
-// File in Storage.
-func (s *Storage) UpdateTime() {
+// UpdateTimeRemaining updates the time remaining until
+// expiration of each File in Storage.
+func (s *Storage) UpdateTimeRemaining() {
 	for _, file := range s.Files {
 		file.Time.Remain = file.TimeRemaining().String()
-		s.Files[file.Name] = file
+		s.Files[file.Id] = file
 	}
 }

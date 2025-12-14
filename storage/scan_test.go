@@ -21,7 +21,7 @@ func TestSetId(t *testing.T) {
 func TestSetSize(t *testing.T) {
 	data := []byte("hello")
 	length := "5"
-	size := "5.00 Bytes"
+	size := "5.00 bytes"
 	f := &File{Data: data}
 	f.setSize()
 	if got := f.Length; got != length {

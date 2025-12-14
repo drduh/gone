@@ -6,7 +6,7 @@ import (
 	"github.com/drduh/gone/config"
 )
 
-// Download handles requests to download a File from Storage by name.
+// Download handles requests to download a File from Storage.
 func Download(app *config.App) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		req, allowed := authRequest(w, r, app)
@@ -28,19 +28,16 @@ func Download(app *config.App) http.HandlerFunc {
 			app.Log.Error(app.NotFound, "filename", fileName, "user", req)
 			return
 		}
-		app.Log.Debug("file found", "filename", file.Name, "user", req)
 
 		file.Serve(w)
-		app.Log.Info("served file",
-			"filename", file.Name, "size", file.Size,
-			"downloads", file.Total, "user", req)
+		app.Log.Info("served file", "id", file.Id, "name", file.Name,
+			"size", file.Size, "downloads", file.Total, "user", req)
 
 		reason := file.IsExpired()
 		if reason != "" {
 			app.Expire(file)
-			app.Log.Info("removed file",
-				"reason", reason, "filename", file.Name,
-				"downloads", file.Total)
+			app.Log.Info("removed file", "reason", reason,
+				"id", file.Id, "name", file.Name, "downloads", file.Total)
 		}
 	}
 }
