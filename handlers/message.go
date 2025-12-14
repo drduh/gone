@@ -8,8 +8,6 @@ import (
 	"github.com/drduh/gone/storage"
 )
 
-const formFieldMessage = "message"
-
 // Message handles requests to read and modify Messages in Storage.
 func Message(app *config.App) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
@@ -21,7 +19,7 @@ func Message(app *config.App) http.HandlerFunc {
 		app.CountMessages()
 
 		if r.Method == http.MethodPost {
-			if r.FormValue("clear") != "" {
+			if r.FormValue(formFieldClear) != "" {
 				app.Log.Debug("clearing messages",
 					"count", app.NumMessages, "user", req)
 				app.ClearMessages()

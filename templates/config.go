@@ -1,4 +1,4 @@
-// Package templates provides dynamic HTML templates to render.
+// Package templates provides HTML source to render.
 package templates
 
 import "embed"

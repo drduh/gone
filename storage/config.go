@@ -21,7 +21,7 @@ type Storage struct {
 	WallContent string
 
 	// Storage content total sizes
-	Sizes `json:"id,sizes"`
+	Sizes
 }
 
 // File represents a user-uploaded file.
