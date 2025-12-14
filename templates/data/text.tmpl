@@ -1,13 +1,23 @@
 <!-- text.tmpl -->
-{{ define "text" }}
+{{ define "text" -}}
   {{ if .Paths.Message -}}
-  <details><summary>message</summary>
-    {{- template "message" . }}
+  {{ if .Storage.Messages }}
+  <details open>
+  {{ else }}
+  <details>
+  {{ end }}
+  <summary>message</summary>
+    {{ template "message" . }}
   </details>
   {{ end }}
   {{ if .Paths.Wall -}}
-  <details><summary>wall</summary>
-    {{- template "wall" . }}
+  {{ if .Storage.WallContent }}
+  <details open>
+  {{ else }}
+  <details>
+  {{ end }}
+  <summary>wall</summary>
+    {{ template "wall" . }}
   </details>
   {{ end }}
 {{ end }}
