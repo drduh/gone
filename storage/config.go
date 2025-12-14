@@ -42,10 +42,13 @@ type File struct {
 	// Downloads information
 	Downloads `json:"downloads,omitempty"`
 
+	// Number of bytes
+	Bytes int `json:"bytes,omitempty"`
+
 	// File length (for Content-Length header)
 	Length string `json:"length,omitempty"`
 
-	// File size (human-readable string)
+	// File size (formatted string)
 	Size string `json:"size,omitempty"`
 
 	// File type (based on name extension)
@@ -122,12 +125,24 @@ type Downloads struct {
 // Sizes represents Storage content sizes.
 type Sizes struct {
 
-	// Number of Files in Storage
+	// Number of characters in all Messages
+	CharsMessages int `json:"charsMessages"`
+
+	// Number of characters in Wall content
+	CharsWall int `json:"charsWall"`
+
+	// Number of lines in Wall content
+	LinesWall int `json:"linesWall"`
+
+	// Number of Files
 	NumFiles int `json:"numFiles"`
 
-	// Number of Messages in Storage
+	// Number of Messages
 	NumMessages int `json:"numMessages"`
 
-	// Length of Wall content in Storage
-	CharsWall int `json:"charsWall"`
+	// Total size of all Files
+	SizeFiles int `json:"sizeFiles"`
+
+	// Formatted total size of all Files
+	SizeFilesFmt string `json:"sizeFilesFmt"`
 }

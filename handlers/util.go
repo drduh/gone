@@ -78,10 +78,10 @@ func parseRequest(r *http.Request) *Request {
 		address = "unknown address"
 	}
 	return &Request{
-		Action:  r.URL.String(),
 		Address: r.RemoteAddr,
-		Mask:    util.Mask(address),
 		Agent:   r.UserAgent(),
+		Mask:    util.Mask(address),
+		Path:    r.URL.String(),
 	}
 }
 
@@ -127,7 +127,7 @@ func getTheme(w http.ResponseWriter, r *http.Request,
 	formContent := r.FormValue(formFieldTheme)
 	if formContent != "" {
 		theme := formContent
-		if !slices.Contains(themes, formContent) {
+		if !slices.Contains(themes, theme) {
 			theme = getDefaultTheme("auto")
 		}
 		http.SetCookie(w, auth.NewCookie(theme, id, t))

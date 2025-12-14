@@ -36,9 +36,13 @@ func Status(app *config.App) http.HandlerFunc {
 				Headers: r.Header,
 			},
 			Sizes: storage.Sizes{
-				NumFiles:    app.NumFiles,
-				NumMessages: app.NumMessages,
-				CharsWall:   app.CharsWall,
+				NumFiles:      app.NumFiles,
+				NumMessages:   app.NumMessages,
+				CharsMessages: app.CharsMessages,
+				CharsWall:     app.CharsWall,
+				LinesWall:     app.LinesWall,
+				SizeFiles:     app.SizeFiles,
+				SizeFilesFmt:  app.SizeFilesFmt,
 			},
 		}
 
