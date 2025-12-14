@@ -5,8 +5,8 @@ import (
 	"github.com/drduh/gone/storage"
 )
 
-// Heartbeat contains the server status response.
-type Heartbeat struct {
+// Status contains the server status and configuration response.
+type Status struct {
 
 	// Application version and build information
 	Version map[string]string `json:"version"`
@@ -20,15 +20,6 @@ type Heartbeat struct {
 	// TCP port the server is listening on (8080)
 	Port int `json:"port"`
 
-	// Number of Files in Storage
-	FileCount int `json:"files"`
-
-	// Number of Messages in Storage
-	MessageCount int `json:"messages"`
-
-	// Length of Wall content in Storage
-	WallCount int `json:"wall"`
-
 	// Defaults configuration
 	settings.Default `json:"default"`
 
@@ -38,6 +29,9 @@ type Heartbeat struct {
 	// Index configuration
 	settings.Index `json:"index"`
 
-	// File owner information
+	// Storage content owner information
 	storage.Owner `json:"owner"`
+
+	// Storage content size
+	storage.Size `json:"count"`
 }

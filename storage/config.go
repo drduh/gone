@@ -115,3 +115,16 @@ type Downloads struct {
 	// Total number of downloads
 	Total int `json:"total,omitempty"`
 }
+
+// Size represents Storage content sizes.
+type Size struct {
+
+	// Number of Files in Storage
+	Files int `json:"files"`
+
+	// Number of Messages in Storage
+	Messages int `json:"messages"`
+
+	// Length of Wall content in Storage
+	Wall int `json:"wallChars"`
+}

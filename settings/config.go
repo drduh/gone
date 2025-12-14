@@ -28,6 +28,9 @@ type Settings struct {
 
 	// TCP port to listen on
 	Port int `json:"port"`
+
+	// Show build details in status and footer
+	ShowBuild bool `json:"showBuild"`
 }
 
 // Auditor logging preferences
@@ -110,9 +113,6 @@ type Error struct {
 // Index HTML index page properties
 type Index struct {
 
-	// Whether to display build, uptime and version in footer
-	ShowBuild bool `json:"showBuild"`
-
 	// Whether to enable Content Security Policy (CSP)
 	CSP bool `json:"csp"`
 
@@ -194,13 +194,10 @@ type Paths struct {
 	// File download ("/download/")
 	Download string `json:"download"`
 
-	// Heartbeat/health check ("/heartbeat")
-	Heartbeat string `json:"heartbeat"`
-
 	// File list ("/list")
 	List string `json:"list"`
 
-	// Message post and read ("/msg")
+	// Message read and write ("/msg")
 	Message string `json:"message"`
 
 	// Random output ("/random/")
@@ -209,12 +206,15 @@ type Paths struct {
 	// Default root path ("/")
 	Root string `json:"root"`
 
-	// Embedded/static file ("/static")
+	// Embedded static file ("/static")
 	Static string `json:"static"`
+
+	// Status check ("/status")
+	Status string `json:"status"`
 
 	// File upload ("/upload")
 	Upload string `json:"upload"`
 
-	// Shared content for edit ("/wall")
+	// Shared content edit ("/wall")
 	Wall string `json:"wall"`
 }
