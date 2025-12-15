@@ -39,5 +39,8 @@ func (s *Storage) ServeWall(w http.ResponseWriter) {
 	disposition := "attachment; filename=\"wall.txt\""
 	w.Header().Set("Content-Disposition", disposition)
 	w.Header().Set("Content-Type", "text/plain")
-	fmt.Fprintf(w, "%s", s.WallContent)
+	_, err := fmt.Fprintf(w, "%s", s.WallContent)
+	if err != nil {
+	    return
+	}
 }
