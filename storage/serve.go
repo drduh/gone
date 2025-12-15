@@ -41,6 +41,6 @@ func (s *Storage) ServeWall(w http.ResponseWriter) {
 	w.Header().Set("Content-Type", "text/plain")
 	_, err := fmt.Fprintf(w, "%s", s.WallContent)
 	if err != nil {
-	    return
+		return
 	}
 }

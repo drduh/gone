@@ -27,11 +27,12 @@ func TestFormatSize(t *testing.T) {
 		expect string
 	}{
 		{0, "0 bytes"},
-		{200, "200.00 bytes"},
-		{1024, "1.00 kb"},
+		{200, "200 bytes"},
+		{1024, "1 kb"},
 		{5000, "4.88 kb"},
-		{1048576, "1.00 mb"},
-		{5242880, "5.00 mb"},
+		{1048576, "1 mb"},
+		{5242880, "5 mb"},
+		{100000000, "95.37 mb"},
 	}
 	for _, tt := range tests {
 		t.Run(fmt.Sprintf("input: %d", tt.input), func(t *testing.T) {

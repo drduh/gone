@@ -21,6 +21,9 @@ func FormatSize(bytes int) string {
 		size /= 1024
 		unitIndex++
 	}
+	if size == float64(int(size)) {
+		return fmt.Sprintf("%d %s", int(size), sizeUnits[unitIndex])
+	}
 	return fmt.Sprintf("%.2f %s", size, sizeUnits[unitIndex])
 }
 

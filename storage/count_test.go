@@ -9,14 +9,34 @@ func TestCountFiles(t *testing.T) {
 	if s.NumFiles != 0 {
 		t.Fatalf("NumFiles = %d; want 0", s.NumFiles)
 	}
+	if s.SizeFiles != 0 {
+		t.Fatalf("SizeFiles = %d; want 0", s.SizeFiles)
+	}
+	if s.SizeFilesFmt != "" {
+		t.Fatalf("SizeFilesFmt = %s; want empty string",
+			s.SizeFilesFmt)
+	}
 
 	s.Files = map[string]*File{
-		"file1": {},
-		"file2": {},
+		"file1": {
+			Data:  []byte("test content 1"),
+			Bytes: 14,
+		},
+		"file2": {
+			Data:  []byte("test content 2"),
+			Bytes: 14,
+		},
 	}
 	s.CountFiles()
 	if s.NumFiles != 2 {
 		t.Fatalf("NumFiles = %d; want 2", s.NumFiles)
+	}
+	if s.SizeFiles != 28 {
+		t.Fatalf("SizeFiles = %d; want 0", s.SizeFiles)
+	}
+	if s.SizeFilesFmt != "28 bytes" {
+		t.Fatalf("SizeFilesFmt = %s; want '28 bytes'",
+			s.SizeFilesFmt)
 	}
 }
 
