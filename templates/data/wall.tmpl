@@ -29,5 +29,13 @@
               title="clear wall"
                type="submit">clear</button>
     </form>
+    <form action="{{ .Paths.Wall }}"
+          method="get"
+           style="display:inline;">
+      <input type="hidden" name="download" value="all">
+      <button class="selectDownload" {{ if not .Storage.WallContent }} disabled {{ end }}
+              title="download wall"
+               type="submit">download</button>
+    </form>
   </div>
 {{ end }}

@@ -30,7 +30,7 @@ func (f *File) setSize() {
 	f.Size = util.FormatSize(f.Bytes)
 }
 
-// SetSum sets the content SHA-256 hash sum.
+// SetSum sets the content hash sum.
 func (f *File) setSum() {
 	f.Sum = util.Sum(f.Data)
 }

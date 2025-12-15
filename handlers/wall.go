@@ -35,6 +35,12 @@ func Wall(app *config.App) http.HandlerFunc {
 			toRoot(w, r, app.Root)
 		}
 
+		if r.URL.Query().Get("download") == "all" {
+			app.Log.Debug("serving wall content", "user", req)
+			app.ServeWall(w)
+			return
+		}
+
 		writeJSON(w, http.StatusOK, app.WallContent)
 	}
 }
