@@ -28,6 +28,7 @@ func getHandler(app *config.App) http.Handler {
 		}
 	}
 
+	handle(app.Clear, handlers.Clear(app))
 	handle(app.Download, handlers.Download(app))
 	handle(app.List, handlers.List(app))
 	handle(app.Message, handlers.Message(app))

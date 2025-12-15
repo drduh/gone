@@ -6,41 +6,42 @@ package settings
 type Settings struct {
 
 	// Auditor options
-	Audit `json:"audit"`
+	Audit `json:"audit,omitempty"`
 
 	// Authentication requirements
-	Auth `json:"auth"`
+	Auth `json:"auth,omitempty"`
 
 	// Errors to serve
-	Error `json:"error"`
+	Error `json:"error,omitempty"`
 
 	// User interface options
-	Index `json:"index"`
+	Index `json:"index,omitempty"`
 
 	// Content sharing defaults
-	Default `json:"default"`
+	Default `json:"default,omitempty"`
 
 	// Content limits
-	Limit `json:"limit"`
+	Limit `json:"limit,omitempty"`
 
 	// Paths to route
-	Paths `json:"paths"`
+	Paths `json:"paths,omitempty"`
 
 	// TCP port to listen on
-	Port int `json:"port"`
+	Port int `json:"port,omitempty"`
 
-	// Show build details in status and footer
-	ShowBuild bool `json:"showBuild"`
+	// Show build details in status response
+	// and index footer
+	ShowBuild bool `json:"showBuild,omitempty"`
 }
 
 // Auditor logging preferences
 type Audit struct {
 
 	// Optional file destination for logs
-	Filename string `json:"logFile"`
+	Filename string `json:"logFile,omitempty"`
 
 	// Format for datetime in logs
-	TimeFormat string `json:"timeFormat"`
+	TimeFormat string `json:"timeFormat,omitempty"`
 }
 
 // Authentication properties
@@ -50,110 +51,113 @@ type Auth struct {
 	Basic struct {
 
 		// Header or form field name ("X-Auth")
-		Field string `json:"field"`
+		Field string `json:"field,omitempty"`
 
-		// String-based token
-		Token string `json:"token"`
-	} `json:"basic"`
+		// String-based token ("mySecret")
+		Token string `json:"token,omitempty"`
+	} `json:"basic,omitempty"`
 
 	// Route authentication requirements
 	Require struct {
 
-		// Whether to require authentication to download files
-		Download bool `json:"download"`
+		// Require authentication to clear uploads
+		Clear bool `json:"clear,omitempty"`
 
-		// Whether to require authentication to list files
-		List bool `json:"list"`
+		// Require authentication to download files
+		Download bool `json:"download,omitempty"`
 
-		// Whether to require authentication to post messages
-		Message bool `json:"message"`
+		// Require authentication to list files
+		List bool `json:"list,omitempty"`
 
-		// Whether to require authentication to upload files
-		Upload bool `json:"upload"`
+		// Require authentication to post messages
+		Message bool `json:"message,omitempty"`
 
-		// Whether to require authentication to edit shared content
-		Wall bool `json:"wall"`
-	} `json:"require"`
+		// Require authentication to upload files
+		Upload bool `json:"upload,omitempty"`
+
+		// Require authentication to edit shared content
+		Wall bool `json:"wall,omitempty"`
+	} `json:"require,omitempty"`
 }
 
-// Error response
+// Error responses
 type Error struct {
 
 	// Failed to copy file
-	Copy string `json:"copy"`
+	Copy string `json:"copy,omitempty"`
 
 	// Deny (not authorized)
-	Deny string `json:"deny"`
+	Deny string `json:"deny,omitempty"`
 
 	// File exceeds size limit
-	FileSize string `json:"fileSize"`
+	FileSize string `json:"fileSize,omitempty"`
 
 	// Upload form not valid
-	Form string `json:"form"`
+	Form string `json:"form,omitempty"`
 
 	// Filename not provided
-	NoFilename string `json:"noFilename"`
+	NoFilename string `json:"noFilename,omitempty"`
 
 	// No files available
-	NoFiles string `json:"noFiles"`
+	NoFiles string `json:"noFiles,omitempty"`
 
 	// File not found in Storage
-	NotFound string `json:"notFound"`
+	NotFound string `json:"notFound,omitempty"`
 
 	// Template could not be executed
-	TmplExec string `json:"tmplExec"`
+	TmplExec string `json:"tmplExec,omitempty"`
 
 	// Template could not be parsed
-	TmplParse string `json:"tmplParse"`
+	TmplParse string `json:"tmplParse,omitempty"`
 
 	// Too many requests
-	RateLimit string `json:"rateLimit"`
+	RateLimit string `json:"rateLimit,omitempty"`
 }
 
 // Index HTML index page properties
 type Index struct {
 
-	// Whether to enable Content Security Policy (CSP)
-	CSP bool `json:"csp"`
+	// Enable Content Security Policy (CSP)
+	CSP bool `json:"csp,omitempty"`
 
 	// Page title ("gone")
-	Title string `json:"title"`
+	Title string `json:"title,omitempty"`
 
 	// Cookie management
 	Cookie struct {
 
 		// Label ("goneTheme")
-		Id string `json:"id"`
+		Id string `json:"id,omitempty"`
 
 		// Time cookie is valid for ("192h")
-		Time Duration `json:"time"`
-	} `json:"cookie"`
+		Time Duration `json:"time,omitempty"`
+	} `json:"cookie,omitempty"`
 
 	// CSS style options
 	Style struct {
 
-		// Whether to allow theme selection
-		AllowPick bool `json:"allowPick"`
+		// Allow theme selection
+		AllowPick bool `json:"allowPick,omitempty"`
 
 		// List of available themes to choose from, if allowed
-		Available []string `json:"available"`
+		Available []string `json:"available,omitempty"`
 
 		// Theme to style with ("auto" for time-based option)
-		Theme string `json:"theme"`
-	} `json:"style"`
+		Theme string `json:"theme,omitempty"`
+	} `json:"style,omitempty"`
 
 	// Index form placeholder text
 	Placeholder struct {
 
 		// Authentication field
-		Auth string `json:"auth"`
+		Auth string `json:"auth,omitempty"`
 
 		// File selection field
-		File string `json:"file"`
+		File string `json:"file,omitempty"`
 
 		// Message input field
-		Message string `json:"message"`
-	} `json:"placeholder"`
+		Message string `json:"message,omitempty"`
+	} `json:"placeholder,omitempty"`
 }
 
 // Content sharing defaults
@@ -189,32 +193,35 @@ type Limit struct {
 type Paths struct {
 
 	// Assets for HTML pages ("/assets/")
-	Assets string `json:"assets"`
+	Assets string `json:"assets,omitempty"`
+
+	// Remove content ("/clear")
+	Clear string `json:"clear,omitempty"`
 
 	// File download ("/download/")
-	Download string `json:"download"`
+	Download string `json:"download,omitempty"`
 
 	// File list ("/list")
-	List string `json:"list"`
+	List string `json:"list,omitempty"`
 
 	// Message read and write ("/msg")
-	Message string `json:"message"`
+	Message string `json:"message,omitempty"`
 
 	// Random output ("/random/")
-	Random string `json:"random"`
+	Random string `json:"random,omitempty"`
 
 	// Default root path ("/")
-	Root string `json:"root"`
+	Root string `json:"root,omitempty"`
 
 	// Embedded static file ("/static")
-	Static string `json:"static"`
+	Static string `json:"static,omitempty"`
 
 	// Status check ("/status")
-	Status string `json:"status"`
+	Status string `json:"status,omitempty"`
 
 	// File upload ("/upload")
-	Upload string `json:"upload"`
+	Upload string `json:"upload,omitempty"`
 
 	// Shared content edit ("/wall")
-	Wall string `json:"wall"`
+	Wall string `json:"wall,omitempty"`
 }

@@ -21,7 +21,8 @@ func List(app *config.App) http.HandlerFunc {
 			return
 		}
 
-		app.UpdateTime()
+		app.UpdateTimeRemaining()
+
 		files := getFiles(app)
 
 		app.Log.Info("serving file list",
@@ -30,15 +31,16 @@ func List(app *config.App) http.HandlerFunc {
 	}
 }
 
-// getFiles returns a list of non-expired Files in Storage.
+// getFiles returns a list of non-expired Files in Storage,
+// and removes expired Files.
 func getFiles(app *config.App) []storage.File {
 	files := make([]storage.File, 0, len(app.Files))
 	for _, file := range app.Files {
 		reason := file.IsExpired()
 		if reason != "" {
 			app.Expire(file)
-			app.Log.Info("removed file",
-				"reason", reason, "filename", file.Name,
+			app.Log.Info("removed file", "reason", reason,
+				"id", file.Id, "name", file.Name,
 				"downloads", file.Total)
 			break
 		}
@@ -65,5 +67,6 @@ func getFiles(app *config.App) []storage.File {
 		}
 		files = append(files, f)
 	}
+
 	return files
 }

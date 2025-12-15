@@ -3,9 +3,9 @@ package config
 // Application operation modes
 type Modes struct {
 
-	// Whether to display verbose debug output
+	// Display verbose debug output
 	Debug bool
 
-	// Whether to display version/build information
+	// Display version/build information
 	Version bool
 }

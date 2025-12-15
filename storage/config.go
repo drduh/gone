@@ -12,16 +12,16 @@ const storageVersion = "1"
 type Storage struct {
 
 	// Uploaded files
-	Files map[string]*File
+	Files map[string]*File `json:"files,omitempty"`
 
 	// Posted text messages
-	Messages map[int]*Message
+	Messages map[int]*Message `json:"messages,omitempty"`
 
 	// Shared edit content
-	WallContent string
+	WallContent string `json:"wallContent,omitempty"`
 
 	// Storage content total sizes
-	Sizes
+	Sizes `json:"storageSizes,omitempty"`
 }
 
 // File represents a user-uploaded file.
@@ -42,10 +42,13 @@ type File struct {
 	// Downloads information
 	Downloads `json:"downloads,omitempty"`
 
+	// Number of bytes
+	Bytes int `json:"bytes,omitempty"`
+
 	// File length (for Content-Length header)
 	Length string `json:"length,omitempty"`
 
-	// File size (human-readable string)
+	// File size (formatted string)
 	Size string `json:"size,omitempty"`
 
 	// File type (based on name extension)
@@ -122,12 +125,24 @@ type Downloads struct {
 // Sizes represents Storage content sizes.
 type Sizes struct {
 
-	// Number of Files in Storage
-	NumFiles int `json:"numFiles"`
+	// Number of characters in all Messages
+	CharsMessages int `json:"charsMessages,omitempty"`
 
-	// Number of Messages in Storage
-	NumMessages int `json:"numMessages"`
+	// Number of characters in Wall content
+	CharsWall int `json:"charsWall,omitempty"`
 
-	// Length of Wall content in Storage
-	CharsWall int `json:"charsWall"`
+	// Number of lines in Wall content
+	LinesWall int `json:"linesWall,omitempty"`
+
+	// Number of Files
+	NumFiles int `json:"numFiles,omitempty"`
+
+	// Number of Messages
+	NumMessages int `json:"numMessages,omitempty"`
+
+	// Total size of all Files
+	SizeFiles int `json:"sizeFiles,omitempty"`
+
+	// Formatted total size of all Files
+	SizeFilesFmt string `json:"sizeFilesFmt,omitempty"`
 }

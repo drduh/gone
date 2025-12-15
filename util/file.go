@@ -8,19 +8,23 @@ import (
 	"strings"
 )
 
+var sizeUnits = []string{"bytes", "kb", "mb", "gb", "tb"}
+
 // FormatSize returns a formatted file size from bytes.
 func FormatSize(bytes int) string {
 	if bytes == 0 {
-		return "0 Bytes"
+		return "0 bytes"
 	}
-	units := []string{"Bytes", "KB", "MB", "GB"}
 	var unitIndex int
 	size := float64(bytes)
-	for size >= 1024 && unitIndex < len(units)-1 {
+	for size >= 1024 && unitIndex < len(sizeUnits)-1 {
 		size /= 1024
 		unitIndex++
 	}
-	return fmt.Sprintf("%.2f %s", size, units[unitIndex])
+	if size == float64(int(size)) {
+		return fmt.Sprintf("%d %s", int(size), sizeUnits[unitIndex])
+	}
+	return fmt.Sprintf("%.2f %s", size, sizeUnits[unitIndex])
 }
 
 // GetOutput returns the destination file or stdout IO writer.

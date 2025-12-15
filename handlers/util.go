@@ -12,7 +12,7 @@ import (
 	"github.com/drduh/gone/util"
 )
 
-// deny serves a JSON response for deny (auth fail).
+// deny serves a JSON response for unauthorized requests.
 func deny(w http.ResponseWriter, app *config.App, r *Request) {
 	writeJSON(w, http.StatusUnauthorized, errorJSON(app.Deny))
 	app.Log.Error(app.Deny, "user", r)
@@ -27,6 +27,7 @@ func toRoot(w http.ResponseWriter, r *http.Request, rootPath string) {
 // is required and allowed.
 func isAllowed(app *config.App, r *http.Request) bool {
 	reqs := map[string]bool{
+		app.Clear:    app.Require.Clear,
 		app.Download: app.Require.Download,
 		app.List:     app.Require.List,
 		app.Message:  app.Require.Message,
@@ -78,15 +79,16 @@ func parseRequest(r *http.Request) *Request {
 		address = "unknown address"
 	}
 	return &Request{
-		Action:  r.URL.String(),
 		Address: r.RemoteAddr,
-		Mask:    util.Mask(address),
 		Agent:   r.UserAgent(),
+		Mask:    util.Mask(address),
+		Path:    r.URL.String(),
 	}
 }
 
-// authRequest returns only an allowed parsed http Request struct.
-func authRequest(w http.ResponseWriter, r *http.Request, app *config.App) (*Request, bool) {
+// authRequest returns only allowed parsed http Requests.
+func authRequest(w http.ResponseWriter,
+	r *http.Request, app *config.App) (*Request, bool) {
 	req := parseRequest(r)
 	if !isAllowed(app, r) {
 		deny(w, app, req)
@@ -127,7 +129,7 @@ func getTheme(w http.ResponseWriter, r *http.Request,
 	formContent := r.FormValue(formFieldTheme)
 	if formContent != "" {
 		theme := formContent
-		if !slices.Contains(themes, formContent) {
+		if !slices.Contains(themes, theme) {
 			theme = getDefaultTheme("auto")
 		}
 		http.SetCookie(w, auth.NewCookie(theme, id, t))

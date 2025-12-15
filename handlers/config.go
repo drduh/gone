@@ -14,8 +14,8 @@ const (
 // Request contains server operation metadata.
 type Request struct {
 
-	// Handler path ("/")
-	Action string `json:"action"`
+	// Path to handle ("/")
+	Path string `json:"path"`
 
 	// IP address including port ("127.0.0.1:12345")
 	Address string `json:"address"`

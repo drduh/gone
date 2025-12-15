@@ -16,19 +16,21 @@ func (f *File) Scan() {
 	f.setType()
 }
 
-// SetId sets versioned File id with encoded entropy bytes.
+// SetId sets a versioned File id using encoded
+// random bytes.
 func (f *File) setId() {
 	f.Id = storageVersion + util.RandomId()
 }
 
-// SetSize sets the content length and readable file size.
+// SetSize sets File byte count, content length and
+// and formatted size.
 func (f *File) setSize() {
-	size := len(f.Data)
-	f.Length = strconv.Itoa(size)
-	f.Size = util.FormatSize(size)
+	f.Bytes = len(f.Data)
+	f.Length = strconv.Itoa(f.Bytes)
+	f.Size = util.FormatSize(f.Bytes)
 }
 
-// SetSum sets the content SHA-256 hash sum.
+// SetSum sets the content hash sum.
 func (f *File) setSum() {
 	f.Sum = util.Sum(f.Data)
 }

@@ -31,14 +31,10 @@ func Status(app *config.App) http.HandlerFunc {
 			Index:    app.Index,
 			Default:  app.Default,
 			Limit:    app.Limit,
+			Sizes:    app.Sizes,
 			Owner: storage.Owner{
 				Address: req.Address,
 				Headers: r.Header,
-			},
-			Sizes: storage.Sizes{
-				NumFiles:    app.NumFiles,
-				NumMessages: app.NumMessages,
-				CharsWall:   app.CharsWall,
 			},
 		}
 

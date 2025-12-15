@@ -21,14 +21,14 @@ func TestSetId(t *testing.T) {
 func TestSetSize(t *testing.T) {
 	data := []byte("hello")
 	length := "5"
-	size := "5.00 Bytes"
+	size := "5 bytes"
 	f := &File{Data: data}
 	f.setSize()
 	if got := f.Length; got != length {
 		t.Fatalf("Length = %q; want %q", got, length)
 	}
 	if got := f.Size; got != size {
-		t.Fatalf("Size = %q; want %q", got, size)
+		t.Fatalf("Size = %q; want '%q'", got, size)
 	}
 }
 

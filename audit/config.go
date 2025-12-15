@@ -1,5 +1,5 @@
-// Package audit provides a JSON-based structured logger
-// to output application events for monitoring.
+// Package audit provides a JSON logger to monitor
+// application events.
 package audit
 
 import (
@@ -7,7 +7,7 @@ import (
 	"log/slog"
 )
 
-// Monitor for application events
+// Auditor represents a configured app logger.
 type Auditor struct {
 
 	// Configured options
@@ -19,10 +19,10 @@ type Auditor struct {
 	*log.Logger
 }
 
-// Auditor configuration
+// Config represents an Auditor configuration.
 type Config struct {
 
-	// Whether to set debug logging level
+	// Set logging level to Debug
 	Debug bool
 
 	// Format for time field
@@ -32,18 +32,18 @@ type Config struct {
 	Filename string
 }
 
-// Audit Event
+// Event represents a unique Auditor log.
 type Event struct {
 
-	// Time of event
+	// Time of event ("Saturday Dec 13 12:00")
 	Time string `json:"time"`
 
 	// Severity level ("INFO", "DEBUG", etc.)
 	Level string `json:"level"`
 
-	// Short summary
+	// Summary message ("starting server")
 	Message string `json:"message"`
 
-	// Full event
+	// Additional information ("data": {"port": 8080})
 	Data map[string]interface{} `json:"data"`
 }

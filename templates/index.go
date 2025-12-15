@@ -8,7 +8,7 @@ import (
 // Index contains index HTML page elements.
 type Index struct {
 
-	// Whether to display build, uptime and version in footer
+	// Display build details in footer
 	ShowBuild bool
 
 	// Selected CSS theme
