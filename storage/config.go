@@ -21,7 +21,7 @@ type Storage struct {
 	WallContent string `json:"wallContent,omitempty"`
 
 	// Storage content total sizes
-	Sizes
+	Sizes `json:"storageSizes,omitempty"`
 }
 
 // File represents a user-uploaded file.

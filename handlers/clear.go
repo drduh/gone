@@ -22,7 +22,6 @@ func Clear(app *config.App) http.HandlerFunc {
 		}
 
 		app.ClearStorage()
-		app.CountStorage()
 		app.Log.Info("storage cleared", "user", req)
 
 		toRoot(w, r, app.Root)

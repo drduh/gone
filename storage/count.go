@@ -22,7 +22,11 @@ func (s *Storage) CountFiles() {
 		total += file.Bytes
 	}
 	s.SizeFiles = total
-	s.SizeFilesFmt = util.FormatSize(s.SizeFiles)
+	if s.SizeFiles > 0 {
+		s.SizeFilesFmt = util.FormatSize(s.SizeFiles)
+	} else {
+		s.SizeFilesFmt = ""
+	}
 }
 
 // CountMessages counts the number of Messages

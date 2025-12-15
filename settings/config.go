@@ -53,7 +53,7 @@ type Auth struct {
 		// Header or form field name ("X-Auth")
 		Field string `json:"field,omitempty"`
 
-		// String-based token
+		// String-based token ("mySecret")
 		Token string `json:"token,omitempty"`
 	} `json:"basic,omitempty"`
 
@@ -80,7 +80,7 @@ type Auth struct {
 	} `json:"require,omitempty"`
 }
 
-// Error response
+// Error responses
 type Error struct {
 
 	// Failed to copy file
