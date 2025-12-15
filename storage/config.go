@@ -12,13 +12,13 @@ const storageVersion = "1"
 type Storage struct {
 
 	// Uploaded files
-	Files map[string]*File
+	Files map[string]*File `json:"files,omitempty"`
 
 	// Posted text messages
-	Messages map[int]*Message
+	Messages map[int]*Message `json:"messages,omitempty"`
 
 	// Shared edit content
-	WallContent string
+	WallContent string `json:"wallContent,omitempty"`
 
 	// Storage content total sizes
 	Sizes
@@ -126,23 +126,23 @@ type Downloads struct {
 type Sizes struct {
 
 	// Number of characters in all Messages
-	CharsMessages int `json:"charsMessages"`
+	CharsMessages int `json:"charsMessages,omitempty"`
 
 	// Number of characters in Wall content
-	CharsWall int `json:"charsWall"`
+	CharsWall int `json:"charsWall,omitempty"`
 
 	// Number of lines in Wall content
-	LinesWall int `json:"linesWall"`
+	LinesWall int `json:"linesWall,omitempty"`
 
 	// Number of Files
-	NumFiles int `json:"numFiles"`
+	NumFiles int `json:"numFiles,omitempty"`
 
 	// Number of Messages
-	NumMessages int `json:"numMessages"`
+	NumMessages int `json:"numMessages,omitempty"`
 
 	// Total size of all Files
-	SizeFiles int `json:"sizeFiles"`
+	SizeFiles int `json:"sizeFiles,omitempty"`
 
 	// Formatted total size of all Files
-	SizeFilesFmt string `json:"sizeFilesFmt"`
+	SizeFilesFmt string `json:"sizeFilesFmt,omitempty"`
 }

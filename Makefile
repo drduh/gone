@@ -137,3 +137,5 @@ coverage: cover
 tset: test
 
 urn: run
+
+verbose: debug
