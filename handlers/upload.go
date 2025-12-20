@@ -5,7 +5,6 @@ import (
 	"io"
 	"mime/multipart"
 	"net/http"
-	"strconv"
 	"sync"
 	"time"
 
@@ -37,21 +36,13 @@ func Upload(app *config.App) http.HandlerFunc {
 			return
 		}
 
-		downloadLimit := app.Downloads
-		downloadLimitInput := r.FormValue(formFieldDownloads)
-		if limit, err := strconv.Atoi(downloadLimitInput); err == nil {
-			downloadLimit = limit
-			app.Log.Debug("got form value",
-				formFieldDownloads, downloadLimit)
-		}
+		downloadLimit := parseFormInt(r,
+			formFieldDownloads, app.Downloads)
+		app.Log.Debug("got form value", formFieldDownloads, downloadLimit)
 
-		durationLimit := app.Expiration.Duration
-		durationLimitInput := r.FormValue(formFieldDuration)
-		if limit, err := time.ParseDuration(durationLimitInput); err == nil {
-			durationLimit = limit
-			app.Log.Debug("got form value",
-				formFieldDuration, durationLimit.String())
-		}
+		durationLimit := parseFormDuration(r,
+			formFieldDuration, app.Expiration.Duration)
+		app.Log.Debug("got form value", formFieldDuration, durationLimit)
 
 		var upload storage.File
 		var uploads []storage.File

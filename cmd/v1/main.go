@@ -24,7 +24,7 @@ func Run() {
 
 	app.Log.Info("started v1",
 		"version", app.Version, "host", app.Hostname)
-	if app.Modes.Debug {
+	if app.Debug {
 		app.Log.Debug("debug enabled", "configuration", app)
 	}
 

@@ -125,6 +125,7 @@ lint-verbose:
 
 cover: test-cover
 	@$(GO) tool cover -html=$(TESTCOVER) -o $(TESTCOVER).html
+	@printf "cover: %s\n" "$$(file $(TESTCOVER).html)"
 
 doc:
 	@$(GODOC) -http :8000
@@ -135,6 +136,8 @@ clean:
 clena: clean
 
 coverage: cover
+
+prod: release
 
 tset: test
 
