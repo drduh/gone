@@ -32,9 +32,12 @@ func isAuthenticated(app *config.App, r *http.Request) bool {
 	reqs := map[string]bool{
 		app.Clear:    app.Require.Clear,
 		app.Download: app.Require.Download,
-		app.Root:     app.Require.Root,
 		app.List:     app.Require.List,
 		app.Message:  app.Require.Message,
+		app.Random:   app.Require.Random,
+		app.Root:     app.Require.Root,
+		app.Static:   app.Require.Static,
+		app.Status:   app.Require.Status,
 		app.Upload:   app.Require.Upload,
 		app.Wall:     app.Require.Wall,
 	}

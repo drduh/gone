@@ -4,9 +4,9 @@ import (
 	"log/slog"
 	"time"
 
+	"github.com/drduh/gone/auth"
 	"github.com/drduh/gone/settings"
 	"github.com/drduh/gone/storage"
-	"github.com/drduh/gone/throttle"
 )
 
 // App represents the global application configuration.
@@ -34,5 +34,5 @@ type App struct {
 	storage.Storage
 
 	// Global rate limiting requests throttle
-	throttle.Requests
+	auth.RequestThrottle
 }

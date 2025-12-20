@@ -57,28 +57,37 @@ type Auth struct {
 		Token string `json:"token,omitempty"`
 	} `json:"basic,omitempty"`
 
-	// Require represents paths which may require auth.
+	// Require represents paths requiring authentication.
 	Require struct {
 
-		// Require authentication to clear uploads
+		// Clear content
 		Clear bool `json:"clear,omitempty"`
 
-		// Require authentication to download files
+		// Download files
 		Download bool `json:"download,omitempty"`
 
-		// Require authentication to load root (index)
-		Root bool `json:"root,omitempty"`
-
-		// Require authentication to list files
+		// List files
 		List bool `json:"list,omitempty"`
 
-		// Require authentication to post messages
+		// Read and write text messages
 		Message bool `json:"message,omitempty"`
 
-		// Require authentication to upload files
+		// Get random output
+		Random bool `json:"random,omitempty"`
+
+		// Load root (index page)
+		Root bool `json:"root,omitempty"`
+
+		// Static content
+		Static bool `json:"static,omitempty"`
+
+		// Server status response
+		Status bool `json:"status,omitempty"`
+
+		// Upload files
 		Upload bool `json:"upload,omitempty"`
 
-		// Require authentication to edit shared content
+		// Read and write wall content
 		Wall bool `json:"wall,omitempty"`
 	} `json:"require,omitempty"`
 }

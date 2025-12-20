@@ -15,7 +15,10 @@
       "download":  true,
       "list":      false,
       "message":   false,
+      "random":    false,
       "root":      false,
+      "static":    false,
+      "status":    false,
       "upload":    false,
       "wall":      false
     }

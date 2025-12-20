@@ -1,4 +1,4 @@
-package throttle
+package auth
 
 import "time"
 
@@ -7,9 +7,9 @@ func getCutoff(t time.Time) time.Time {
 	return t.Add(-1 * time.Minute)
 }
 
-// Allow returns true if the Requests limit
+// Allow returns true if the RequestThrottle limit
 // is not exceeded within the cutoff period.
-func (r *Requests) Authorize(limit int) bool {
+func (r *RequestThrottle) Authorize(limit int) bool {
 	if limit <= 0 {
 		return true
 	}
