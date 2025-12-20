@@ -183,7 +183,7 @@ type Limit struct {
 	MaxSizeFileMb int64 `json:"maxSizeFileMb,omitempty"`
 
 	// Number of requests per minute to rate limit
-	PerMinute int `json:"perMinute,omitempty"`
+	ReqsPerMinute int `json:"reqsPerMinute,omitempty"`
 
 	// Frequency of File expiration check
 	Ticker Duration `json:"ticker,omitempty"`

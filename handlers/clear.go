@@ -9,12 +9,12 @@ import (
 // Clear handles requests to clear Storage content.
 func Clear(app *config.App) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		req, allowed := authRequest(w, r, app)
-		if !allowed {
+		req := authRequest(w, r, app)
+		if req == nil {
 			return
 		}
 
-		if !app.Allow(app.PerMinute) {
+		if !app.Allow(app.ReqsPerMinute) {
 			writeJSON(w, http.StatusTooManyRequests,
 				errorJSON(app.RateLimit))
 			app.Log.Error(app.RateLimit, "user", req)

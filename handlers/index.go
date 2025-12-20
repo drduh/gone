@@ -14,7 +14,7 @@ func Index(app *config.App) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		req := parseRequest(r)
 
-		if !app.Allow(app.PerMinute) {
+		if !app.Allow(app.ReqsPerMinute) {
 			writeJSON(w, http.StatusTooManyRequests, errorJSON(app.RateLimit))
 			app.Log.Error(app.RateLimit, "user", req)
 			return

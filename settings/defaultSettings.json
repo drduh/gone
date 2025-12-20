@@ -72,7 +72,7 @@
     "maxSizeMsg":    128,
     "maxSizeWall":   1280,
     "maxSizeFileMb": 256,
-    "perMinute":     30,
+    "reqsPerMinute": 30,
     "ticker":        "30s"
   },
   "paths": {

@@ -12,16 +12,17 @@ import (
 //go:embed defaultSettings.json
 var defaultSettings []byte
 
-// Get returns the loaded application configuration
-// from path or embedded default settings file.
-func Get(pathConfig string) Settings {
+// Load returns the application configuration from
+// a settings file or the default embedded settings.
+func Load(settingsFilepath string) Settings {
 	var settings Settings
 	if err := loadSettings(defaultSettings, &settings); err != nil {
 		log.Fatalf("failed loading default settings: %v", err)
 	}
 
-	if pathConfig != "" {
-		if err := loadSettingsFromFile(pathConfig, &settings); err != nil {
+	if settingsFilepath != "" {
+		if err := loadSettingsFromFile(
+			settingsFilepath, &settings); err != nil {
 			log.Fatalf("failed loading settings from file: %v", err)
 		}
 	}
@@ -41,7 +42,7 @@ func loadSettings(data []byte, settings *Settings) error {
 func loadSettingsFromFile(path string, settings *Settings) error {
 	data, err := os.ReadFile(path)
 	if err != nil {
-		return fmt.Errorf("failed to read %s: %w", path, err)
+		return fmt.Errorf("failed to read '%s': %w", path, err)
 	}
 	return loadSettings(data, settings)
 }

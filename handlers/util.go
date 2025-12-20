@@ -87,14 +87,14 @@ func parseRequest(r *http.Request) *Request {
 }
 
 // authRequest returns only allowed parsed http Requests.
-func authRequest(w http.ResponseWriter,
-	r *http.Request, app *config.App) (*Request, bool) {
+func authRequest(w http.ResponseWriter, r *http.Request,
+	app *config.App) *Request {
 	req := parseRequest(r)
 	if !isAllowed(app, r) {
 		deny(w, app, req)
-		return nil, false
+		return nil
 	}
-	return req, true
+	return req
 }
 
 // writeJSON serves a JSON response with data.

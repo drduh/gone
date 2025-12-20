@@ -6,7 +6,8 @@ import (
 	"github.com/drduh/gone/config"
 )
 
-// expiryWorker runs an expiration check on a configured schedule.
+// expiryWorker checks for and expires Files
+// on the configured "ticker" schedule.
 func expiryWorker(app *config.App) {
 	ticker := time.NewTicker(app.Ticker.Duration)
 	defer ticker.Stop()
