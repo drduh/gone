@@ -2,13 +2,16 @@ package auth
 
 import "time"
 
-// getCutoff returns the Throttle window cutoff (1 minute).
+const throttleInterval = 1 * time.Minute
+
+// getCutoff returns the rate-limit window cutoff.
 func getCutoff(t time.Time) time.Time {
-	return t.Add(-1 * time.Minute)
+	return t.Add(-throttleInterval)
 }
 
-// Allow returns true if the RequestThrottle limit
-// is not exceeded within the cutoff period.
+// Authorize returns true if the RequestThrottle limit
+// is not exceeded within the cutoff period, or returns
+// false and slows fails attempts.
 func (r *RequestThrottle) Authorize(limit int) bool {
 	if limit <= 0 {
 		return true
@@ -28,6 +31,7 @@ func (r *RequestThrottle) Authorize(limit int) bool {
 	}
 
 	if len(times) >= limit {
+		applyTarpit()
 		return false
 	}
 

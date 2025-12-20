@@ -8,7 +8,9 @@ import (
 	"github.com/drduh/gone/handlers"
 )
 
-// getHandler configures HTTP handler routes to serve.
+const assetsPath = "assets"
+
+// getHandler configures paths to handle and serve.
 func getHandler(app *config.App) http.Handler {
 	mux := http.NewServeMux()
 
@@ -18,13 +20,11 @@ func getHandler(app *config.App) http.Handler {
 		}
 	}
 
-	handle(app.Root, handlers.Index(app))
-
 	if app.Assets != "" {
-		assets := "assets"
-		if _, err := os.Stat(assets); err == nil {
-			mux.Handle(app.Assets, http.StripPrefix(
-				app.Assets, http.FileServer(http.Dir(assets))))
+		if _, err := os.Stat(assetsPath); err == nil {
+			mux.Handle(app.Assets,
+				http.StripPrefix(app.Assets,
+					http.FileServer(http.Dir(assetsPath))))
 		}
 	}
 
@@ -33,6 +33,7 @@ func getHandler(app *config.App) http.Handler {
 	handle(app.List, handlers.List(app))
 	handle(app.Message, handlers.Message(app))
 	handle(app.Random, handlers.Random(app))
+	handle(app.Root, handlers.Index(app))
 	handle(app.Static, handlers.Static(app))
 	handle(app.Status, handlers.Status(app))
 	handle(app.Upload, handlers.Upload(app))
