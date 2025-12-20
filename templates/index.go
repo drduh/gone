@@ -35,7 +35,7 @@ type Index struct {
 	// Content sharing defaults
 	settings.Default
 
-	// Page properties
+	// Index page HTML properties
 	settings.Index
 
 	// Content limits

@@ -15,7 +15,7 @@ type Settings struct {
 	Error `json:"error,omitempty"`
 
 	// User interface options
-	Index `json:"index,omitempty"`
+	Index `json:"indexPage,omitempty"`
 
 	// Content sharing defaults
 	Default `json:"default,omitempty"`
@@ -66,6 +66,9 @@ type Auth struct {
 		// Require authentication to download files
 		Download bool `json:"download,omitempty"`
 
+		// Require authentication to load root (index)
+		Root bool `json:"root,omitempty"`
+
 		// Require authentication to list files
 		List bool `json:"list,omitempty"`
 
@@ -114,7 +117,7 @@ type Error struct {
 	RateLimit string `json:"rateLimit,omitempty"`
 }
 
-// Index HTML index page properties
+// Index page HTML properties
 type Index struct {
 
 	// Enable Content Security Policy (CSP)

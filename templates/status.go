@@ -26,7 +26,7 @@ type Status struct {
 	// Limits configuration
 	settings.Limit `json:"limits,omitempty"`
 
-	// Index configuration
+	// Index page configuration
 	settings.Index `json:"indexPage,omitempty"`
 
 	// Storage content total sizes

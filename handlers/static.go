@@ -7,8 +7,7 @@ import (
 	"github.com/drduh/gone/templates"
 )
 
-// Static handles requests for static (embedded) content
-// from "templates/data/static.txt".
+// Static handles requests for static embedded content.
 func Static(app *config.App) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		req := parseRequest(r)

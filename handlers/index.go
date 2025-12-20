@@ -12,11 +12,8 @@ import (
 // with all available application features.
 func Index(app *config.App) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		req := parseRequest(r)
-
-		if !app.Allow(app.ReqsPerMinute) {
-			writeJSON(w, http.StatusTooManyRequests, errorJSON(app.RateLimit))
-			app.Log.Error(app.RateLimit, "user", req)
+		req := authRequest(w, r, app)
+		if req == nil {
 			return
 		}
 

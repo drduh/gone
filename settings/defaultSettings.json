@@ -15,6 +15,7 @@
       "download":  true,
       "list":      false,
       "message":   false,
+      "root":      false,
       "upload":    false,
       "wall":      false
     }
@@ -35,7 +36,7 @@
     "tmplExec":    "failed to exec",
     "tmplParse":   "failed parsing"
   },
-  "index": {
+  "indexPage": {
     "csp":         true,
     "title":       "gone",
     "cookie": {

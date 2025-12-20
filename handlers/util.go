@@ -12,10 +12,11 @@ import (
 	"github.com/drduh/gone/util"
 )
 
-// deny serves a JSON response for unauthorized requests.
-func deny(w http.ResponseWriter, app *config.App, r *Request) {
-	writeJSON(w, http.StatusUnauthorized, errorJSON(app.Deny))
-	app.Log.Error(app.Deny, "user", r)
+// deny serves a JSON response for disallowed requests.
+func deny(w http.ResponseWriter, httpCode int, reason string,
+	app *config.App, r *Request) {
+	writeJSON(w, httpCode, errorJSON(reason))
+	app.Log.Error(reason, "user", r)
 }
 
 // toRoot redirects an HTTP request to the root/index handler.
@@ -23,12 +24,13 @@ func toRoot(w http.ResponseWriter, r *http.Request, rootPath string) {
 	http.Redirect(w, r, rootPath, http.StatusSeeOther)
 }
 
-// isAllowed returns true if authentication for a route
+// isAuthenticated returns true if authentication for a route
 // is required and allowed.
-func isAllowed(app *config.App, r *http.Request) bool {
+func isAuthenticated(app *config.App, r *http.Request) bool {
 	reqs := map[string]bool{
 		app.Clear:    app.Require.Clear,
 		app.Download: app.Require.Download,
+		app.Root:     app.Require.Root,
 		app.List:     app.Require.List,
 		app.Message:  app.Require.Message,
 		app.Upload:   app.Require.Upload,
@@ -38,19 +40,14 @@ func isAllowed(app *config.App, r *http.Request) bool {
 	path := util.GetBasePath(r.URL.Path)
 
 	required, exists := reqs[path]
-	app.Log.Debug("checking auth",
+	app.Log.Debug("checking authn",
 		"path", path, "required", required, "exists", exists)
 	if !exists || !required {
-		app.Log.Debug("auth not required", "path", r.URL.Path)
+		app.Log.Debug("authn not required", "path", r.URL.Path)
 		return true
 	}
 
-	return isAuthenticated(app.Basic.Field, app.Basic.Token, r)
-}
-
-// isAuthentication returns true if basic authentication is successful.
-func isAuthenticated(header, token string, r *http.Request) bool {
-	return auth.Basic(header, token, r)
+	return auth.Basic(app.Basic.Field, app.Basic.Token, r)
 }
 
 // errorJSON returns an error string map containing the string.
@@ -86,12 +83,19 @@ func parseRequest(r *http.Request) *Request {
 	}
 }
 
-// authRequest returns only allowed parsed http Requests.
-func authRequest(w http.ResponseWriter, r *http.Request,
-	app *config.App) *Request {
+// authRequest returns only allowed parsed http Requests,
+// rejecting unauthenticated and unauthorized attempts.
+func authRequest(w http.ResponseWriter,
+	r *http.Request, app *config.App) *Request {
 	req := parseRequest(r)
-	if !isAllowed(app, r) {
-		deny(w, app, req)
+	if !isAuthenticated(app, r) {
+		deny(w, http.StatusForbidden,
+			app.Deny, app, req)
+		return nil
+	}
+	if !app.Authorize(app.ReqsPerMinute) {
+		deny(w, http.StatusTooManyRequests,
+			app.RateLimit, app, req)
 		return nil
 	}
 	return req

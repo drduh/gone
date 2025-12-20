@@ -14,17 +14,8 @@ func List(app *config.App) http.HandlerFunc {
 		if req == nil {
 			return
 		}
-
-		if !app.Allow(app.ReqsPerMinute) {
-			writeJSON(w, http.StatusTooManyRequests, errorJSON(app.RateLimit))
-			app.Log.Error(app.RateLimit, "user", req)
-			return
-		}
-
 		app.UpdateTimeRemaining()
-
 		files := getFiles(app)
-
 		app.Log.Info("serving file list",
 			"files", len(files), "user", req)
 		writeJSON(w, http.StatusOK, files)

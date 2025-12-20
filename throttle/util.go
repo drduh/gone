@@ -7,9 +7,9 @@ func getCutoff(t time.Time) time.Time {
 	return t.Add(-1 * time.Minute)
 }
 
-// Allow returns true if the Throttle limit
+// Allow returns true if the Requests limit
 // is not exceeded within the cutoff period.
-func (t *Throttle) Allow(limit int) bool {
+func (r *Requests) Authorize(limit int) bool {
 	if limit <= 0 {
 		return true
 	}
@@ -17,11 +17,11 @@ func (t *Throttle) Allow(limit int) bool {
 	now := time.Now()
 	cut := getCutoff(now)
 
-	t.Lease.Lock()
-	defer t.Lease.Unlock()
+	r.Lease.Lock()
+	defer r.Lease.Unlock()
 
-	times := make([]time.Time, 0, len(t.RequestTimes))
-	for _, t := range t.RequestTimes {
+	times := make([]time.Time, 0, len(r.RequestTimes))
+	for _, t := range r.RequestTimes {
 		if t.After(cut) {
 			times = append(times, t)
 		}
@@ -32,7 +32,7 @@ func (t *Throttle) Allow(limit int) bool {
 	}
 
 	times = append(times, now)
-	t.RequestTimes = times
+	r.RequestTimes = times
 
 	return true
 }

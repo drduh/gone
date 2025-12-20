@@ -9,7 +9,7 @@ import (
 	"github.com/drduh/gone/throttle"
 )
 
-// Global application configuration
+// App represents the global application configuration.
 type App struct {
 
 	// Application version and build info
@@ -33,6 +33,6 @@ type App struct {
 	// Uploaded content storage
 	storage.Storage
 
-	// Rate limit throttle for requests
-	throttle.Throttle
+	// Global rate limiting requests throttle
+	throttle.Requests
 }

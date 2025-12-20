@@ -14,13 +14,6 @@ func Clear(app *config.App) http.HandlerFunc {
 			return
 		}
 
-		if !app.Allow(app.ReqsPerMinute) {
-			writeJSON(w, http.StatusTooManyRequests,
-				errorJSON(app.RateLimit))
-			app.Log.Error(app.RateLimit, "user", req)
-			return
-		}
-
 		app.ClearStorage()
 		app.Log.Info("storage cleared", "user", req)
 

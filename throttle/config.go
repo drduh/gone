@@ -7,12 +7,12 @@ import (
 	"time"
 )
 
-// Throttle represents request time records.
-type Throttle struct {
+// Requests represents time records of requests.
+type Requests struct {
 
-	// Throttle lock
+	// Mutex lock
 	Lease sync.Mutex
 
-	// Recorded request times
+	// Request time records
 	RequestTimes []time.Time
 }
