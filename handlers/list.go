@@ -4,7 +4,6 @@ import (
 	"net/http"
 
 	"github.com/drduh/gone/config"
-	"github.com/drduh/gone/storage"
 )
 
 // List handles requests to list Files in Storage.
@@ -15,49 +14,9 @@ func List(app *config.App) http.HandlerFunc {
 			return
 		}
 		app.UpdateTimeRemaining()
-		files := getFiles(app)
+		files := app.ListFiles()
 		app.Log.Info("serving file list",
 			"files", len(files), "user", req)
 		writeJSON(w, http.StatusOK, files)
 	}
-}
-
-// getFiles returns a list of non-expired Files in Storage,
-// and removes expired Files.
-func getFiles(app *config.App) []storage.File {
-	files := make([]storage.File, 0, len(app.Files))
-	for _, file := range app.Files {
-		reason := file.IsExpired()
-		if reason != "" {
-			app.Expire(file)
-			app.Log.Info("removed file", "reason", reason,
-				"id", file.Id, "name", file.Name,
-				"downloads", file.Total)
-			break
-		}
-
-		f := storage.File{
-			Id:   file.Id,
-			Name: file.Name,
-			Size: file.Size,
-			Sum:  file.Sum,
-			Type: file.Type,
-			Owner: storage.Owner{
-				Agent: file.Agent,
-				Mask:  file.Mask,
-			},
-			Time: storage.Time{
-				Remain: file.Time.Remain,
-				Upload: file.Upload,
-			},
-			Downloads: storage.Downloads{
-				Allow:  file.Downloads.Allow,
-				Remain: file.NumRemaining(),
-				Total:  file.Total,
-			},
-		}
-		files = append(files, f)
-	}
-
-	return files
 }

@@ -1,4 +1,4 @@
-// Package storage defines uploaded content.
+// Package storage provides content storage and functions.
 package storage
 
 import (
