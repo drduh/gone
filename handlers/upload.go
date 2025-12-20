@@ -37,11 +37,11 @@ func Upload(app *config.App) http.HandlerFunc {
 		}
 
 		downloadLimit := parseFormInt(r,
-			formFieldDownloads, app.Downloads)
+			formFieldDownloads, app.Downloads, app.MaxDownloads)
 		app.Log.Debug("got form value", formFieldDownloads, downloadLimit)
 
 		durationLimit := parseFormDuration(r,
-			formFieldDuration, app.Expiration.Duration)
+			formFieldDuration, app.Expiration.Duration, app.MaxDuration)
 		app.Log.Debug("got form value", formFieldDuration, durationLimit)
 
 		var upload storage.File

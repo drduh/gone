@@ -73,6 +73,8 @@
     }
   },
   "limit": {
+    "maxDownloads":  100,
+    "maxDuration":   "192h",
     "maxSizeMsg":    128,
     "maxSizeWall":   1280,
     "maxSizeFileMb": 256,

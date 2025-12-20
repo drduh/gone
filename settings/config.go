@@ -185,6 +185,12 @@ type Default struct {
 // Content represents limits on content sharing.
 type Limit struct {
 
+	// Maximum number of allowed downloads
+	MaxDownloads int `json:"maxDownloads,omitempty"`
+
+	// Maximum expiration duration
+	MaxDuration Duration `json:"maxDuration,omitempty"`
+
 	// Maximum text message size
 	MaxSizeMsg int `json:"maxSizeMsg,omitempty"`
 
