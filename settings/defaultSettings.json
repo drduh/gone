@@ -74,7 +74,7 @@
     "maxSizeWall":   1280,
     "maxSizeFileMb": 256,
     "reqsPerMinute": 30,
-    "ticker":        "30s"
+    "expiryTicker":  "30s"
   },
   "paths": {
     "assets":      "/assets/",

@@ -12,6 +12,8 @@ import (
 	"github.com/drduh/gone/util"
 )
 
+const autoTheme = "auto"
+
 // deny serves a JSON response for disallowed requests.
 func deny(w http.ResponseWriter, httpCode int, reason string,
 	app *config.App, r *Request) {
@@ -38,7 +40,6 @@ func isAuthenticated(app *config.App, r *http.Request) bool {
 	}
 
 	path := util.GetBasePath(r.URL.Path)
-
 	required, exists := reqs[path]
 	app.Log.Debug("checking authn",
 		"path", path, "required", required, "exists", exists)
@@ -57,10 +58,10 @@ func errorJSON(s string) map[string]string {
 	}
 }
 
-// getDefaultTheme returns a theme based on
-// the current time of day if set to "auto".
+// getDefaultTheme returns a default theme, based on
+// the current time if set to automatically theme.
 func getDefaultTheme(theme string) string {
-	if theme != "auto" {
+	if theme != autoTheme {
 		return theme
 	}
 	if util.IsDaytime() {
@@ -89,13 +90,11 @@ func authRequest(w http.ResponseWriter,
 	r *http.Request, app *config.App) *Request {
 	req := parseRequest(r)
 	if !isAuthenticated(app, r) {
-		deny(w, http.StatusForbidden,
-			app.Deny, app, req)
+		deny(w, http.StatusForbidden, app.Deny, app, req)
 		return nil
 	}
 	if !app.Authorize(app.ReqsPerMinute) {
-		deny(w, http.StatusTooManyRequests,
-			app.RateLimit, app, req)
+		deny(w, http.StatusTooManyRequests, app.RateLimit, app, req)
 		return nil
 	}
 	return req
@@ -113,9 +112,10 @@ func writeJSON(w http.ResponseWriter, code int, data interface{}) {
 	}
 }
 
-// getParam return a parameter (such as filename)
-// from an HTTP request, as URL, query or form value.
-func getParam(r *http.Request, pathLen int, fieldName string) string {
+// getRequestParameter returns a request parameter from the
+// URL or a form value.
+func getRequestParameter(r *http.Request,
+	pathLen int, fieldName string) string {
 	p := r.URL.Path[pathLen:]
 	if p == "" {
 		p = r.URL.Query().Get(fieldName)
@@ -134,7 +134,7 @@ func getTheme(w http.ResponseWriter, r *http.Request,
 	if formContent != "" {
 		theme := formContent
 		if !slices.Contains(themes, theme) {
-			theme = getDefaultTheme("auto")
+			theme = getDefaultTheme(autoTheme)
 		}
 		http.SetCookie(w, auth.NewCookie(theme, id, t))
 		return theme

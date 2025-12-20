@@ -14,7 +14,7 @@ func Download(app *config.App) http.HandlerFunc {
 			return
 		}
 
-		fileName := getParam(r, len(app.Download), "name")
+		fileName := getRequestParameter(r, len(app.Download), "name")
 		if fileName == "" {
 			writeJSON(w, http.StatusNotFound, errorJSON(app.NoFilename))
 			app.Log.Error(app.NoFilename, "user", req)
