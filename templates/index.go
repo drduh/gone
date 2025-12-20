@@ -5,7 +5,7 @@ import (
 	"github.com/drduh/gone/storage"
 )
 
-// Index contains index HTML page elements.
+// Index represents index HTML page elements.
 type Index struct {
 
 	// Display build details in footer

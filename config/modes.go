@@ -1,11 +1,11 @@
 package config
 
-// Application operation modes
+// Modes represents application operation modes.
 type Modes struct {
 
-	// Display verbose debug output
+	// Enable verbose audit output
 	Debug bool
 
-	// Display version/build information
+	// Display version and build detail
 	Version bool
 }

@@ -2,7 +2,13 @@ package throttle
 
 import "time"
 
-// Allow returns true if the Throttle limit is not exceeded.
+// getCutoff returns the Throttle window cutoff (1 minute).
+func getCutoff(t time.Time) time.Time {
+	return t.Add(-1 * time.Minute)
+}
+
+// Allow returns true if the Throttle limit
+// is not exceeded within the cutoff period.
 func (t *Throttle) Allow(limit int) bool {
 	if limit <= 0 {
 		return true
@@ -14,8 +20,8 @@ func (t *Throttle) Allow(limit int) bool {
 	t.Lease.Lock()
 	defer t.Lease.Unlock()
 
-	times := make([]time.Time, 0, len(t.Times))
-	for _, t := range t.Times {
+	times := make([]time.Time, 0, len(t.RequestTimes))
+	for _, t := range t.RequestTimes {
 		if t.After(cut) {
 			times = append(times, t)
 		}
@@ -26,12 +32,7 @@ func (t *Throttle) Allow(limit int) bool {
 	}
 
 	times = append(times, now)
-	t.Times = times
+	t.RequestTimes = times
 
 	return true
-}
-
-// getCutoff returns the Throttle window cutoff (1 minute).
-func getCutoff(t time.Time) time.Time {
-	return t.Add(-1 * time.Minute)
 }

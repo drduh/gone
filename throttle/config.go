@@ -1,5 +1,5 @@
-// Package throttle implements request rate-limiting
-// for the application.
+// Package throttle implements global
+// rate-limiting using request times.
 package throttle
 
 import (
@@ -7,12 +7,12 @@ import (
 	"time"
 )
 
-// Throttle requests by time
+// Throttle represents request time records.
 type Throttle struct {
-
-	// Record times to rate limit
-	Times []time.Time
 
 	// Throttle lock
 	Lease sync.Mutex
+
+	// Recorded request times
+	RequestTimes []time.Time
 }
