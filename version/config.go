@@ -1,5 +1,5 @@
-// Package version provides application version and
-// build system information.
+// Package version provides application version
+// and build details.
 package version
 
 var (
@@ -25,10 +25,10 @@ var (
 	// Build time ("2025-12-31T12:00:00")
 	Time = "unknown"
 
-	// Build hostname ("system")
+	// Build hostname ("macbook.local")
 	Host = "unknown"
 
-	// Build system ("darwin")
+	// Build system ("darwin", "linux", etc.)
 	System = "unknown"
 
 	// Build user ("user")
