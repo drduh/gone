@@ -13,28 +13,23 @@ permissions:
   pull-requests: read
 
 jobs:
-  gotest:
-    name: test
+  test:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v6
     - uses: actions/setup-go@v6
       with:
-        go-version: stable
-    - name: build
-      run: go build -v ./...
-    - name: test
-      run: go test -v ./...
+        go-version-file: 'go.mod'
+    - run: go build -v ./...
+    - run: go test -v ./...
 
-  golint:
-    name: lint
+  lint:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v6
     - uses: actions/setup-go@v6
       with:
-        go-version: stable
-    - name: golangci-lint
-      uses: golangci/golangci-lint-action@v9
+        go-version-file: 'go.mod'
+    - uses: golangci/golangci-lint-action@v9
       with:
         version: v2.7

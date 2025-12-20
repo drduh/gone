@@ -5,7 +5,7 @@ import (
 	"github.com/drduh/gone/storage"
 )
 
-// Index contains index HTML page elements.
+// Index represents index HTML page elements.
 type Index struct {
 
 	// Display build details in footer
@@ -35,7 +35,7 @@ type Index struct {
 	// Content sharing defaults
 	settings.Default
 
-	// Page properties
+	// Index page HTML properties
 	settings.Index
 
 	// Content limits

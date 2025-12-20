@@ -15,6 +15,10 @@
       "download":  true,
       "list":      false,
       "message":   false,
+      "random":    false,
+      "root":      false,
+      "static":    false,
+      "status":    false,
       "upload":    false,
       "wall":      false
     }
@@ -35,7 +39,7 @@
     "tmplExec":    "failed to exec",
     "tmplParse":   "failed parsing"
   },
-  "index": {
+  "indexPage": {
     "csp":         true,
     "title":       "gone",
     "cookie": {
@@ -72,8 +76,8 @@
     "maxSizeMsg":    128,
     "maxSizeWall":   1280,
     "maxSizeFileMb": 256,
-    "perMinute":     30,
-    "ticker":        "30s"
+    "reqsPerMinute": 30,
+    "expiryTicker":  "30s"
   },
   "paths": {
     "assets":      "/assets/",

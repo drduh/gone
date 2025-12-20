@@ -2,7 +2,7 @@
 // application settings.
 package settings
 
-// Application settings
+// Settings represents all application settings.
 type Settings struct {
 
 	// Auditor options
@@ -15,7 +15,7 @@ type Settings struct {
 	Error `json:"error,omitempty"`
 
 	// User interface options
-	Index `json:"index,omitempty"`
+	Index `json:"indexPage,omitempty"`
 
 	// Content sharing defaults
 	Default `json:"default,omitempty"`
@@ -34,7 +34,7 @@ type Settings struct {
 	ShowBuild bool `json:"showBuild,omitempty"`
 }
 
-// Auditor logging preferences
+// Audit represents logging preferences.
 type Audit struct {
 
 	// Optional file destination for logs
@@ -44,43 +44,55 @@ type Audit struct {
 	TimeFormat string `json:"timeFormat,omitempty"`
 }
 
-// Authentication properties
+// Auth represents the authentication configuration.
 type Auth struct {
 
-	// String-based check
+	// Basic represents token-based authentication.
 	Basic struct {
 
 		// Header or form field name ("X-Auth")
 		Field string `json:"field,omitempty"`
 
-		// String-based token ("mySecret")
+		// Authentication token string ("mySecret")
 		Token string `json:"token,omitempty"`
 	} `json:"basic,omitempty"`
 
-	// Route authentication requirements
+	// Require represents paths requiring authentication.
 	Require struct {
 
-		// Require authentication to clear uploads
+		// Clear content
 		Clear bool `json:"clear,omitempty"`
 
-		// Require authentication to download files
+		// Download files
 		Download bool `json:"download,omitempty"`
 
-		// Require authentication to list files
+		// List files
 		List bool `json:"list,omitempty"`
 
-		// Require authentication to post messages
+		// Read and write text messages
 		Message bool `json:"message,omitempty"`
 
-		// Require authentication to upload files
+		// Get random output
+		Random bool `json:"random,omitempty"`
+
+		// Load root (index page)
+		Root bool `json:"root,omitempty"`
+
+		// Static content
+		Static bool `json:"static,omitempty"`
+
+		// Server status response
+		Status bool `json:"status,omitempty"`
+
+		// Upload files
 		Upload bool `json:"upload,omitempty"`
 
-		// Require authentication to edit shared content
+		// Read and write wall content
 		Wall bool `json:"wall,omitempty"`
 	} `json:"require,omitempty"`
 }
 
-// Error responses
+// Error represents responses error message strings.
 type Error struct {
 
 	// Failed to copy file
@@ -114,7 +126,7 @@ type Error struct {
 	RateLimit string `json:"rateLimit,omitempty"`
 }
 
-// Index HTML index page properties
+// Index represents index HTML page properties.
 type Index struct {
 
 	// Enable Content Security Policy (CSP)
@@ -123,7 +135,7 @@ type Index struct {
 	// Page title ("gone")
 	Title string `json:"title,omitempty"`
 
-	// Cookie management
+	// Cookie represents cookie-based user preferences.
 	Cookie struct {
 
 		// Label ("goneTheme")
@@ -133,7 +145,7 @@ type Index struct {
 		Time Duration `json:"time,omitempty"`
 	} `json:"cookie,omitempty"`
 
-	// CSS style options
+	// Style represents theme options.
 	Style struct {
 
 		// Allow theme selection
@@ -146,7 +158,7 @@ type Index struct {
 		Theme string `json:"theme,omitempty"`
 	} `json:"style,omitempty"`
 
-	// Index form placeholder text
+	// Placeholder represents placeholder text in forms.
 	Placeholder struct {
 
 		// Authentication field
@@ -160,7 +172,7 @@ type Index struct {
 	} `json:"placeholder,omitempty"`
 }
 
-// Content sharing defaults
+// Default represents content sharing default options.
 type Default struct {
 
 	// Number of allowed downloads before File expiration
@@ -170,7 +182,7 @@ type Default struct {
 	Expiration Duration `json:"duration,omitempty"`
 }
 
-// Content sharing limits
+// Content represents limits on content sharing.
 type Limit struct {
 
 	// Maximum text message size
@@ -182,17 +194,17 @@ type Limit struct {
 	// Maximum file size (in Megabytes)
 	MaxSizeFileMb int64 `json:"maxSizeFileMb,omitempty"`
 
-	// Number of requests per minute to rate limit
-	PerMinute int `json:"perMinute,omitempty"`
+	// Global requests per minute to rate limit
+	ReqsPerMinute int `json:"reqsPerMinute,omitempty"`
 
 	// Frequency of File expiration check
-	Ticker Duration `json:"ticker,omitempty"`
+	Ticker Duration `json:"expiryTicker,omitempty"`
 }
 
-// Paths to route
+// Paths represents paths to handle.
 type Paths struct {
 
-	// Assets for HTML pages ("/assets/")
+	// HTML assets, such as stylesheet ("/assets/")
 	Assets string `json:"assets,omitempty"`
 
 	// Remove content ("/clear")
@@ -222,6 +234,6 @@ type Paths struct {
 	// File upload ("/upload")
 	Upload string `json:"upload,omitempty"`
 
-	// Shared content edit ("/wall")
+	// Shared content read and write ("/wall")
 	Wall string `json:"wall,omitempty"`
 }

@@ -12,7 +12,7 @@ import (
 )
 
 // Run loads the application configuration, sets up the
-// signal handler and starts the HTTP server.
+// signal handler and starts the server.
 func Run() {
 	flag.Parse()
 
@@ -24,7 +24,9 @@ func Run() {
 
 	app.Log.Info("started v1",
 		"version", app.Version, "host", app.Hostname)
-	app.Log.Debug("debug enabled", "configuration", app)
+	if app.Debug {
+		app.Log.Debug("debug enabled", "configuration", app)
+	}
 
 	signal.Setup(app)
 

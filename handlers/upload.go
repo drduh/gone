@@ -5,7 +5,6 @@ import (
 	"io"
 	"mime/multipart"
 	"net/http"
-	"strconv"
 	"sync"
 	"time"
 
@@ -16,22 +15,17 @@ import (
 // Upload handles requests to upload Files to Storage.
 func Upload(app *config.App) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		req, allowed := authRequest(w, r, app)
-		if !allowed {
-			return
-		}
-
-		if !app.Allow(app.PerMinute) {
-			writeJSON(w, http.StatusTooManyRequests, errorJSON(app.RateLimit))
-			app.Log.Error(app.RateLimit, "user", req)
+		req := authRequest(w, r, app)
+		if req == nil {
 			return
 		}
 
 		maxFileBytes := app.GetMaxFileBytes()
-		if r.ContentLength > maxFileBytes {
+		contentLength := r.ContentLength
+		if contentLength > maxFileBytes {
 			writeJSON(w, http.StatusRequestEntityTooLarge, errorJSON(app.FileSize))
 			app.Log.Error(app.FileSize,
-				"fileSizeMb", r.ContentLength/(1<<20), "user", req)
+				"fileSizeMb", contentLength/(1<<20), "user", req)
 			return
 		}
 
@@ -42,21 +36,13 @@ func Upload(app *config.App) http.HandlerFunc {
 			return
 		}
 
-		downloadLimit := app.Downloads
-		downloadLimitInput := r.FormValue(formFieldDownloads)
-		if limit, err := strconv.Atoi(downloadLimitInput); err == nil {
-			downloadLimit = limit
-			app.Log.Debug("got form value",
-				formFieldDownloads, downloadLimit)
-		}
+		downloadLimit := parseFormInt(r,
+			formFieldDownloads, app.Downloads)
+		app.Log.Debug("got form value", formFieldDownloads, downloadLimit)
 
-		durationLimit := app.Expiration.Duration
-		durationLimitInput := r.FormValue(formFieldDuration)
-		if limit, err := time.ParseDuration(durationLimitInput); err == nil {
-			durationLimit = limit
-			app.Log.Debug("got form value",
-				formFieldDuration, durationLimit.String())
-		}
+		durationLimit := parseFormDuration(r,
+			formFieldDuration, app.Expiration.Duration)
+		app.Log.Debug("got form value", formFieldDuration, durationLimit)
 
 		var upload storage.File
 		var uploads []storage.File
@@ -116,6 +102,7 @@ func Upload(app *config.App) http.HandlerFunc {
 					Id:   f.Id,
 					Name: f.Name,
 					Size: f.Size,
+					Sum:  f.Sum,
 					Type: f.Type,
 					Owner: storage.Owner{
 						Address: f.Address,

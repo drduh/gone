@@ -10,4 +10,4 @@ Therefore, gone is only intended for use on a secure network with trusted device
 - delay "tarpit" applied to requests failing auth
 - robust audit logging with time and event detail
 - files stored, indexed with randomly-selected id
-- global request rate limiting (throttle package)
+- global request rate limiting (via auth package)

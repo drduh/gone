@@ -16,10 +16,12 @@ BUILDPKG  = $(GIT)/$(APPNAME)/version
 BUILDARCH = $(shell $(GO) env GOHOSTARCH)
 BUILDVERS = $(shell $(GO) env GOVERSION)
 BUILDOS   = $(shell $(GO) env GOHOSTOS)
+BUILDGIT  = $(shell git log -1 --format=%h \
+	2>/dev/null || printf "0000000")
 BUILDTIME = $(shell date +"%Y-%m-%dT%H:%M:%S")
 BUILDFLAG = \
   -X "$(BUILDPKG).Arch=$(BUILDARCH)" \
-  -X "$(BUILDPKG).Commit=$(shell git log -1 --format=%h)" \
+  -X "$(BUILDPKG).Commit=$(BUILDGIT)" \
   -X "$(BUILDPKG).Go=$(BUILDVERS)" \
   -X "$(BUILDPKG).Host=$(shell hostname -f)" \
   -X "$(BUILDPKG).Id=$(APPNAME)" \
@@ -123,6 +125,7 @@ lint-verbose:
 
 cover: test-cover
 	@$(GO) tool cover -html=$(TESTCOVER) -o $(TESTCOVER).html
+	@printf "cover: %s\n" "$$(file $(TESTCOVER).html)"
 
 doc:
 	@$(GODOC) -http :8000
@@ -133,6 +136,8 @@ clean:
 clena: clean
 
 coverage: cover
+
+prod: release
 
 tset: test
 

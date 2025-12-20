@@ -181,19 +181,22 @@ See [config/zshrc](https://github.com/drduh/config/blob/main/zshrc#L614) for ali
 $ gonePut test.txt 3 30m
 [
   {
+    "id": "11FWEbzQTepq-5xN4YBBdwsL9lBDM4JWpBVPg154wjyU",
     "name": "test.txt",
+    "sum": "280afdc7ab83033e2913c9d564c5d8cb85a22dc5f96216f884053959da36c112",
     "downloads": {
       "allow": 3
     },
-    "size": "13.00 Bytes",
+    "size": "40 bytes",
+    "type": "application/octet-stream",
     "owner": {
       "address": "127.0.0.1:1234",
       "mask": "Bob123",
-      "agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)"
+      "agent": "curl/8.7.1"
     },
     "time": {
       "allow": "30m0s",
-      "upload": "2025-10-31T10:00:00"
+      "upload": "2025-12-20T12:00:00"
     }
   }
 ]

@@ -11,7 +11,7 @@ const (
 	formFieldWall      = "wall"
 )
 
-// Request contains server operation metadata.
+// Request represents user operation metadata.
 type Request struct {
 
 	// Path to handle ("/")

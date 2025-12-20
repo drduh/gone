@@ -12,10 +12,13 @@ import (
 	"github.com/drduh/gone/util"
 )
 
-// deny serves a JSON response for unauthorized requests.
-func deny(w http.ResponseWriter, app *config.App, r *Request) {
-	writeJSON(w, http.StatusUnauthorized, errorJSON(app.Deny))
-	app.Log.Error(app.Deny, "user", r)
+const autoTheme = "auto"
+
+// deny serves a JSON response for disallowed requests.
+func deny(w http.ResponseWriter, httpCode int, reason string,
+	app *config.App, r *Request) {
+	writeJSON(w, httpCode, errorJSON(reason))
+	app.Log.Error(reason, "user", r)
 }
 
 // toRoot redirects an HTTP request to the root/index handler.
@@ -23,34 +26,32 @@ func toRoot(w http.ResponseWriter, r *http.Request, rootPath string) {
 	http.Redirect(w, r, rootPath, http.StatusSeeOther)
 }
 
-// isAllowed returns true if authentication for a route
+// isAuthenticated returns true if authentication for a route
 // is required and allowed.
-func isAllowed(app *config.App, r *http.Request) bool {
+func isAuthenticated(app *config.App, r *http.Request) bool {
 	reqs := map[string]bool{
 		app.Clear:    app.Require.Clear,
 		app.Download: app.Require.Download,
 		app.List:     app.Require.List,
 		app.Message:  app.Require.Message,
+		app.Random:   app.Require.Random,
+		app.Root:     app.Require.Root,
+		app.Static:   app.Require.Static,
+		app.Status:   app.Require.Status,
 		app.Upload:   app.Require.Upload,
 		app.Wall:     app.Require.Wall,
 	}
 
 	path := util.GetBasePath(r.URL.Path)
-
 	required, exists := reqs[path]
-	app.Log.Debug("checking auth",
+	app.Log.Debug("checking authn",
 		"path", path, "required", required, "exists", exists)
 	if !exists || !required {
-		app.Log.Debug("auth not required", "path", r.URL.Path)
+		app.Log.Debug("authn not required", "path", r.URL.Path)
 		return true
 	}
 
-	return isAuthenticated(app.Basic.Field, app.Basic.Token, r)
-}
-
-// isAuthentication returns true if basic authentication is successful.
-func isAuthenticated(header, token string, r *http.Request) bool {
-	return auth.Basic(header, token, r)
+	return auth.Basic(app.Basic.Field, app.Basic.Token, r)
 }
 
 // errorJSON returns an error string map containing the string.
@@ -60,10 +61,10 @@ func errorJSON(s string) map[string]string {
 	}
 }
 
-// getDefaultTheme returns a theme based on
-// the current time of day if set to "auto".
+// getDefaultTheme returns a default theme, based on
+// the current time if set to automatically theme.
 func getDefaultTheme(theme string) string {
-	if theme != "auto" {
+	if theme != autoTheme {
 		return theme
 	}
 	if util.IsDaytime() {
@@ -86,15 +87,20 @@ func parseRequest(r *http.Request) *Request {
 	}
 }
 
-// authRequest returns only allowed parsed http Requests.
+// authRequest returns only allowed parsed http Requests,
+// rejecting unauthenticated and unauthorized attempts.
 func authRequest(w http.ResponseWriter,
-	r *http.Request, app *config.App) (*Request, bool) {
+	r *http.Request, app *config.App) *Request {
 	req := parseRequest(r)
-	if !isAllowed(app, r) {
-		deny(w, app, req)
-		return nil, false
+	if !isAuthenticated(app, r) {
+		deny(w, http.StatusForbidden, app.Deny, app, req)
+		return nil
 	}
-	return req, true
+	if !app.Authorize(app.ReqsPerMinute) {
+		deny(w, http.StatusTooManyRequests, app.RateLimit, app, req)
+		return nil
+	}
+	return req
 }
 
 // writeJSON serves a JSON response with data.
@@ -109,9 +115,10 @@ func writeJSON(w http.ResponseWriter, code int, data interface{}) {
 	}
 }
 
-// getParam return a parameter (such as filename)
-// from an HTTP request, as URL, query or form value.
-func getParam(r *http.Request, pathLen int, fieldName string) string {
+// getRequestParameter returns a request parameter from the
+// URL or a form value.
+func getRequestParameter(r *http.Request,
+	pathLen int, fieldName string) string {
 	p := r.URL.Path[pathLen:]
 	if p == "" {
 		p = r.URL.Query().Get(fieldName)
@@ -130,7 +137,7 @@ func getTheme(w http.ResponseWriter, r *http.Request,
 	if formContent != "" {
 		theme := formContent
 		if !slices.Contains(themes, theme) {
-			theme = getDefaultTheme("auto")
+			theme = getDefaultTheme(autoTheme)
 		}
 		http.SetCookie(w, auth.NewCookie(theme, id, t))
 		return theme

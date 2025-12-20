@@ -10,7 +10,7 @@ import (
 
 var sizeUnits = []string{"bytes", "kb", "mb", "gb", "tb"}
 
-// FormatSize returns a formatted file size from bytes.
+// FormatSize returns a formatted size from number of bytes.
 func FormatSize(bytes int) string {
 	if bytes == 0 {
 		return "0 bytes"
@@ -35,12 +35,13 @@ func GetOutput(filename string) (io.Writer, error) {
 	dest, err := os.OpenFile(
 		filename, os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0600)
 	if err != nil {
-		return nil, fmt.Errorf("failed to open %s: %w", filename, err)
+		return nil, fmt.Errorf("failed to open '%s': %w", filename, err)
 	}
 	return dest, nil
 }
 
-// Returns trimmed names from file or default names list.
+// loadNames returns trimmed names from a file or
+// the default names list.
 func loadNames(filename string) []string {
 	f, err := os.Open(filename)
 	if err != nil {

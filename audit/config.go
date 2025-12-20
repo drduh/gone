@@ -7,7 +7,7 @@ import (
 	"log/slog"
 )
 
-// Auditor represents a configured app logger.
+// Auditor represents a configured application logger.
 type Auditor struct {
 
 	// Configured options

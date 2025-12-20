@@ -5,7 +5,7 @@ import (
 	"github.com/drduh/gone/storage"
 )
 
-// Status contains the server status and configuration response.
+// Status represents server state and configuration.
 type Status struct {
 
 	// Formatted time since start ("3m45s")
@@ -20,17 +20,17 @@ type Status struct {
 	// Application version and build information
 	Version map[string]string `json:"buildInfo,omitempty"`
 
-	// Storage content total sizes
-	storage.Sizes `json:"storageSizes,omitempty"`
-
 	// Defaults configuration
 	settings.Default `json:"defaultOptions,omitempty"`
 
 	// Limits configuration
 	settings.Limit `json:"limits,omitempty"`
 
-	// Index configuration
+	// Index page configuration
 	settings.Index `json:"indexPage,omitempty"`
+
+	// Storage content total sizes
+	storage.Sizes `json:"storageSizes,omitempty"`
 
 	// Storage content owner information
 	storage.Owner `json:"request,omitempty"`

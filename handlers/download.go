@@ -9,12 +9,12 @@ import (
 // Download handles requests to download a File from Storage.
 func Download(app *config.App) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		req, allowed := authRequest(w, r, app)
-		if !allowed {
+		req := authRequest(w, r, app)
+		if req == nil {
 			return
 		}
 
-		fileName := getParam(r, len(app.Download), "name")
+		fileName := getRequestParameter(r, len(app.Download), "name")
 		if fileName == "" {
 			writeJSON(w, http.StatusNotFound, errorJSON(app.NoFilename))
 			app.Log.Error(app.NoFilename, "user", req)
