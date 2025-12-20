@@ -73,13 +73,15 @@
     }
   },
   "limit": {
+    "expiryTicker":  "30s",
     "maxDownloads":  100,
     "maxDuration":   "192h",
     "maxSizeMsg":    128,
+    "maxSizeName":   60,
     "maxSizeWall":   1280,
     "maxSizeFileMb": 256,
     "reqsPerMinute": 30,
-    "expiryTicker":  "30s"
+    "specialChars":  "_.-"
   },
   "paths": {
     "assets":      "/assets/",
