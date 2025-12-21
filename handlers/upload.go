@@ -78,7 +78,7 @@ func Upload(app *config.App) http.HandlerFunc {
 				}
 
 				filename := storage.SanitizeName(fileHeader.Filename,
-					app.MaxSizeName, app.AllowedSpecialChars)
+					app.MaxSizeName, app.FilenameExtraChars)
 				f := &storage.File{
 					Name: filename,
 					Data: buf.Bytes(),

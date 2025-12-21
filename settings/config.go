@@ -185,8 +185,8 @@ type Default struct {
 // Content represents limits on content sharing.
 type Limit struct {
 
-	// Special characters allowed in file names
-	AllowedSpecialChars string `json:"specialChars,omitempty"`
+	// Extra characters allowed in file names
+	FilenameExtraChars string `json:"filenameChars,omitempty"`
 
 	// Maximum number of allowed downloads
 	MaxDownloads int `json:"maxDownloads,omitempty"`
