@@ -8,28 +8,26 @@ import (
 	"github.com/drduh/gone/templates"
 )
 
-// Index handles requests for the main index page
-// with all available application features.
+const templateData = "data/*.tmpl"
+
+// Index handles requests to load and render the index page.
 func Index(app *config.App) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		req := authRequest(w, r, app)
 		if req == nil {
 			return
 		}
-
 		app.Log.Info("serving index", "user", req)
 
 		theme := getDefaultTheme(app.Style.Theme)
-		app.Log.Debug("got theme", "default", theme)
 		if app.Style.AllowPick {
 			theme = getTheme(w, r, theme,
 				app.Cookie.Id,
 				app.Cookie.Time.GetDuration(),
 				app.Style.Available)
-			app.Log.Debug("got theme", "selected", theme)
 		}
 
-		tmpl, err := template.New("index").ParseFS(templates.All, "data/*.tmpl")
+		tmpl, err := template.New("index").ParseFS(templates.All, templateData)
 		if err != nil {
 			writeJSON(w, http.StatusInternalServerError, errorJSON(app.TmplParse))
 			app.Log.Error(app.TmplParse, "error", err.Error(), "user", req)
@@ -37,13 +35,12 @@ func Index(app *config.App) http.HandlerFunc {
 		}
 
 		app.UpdateTimeRemaining()
-
 		response := templates.Index{
 			Auth:            app.Auth,
+			Default:         app.Default,
 			DefaultDuration: app.Expiration.String(),
 			Hostname:        app.Hostname,
 			Index:           app.Index,
-			Default:         app.Default,
 			Limit:           app.Limit,
 			NoFiles:         app.NoFiles,
 			Paths:           app.Paths,

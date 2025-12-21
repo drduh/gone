@@ -22,12 +22,12 @@ func (f *File) Serve(w http.ResponseWriter) {
 
 // ServeMessages writes all Messages as a text file.
 func (s *Storage) ServeMessages(w http.ResponseWriter) {
-	disposition := "attachment; filename=\"messages.txt\""
+	disposition := "attachment; filename=\"" + filenameMessages + "\""
 	w.Header().Set("Content-Disposition", disposition)
 	w.Header().Set("Content-Type", "text/plain")
-	msgFormat := "%d (%s) - %s\n"
+	msgFmt := "%d (%s) - %s\n"
 	for _, msg := range s.Messages {
-		_, err := fmt.Fprintf(w, msgFormat, msg.Count, msg.Allow, msg.Data)
+		_, err := fmt.Fprintf(w, msgFmt, msg.Count, msg.Allow, msg.Data)
 		if err != nil {
 			return
 		}
@@ -36,7 +36,7 @@ func (s *Storage) ServeMessages(w http.ResponseWriter) {
 
 // ServeWall writes all Wall content as a text file.
 func (s *Storage) ServeWall(w http.ResponseWriter) {
-	disposition := "attachment; filename=\"wall.txt\""
+	disposition := "attachment; filename=\"" + filenameWall + "\""
 	w.Header().Set("Content-Disposition", disposition)
 	w.Header().Set("Content-Type", "text/plain")
 	_, err := fmt.Fprintf(w, "%s", s.WallContent)

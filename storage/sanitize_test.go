@@ -80,10 +80,12 @@ func TestSanitizeName(t *testing.T) {
 		{"@#$%^&*", 10, extraChars, defaultName},
 	}
 	for _, test := range tests {
-		result := SanitizeName(test.input, test.maxLength, test.extraChars)
-		if result != test.want {
-			t.Fatalf("name: '%s', length: %d, special: '%s', got: '%s', want: '%s'",
-				test.input, test.maxLength, test.extraChars, result, test.want)
-		}
+		t.Run(test.input, func(t *testing.T) {
+			result := SanitizeName(test.input, test.maxLength, test.extraChars)
+			if result != test.want {
+				t.Fatalf("length: %d, special: '%s', got: '%s', want: '%s'",
+					test.maxLength, test.extraChars, result, test.want)
+			}
+		})
 	}
 }

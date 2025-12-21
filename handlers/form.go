@@ -1,7 +1,6 @@
 package handlers
 
 import (
-	"math"
 	"net/http"
 	"strconv"
 	"strings"
@@ -11,21 +10,18 @@ import (
 )
 
 // parseFormInt reads an integer form value or returns the default.
-func parseFormInt(r *http.Request, field string, def int, maximum int) int {
+func parseFormInt(r *http.Request, field string, def, maximum int) int {
 	input := r.FormValue(field)
 	if input != "" {
 		input = strings.TrimSpace(input)
-		if v, err := strconv.ParseUint(input, 10, 64); err == nil {
-			if v == 0 {
+		if v, err := strconv.Atoi(input); err == nil {
+			if v <= 0 {
 				return def
 			}
-			if v > uint64(maximum) {
+			if v > maximum {
 				return maximum
 			}
-			if v > math.MaxInt {
-				return maximum
-			}
-			return int(v)
+			return v
 		}
 	}
 	return def
