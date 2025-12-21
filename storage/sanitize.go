@@ -7,10 +7,16 @@ import (
 	"unicode"
 )
 
-const defaultName = "default"
+const (
+	defaultName  = "default"
+	maxExtLength = 5
+)
 
 // SanitizeName validates strings for use as filename.
 func SanitizeName(input, extraChars string, maxLength int) string {
+	if strings.TrimSpace(input) == "" {
+		return defaultName
+	}
 	input, err := url.QueryUnescape(input)
 	if err != nil {
 		return defaultName
@@ -41,10 +47,11 @@ func removeInvalidChars(filename string, allowed string) string {
 // truncateName trims a filename string to max size,
 // preserving reasonably-sized original file extensions.
 func truncateName(base string, ext string, maxLength int) string {
-	const maxExtensionLength = 5
-	if len(ext) > maxExtensionLength {
-		ext = ext[:maxExtensionLength]
+	ext = strings.ReplaceAll(ext, " ", "")
+	if len(ext) > maxExtLength {
+		ext = ext[:maxExtLength]
 	}
+	base = strings.TrimSpace(base)
 	totalLength := len(base) + len(ext)
 	if totalLength <= maxLength {
 		return base + ext
