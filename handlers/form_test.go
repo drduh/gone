@@ -82,10 +82,16 @@ func TestParseFormDuration(t *testing.T) {
 			def, def, maximum},
 		{"fraction", "/?duration=1.5h", "duration",
 			def, 90 * time.Minute, maximum},
+		{"no-unit", "/?duration=3333", "duration",
+			def, def, maximum},
+		{"bad-unit", "/duration=8h", "duration",
+			def, def, maximum},
 		{"large", "/?duration=9999h", "duration",
 			def, maximum, maximum},
 		{"xlarge", "/?duration=99999999999h", "duration",
 			def, def, maximum}, // overflows int64
+		{"encoded", "/?duration=%32%34%68", "duration",
+			def, 24 * time.Hour, maximum}, // "24h" encoded
 	}
 	for _, tc := range tests {
 		tc := tc

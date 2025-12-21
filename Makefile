@@ -32,8 +32,10 @@ BUILDFLAG = \
   -X "$(BUILDPKG).Version=$(VERSION)"
 BUILDCMD  = $(GO) build -ldflags '-s -w $(BUILDFLAG)'
 BINNAME   = $(APPNAME)-$(BUILDOS)-$(BUILDARCH)-$(VERSION)
-GOBUILD   = GOOS=$(BUILDOS) GOARCH=$(BUILDARCH) \
-            $(BUILDCMD) -o $(OUT)/$(BINNAME) $(SRC)
+GOBUILD   = GOOS=$(BUILDOS) GOARCH=$(BUILDARCH) $(BUILDCMD) \
+            -o "$(OUT)/$(BINNAME)" "$(SRC)"
+GORACE    = GOOS=$(BUILDOS) GOARCH=$(BUILDARCH) $(BUILDCMD) \
+            -race -o "$(OUT)/$(BINNAME)-race" "$(SRC)"
 
 SERVICE   = $(APPNAME).service
 
@@ -122,6 +124,12 @@ lint:
 
 lint-verbose:
 	@$(GOLINT) run -v ./...
+
+build-race: prep
+	@$(GORACE)
+
+race: build-race
+	@$(OUT)/$(BINNAME)-race -debug
 
 cover: test-cover
 	@$(GO) tool cover -html=$(TESTCOVER) -o $(TESTCOVER).html
