@@ -1,8 +1,11 @@
 package storage
 
-import "testing"
+import (
+	"strings"
+	"testing"
+)
 
-const extraChars = "_.-"
+const extraChars = "_.- "
 
 // TestRemoveInvalidChars validates invalid characters
 // are removed from filename strings.
@@ -65,23 +68,38 @@ func TestTruncateName(t *testing.T) {
 func TestSanitizeName(t *testing.T) {
 	tests := []struct {
 		input      string
-		maxLength  int
 		extraChars string
+		maxLength  int
 		want       string
 	}{
-		{"my@invalid#name?.txt", 20, extraChars, "myinvalidname.txt"},
-		{"averylongfilename.png", 15, extraChars, "averylongfi.png"},
-		{"my.file.name.txt", 20, extraChars, "my.file.name.txt"},
-		{".hiddenfile", 15, extraChars, defaultName + ".hidd"},
-		{"myfilename.png", 20, extraChars, "myfilename.png"},
-		{"/path/to/file.txt", 20, extraChars, "file.txt"},
-		{"myfilenames", 10, extraChars, "myfilename"},
-		{".@#$%^&*.png", 15, extraChars, "..png"},
-		{"@#$%^&*", 10, extraChars, defaultName},
+		{"my@invalid#name?.txt", extraChars, 20, "myinvalidname.txt"},
+		{"averylongfilename.png", extraChars, 15, "averylongfi.png"},
+		{"my.file.name.txt", extraChars, 20, "my.file.name.txt"},
+		{".hiddenfile", extraChars, 15, defaultName + ".hidd"},
+		{"myfilename.png", extraChars, 20, "myfilename.png"},
+		{"/path/to/file.txt", extraChars, 20, "file.txt"},
+		{"myfilenames", extraChars, 10, "myfilename"},
+		{"@#$%^&*.png", extraChars, 20, defaultName},
+		{"!@#$%^&*()[]{}<>", extraChars, 20, defaultName},
+		{"filename.", extraChars, 15, "filename."},
+		{"/etc/passwd", extraChars, 15, "passwd"},
+		{"name\u0000.txt", extraChars, 20, "name.txt"},
+		{"control\ttest.txt", extraChars, 20, "controltest.txt"},
+		{"/path/../file.txt", extraChars, 20, "file.txt"},
+		{"<script>alert('xss')</script>", extraChars, 25, "script"},
+		{"percent%encoded%name.doc", extraChars, 20, defaultName},
+		{"filename%20with%20spaces.txt", extraChars, 20,
+			"filename with sp.txt"},
+		{"filename with spaces.txt", extraChars, 25,
+			"filename with spaces.txt"},
+		{"my%2Fcool%2Bdoc%26about%2Cstuff.md", extraChars + "/+&,", 40,
+			"cool+doc&about,stuff.md"},
+		{strings.Repeat("a", 1000) + ".txt", extraChars, 50,
+			strings.Repeat("a", 46) + ".txt"},
 	}
 	for _, test := range tests {
 		t.Run(test.input, func(t *testing.T) {
-			result := SanitizeName(test.input, test.maxLength, test.extraChars)
+			result := SanitizeName(test.input, test.extraChars, test.maxLength)
 			if result != test.want {
 				t.Fatalf("length: %d, special: '%s', got: '%s', want: '%s'",
 					test.maxLength, test.extraChars, result, test.want)

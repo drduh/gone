@@ -46,6 +46,7 @@ func Upload(app *config.App) http.HandlerFunc {
 
 		var upload storage.File
 		var uploads []storage.File
+		var mu sync.Mutex
 		var wg sync.WaitGroup
 
 		formFileContent := r.MultipartForm.File["file"]
@@ -59,6 +60,8 @@ func Upload(app *config.App) http.HandlerFunc {
 		for _, fileHeader := range formFileContent {
 			go func(fileHeader *multipart.FileHeader) {
 				defer wg.Done()
+				mu.Lock()
+				defer mu.Unlock()
 				file, err := fileHeader.Open()
 				if err != nil {
 					app.Log.Error(app.Copy, "error", err.Error(), "user", req)
@@ -78,7 +81,7 @@ func Upload(app *config.App) http.HandlerFunc {
 				}
 
 				filename := storage.SanitizeName(fileHeader.Filename,
-					app.MaxSizeName, app.FilenameExtraChars)
+					app.FilenameExtraChars, app.MaxSizeName)
 				f := &storage.File{
 					Name: filename,
 					Data: buf.Bytes(),

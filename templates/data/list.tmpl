@@ -20,10 +20,10 @@
       <table>
         <thead>
           <tr>
-            <th>Name</th>
+            <th>File</th>
             <th>Size</th>
             <th>Type</th>
-            <th>Owner</th>
+            <th>User</th>
             <th>Time</th>
           </tr>
         </thead>
@@ -31,7 +31,7 @@
         {{ range .Storage.Files }}
         <tr class="list-row">
           <td>
-            <label for="{{ .Id }}">{{ .Name }}</label>
+            <label for="{{ .Id }}">{{ .Name }}<br>({{ printf "%.6s" .Sum }})</label>
             <input id="{{ .Id }}"
                  name="name"
                  type="radio"

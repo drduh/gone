@@ -1,6 +1,7 @@
 package storage
 
 import (
+	"net/url"
 	"path/filepath"
 	"strings"
 	"unicode"
@@ -9,7 +10,11 @@ import (
 const defaultName = "default"
 
 // SanitizeName validates strings for use as filename.
-func SanitizeName(input string, maxLength int, extraChars string) string {
+func SanitizeName(input, extraChars string, maxLength int) string {
+	input, err := url.QueryUnescape(input)
+	if err != nil {
+		return defaultName
+	}
 	f := filepath.Base(input)
 	f = removeInvalidChars(f, extraChars)
 	ext := filepath.Ext(f)
