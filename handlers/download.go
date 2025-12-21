@@ -14,18 +14,18 @@ func Download(app *config.App) http.HandlerFunc {
 			return
 		}
 
-		fileName := getRequestParameter(r, len(app.Download), "name")
-		if fileName == "" {
+		filename := getRequestParameter(r, len(app.Download), "name")
+		if filename == "" {
 			writeJSON(w, http.StatusNotFound, errorJSON(app.NoFilename))
 			app.Log.Error(app.NoFilename, "user", req)
 			return
 		}
-		app.Log.Debug("file requested", "filename", fileName, "user", req)
+		app.Log.Debug("file requested", "filename", filename, "user", req)
 
-		file := app.FindFile(fileName)
+		file := app.FindFile(filename)
 		if file == nil {
 			writeJSON(w, http.StatusNotFound, errorJSON(app.NotFound))
-			app.Log.Error(app.NotFound, "filename", fileName, "user", req)
+			app.Log.Error(app.NotFound, "filename", filename, "user", req)
 			return
 		}
 

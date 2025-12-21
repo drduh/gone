@@ -13,10 +13,8 @@ func Clear(app *config.App) http.HandlerFunc {
 		if req == nil {
 			return
 		}
-
 		app.ClearStorage()
 		app.Log.Info("storage cleared", "user", req)
-
 		toRoot(w, r, app.Root)
 	}
 }

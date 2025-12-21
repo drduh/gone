@@ -7,7 +7,7 @@ import (
 	"github.com/drduh/gone/util"
 )
 
-// Random serves a random string of specified type.
+// Random handles requests to generate a random string.
 func Random(app *config.App) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		req := authRequest(w, r, app)

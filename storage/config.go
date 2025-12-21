@@ -1,4 +1,4 @@
-// Package storage defines uploaded content.
+// Package storage provides content storage and functions.
 package storage
 
 import (
@@ -6,7 +6,12 @@ import (
 	"time"
 )
 
-const storageVersion = "1"
+const (
+	storageVersion = "1"
+
+	filenameMessages = "messages.txt"
+	filenameWall     = "wall.txt"
+)
 
 // Storage represents content uploaded by users.
 type Storage struct {
