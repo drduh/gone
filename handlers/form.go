@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"math"
 	"net/http"
 	"strconv"
 	"strings"
@@ -19,6 +20,9 @@ func parseFormInt(r *http.Request, field string, def int, maximum int) int {
 				return def
 			}
 			if v > uint64(maximum) {
+				return maximum
+			}
+			if v > math.MaxInt {
 				return maximum
 			}
 			return int(v)
