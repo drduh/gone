@@ -36,8 +36,8 @@ func Wall(app *config.App) http.HandlerFunc {
 		}
 
 		if r.URL.Query().Get("download") == "all" {
-			app.Log.Debug("serving wall content", "user", req)
 			app.ServeWall(w)
+			app.Log.Info("downloaded wall", "user", req)
 			return
 		}
 

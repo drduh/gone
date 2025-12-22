@@ -11,6 +11,7 @@ func (s *Storage) ListFiles() []File {
 			break
 		}
 
+		s.UpdateTimeRemaining()
 		f := File{
 			Id:   file.Id,
 			Name: file.Name,

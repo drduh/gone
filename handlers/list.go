@@ -13,7 +13,6 @@ func List(app *config.App) http.HandlerFunc {
 		if req == nil {
 			return
 		}
-		app.UpdateTimeRemaining()
 		files := app.ListFiles()
 		app.Log.Info("serving file list",
 			"files", len(files), "user", req)

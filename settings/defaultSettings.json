@@ -74,7 +74,7 @@
   },
   "limit": {
     "expiryTicker":  "30s",
-    "filenameChars": "_.-",
+    "filenameChars": "_.- ",
     "maxDownloads":  100,
     "maxDuration":   "192h",
     "maxSizeMsg":    128,
