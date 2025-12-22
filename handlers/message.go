@@ -49,7 +49,7 @@ func Message(app *config.App) http.HandlerFunc {
 		}
 
 		if r.URL.Query().Get("download") == "all" {
-			app.Log.Debug("dowloading messages",
+			app.Log.Debug("downloading messages",
 				"count", app.NumMessages, "user", req)
 			app.ServeMessages(w)
 			return

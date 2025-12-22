@@ -104,8 +104,8 @@ func TestSanitizeName(t *testing.T) {
 			"example.xxxx"},
 		{strings.Repeat("a", 1000) + ".txt", extraChars, 50,
 			strings.Repeat("a", 46) + ".txt"},
-		{strings.Repeat(".", 100) + strings.Repeat(".", 100), extraChars, 80,
-			strings.Repeat(".", 79) + "."},
+		{strings.Repeat(".", 200), extraChars, 80,
+			strings.Repeat(".", 80)},
 	}
 	for _, test := range tests {
 		t.Run(test.input, func(t *testing.T) {
