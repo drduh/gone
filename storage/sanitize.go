@@ -4,7 +4,6 @@ import (
 	"net/url"
 	"path/filepath"
 	"strings"
-	"unicode"
 )
 
 const (
@@ -25,7 +24,7 @@ func SanitizeName(input, extraChars string, maxLength int) string {
 	f = removeInvalidChars(f, extraChars)
 	ext := filepath.Ext(f)
 	base := strings.TrimSuffix(f, ext)
-	if base == "" {
+	if strings.TrimSpace(base) == "" {
 		base = defaultName
 	}
 	return truncateName(base, ext, maxLength)
@@ -35,8 +34,9 @@ func SanitizeName(input, extraChars string, maxLength int) string {
 func removeInvalidChars(filename string, allowed string) string {
 	var result strings.Builder
 	for _, char := range filename {
-		if unicode.IsDigit(char) ||
-			unicode.IsLetter(char) ||
+		if (char >= '0' && char <= '9') ||
+			(char >= 'a' && char <= 'z') ||
+			(char >= 'A' && char <= 'Z') ||
 			isAllowedChar(char, allowed) {
 			result.WriteRune(char)
 		}

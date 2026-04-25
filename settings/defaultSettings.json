@@ -20,7 +20,7 @@
       "static":    false,
       "status":    false,
       "upload":    false,
-      "user":      true,
+      "user":      false,
       "wall":      false
     }
   },
@@ -80,8 +80,8 @@
     "maxDuration":   "192h",
     "maxSizeMsg":    128,
     "maxSizeName":   64,
-    "maxSizeWall":   1280,
-    "maxSizeFileMb": 256,
+    "maxSizeWall":   2560,
+    "maxSizeFileMb": 512,
     "reqsPerMinute": 30
   },
   "paths": {
