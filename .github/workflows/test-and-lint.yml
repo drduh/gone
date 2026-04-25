@@ -32,4 +32,4 @@ jobs:
         go-version-file: 'go.mod'
     - uses: golangci/golangci-lint-action@v9
       with:
-        version: v2.7
+        version: v2.11.4
