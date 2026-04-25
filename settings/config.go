@@ -87,6 +87,9 @@ type Auth struct {
 		// Upload files
 		Upload bool `json:"upload,omitempty"`
 
+		// User request
+		User bool `json:"user,omitempty"`
+
 		// Read and write wall content
 		Wall bool `json:"wall,omitempty"`
 	} `json:"require,omitempty"`
@@ -245,6 +248,9 @@ type Paths struct {
 
 	// File upload ("/upload")
 	Upload string `json:"upload,omitempty"`
+
+	// User request ("/user")
+	User string `json:"user,omitempty"`
 
 	// Shared content read and write ("/wall")
 	Wall string `json:"wall,omitempty"`

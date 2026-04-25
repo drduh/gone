@@ -4,7 +4,6 @@ import (
 	"net/http"
 
 	"github.com/drduh/gone/config"
-	"github.com/drduh/gone/storage"
 	"github.com/drduh/gone/templates"
 	"github.com/drduh/gone/version"
 )
@@ -35,10 +34,6 @@ func Status(app *config.App) http.HandlerFunc {
 			Default:  app.Default,
 			Limit:    app.Limit,
 			Sizes:    app.Sizes,
-			Owner: storage.Owner{
-				Address: req.Address,
-				Headers: r.Header,
-			},
 		}
 
 		writeJSON(w, http.StatusOK, response)
