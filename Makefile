@@ -11,6 +11,7 @@ OUT       = release
 GO       ?= go
 GODOC    ?= ${HOME}/go/bin/godoc
 GOLINT   ?= golangci-lint
+GOSEC    ?= gosec
 
 BUILDPKG  = $(GIT)/$(APPNAME)/version
 BUILDARCH = $(shell $(GO) env GOHOSTARCH)
@@ -123,7 +124,18 @@ lint:
 	fi
 
 lint-verbose:
-	@$(GOLINT) run -v ./...
+	@if command -v $(GOLINT) >/dev/null 2>&1 ; then \
+		$(GOLINT) run --verbose ./... ; \
+	else \
+		$(call WARN,skipping lint - '$(GOLINT)' not found); \
+	fi
+
+sec:
+	@if command -v $(GOSEC) >/dev/null 2>&1 ; then \
+		$(GOSEC) run ./... ; \
+	else \
+		$(call WARN,skipping gosec - '$(GOSEC)' not found); \
+	fi
 
 build-race: prep
 	@$(GORACE)
