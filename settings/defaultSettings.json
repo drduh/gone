@@ -20,6 +20,7 @@
       "static":    false,
       "status":    false,
       "upload":    false,
+      "user":      false,
       "wall":      false
     }
   },
@@ -79,8 +80,8 @@
     "maxDuration":   "192h",
     "maxSizeMsg":    128,
     "maxSizeName":   64,
-    "maxSizeWall":   1280,
-    "maxSizeFileMb": 256,
+    "maxSizeWall":   2560,
+    "maxSizeFileMb": 512,
     "reqsPerMinute": 30
   },
   "paths": {
@@ -94,6 +95,7 @@
     "static":      "/static",
     "status":      "/status",
     "upload":      "/upload",
+    "user":        "/user",
     "wall":        "/wall"
   }
 }

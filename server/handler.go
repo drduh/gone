@@ -37,6 +37,7 @@ func getHandler(app *config.App) http.Handler {
 	handle(app.Static, handlers.Static(app))
 	handle(app.Status, handlers.Status(app))
 	handle(app.Upload, handlers.Upload(app))
+	handle(app.User, handlers.User(app))
 	handle(app.Wall, handlers.Wall(app))
 
 	return mux

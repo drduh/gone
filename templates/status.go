@@ -31,7 +31,4 @@ type Status struct {
 
 	// Storage content total sizes
 	storage.Sizes `json:"storageSizes,omitempty"`
-
-	// Storage content owner information
-	storage.Owner `json:"request,omitempty"`
 }

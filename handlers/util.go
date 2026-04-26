@@ -27,6 +27,7 @@ func isAuthenticated(app *config.App, r *http.Request) bool {
 		app.Static:   app.Require.Static,
 		app.Status:   app.Require.Status,
 		app.Upload:   app.Require.Upload,
+		app.User:     app.Require.User,
 		app.Wall:     app.Require.Wall,
 	}
 
