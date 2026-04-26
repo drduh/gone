@@ -43,6 +43,15 @@ func TestCookieNotExists(t *testing.T) {
 		cookies[0].Value != cookieValue {
 		t.Errorf("Cookie was not set correctly")
 	}
+	if !cookies[0].HttpOnly {
+		t.Errorf("Expected HttpOnly=true, got false")
+	}
+	if cookies[0].SameSite != cookieMode {
+		t.Errorf("Expected SameSite=%d, got %d", cookieMode, cookies[0].SameSite)
+	}
+	if !cookies[0].Secure {
+		t.Errorf("Expected Secure=true, got false")
+	}
 }
 
 // TestNewCookie tests NewCookie correctly sets a cookie.
@@ -57,8 +66,14 @@ func TestNewCookie(t *testing.T) {
 	if cookie.Value != cookieValue {
 		t.Errorf("Expected Value=%q, got %q", cookieValue, cookie.Value)
 	}
+	if !cookie.HttpOnly {
+		t.Errorf("Expected HttpOnly=true, got false")
+	}
 	if cookie.SameSite != cookieMode {
 		t.Errorf("Expected SameSite=%d, got %d", cookieMode, cookie.SameSite)
+	}
+	if !cookie.Secure {
+		t.Errorf("Expected Secure=true, got false")
 	}
 	if cookie.Expires.Before(
 		time.Now().Add(cookieTime - time.Second)) {
