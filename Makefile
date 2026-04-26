@@ -8,6 +8,7 @@ CMD       = cmd
 SRC       = $(CMD)/main.go
 OUT       = release
 
+CONTAIN  ?= container
 GO       ?= go
 GODOC    ?= ${HOME}/go/bin/godoc
 GOLINT   ?= golangci-lint
@@ -31,7 +32,7 @@ BUILDFLAG = \
   -X "$(BUILDPKG).Time=$(BUILDTIME)" \
   -X "$(BUILDPKG).User=$(shell whoami)" \
   -X "$(BUILDPKG).Version=$(VERSION)"
-BUILDCMD  = $(GO) build -ldflags '-s -w $(BUILDFLAG)'
+BUILDCMD  = $(GO) build -trimpath -ldflags '-s -w $(BUILDFLAG)'
 BINNAME   = $(APPNAME)-$(BUILDOS)-$(BUILDARCH)-$(VERSION)
 GOBUILD   = GOOS=$(BUILDOS) GOARCH=$(BUILDARCH) $(BUILDCMD) \
             -o "$(OUT)/$(BINNAME)" "$(SRC)"
@@ -64,11 +65,17 @@ prep:
 build: prep
 	@$(GOBUILD)
 
+build-container:
+	@$(CONTAIN) build -t gone-$(VERSION) .
+
 release: build
 	@printf "built: %s\n" "$$(file $(OUT)/$(BINNAME))"
 
 run: build
 	@$(OUT)/$(BINNAME)
+
+run-container: build-container
+	@$(CONTAIN) run gone-$(VERSION)
 
 debug: build
 	@$(OUT)/$(BINNAME) -debug
