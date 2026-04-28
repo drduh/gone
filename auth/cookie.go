@@ -23,8 +23,10 @@ func NewCookie(value, id string, t time.Duration) *http.Cookie {
 	return &http.Cookie{
 		Name:     id,
 		Expires:  time.Now().Add(t),
+		HttpOnly: true,
 		Path:     "/",
 		SameSite: http.SameSiteStrictMode,
+		Secure:   true,
 		Value:    value,
 	}
 }
