@@ -127,8 +127,12 @@ func Upload(app *config.App) http.HandlerFunc {
 		}
 		wg.Wait()
 
-		toRoot(w, r, app.Root)
-		writeJSON(w, http.StatusOK, uploads)
+		if req.IsBrowser {
+			toRoot(w, r, app.Root)
+		} else {
+			writeJSON(w, http.StatusOK, uploads)
+		}
+
 		app.Log.Info("file(s) uploaded",
 			"files", uploads, "user", req)
 	}

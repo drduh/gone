@@ -3,6 +3,7 @@ package handlers
 import (
 	"net"
 	"net/http"
+	"strings"
 
 	"github.com/drduh/gone/auth"
 	"github.com/drduh/gone/config"
@@ -54,6 +55,9 @@ func parseRequest(r *http.Request) *Request {
 		Agent:   r.UserAgent(),
 		Mask:    util.Mask(address),
 		Path:    r.URL.String(),
+		IsBrowser: strings.Contains(
+			r.Header.Get("Accept"), "text/html",
+		),
 	}
 }
 
