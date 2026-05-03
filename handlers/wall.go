@@ -32,7 +32,10 @@ func Wall(app *config.App) http.HandlerFunc {
 				app.Log.Info("updated wall", "user", req)
 			}
 
-			toRoot(w, r, app.Root)
+			if req.IsBrowser {
+				toRoot(w, r, app.Root)
+				return
+			}
 		}
 
 		if r.URL.Query().Get("download") == "all" {

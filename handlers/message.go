@@ -45,7 +45,10 @@ func Message(app *config.App) http.HandlerFunc {
 				app.Log.Info("added message", "user", req)
 			}
 
-			toRoot(w, r, app.Root)
+			if req.IsBrowser {
+				toRoot(w, r, app.Root)
+				return
+			}
 		}
 
 		if r.URL.Query().Get("download") == "all" {

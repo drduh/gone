@@ -15,6 +15,8 @@ func Clear(app *config.App) http.HandlerFunc {
 		}
 		app.ClearStorage()
 		app.Log.Info("storage cleared", "user", req)
-		toRoot(w, r, app.Root)
+		if req.IsBrowser {
+			toRoot(w, r, app.Root)
+		}
 	}
 }
