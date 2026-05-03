@@ -3,6 +3,7 @@ package handlers
 import (
 	"net"
 	"net/http"
+	"strings"
 
 	"github.com/drduh/gone/auth"
 	"github.com/drduh/gone/config"
@@ -54,6 +55,9 @@ func parseRequest(r *http.Request) *Request {
 		Agent:   r.UserAgent(),
 		Mask:    util.Mask(address),
 		Path:    r.URL.String(),
+		IsBrowser: strings.Contains(
+			r.Header.Get("Accept"), "text/html",
+		),
 	}
 }
 
@@ -63,13 +67,13 @@ func authRequest(w http.ResponseWriter,
 	r *http.Request, app *config.App) *Request {
 	req := parseRequest(r)
 	if !isAuthenticated(app, r) {
-		deny(w, http.StatusForbidden, app.Deny, req)
-		app.Log.Error(app.Deny, "user", r)
+		deny(w, http.StatusForbidden, app.Deny)
+		app.Log.Error(app.Deny, "user", req)
 		return nil
 	}
 	if !app.Authorize(app.ReqsPerMinute) {
-		deny(w, http.StatusTooManyRequests, app.RateLimit, req)
-		app.Log.Error(app.RateLimit, "user", r)
+		deny(w, http.StatusTooManyRequests, app.RateLimit)
+		app.Log.Error(app.RateLimit, "user", req)
 		return nil
 	}
 	return req
