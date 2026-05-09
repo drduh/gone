@@ -3,6 +3,7 @@ package util
 import (
 	"fmt"
 	"os"
+	"strings"
 	"testing"
 )
 
@@ -33,6 +34,8 @@ func TestFormatSize(t *testing.T) {
 		{1048576, "1 mb"},
 		{5242880, "5 mb"},
 		{100000000, "95.37 mb"},
+		{50000 * 50000, "2.33 gb"},
+		{50000 * 50000 * 50000, "113.69 tb"},
 	}
 	for _, tt := range tests {
 		t.Run(fmt.Sprintf("input: %d", tt.input), func(t *testing.T) {
@@ -52,6 +55,7 @@ func TestGetOutput(t *testing.T) {
 	if writer != os.Stdout {
 		t.Errorf("expected stdout writer, got %v", writer)
 	}
+
 	testFile := "test.txt"
 	writer, err = GetOutput(testFile)
 	if err != nil {
@@ -68,6 +72,7 @@ func TestGetOutput(t *testing.T) {
 			t.Errorf("error removing file: %v", err)
 		}
 	}
+
 	badFile := string([]byte{0})
 	writer, err = GetOutput(badFile)
 	if err == nil {
@@ -78,15 +83,53 @@ func TestGetOutput(t *testing.T) {
 	}
 }
 
+// TestGetOutputAppend tests an existing file is appended.
+func TestGetOutputAppends(t *testing.T) {
+	testFile := "test_append.txt"
+	defer func() { _ = os.Remove(testFile) }()
+
+	first, err := GetOutput(testFile)
+	if err != nil {
+		t.Fatalf("first open error: %v", err)
+	}
+	if _, err := fmt.Fprint(first, "hello"); err != nil {
+		t.Fatalf("first write error: %v", err)
+	}
+	if err := first.(*os.File).Close(); err != nil {
+		t.Fatalf("first close error: %v", err)
+	}
+
+	second, err := GetOutput(testFile)
+	if err != nil {
+		t.Fatalf("second open error: %v", err)
+	}
+	if _, err := fmt.Fprint(second, " world"); err != nil {
+		t.Fatalf("second write error: %v", err)
+	}
+	if err := second.(*os.File).Close(); err != nil {
+		t.Fatalf("second close error: %v", err)
+	}
+
+	data, err := os.ReadFile(testFile)
+	if err != nil {
+		t.Fatalf("read error: %v", err)
+	}
+	if got := string(data); got != "hello world" {
+		t.Errorf("expected content 'hello world', got %q", got)
+	}
+}
+
+// TestLoadNamesEmpty tests a file containing only blank lines.
 func TestLoadNamesEmpty(t *testing.T) {
 	setupNames(namesFile, "\n\n")
 	defer func() { _ = os.Remove(namesFile) }()
 	names := loadNames(namesFile)
 	if len(names) != len(defaultNames) {
-		t.Errorf("expected names, got %d empty lines", len(names))
+		t.Errorf("expected %d default names, got %d", len(defaultNames), len(names))
 	}
 }
 
+// TestLoadNamesExist test a file with three names is loaded.
 func TestLoadNamesExist(t *testing.T) {
 	setupNames(namesFile, "Sun\nEarth\nMoon\n")
 	defer func() { _ = os.Remove(namesFile) }()
@@ -102,10 +145,46 @@ func TestLoadNamesExist(t *testing.T) {
 	}
 }
 
+// TestLoadNamesMissing tests no file provided with names.
 func TestLoadNamesMissing(t *testing.T) {
 	setupNames(namesFile, "")
 	names := loadNames(namesFile)
 	if len(names) != len(defaultNames) {
 		t.Errorf("expected %d names, got %d", len(defaultNames), len(names))
+	}
+}
+
+// TestLoadNamesMix tests a file with blank lines and valid names.
+func TestLoadNamesMix(t *testing.T) {
+	setupNames(namesFile, "\nSun\n\nMoon\n\n")
+	defer func() { _ = os.Remove(namesFile) }()
+	names := loadNames(namesFile)
+	expected := []string{"Sun", "Moon"}
+	if len(names) != len(expected) {
+		t.Errorf("expected %d names, got %d", len(expected), len(names))
+	}
+	for i := range expected {
+		if names[i] != expected[i] {
+			t.Errorf("expected %s, got %s", expected[i], names[i])
+		}
+	}
+}
+
+// TestLoadNamesSpaces tests file with extra spaces to trim.
+func TestLoadNamesSpaces(t *testing.T) {
+	setupNames(namesFile, "  Sun  \n\tEarth\t\n  Moon\n")
+	defer func() { _ = os.Remove(namesFile) }()
+	names := loadNames(namesFile)
+	expected := []string{"Sun", "Earth", "Moon"}
+	if len(names) != len(expected) {
+		t.Errorf("expected %d names, got %d", len(expected), len(names))
+	}
+	for i := range expected {
+		if names[i] != expected[i] {
+			t.Errorf("index %d: expected %q, got %q", i, expected[i], names[i])
+		}
+		if names[i] != strings.TrimSpace(names[i]) {
+			t.Errorf("index %d: name %q was not trimmed", i, names[i])
+		}
 	}
 }

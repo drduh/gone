@@ -42,7 +42,7 @@ func TestPickRandom(t *testing.T) {
 	if !found && result != fallback {
 		t.Errorf("pickRandom returned %s", result)
 	}
-	result = pickRandom([]string{}, fallback)
+	result = pickRandom(nil, fallback)
 	if result != fallback {
 		t.Errorf("pickRandom did not return fallback (%s)", result)
 	}
