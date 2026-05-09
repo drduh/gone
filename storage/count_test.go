@@ -79,10 +79,19 @@ func TestCountWall(t *testing.T) {
 	var s Storage
 	s.CountWall()
 	if s.CharsWall != 0 {
-		t.Fatalf("CountWall = %d; want 0", s.CharsWall)
+		t.Fatalf("CharsWall = %d; want 0", s.CharsWall)
 	}
 	if s.LinesWall != 0 {
 		t.Fatalf("LinesWall = %d; want 0", s.LinesWall)
+	}
+
+	s.WallContent = "test"
+	s.CountWall()
+	if s.CharsWall != 4 {
+		t.Fatalf("CharsWall = %d; want 4", s.CharsWall)
+	}
+	if s.LinesWall != 1 {
+		t.Fatalf("LinesWall = %d; want 1", s.LinesWall)
 	}
 
 	s.WallContent = "test\r\nwall"
