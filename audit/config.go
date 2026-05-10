@@ -45,5 +45,5 @@ type Event struct {
 	Message string `json:"message"`
 
 	// Additional information ("data": {"port": 8080})
-	Data map[string]interface{} `json:"data"`
+	Data map[string]any `json:"data"`
 }

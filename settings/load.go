@@ -1,8 +1,10 @@
 package settings
 
 import (
+	"bytes"
 	"encoding/json"
 	"fmt"
+	"io"
 	"log"
 	"os"
 
@@ -14,15 +16,15 @@ var defaultSettings []byte
 
 // Load returns the application configuration from
 // a settings file or the default embedded settings.
-func Load(settingsFilepath string) Settings {
+func Load(path string) Settings {
 	var settings Settings
+
 	if err := loadSettings(defaultSettings, &settings); err != nil {
 		log.Fatalf("failed loading default settings: %v", err)
 	}
 
-	if settingsFilepath != "" {
-		if err := loadSettingsFromFile(
-			settingsFilepath, &settings); err != nil {
+	if path != "" {
+		if err := loadSettingsFromFile(path, &settings); err != nil {
 			log.Fatalf("failed loading settings from file: %v", err)
 		}
 	}
@@ -30,11 +32,26 @@ func Load(settingsFilepath string) Settings {
 	return settings
 }
 
-// loadSettings unmarshals settings from a JSON byte slice.
+// loadSettings decodes a JSON byte slice into a Settings struct,
+// rejecting unknown fields, trailing data, and invalid configurations.
 func loadSettings(data []byte, settings *Settings) error {
-	if err := json.Unmarshal(data, settings); err != nil {
-		return fmt.Errorf("failed to unmarshal settings: %w", err)
+	dec := json.NewDecoder(bytes.NewReader(data))
+	dec.DisallowUnknownFields()
+	if err := dec.Decode(settings); err != nil {
+		return fmt.Errorf("failed to decode settings: %w", err)
 	}
+
+	if err := dec.Decode(&struct{}{}); err != io.EOF {
+		if err == nil {
+			return fmt.Errorf("failed to decode settings: trailing data")
+		}
+		return fmt.Errorf("failed to decode settings: trailing data: %w", err)
+	}
+
+	if err := settings.Validate(); err != nil {
+		return fmt.Errorf("failed to validate settings: %w", err)
+	}
+
 	return nil
 }
 
