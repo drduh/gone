@@ -83,7 +83,7 @@ func TestGetOutput(t *testing.T) {
 	}
 }
 
-// TestGetOutputAppend tests an existing file is appended.
+// TestGetOutputAppends tests existing output file is appended.
 func TestGetOutputAppends(t *testing.T) {
 	testFile := "test_append.txt"
 	defer func() { _ = os.Remove(testFile) }()
@@ -125,7 +125,8 @@ func TestLoadNamesEmpty(t *testing.T) {
 	defer func() { _ = os.Remove(namesFile) }()
 	names := loadNames(namesFile)
 	if len(names) != len(defaultNames) {
-		t.Errorf("expected %d default names, got %d", len(defaultNames), len(names))
+		t.Errorf("expected %d default names, got %d",
+			len(defaultNames), len(names))
 	}
 }
 
@@ -145,7 +146,7 @@ func TestLoadNamesExist(t *testing.T) {
 	}
 }
 
-// TestLoadNamesMissing tests no file provided with names.
+// TestLoadNamesMissing tests setting up names with no file.
 func TestLoadNamesMissing(t *testing.T) {
 	setupNames(namesFile, "")
 	names := loadNames(namesFile)
