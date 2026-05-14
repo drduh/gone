@@ -107,6 +107,9 @@ type Error struct {
 	// File exceeds size limit
 	FileSize string `json:"fileSize,omitempty"`
 
+	// Files exceed total size limit
+	FileSizeAll string `json:"fileSizeAll,omitempty"`
+
 	// Upload form not valid
 	Form string `json:"form,omitempty"`
 
@@ -185,35 +188,50 @@ type Default struct {
 	Expiration Duration `json:"duration,omitempty"`
 }
 
-// Content represents limits on content sharing.
+// Content represents limits on content.
 type Limit struct {
-
-	// Extra characters allowed in file names
-	FilenameExtraChars string `json:"filenameChars,omitempty"`
-
-	// Maximum number of allowed downloads
-	MaxDownloads int `json:"maxDownloads,omitempty"`
-
-	// Maximum expiration duration
-	MaxDuration Duration `json:"maxDuration,omitempty"`
-
-	// Maximum text message size
-	MaxSizeMsg int `json:"maxSizeMsg,omitempty"`
-
-	// Maximum file name length
-	MaxSizeName int `json:"maxSizeName,omitempty"`
-
-	// Maximum wall content size
-	MaxSizeWall int `json:"maxSizeWall,omitempty"`
-
-	// Maximum file size (in Megabytes)
-	MaxSizeFileMb int64 `json:"maxSizeFileMb,omitempty"`
 
 	// Global requests per minute to rate limit
 	ReqsPerMinute int `json:"reqsPerMinute,omitempty"`
 
-	// Frequency of File expiration check
-	Ticker Duration `json:"expiryTicker,omitempty"`
+	// FileLimits represents file upload limits.
+	FileLimits struct {
+
+		// Frequency of file expiration check
+		ExpiryCheck Duration `json:"expiryCheck,omitempty"`
+
+		// Maximum number of downloads until expiration
+		MaxDownloads int `json:"maxDownloads,omitempty"`
+
+		// Maximum duration until expiration
+		MaxDuration Duration `json:"maxDuration,omitempty"`
+
+		// Extra characters allowed in file names
+		NameExtraChars string `json:"nameExtraChars,omitempty"`
+
+		// File name length
+		NameLength int `json:"nameLength,omitempty"`
+
+		// Maximum size for each individual file (in Megabytes)
+		SizeEachMb int64 `json:"sizeEachMb,omitempty"`
+
+		// Maximum total size for all files (in Megabytes)
+		SizeTotalMb int64 `json:"sizeTotalMb,omitempty"`
+	} `json:"fileLimits,omitempty"`
+
+	// MessageLimits represents message text limits.
+	MessageLimits struct {
+
+		// Maximum length of characters in a text message
+		LengthChars int `json:"lengthChars,omitempty"`
+	} `json:"messageLimits,omitempty"`
+
+	// WallLimits represents wall text limits.
+	WallLimits struct {
+
+		// Maximum length of characters in wall content
+		LengthChars int `json:"lengthChars,omitempty"`
+	} `json:"wallLimits,omitempty"`
 }
 
 // Paths represents paths to handle.
@@ -252,6 +270,6 @@ type Paths struct {
 	// User request ("/user")
 	User string `json:"user,omitempty"`
 
-	// Shared content read and write ("/wall")
+	// Shared-edit content read and write ("/wall")
 	Wall string `json:"wall,omitempty"`
 }

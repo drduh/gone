@@ -22,10 +22,21 @@ func Upload(app *config.App) http.HandlerFunc {
 
 		maxFileBytes := app.GetMaxFileBytes()
 		contentLength := r.ContentLength
+
 		if contentLength > maxFileBytes {
 			writeJSON(w, http.StatusRequestEntityTooLarge, errorJSON(app.FileSize))
 			app.Log.Error(app.FileSize,
 				"fileSizeMb", contentLength/(1<<20), "user", req)
+			return
+		}
+
+		app.CountFiles()
+		maxTotalBytes := app.GetMaxFilesBytes()
+
+		if maxTotalBytes > 0 && int64(app.SizeFiles)+contentLength > maxTotalBytes {
+			writeJSON(w, http.StatusRequestEntityTooLarge, errorJSON(app.FileSizeAll))
+			app.Log.Error(app.FileSizeAll,
+				"totalSize", app.SizeFiles, "user", req)
 			return
 		}
 
@@ -37,11 +48,11 @@ func Upload(app *config.App) http.HandlerFunc {
 		}
 
 		downloadLimit := parseFormInt(r,
-			formFieldDownloads, app.Downloads, app.MaxDownloads)
+			formFieldDownloads, app.Downloads, app.FileLimits.MaxDownloads)
 		app.Log.Debug("got form value", formFieldDownloads, downloadLimit)
 
 		durationLimit := parseFormDuration(r,
-			formFieldDuration, app.Expiration.Duration, app.MaxDuration)
+			formFieldDuration, app.Expiration.Duration, app.FileLimits.MaxDuration)
 		app.Log.Debug("got form value", formFieldDuration, durationLimit)
 
 		var upload storage.File
@@ -81,7 +92,8 @@ func Upload(app *config.App) http.HandlerFunc {
 				}
 
 				filename := storage.SanitizeName(fileHeader.Filename,
-					app.FilenameExtraChars, app.MaxSizeName)
+					app.FileLimits.NameExtraChars, app.FileLimits.NameLength)
+
 				f := &storage.File{
 					Name: filename,
 					Data: buf.Bytes(),

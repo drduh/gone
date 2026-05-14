@@ -41,9 +41,9 @@ type Index struct {
 	// Content limits
 	settings.Limit
 
-	// Configured route paths
+	// Configured routable paths
 	settings.Paths
 
-	// Configured storage (Files and Messages)
+	// Configured storage (Files, Messages, Wall)
 	storage.Storage
 }

@@ -9,7 +9,7 @@
                  cols="32" rows="12"
                  form="wall"
                    id="wall"
-            maxlength="{{ .Limit.MaxSizeWall }}"
+            maxlength="{{ .Limit.WallLimits.LengthChars }}"
                  name="wall"
                 title="add or edit content">
       {{- .Storage.WallContent -}}

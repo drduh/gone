@@ -9,7 +9,8 @@ import (
 // expiryWorker checks for and expires Files
 // on the configured "ticker" schedule.
 func expiryWorker(app *config.App) {
-	ticker := time.NewTicker(app.Ticker.Duration)
+	ticker := time.NewTicker(
+		app.FileLimits.ExpiryCheck.Duration)
 	defer ticker.Stop()
 	for range ticker.C {
 		expireFiles(app)
@@ -28,7 +29,8 @@ func expireFiles(app *config.App) {
 		reason := f.IsExpired()
 		if reason != "" {
 			app.Expire(f)
-			app.Log.Info("removed file", "reason", reason,
+			app.Log.Info("removed file",
+				"reason", reason,
 				"id", f.Id, "name", f.Name,
 				"available", lifetime.String(),
 				"downloads", f.Total)

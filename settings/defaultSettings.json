@@ -32,6 +32,7 @@
     "copy":        "file copy fail",
     "deny":        "not authorized",
     "fileSize":    "file too large",
+    "fileSizeAll": "size limit met",
     "form":        "file form fail",
     "noFilename":  "need file name",
     "noFiles":     "no files found",
@@ -74,15 +75,22 @@
     }
   },
   "limit": {
-    "expiryTicker":  "30s",
-    "filenameChars": "_.- ",
-    "maxDownloads":  100,
-    "maxDuration":   "192h",
-    "maxSizeMsg":    128,
-    "maxSizeName":   64,
-    "maxSizeWall":   2560,
-    "maxSizeFileMb": 512,
-    "reqsPerMinute": 30
+    "reqsPerMinute":    30,
+    "fileLimits": {
+      "expiryCheck":    "30s",
+      "maxDownloads":   100,
+      "maxDuration":    "192h",
+      "nameExtraChars": "_.- ",
+      "nameLength":     64,
+      "sizeEachMb":     512,
+      "sizeTotalMb":    4096
+    },
+    "messageLimits": {
+      "lengthChars": 128
+    },
+    "wallLimits": {
+      "lengthChars": 2560
+    }
   },
   "paths": {
     "assets":      "/assets/",

@@ -22,18 +22,25 @@ func (s *Settings) Validate() error {
 			s.Downloads)
 	}
 
-	if s.MaxDownloads < 1 {
+	if s.FileLimits.MaxDownloads < 1 {
 		return fmt.Errorf("downloads limit must be >1, got %d",
-			s.MaxDownloads)
+			s.FileLimits.MaxDownloads)
 	}
 
-	if s.MaxSizeMsg < 1 || s.MaxSizeName < 1 || s.MaxSizeWall < 1 {
+	if s.FileLimits.NameLength < 1 ||
+		s.MessageLimits.LengthChars < 1 ||
+		s.WallLimits.LengthChars < 1 {
 		return fmt.Errorf("max content limits must be >1")
 	}
 
-	if s.MaxSizeFileMb < 1 {
+	if s.FileLimits.SizeEachMb < 1 {
 		return fmt.Errorf("file size limit must be >1, got %d",
-			s.MaxSizeFileMb)
+			s.FileLimits.SizeEachMb)
+	}
+
+	if s.FileLimits.SizeTotalMb < 1 {
+		return fmt.Errorf("total files size limit must be >1, got %d",
+			s.FileLimits.SizeTotalMb)
 	}
 
 	if s.ReqsPerMinute < 1 {
@@ -46,9 +53,9 @@ func (s *Settings) Validate() error {
 			s.Expiration.Duration)
 	}
 
-	if s.MaxDuration.GetDuration() < 1 {
+	if s.FileLimits.MaxDuration.GetDuration() < 1 {
 		return fmt.Errorf("duration limit must be >1, got %s",
-			s.MaxDuration.Duration)
+			s.FileLimits.MaxDuration.Duration)
 	}
 
 	return nil
