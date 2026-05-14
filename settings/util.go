@@ -12,7 +12,8 @@ func (l *Limit) GetMaxFileBytes() int64 {
 	return l.FileLimits.SizeEachMb << 20
 }
 
-// GetMaxFilesBytes returns the maximum allowed size of all files in bytes.
-func (l *Limit) GetMaxFilesBytes() int64 {
+// GetMaxTotalFilesBytes returns the maximum allowed size of all
+// files in bytes.
+func (l *Limit) GetMaxTotalFilesBytes() int64 {
 	return l.FileLimits.SizeTotalMb << 20
 }

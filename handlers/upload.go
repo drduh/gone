@@ -31,7 +31,7 @@ func Upload(app *config.App) http.HandlerFunc {
 		}
 
 		app.CountFiles()
-		maxTotalBytes := app.GetMaxFilesBytes()
+		maxTotalBytes := app.GetMaxTotalFilesBytes()
 
 		if maxTotalBytes > 0 && int64(app.SizeFiles)+contentLength > maxTotalBytes {
 			writeJSON(w, http.StatusRequestEntityTooLarge, errorJSON(app.FileSizeAll))
@@ -47,12 +47,12 @@ func Upload(app *config.App) http.HandlerFunc {
 			return
 		}
 
-		downloadLimit := parseFormInt(r,
-			formFieldDownloads, app.Downloads, app.FileLimits.MaxDownloads)
+		downloadLimit := parseFormInt(r, formFieldDownloads,
+			app.Downloads, app.FileLimits.MaxDownloads)
 		app.Log.Debug("got form value", formFieldDownloads, downloadLimit)
 
-		durationLimit := parseFormDuration(r,
-			formFieldDuration, app.Expiration.Duration, app.FileLimits.MaxDuration)
+		durationLimit := parseFormDuration(r, formFieldDuration,
+			app.Expiration.Duration, app.FileLimits.MaxDuration)
 		app.Log.Debug("got form value", formFieldDuration, durationLimit)
 
 		var upload storage.File
