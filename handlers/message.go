@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"net/http"
+	"strings"
 	"time"
 
 	"github.com/drduh/gone/config"
@@ -37,7 +38,8 @@ func Message(app *config.App) http.HandlerFunc {
 				},
 			}
 
-			formContent := r.FormValue(formFieldMessage)
+			formContent := strings.TrimSpace(
+				r.PostFormValue(formFieldMessage))
 			if formContent != "" {
 				message.Count++
 				message.Data = formContent
