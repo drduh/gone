@@ -87,6 +87,12 @@ Get server status:
 curl localhost:8080/status
 ```
 
+Get user/request information:
+
+```
+curl localhost:8080/user
+```
+
 ## Upload
 
 Upload file:
@@ -228,4 +234,26 @@ Test coverage is also available - to generate an HTML report as `testCoverage.ht
 
 ```
 make cover
+```
+
+# Container
+
+The application can run in a container using [`Dockerfile`](https://github.com/drduh/gone/blob/main/Dockerfile).
+
+On macOS, using [apple/container](https://github.com/apple/container):
+
+```
+container system start
+
+container build -t gone-$(date +%F) .
+
+container run gone-$(date +%F)
+```
+
+Get the server IP address:
+
+```
+container ls | grep gone | grep --color --text -Eo "([0-9]{1,3}\.){3}[0-9]{1,3}"
+
+curl 192.168.64.3:8080
 ```

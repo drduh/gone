@@ -18,34 +18,40 @@ import (
 )
 
 func defaultLimit() settings.Limit {
-	lim := settings.Limit{}
-	lim.FileLimits.NameExtraChars = "_.- "
-	lim.FileLimits.NameLength = 40
-	lim.FileLimits.SizeEachMb = 1
-	lim.FileLimits.SizeTotalMb = 10
-	lim.FileLimits.MaxDownloads = 3
-	lim.FileLimits.ExpiryCheck = settings.Duration{Duration: time.Minute}
-	lim.FileLimits.MaxDuration = settings.Duration{Duration: 24 * time.Hour}
-	return lim
+	limit := settings.Limit{}
+	limit.FileLimits.NameExtraChars = "_.- "
+	limit.FileLimits.NameLength = 40
+	limit.FileLimits.SizeEachMb = 1
+	limit.FileLimits.SizeTotalMb = 10
+	limit.FileLimits.MaxDownloads = 3
+	limit.FileLimits.ExpiryCheck = settings.Duration{
+		Duration: time.Minute,
+	}
+	limit.FileLimits.MaxDuration = settings.Duration{
+		Duration: 24 * time.Hour,
+	}
+	return limit
 }
 
-func newTestAppWithLimit(lim settings.Limit) *config.App {
+func newTestAppWithLimit(limit settings.Limit) *config.App {
 	return &config.App{
 		Log:      slog.New(slog.NewTextHandler(io.Discard, nil)),
-		Settings: settings.Settings{Limit: lim},
-		Storage:  storage.Storage{Files: make(map[string]*storage.File)},
+		Settings: settings.Settings{Limit: limit},
+		Storage: storage.Storage{
+			Files: make(map[string]*storage.File),
+		},
 	}
 }
 
 // TestUploadFileTooLarge test file uploads exceeding size limit.
 func TestUploadFileTooLarge(t *testing.T) {
-	lim := defaultLimit()
-	app := newTestAppWithLimit(lim)
+	limit := defaultLimit()
+	app := newTestAppWithLimit(limit)
 	app.FileSize = "file too large"
 
 	reqBody := strings.NewReader("dummy")
 	req := httptest.NewRequest(http.MethodPost, "/upload", reqBody)
-	req.ContentLength = (lim.FileLimits.SizeEachMb << 20) + 1
+	req.ContentLength = (limit.FileLimits.SizeEachMb << 20) + 1
 
 	w := httptest.NewRecorder()
 	handler := Upload(app)
@@ -69,8 +75,8 @@ func TestUploadFileTooLarge(t *testing.T) {
 
 // TestUploadNoFile tests uploads without a file selected.
 func TestUploadNoFile(t *testing.T) {
-	lim := defaultLimit()
-	app := newTestAppWithLimit(lim)
+	limit := defaultLimit()
+	app := newTestAppWithLimit(limit)
 	app.Form = "invalid form"
 
 	var b bytes.Buffer
@@ -104,8 +110,8 @@ func TestUploadNoFile(t *testing.T) {
 
 // TestUploadSuccess tests successful file uploads.
 func TestUploadSuccess(t *testing.T) {
-	lim := defaultLimit()
-	app := newTestAppWithLimit(lim)
+	limit := defaultLimit()
+	app := newTestAppWithLimit(limit)
 
 	var b bytes.Buffer
 	mw := multipart.NewWriter(&b)

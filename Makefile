@@ -38,6 +38,7 @@ GOBUILD   = GOOS=$(BUILDOS) GOARCH=$(BUILDARCH) $(BUILDCMD) \
             -o "$(OUT)/$(BINNAME)" "$(SRC)"
 GORACE    = GOOS=$(BUILDOS) GOARCH=$(BUILDARCH) $(BUILDCMD) \
             -race -o "$(OUT)/$(BINNAME)-race" "$(SRC)"
+GOTEST    = $(GO) test -trimpath
 
 SERVICE   = $(APPNAME).service
 
@@ -83,8 +84,9 @@ debug: build
 version: build
 	@$(OUT)/$(BINNAME) -version
 
-install: install-assets install-bin install-config install-service \
-	reload-service
+install: install-assets install-bin \
+	install-config \
+	install-service reload-service
 
 install-assets:
 	@sudo install -Dm $(MOD_FILE) $(ASSET_CSS) $(DEST_CSS)
@@ -112,16 +114,16 @@ fmt:
 	@$(GO) fmt ./...
 
 test:
-	@$(GO) test ./...
+	@$(GOTEST) ./...
 
 test-race:
-	@$(GO) test -race -timeout=1m ./...
+	@$(GOTEST) -race -timeout=1m ./...
 
 test-verbose:
-	@$(GO) test -v ./...
+	@$(GOTEST) -v ./...
 
 test-cover:
-	@$(GO) test -coverprofile=$(TESTCOVER) ./...
+	@$(GOTEST) -coverprofile=$(TESTCOVER) ./...
 
 lint:
 	@if command -v $(GOLINT) >/dev/null 2>&1 ; then \
