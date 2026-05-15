@@ -51,9 +51,7 @@ func TestFindFileNotFound(t *testing.T) {
 
 // TestFindFileNil tests no Files are found in empty Storage.
 func TestFindFileNil(t *testing.T) {
-	s := &Storage{
-		Files: nil,
-	}
+	s := &Storage{Files: nil}
 	got := s.FindFile("file1")
 	if got != nil {
 		t.Fatalf("FindFile returned %#v; want nil", got)

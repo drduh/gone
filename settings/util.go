@@ -9,5 +9,11 @@ func (s *Settings) GetAddr() string {
 
 // GetMaxFileBytes returns the maximum allowed file size in bytes.
 func (l *Limit) GetMaxFileBytes() int64 {
-	return l.MaxSizeFileMb << 20
+	return l.FileLimits.SizeEachMb << 20
+}
+
+// GetMaxTotalFilesBytes returns the maximum allowed size of all
+// files in bytes.
+func (l *Limit) GetMaxTotalFilesBytes() int64 {
+	return l.FileLimits.SizeTotalMb << 20
 }

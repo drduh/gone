@@ -19,10 +19,10 @@ type Storage struct {
 	// Uploaded files
 	Files map[string]*File `json:"files,omitempty"`
 
-	// Posted text messages
+	// Text messages
 	Messages map[int]*Message `json:"messages,omitempty"`
 
-	// Shared edit content
+	// Shared wall content
 	WallContent string `json:"wallContent,omitempty"`
 
 	// Storage content total sizes

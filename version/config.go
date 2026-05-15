@@ -13,7 +13,7 @@ var (
 	// CPU architecture ("arm64", "x86_64", etc.)
 	Arch = "unknown"
 
-	// Go version ("go1.26.2")
+	// Go version ("go1.26.3")
 	Go = "unknown"
 
 	// Current git commit short hash ("a08f572")
