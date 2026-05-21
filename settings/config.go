@@ -113,6 +113,9 @@ type Error struct {
 	// Upload form not valid
 	Form string `json:"form,omitempty"`
 
+	// Message length exceeded
+	MsgLength string `json:"msgLength,omitempty"`
+
 	// Filename not provided
 	NoFilename string `json:"noFilename,omitempty"`
 
