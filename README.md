@@ -146,7 +146,7 @@ curl localhost:8080/static
 Post a short text message (use single quotes to wrap special characters):
 
 ```
-curl -s -F 'message=hello, world!' localhost:8080/msg >/dev/null
+curl -s -d 'message=hello, world!' localhost:8080/msg
 ```
 
 ## Wall
@@ -154,7 +154,7 @@ curl -s -F 'message=hello, world!' localhost:8080/msg >/dev/null
 Post multi-line text for shared edit:
 
 ```
-curl -s -F "wall=$(cat /etc/dnsmasq.conf)" localhost:8080/wall >/dev/null
+curl -s -F "wall=$(cat /etc/resolv.conf)" localhost:8080/wall
 ```
 
 Get shared multi-line text:
@@ -187,22 +187,22 @@ See [config/zshrc](https://github.com/drduh/config/blob/main/zshrc#L614) for ali
 $ gonePut test.txt 3 30m
 [
   {
-    "id": "11FWEbzQTepq-5xN4YBBdwsL9lBDM4JWpBVPg154wjyU",
+    "id": "1J81kxgMK0JEJa5VpMb7AJJvwutwaq7bhV26xtEaFL4w",
     "name": "test.txt",
-    "sum": "280afdc7ab83033e2913c9d564c5d8cb85a22dc5f96216f884053959da36c112",
+    "sum": "4dca0fd5f424a31b03ab807cbae77eb32bf2d089eed1cee154b3afed458de0dc",
     "downloads": {
       "allow": 3
     },
-    "size": "40 bytes",
-    "type": "application/octet-stream",
+    "size": "14 bytes",
+    "type": "text/plain; charset=utf-8",
     "owner": {
-      "address": "127.0.0.1:1234",
+      "address": "127.0.0.1:12345",
       "mask": "Bob123",
       "agent": "curl/8.7.1"
     },
     "time": {
       "allow": "30m0s",
-      "upload": "2025-12-20T12:00:00"
+      "upload": "2026-05-20T12:00:00.00000-00:00"
     }
   }
 ]
