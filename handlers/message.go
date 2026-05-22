@@ -41,10 +41,19 @@ func Message(app *config.App) http.HandlerFunc {
 			formContent := strings.TrimSpace(
 				r.PostFormValue(formFieldMessage))
 			if formContent != "" {
+				msgLength := len(formContent)
+				if msgLength > app.MessageLimits.LengthChars {
+					writeJSON(w, http.StatusBadRequest, errorJSON(app.MsgLength))
+					app.Log.Error(app.MsgLength,
+						"length", msgLength,
+						"limit", app.MessageLimits.LengthChars,
+						"user", req)
+					return
+				}
 				message.Count++
 				message.Data = formContent
 				app.Messages[message.Count] = &message
-				app.Log.Info("added message", "user", req)
+				app.Log.Info("added message", "length", msgLength, "user", req)
 			}
 
 			if req.IsBrowser {

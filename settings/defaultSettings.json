@@ -34,6 +34,7 @@
     "fileSize":    "file too large",
     "fileSizeAll": "size limit met",
     "form":        "file form fail",
+    "msgLength":   "msg length met",
     "noFilename":  "need file name",
     "noFiles":     "no files found",
     "notFound":    "file not found",

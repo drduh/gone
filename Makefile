@@ -32,13 +32,13 @@ BUILDFLAG = \
   -X "$(BUILDPKG).Time=$(BUILDTIME)" \
   -X "$(BUILDPKG).User=$(shell whoami)" \
   -X "$(BUILDPKG).Version=$(VERSION)"
-BUILDCMD  = $(GO) build -trimpath -ldflags '-s -w $(BUILDFLAG)'
 BINNAME   = $(APPNAME)-$(BUILDOS)-$(BUILDARCH)-$(VERSION)
-GOBUILD   = GOOS=$(BUILDOS) GOARCH=$(BUILDARCH) $(BUILDCMD) \
+CMDBUILD  = $(GO) build -trimpath -ldflags '-s -w $(BUILDFLAG)'
+CMDTEST   = $(GO) test -trimpath
+GOBUILD   = GOOS=$(BUILDOS) GOARCH=$(BUILDARCH) $(CMDBUILD) \
             -o "$(OUT)/$(BINNAME)" "$(SRC)"
-GORACE    = GOOS=$(BUILDOS) GOARCH=$(BUILDARCH) $(BUILDCMD) \
+GORACE    = GOOS=$(BUILDOS) GOARCH=$(BUILDARCH) $(CMDBUILD) \
             -race -o "$(OUT)/$(BINNAME)-race" "$(SRC)"
-GOTEST    = $(GO) test -trimpath
 
 SERVICE   = $(APPNAME).service
 
@@ -114,16 +114,16 @@ fmt:
 	@$(GO) fmt ./...
 
 test:
-	@$(GOTEST) ./...
+	@$(CMDTEST) ./...
 
 test-race:
-	@$(GOTEST) -race -timeout=1m ./...
+	@$(CMDTEST) -race -timeout=1m ./...
 
 test-verbose:
-	@$(GOTEST) -v ./...
+	@$(CMDTEST) -v ./...
 
 test-cover:
-	@$(GOTEST) -coverprofile=$(TESTCOVER) ./...
+	@$(CMDTEST) -coverprofile=$(TESTCOVER) ./...
 
 lint:
 	@if command -v $(GOLINT) >/dev/null 2>&1 ; then \
