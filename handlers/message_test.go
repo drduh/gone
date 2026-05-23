@@ -2,41 +2,29 @@ package handlers
 
 import (
 	"fmt"
-	"io"
-	"log/slog"
 	"net/http"
 	"net/http/httptest"
 	"net/url"
 	"strings"
 	"testing"
-	"time"
 
-	"github.com/drduh/gone/config"
 	"github.com/drduh/gone/storage"
 )
 
 const (
-	maxLength      = 128
+	contentType    = "application/x-www-form-urlencoded"
 	messageContent = "hello, world!"
-	errorMsg       = "msg length met"
 )
 
 // TestMessageHandlerValid tests a valid message post.
 func TestMessageHandlerValid(t *testing.T) {
-	app := &config.App{}
-	app.Log = slog.New(slog.NewTextHandler(
-		io.Discard, &slog.HandlerOptions{}))
-	app.MessageLimits.LengthChars = maxLength
-	app.Messages = make(map[int]*storage.Message)
-	app.TimeFormat = time.RFC3339
-	app.MsgLength = errorMsg
+	app := newTestApp()
 
 	form := url.Values{}
 	form.Set("message", messageContent)
 	req := httptest.NewRequest(
 		"POST", "/", strings.NewReader(form.Encode()))
-	req.Header.Set("Content-Type",
-		"application/x-www-form-urlencoded")
+	req.Header.Set("Content-Type", contentType)
 
 	rr := httptest.NewRecorder()
 	handler := Message(app)
@@ -63,22 +51,15 @@ func TestMessageHandlerValid(t *testing.T) {
 }
 
 // TestMessageHandlerExceedLength tests message
-// exceeding configured limit causes an error.
+// exceeding configured length causes an error.
 func TestMessageHandlerExceedLength(t *testing.T) {
-	app := &config.App{}
-	app.Log = slog.New(slog.NewTextHandler(
-		io.Discard, &slog.HandlerOptions{}))
-	app.MessageLimits.LengthChars = maxLength
-	app.Messages = make(map[int]*storage.Message)
-	app.TimeFormat = time.RFC3339
-	app.MsgLength = errorMsg
+	app := newTestApp()
 
 	form := url.Values{}
 	form.Set("message", strings.Repeat("a", 1000))
 	req := httptest.NewRequest(
 		"POST", "/", strings.NewReader(form.Encode()))
-	req.Header.Set("Content-Type",
-		"application/x-www-form-urlencoded")
+	req.Header.Set("Content-Type", contentType)
 
 	rr := httptest.NewRecorder()
 	handler := Message(app)
@@ -88,7 +69,7 @@ func TestMessageHandlerExceedLength(t *testing.T) {
 		t.Errorf("expected 400, got %d", rr.Code)
 	}
 
-	want := `{"error":"` + errorMsg + `"}` + "\n"
+	want := `{"error":"` + app.MsgLength + `"}` + "\n"
 	if rr.Body.String() != want {
 		t.Errorf("expected response %q, got %q",
 			want, rr.Body.String())
@@ -97,13 +78,7 @@ func TestMessageHandlerExceedLength(t *testing.T) {
 
 // TestMessageHandlerClear tests messages are cleared.
 func TestMessageHandlerClear(t *testing.T) {
-	app := &config.App{}
-	app.Log = slog.New(slog.NewTextHandler(
-		io.Discard, &slog.HandlerOptions{}))
-	app.MessageLimits.LengthChars = maxLength
-	app.Messages = make(map[int]*storage.Message)
-	app.TimeFormat = time.RFC3339
-	app.MsgLength = errorMsg
+	app := newTestApp()
 
 	app.Messages[1] = &storage.Message{
 		Count: 1, Data: messageContent,
@@ -114,8 +89,7 @@ func TestMessageHandlerClear(t *testing.T) {
 	form.Set("clear", "true")
 	req := httptest.NewRequest(
 		"POST", "/", strings.NewReader(form.Encode()))
-	req.Header.Set("Content-Type",
-		"application/x-www-form-urlencoded")
+	req.Header.Set("Content-Type", contentType)
 
 	rr := httptest.NewRecorder()
 	handler := Message(app)
@@ -129,13 +103,7 @@ func TestMessageHandlerClear(t *testing.T) {
 
 // TestMessageHandlerDownloadAll test all messages download.
 func TestMessageHandlerDownloadAll(t *testing.T) {
-	app := &config.App{}
-	app.Log = slog.New(slog.NewTextHandler(
-		io.Discard, &slog.HandlerOptions{}))
-	app.MessageLimits.LengthChars = maxLength
-	app.Messages = make(map[int]*storage.Message)
-	app.TimeFormat = time.RFC3339
-	app.MsgLength = errorMsg
+	app := newTestApp()
 
 	app.Messages[1] = &storage.Message{
 		Count: 1, Data: messageContent + "1",
@@ -160,5 +128,42 @@ func TestMessageHandlerDownloadAll(t *testing.T) {
 			t.Errorf("expected message %q, got %q",
 				want, body)
 		}
+	}
+}
+
+// TestMessageHandlerExceedCount tests message
+// exceeding configured count causes an error.
+func TestMessageHandlerExceedCount(t *testing.T) {
+	app := newTestApp()
+
+	handler := Message(app)
+	form := url.Values{}
+
+	for i := 0; i < app.MessageLimits.MaxCount; i++ {
+		form.Set("message", fmt.Sprintf("msg %d", i+1))
+		req := httptest.NewRequest(
+			"POST", "/", strings.NewReader(form.Encode()))
+		req.Header.Set("Content-Type", contentType)
+		rr := httptest.NewRecorder()
+		handler.ServeHTTP(rr, req)
+		if rr.Code < 200 || rr.Code >= 400 {
+			t.Errorf("expected 2xx, got %d", rr.Code)
+		}
+	}
+
+	form.Set("message", messageContent)
+	req := httptest.NewRequest(
+		"POST", "/", strings.NewReader(form.Encode()))
+	req.Header.Set("Content-Type", contentType)
+	rr := httptest.NewRecorder()
+	handler.ServeHTTP(rr, req)
+	if rr.Code != http.StatusBadRequest {
+		t.Errorf("expected 400, got %d", rr.Code)
+	}
+
+	want := `{"error":"` + app.MsgCount + `"}` + "\n"
+	if rr.Body.String() != want {
+		t.Errorf("expected %q, got %q",
+			want, rr.Body.String())
 	}
 }

@@ -2,24 +2,19 @@ package handlers
 
 import (
 	"encoding/json"
-	"io"
-	"log/slog"
 	"net/http"
 	"net/http/httptest"
 	"testing"
 	"time"
 
 	"github.com/drduh/gone/auth"
-	"github.com/drduh/gone/config"
 	"github.com/drduh/gone/storage"
 	"github.com/drduh/gone/util"
 )
 
 // TestListHandler tests a successful file list op.
 func TestListHandler(t *testing.T) {
-	app := &config.App{}
-	app.Log = slog.New(slog.NewTextHandler(
-		io.Discard, &slog.HandlerOptions{}))
+	app := newTestApp()
 	app.Require.List = false
 
 	data := []byte("hello, world!\n")
@@ -90,15 +85,9 @@ func TestListHandler(t *testing.T) {
 
 // TestListHandlerForbidden test a forbidden file list op.
 func TestListHandlerForbidden(t *testing.T) {
-	app := &config.App{}
-	app.Log = slog.New(slog.NewTextHandler(
-		io.Discard, &slog.HandlerOptions{}))
+	app := newTestApp()
 
-	app.List = "/list"
 	app.Require.List = true
-	app.Basic.Field = "X-Auth"
-	app.Basic.Token = "secret"
-	app.Deny = "not authorized"
 
 	auth.SetTarpit(0)
 

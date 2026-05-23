@@ -56,7 +56,7 @@ func Message(app *config.App) http.HandlerFunc {
 					writeJSON(w, http.StatusBadRequest,
 						errorJSON(app.MsgCount))
 					app.Log.Error(app.MsgCount,
-						"max", app.MessageLimits.MaxCount,
+						"count", app.MessageLimits.MaxCount,
 						"user", req)
 					return
 				}
