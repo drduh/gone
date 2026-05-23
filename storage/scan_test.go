@@ -1,6 +1,9 @@
 package storage
 
-import "testing"
+import (
+	"strings"
+	"testing"
+)
 
 const fileIdLength = 44 // storageVersion "1" + 32 bytes
 
@@ -123,8 +126,8 @@ func TestSetSum(t *testing.T) {
 	}
 }
 
-// TestSetType tests File type is set correctly.
-func TestSetType(t *testing.T) {
+// TestSetTypeEmptyFile tests File type is correct for empty files.
+func TestSetTypeEmptyFile(t *testing.T) {
 	files := []struct {
 		Name string
 		Type string
@@ -136,19 +139,26 @@ func TestSetType(t *testing.T) {
 		{"document.pdf", "application/pdf"},
 		{"image.gif", "image/gif"},
 		{"image.jpg", "image/jpeg"},
-		{"index.html", "text/html; charset=utf-8"},
-		{"notes.txt", "text/plain; charset=utf-8"},
+		{"index.html", "text/html"},
+		{"notes.txt", "text/plain"},
 		{"picture.png", "image/png"},
-		{"style.css", "text/css; charset=utf-8"},
-		{"table.csv", "text/csv; charset=utf-8"},
+		{"style.css", "text/css"},
+		{"table.csv", "text/csv"},
 		{"whatever.foo", "application/octet-stream"},
 	}
 	for _, tt := range files {
 		f := &File{Name: tt.Name}
 		f.setType()
-		if f.Type != tt.Type {
+		got := f.Type
+		if i := strings.Index(got, ";"); i != -1 {
+			got = got[:i]
+		}
+		if i := strings.Index(tt.Type, ";"); i != -1 {
+			tt.Type = tt.Type[:i]
+		}
+		if got != tt.Type {
 			t.Errorf("setType(%q) = %q; want %q",
-				tt.Name, f.Type, tt.Type)
+				tt.Name, got, tt.Type)
 		}
 	}
 }

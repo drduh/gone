@@ -34,7 +34,6 @@ BUILDFLAG = \
   -X "$(BUILDPKG).Version=$(VERSION)"
 BINNAME   = $(APPNAME)-$(BUILDOS)-$(BUILDARCH)-$(VERSION)
 CMDBUILD  = $(GO) build -trimpath -ldflags '-s -w $(BUILDFLAG)'
-CMDTEST   = $(GO) test -trimpath
 GOBUILD   = GOOS=$(BUILDOS) GOARCH=$(BUILDARCH) $(CMDBUILD) \
             -o "$(OUT)/$(BINNAME)" "$(SRC)"
 GORACE    = GOOS=$(BUILDOS) GOARCH=$(BUILDARCH) $(CMDBUILD) \
@@ -55,6 +54,10 @@ MOD_BIN   = 0755
 MOD_FILE  = 0644
 
 TESTCOVER = testCoverage
+CMDTEST   = $(GO) test -trimpath
+CMDCOVER  = $(CMDTEST) -coverprofile=$(TESTCOVER) ./...
+
+TIMEOUT  ?= 1m
 
 WARN      = tput setaf 3 ; printf "%s\n" "${1}" ; tput sgr0
 
@@ -117,13 +120,17 @@ test:
 	@$(CMDTEST) ./...
 
 test-race:
-	@$(CMDTEST) -race -timeout=1m ./...
+	@$(CMDTEST) -race -timeout=$(TIMEOUT) ./...
 
 test-verbose:
 	@$(CMDTEST) -v ./...
 
 test-cover:
-	@$(CMDTEST) -coverprofile=$(TESTCOVER) ./...
+	@$(CMDCOVER)
+
+test-cover-total: test-cover
+	@echo "total coverage: $$($(GO) tool cover -func=$(TESTCOVER) | \
+		grep total: | awk '{print $$3}')"
 
 lint:
 	@if command -v $(GOLINT) >/dev/null 2>&1 ; then \
@@ -161,6 +168,9 @@ doc:
 
 clean:
 	@rm -rf $(OUT) $(TESTCOVER) $(TESTCOVER).html
+
+clean-cache:
+	@$(GO) clean -cache -testcache -modcache
 
 clena: clean
 
