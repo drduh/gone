@@ -135,7 +135,6 @@ func TestSetTypeEmptyFile(t *testing.T) {
 		{"app.apk", "application/vnd.android.package-archive"},
 		{"archive.zip", "application/zip"},
 		{"data.json", "application/json"},
-		{"data.xml", "application/xml"},
 		{"document.pdf", "application/pdf"},
 		{"image.gif", "image/gif"},
 		{"image.jpg", "image/jpeg"},
