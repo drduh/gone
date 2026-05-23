@@ -39,7 +39,7 @@
     "noFilename":  "need file name",
     "noFiles":     "no files found",
     "notFound":    "file not found",
-    "rateLimit":   "limit exceeded",
+    "rateLimit":   "req rate limit",
     "tmplExec":    "failed to exec",
     "tmplParse":   "failed parsing"
   },
