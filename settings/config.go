@@ -113,6 +113,9 @@ type Error struct {
 	// Upload form not valid
 	Form string `json:"form,omitempty"`
 
+	// Message count exceeded
+	MsgCount string `json:"msgCount,omitempty"`
+
 	// Message length exceeded
 	MsgLength string `json:"msgLength,omitempty"`
 
@@ -227,6 +230,9 @@ type Limit struct {
 
 		// Maximum length of characters in a text message
 		LengthChars int `json:"lengthChars,omitempty"`
+
+		// Maximum count of text messages
+		MaxCount int `json:"maxCount,omitempty"`
 	} `json:"messageLimits,omitempty"`
 
 	// WallLimits represents wall text limits.

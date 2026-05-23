@@ -34,6 +34,7 @@
     "fileSize":    "file too large",
     "fileSizeAll": "size limit met",
     "form":        "file form fail",
+    "msgCount":    "msgs count met",
     "msgLength":   "msg length met",
     "noFilename":  "need file name",
     "noFiles":     "no files found",
@@ -87,10 +88,11 @@
       "sizeTotalMb":    4096
     },
     "messageLimits": {
-      "lengthChars": 128
+      "maxCount":       32,
+      "lengthChars":    128
     },
     "wallLimits": {
-      "lengthChars": 2560
+      "lengthChars":    2560
     }
   },
   "paths": {
