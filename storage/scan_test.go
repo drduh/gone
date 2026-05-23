@@ -30,6 +30,30 @@ func TestFileScan(t *testing.T) {
 			Sum:    "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
 			Type:   "application/octet-stream",
 		},
+		{
+			Name:   "page.html",
+			Data:   []byte("<!DOCTYPE html><html><head></head><body></body></html>"),
+			Length: "54",
+			Size:   54,
+			Sum:    "a68ced9bf3600aac812a146702e5e951eadb5e0312a8eaa7b54484534c979067",
+			Type:   "text/html; charset=utf-8",
+		},
+		{
+			Name:   "image.png",
+			Data:   []byte{0x89, 0x50, 0x4E, 0x47, 0x0D, 0x0A, 0x1A, 0x0A}, // rfc2083
+			Length: "8",
+			Size:   8,
+			Sum:    "4c4b6a3be1314ab86138bef4314dde022e600960d8689a2c8f8631802d20dab6",
+			Type:   "image/png",
+		},
+		{
+			Name:   "document.pdf",
+			Data:   []byte("%PDF-1.4\n"), // rfc8118
+			Length: "9",
+			Size:   9,
+			Sum:    "e5c62df5dab5c87b6a015ef3d43597074d1eec433b15f51aec63b8582d0e4ab4",
+			Type:   "application/pdf",
+		},
 	}
 
 	for _, tc := range files {

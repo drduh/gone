@@ -24,6 +24,8 @@ func TestRemoveInvalidChars(t *testing.T) {
 		{".....", extraChars, "....."},
 		{"!@#$%^&()", extraChars, ""},
 		{"", extraChars, ""},
+		{`foo"bar.txt`, extraChars, "foobar.txt"},
+		{`foo"bar.txt`, extraChars + `"`, `foo"bar.txt`},
 	}
 	for _, test := range tests {
 		result := removeInvalidChars(test.input, test.allow)
@@ -127,6 +129,8 @@ func TestSanitizeName(t *testing.T) {
 			"filename with spaces.txt"},
 		{"my%2Fcool%2Bdoc%26about%2Cstuff.md", extraChars + "/+&,", 40,
 			"cool+doc&about,stuff.md"},
+		{"unicøde.txt", extraChars, 20, "unicde.txt"},
+		{`""foo.txt`, extraChars, 20, "foo.txt"},
 		{"example." + strings.Repeat("x", 1000), extraChars, 20,
 			"example.xxxx"},
 		{strings.Repeat("a", 1000) + ".txt", extraChars, 50,

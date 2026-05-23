@@ -2,6 +2,7 @@ package storage
 
 import (
 	"mime"
+	"net/http"
 	"path/filepath"
 	"strconv"
 
@@ -35,11 +36,18 @@ func (f *File) setSum() {
 	f.Sum = util.Sum(f.Data)
 }
 
-// SetType sets File content type based on filename extension.
+// SetType sets File content type based on content type,
+// or filename extension for empty files.
 func (f *File) setType() {
-	t := mime.TypeByExtension(filepath.Ext(f.Name))
-	if t == "" {
-		t = "application/octet-stream"
+	if len(f.Data) > 0 {
+		f.Type = http.DetectContentType(f.Data)
+	} else {
+		ext := filepath.Ext(f.Name)
+		if t := mime.TypeByExtension(ext); t != "" {
+			f.Type = t
+		}
 	}
-	f.Type = t
+	if f.Type == "" {
+		f.Type = "application/octet-stream"
+	}
 }
