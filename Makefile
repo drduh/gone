@@ -33,10 +33,13 @@ BUILDFLAG = \
   -X "$(BUILDPKG).User=$(shell whoami)" \
   -X "$(BUILDPKG).Version=$(VERSION)"
 BINNAME   = $(APPNAME)-$(BUILDOS)-$(BUILDARCH)-$(VERSION)
-CMDBUILD  = $(GO) build -trimpath -ldflags '-s -w $(BUILDFLAG)'
-GOBUILD   = GOOS=$(BUILDOS) GOARCH=$(BUILDARCH) $(CMDBUILD) \
+CMDBUILD  = $(GO) build -trimpath \
+            -ldflags '-s -w $(BUILDFLAG)'
+GOBUILD   = GOOS=$(BUILDOS) \
+            GOARCH=$(BUILDARCH) $(CMDBUILD) \
             -o "$(OUT)/$(BINNAME)" "$(SRC)"
-GORACE    = GOOS=$(BUILDOS) GOARCH=$(BUILDARCH) $(CMDBUILD) \
+GORACE    = GOOS=$(BUILDOS) \
+            GOARCH=$(BUILDARCH) $(CMDBUILD) \
             -race -o "$(OUT)/$(BINNAME)-race" "$(SRC)"
 
 SERVICE   = $(APPNAME).service
@@ -55,11 +58,14 @@ MOD_FILE  = 0644
 
 TESTCOVER = testCoverage
 CMDTEST   = $(GO) test -trimpath
-CMDCOVER  = $(CMDTEST) -coverprofile=$(TESTCOVER) ./...
+CMDCOVER  = $(CMDTEST) \
+            -coverprofile=$(TESTCOVER) ./...
 
 TIMEOUT  ?= 1m
 
-WARN      = tput setaf 3 ; printf "%s\n" "${1}" ; tput sgr0
+WARN      = tput setaf 3 ; \
+            printf "%s\n" "${1}" ; \
+            tput sgr0
 
 all: fmt build test lint
 
@@ -168,13 +174,18 @@ cover: test-cover
 doc:
 	@$(GODOC) -http :8000
 
-clean:
-	@rm -rf $(OUT) $(TESTCOVER) $(TESTCOVER).html
+clean: clean-coverage
+	@rm -rf $(OUT)
+
+clean-coverage:
+	@rm -rf $(TESTCOVER) $(TESTCOVER).html
 
 clean-cache:
 	@$(GO) clean -cache -testcache -modcache
 
 clena: clean
+
+c: clean
 
 coverage: cover
 
@@ -187,5 +198,7 @@ prod: release
 tset: test
 
 urn: run
+
+r: run
 
 verbose: debug

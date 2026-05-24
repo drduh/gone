@@ -93,6 +93,9 @@ type Auth struct {
 		// Read and write wall content
 		Wall bool `json:"wall,omitempty"`
 	} `json:"require,omitempty"`
+
+	// Duration to delay failed requests
+	TarpitDelay Duration `json:"tarpitDelay,omitempty"`
 }
 
 // Error represents responses error message strings.
