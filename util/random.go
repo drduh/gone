@@ -17,7 +17,7 @@ var defaultNames = []string{
 	"Uma", "Victor", "Wendy", "Xavier", "Yvonne", "Zack",
 }
 
-var names = loadNames("/etc/gone/assets/names.txt")
+var names = loadNames("/etc/gone/assets", "names.txt")
 
 var nato = []string{
 	"Alpha", "Bravo", "Charlie", "Delta", "Echo", "Foxtrot",

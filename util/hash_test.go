@@ -6,23 +6,23 @@ import "testing"
 func TestSum(t *testing.T) {
 	tests := []struct {
 		name string
-		hash string
 		data []byte
+		hash string
 	}{
 		{
 			name: "nil",
-			hash: "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
 			data: nil,
+			hash: "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
 		},
 		{
 			name: "empty",
-			hash: "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
 			data: []byte(""),
+			hash: "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
 		},
 		{
-			name: "hello",
-			hash: "2cf24dba5fb0a30e26e83b2ac5b9e29e1b161e5c1fa7425e73043362938b9824",
-			data: []byte("hello"),
+			name: "string",
+			data: []byte("hello, world!\n"),
+			hash: "4dca0fd5f424a31b03ab807cbae77eb32bf2d089eed1cee154b3afed458de0dc",
 		},
 	}
 	for _, tt := range tests {
@@ -30,7 +30,8 @@ func TestSum(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			got := Sum(tt.data)
 			if got != tt.hash {
-				t.Fatalf("Sum(%q) = %q; expect %q", tt.data, got, tt.hash)
+				t.Fatalf("Sum(%q) = %q; expect %q",
+					tt.data, got, tt.hash)
 			}
 		})
 	}
