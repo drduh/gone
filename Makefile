@@ -4,6 +4,7 @@ AUTHOR   ?= drduh
 GIT      ?= github.com/$(AUTHOR)
 VERSION  ?= $(shell date +"%Y.%m.%d")
 
+PKG       = ./...
 CMD       = cmd
 SRC       = $(CMD)/main.go
 OUT       = release
@@ -13,6 +14,7 @@ GO       ?= go
 GODOC    ?= ${HOME}/go/bin/godoc
 GOLINT   ?= golangci-lint
 GOSEC    ?= gosec
+GOSTATIC ?= staticcheck
 
 BUILDPKG  = $(GIT)/$(APPNAME)/version
 BUILDARCH = $(shell $(GO) env GOHOSTARCH)
@@ -59,7 +61,7 @@ MOD_FILE  = 0644
 TESTCOVER = testCoverage
 CMDTEST   = $(GO) test -trimpath
 CMDCOVER  = $(CMDTEST) \
-            -coverprofile=$(TESTCOVER) ./...
+            -coverprofile=$(TESTCOVER) $(PKG)
 
 TIMEOUT  ?= 1m
 
@@ -120,16 +122,16 @@ reload-service:
 	@sudo systemctl restart $(SERVICE)
 
 fmt:
-	@$(GO) fmt ./...
+	@$(GO) fmt $(PKG)
 
 test:
-	@$(CMDTEST) ./...
+	@$(CMDTEST) $(PKG)
 
 test-race:
-	@$(CMDTEST) -race -timeout=$(TIMEOUT) ./...
+	@$(CMDTEST) -race -timeout=$(TIMEOUT) $(PKG)
 
 test-verbose:
-	@$(CMDTEST) -v ./...
+	@$(CMDTEST) -v $(PKG)
 
 test-cover:
 	@$(CMDCOVER)
@@ -142,23 +144,26 @@ test-cover-all: test-cover-total
 
 lint:
 	@if command -v $(GOLINT) >/dev/null 2>&1 ; then \
-		$(GOLINT) run ./... ; \
-	else \
-		$(call WARN,skipping lint - '$(GOLINT)' not found); \
+		$(GOLINT) run $(PKG) ; else \
+		$(call WARN,skipping '$@': '$(GOLINT)' not found); \
 	fi
 
 lint-verbose:
 	@if command -v $(GOLINT) >/dev/null 2>&1 ; then \
-		$(GOLINT) run --verbose ./... ; \
-	else \
-		$(call WARN,skipping lint - '$(GOLINT)' not found); \
+		$(GOLINT) run --verbose $(PKG) ; else \
+		$(call WARN,skipping '$@': '$(GOLINT)' not found); \
 	fi
 
 sec:
 	@if command -v $(GOSEC) >/dev/null 2>&1 ; then \
-		$(GOSEC) run ./... ; \
-	else \
-		$(call WARN,skipping gosec - '$(GOSEC)' not found); \
+		$(GOSEC) run $(PKG) ; else \
+		$(call WARN,skipping '$@': '$(GOSEC)' not found); \
+	fi
+
+static:
+	@if command -v $(GOSTATIC) >/dev/null 2>&1 ; then \
+		$(GOSTATIC) $(PKG) ; else \
+		$(call WARN,skipping '$@': '$(GOSTATIC)' not found); \
 	fi
 
 build-race: prep

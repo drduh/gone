@@ -8,10 +8,10 @@ import (
 	"github.com/drduh/gone/handlers"
 )
 
-const assetsPath = "assets"
-
 // getHandler configures paths to handle and serve.
 func getHandler(app *config.App) http.Handler {
+	const pathAssets = "assets"
+
 	mux := http.NewServeMux()
 
 	handle := func(path string, h http.HandlerFunc) {
@@ -21,10 +21,12 @@ func getHandler(app *config.App) http.Handler {
 	}
 
 	if app.Assets != "" {
-		if _, err := os.Stat(assetsPath); err == nil {
-			mux.Handle(app.Assets,
-				http.StripPrefix(app.Assets,
-					http.FileServer(http.Dir(assetsPath))))
+		if _, err := os.Stat(pathAssets); err == nil {
+			app.Log.Debug("assets present", "path", pathAssets)
+			mux.Handle(app.Assets, http.StripPrefix(
+				app.Assets, http.FileServer(http.Dir(pathAssets))))
+		} else {
+			app.Log.Warn("missing assets", "path", pathAssets)
 		}
 	}
 

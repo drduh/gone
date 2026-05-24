@@ -5,28 +5,30 @@
   font-family: "Open Sans", "Helvetica Neue", "Helvetica", "Arial", sans-serif;
 }
 
-body {
-  align-items: center;
+html {
   animation: var(--bg-animation);
   background: var(--bg-gradient);
   background-size: var(--bg-size);
   background-attachment: fixed;
+  min-height: 100%;
+}
+
+body {
+  align-items: center;
+  background: transparent;
   color: var(--fg-dark);
   display: flex;
   flex-direction: column;
   font-size: 1em;
   margin: 1em auto;
-  max-width: 80%;
 }
 
 .box {
   background-color: var(--bg-norm-half);
   border: 1px solid var(--fg-dark);
   border-radius: var(--box-radius);
-  box-sizing: border-box;
-  color: var(--fg-dark);
   flex: 1;
-  margin: 1em;
+  margin: 1em auto;
   padding: 1em;
   text-align: center;
 }
@@ -42,15 +44,13 @@ body {
   width: 100%;
 }
 
-a:link,
-a:visited {
+a {
   color: var(--fg-light);
   text-decoration: none;
 }
 
 a:active,
 a:hover {
-  color: var(--fg-light);
   text-decoration: underline;
 }
 
@@ -96,8 +96,8 @@ input[type="number"] {
 }
 
 .message {
-  color: var(--fg-light);
   border-bottom: 1px dotted var(--fg-light);
+  color: var(--fg-light);
   display: inline-block;
   position: relative;
 }
