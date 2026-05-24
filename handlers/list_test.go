@@ -2,24 +2,19 @@ package handlers
 
 import (
 	"encoding/json"
-	"io"
-	"log/slog"
 	"net/http"
 	"net/http/httptest"
 	"testing"
 	"time"
 
 	"github.com/drduh/gone/auth"
-	"github.com/drduh/gone/config"
 	"github.com/drduh/gone/storage"
 	"github.com/drduh/gone/util"
 )
 
 // TestListHandler tests a successful file list op.
 func TestListHandler(t *testing.T) {
-	app := &config.App{}
-	app.Log = slog.New(slog.NewTextHandler(
-		io.Discard, &slog.HandlerOptions{}))
+	app := newTestApp()
 	app.Require.List = false
 
 	data := []byte("hello, world!\n")
@@ -38,7 +33,7 @@ func TestListHandler(t *testing.T) {
 	app.Files = map[string]*storage.File{f.Id: f}
 
 	rr := httptest.NewRecorder()
-	req := httptest.NewRequest(http.MethodGet, "/list", nil)
+	req := httptest.NewRequest(http.MethodGet, app.List, nil)
 	req.RemoteAddr = "127.0.0.1:12345"
 
 	List(app).ServeHTTP(rr, req)
@@ -90,20 +85,12 @@ func TestListHandler(t *testing.T) {
 
 // TestListHandlerForbidden test a forbidden file list op.
 func TestListHandlerForbidden(t *testing.T) {
-	app := &config.App{}
-	app.Log = slog.New(slog.NewTextHandler(
-		io.Discard, &slog.HandlerOptions{}))
-
-	app.List = "/list"
+	app := newTestApp()
 	app.Require.List = true
-	app.Basic.Field = "X-Auth"
-	app.Basic.Token = "secret"
-	app.Deny = "not authorized"
-
 	auth.SetTarpit(0)
 
 	rr := httptest.NewRecorder()
-	req := httptest.NewRequest(http.MethodGet, "/list", nil)
+	req := httptest.NewRequest(http.MethodGet, app.List, nil)
 	req.RemoteAddr = "127.0.0.1:12345"
 
 	List(app).ServeHTTP(rr, req)

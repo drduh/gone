@@ -43,13 +43,24 @@ func Message(app *config.App) http.HandlerFunc {
 			if formContent != "" {
 				msgLength := len(formContent)
 				if msgLength > app.MessageLimits.LengthChars {
-					writeJSON(w, http.StatusBadRequest, errorJSON(app.MsgLength))
+					writeJSON(w, http.StatusBadRequest,
+						errorJSON(app.MsgLength))
 					app.Log.Error(app.MsgLength,
 						"length", msgLength,
 						"limit", app.MessageLimits.LengthChars,
 						"user", req)
 					return
 				}
+
+				if len(app.Messages) >= app.MessageLimits.MaxCount {
+					writeJSON(w, http.StatusBadRequest,
+						errorJSON(app.MsgCount))
+					app.Log.Error(app.MsgCount,
+						"count", app.MessageLimits.MaxCount,
+						"user", req)
+					return
+				}
+
 				message.Count++
 				message.Data = formContent
 				app.Messages[message.Count] = &message

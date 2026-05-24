@@ -3,55 +3,22 @@ package handlers
 import (
 	"bytes"
 	"encoding/json"
-	"io"
-	"log/slog"
 	"mime/multipart"
 	"net/http"
 	"net/http/httptest"
 	"strings"
 	"testing"
-	"time"
 
-	"github.com/drduh/gone/config"
-	"github.com/drduh/gone/settings"
 	"github.com/drduh/gone/storage"
 )
 
-func defaultLimit() settings.Limit {
-	limit := settings.Limit{}
-	limit.FileLimits.NameExtraChars = "_.- "
-	limit.FileLimits.NameLength = 40
-	limit.FileLimits.SizeEachMb = 1
-	limit.FileLimits.SizeTotalMb = 10
-	limit.FileLimits.MaxDownloads = 3
-	limit.FileLimits.ExpiryCheck = settings.Duration{
-		Duration: time.Minute,
-	}
-	limit.FileLimits.MaxDuration = settings.Duration{
-		Duration: 24 * time.Hour,
-	}
-	return limit
-}
-
-func newTestAppWithLimit(limit settings.Limit) *config.App {
-	return &config.App{
-		Log:      slog.New(slog.NewTextHandler(io.Discard, nil)),
-		Settings: settings.Settings{Limit: limit},
-		Storage: storage.Storage{
-			Files: make(map[string]*storage.File),
-		},
-	}
-}
-
 // TestUploadFileTooLarge test file uploads exceeding size limit.
 func TestUploadFileTooLarge(t *testing.T) {
-	limit := defaultLimit()
-	app := newTestAppWithLimit(limit)
-	app.FileSize = "file too large"
+	app := newTestApp()
 
 	reqBody := strings.NewReader("dummy")
 	req := httptest.NewRequest(http.MethodPost, "/upload", reqBody)
-	req.ContentLength = (limit.FileLimits.SizeEachMb << 20) + 1
+	req.ContentLength = (app.FileLimits.SizeEachMb << 20) + 1
 
 	w := httptest.NewRecorder()
 	handler := Upload(app)
@@ -75,9 +42,7 @@ func TestUploadFileTooLarge(t *testing.T) {
 
 // TestUploadNoFile tests uploads without a file selected.
 func TestUploadNoFile(t *testing.T) {
-	limit := defaultLimit()
-	app := newTestAppWithLimit(limit)
-	app.Form = "invalid form"
+	app := newTestApp()
 
 	var b bytes.Buffer
 	mw := multipart.NewWriter(&b)
@@ -110,8 +75,7 @@ func TestUploadNoFile(t *testing.T) {
 
 // TestUploadSuccess tests successful file uploads.
 func TestUploadSuccess(t *testing.T) {
-	limit := defaultLimit()
-	app := newTestAppWithLimit(limit)
+	app := newTestApp()
 
 	var b bytes.Buffer
 	mw := multipart.NewWriter(&b)

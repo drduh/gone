@@ -2,15 +2,18 @@ package storage
 
 import (
 	"fmt"
+	"mime"
 	"net/http"
 )
 
 // Serve writes a File as an HTTP response.
 func (f *File) Serve(w http.ResponseWriter) {
-	disposition := "attachment; filename=\"" + f.Name + "\""
+	disposition := mime.FormatMediaType(
+		"attachment", map[string]string{"filename": f.Name})
 	w.Header().Set("Content-Disposition", disposition)
 	w.Header().Set("Content-Length", f.Length)
 	w.Header().Set("Content-Type", f.Type)
+	w.Header().Set("X-Content-Type-Options", "nosniff")
 	n, err := w.Write(f.Data)
 	if err != nil {
 		return
