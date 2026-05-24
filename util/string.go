@@ -1,32 +1,16 @@
 package util
 
-import (
-	"strings"
-	"unicode"
-)
-
-// GetBasePath returns the string up to and including the first "/".
-func GetBasePath(s string) string {
-	s = strings.TrimSpace(s)
-	if len(s) == 0 {
-		return s
-	}
-	i := strings.Index(s[1:], "/")
-	if i == -1 {
-		return s
-	}
-	return s[:i+2]
-}
-
 // IsNumeric returns true if the string contains only numbers.
 func IsNumeric(s string) bool {
 	if s == "" {
 		return false
 	}
+
 	for _, r := range s {
-		if !unicode.IsDigit(r) {
+		if r < '0' || r > '9' {
 			return false
 		}
 	}
+
 	return true
 }

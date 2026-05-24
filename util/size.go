@@ -4,7 +4,9 @@ import "fmt"
 
 // FormatSize returns a formatted size from number of bytes.
 func FormatSize(bytes int) string {
-	var units = [...]string{"bytes", "kb", "mb", "gb", "tb"}
+	var units = [...]string{
+		"bytes", "kb", "mb", "gb", "tb",
+	}
 
 	if bytes <= 0 {
 		return "0 bytes"
@@ -18,8 +20,10 @@ func FormatSize(bytes int) string {
 	}
 
 	if size == float64(int(size)) {
-		return fmt.Sprintf("%d %s", int(size), units[unitIndex])
+		return fmt.Sprintf("%d %s",
+			int(size), units[unitIndex])
 	}
 
-	return fmt.Sprintf("%.2f %s", size, units[unitIndex])
+	return fmt.Sprintf("%.2f %s",
+		size, units[unitIndex])
 }

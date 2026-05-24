@@ -22,10 +22,11 @@ func TestFormatSize(t *testing.T) {
 		{50000 * 50000 * 50000, "113.69 tb"},
 		{-1000, "0 bytes"},
 	}
+
 	for _, tt := range tests {
 		t.Run(fmt.Sprintf("input: %d", tt.input), func(t *testing.T) {
 			if got := FormatSize(tt.input); got != tt.expect {
-				t.Errorf("size %d: got %v, expected %v",
+				t.Errorf("size %d: got %v, expect %v",
 					tt.input, got, tt.expect)
 			}
 		})

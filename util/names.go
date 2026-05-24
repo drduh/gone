@@ -7,6 +7,16 @@ import (
 	"strings"
 )
 
+var defaultNames = []string{
+	"Alice", "Bob", "Charlie", "Diana", "Eve",
+	"Frank", "Grace", "Henry", "Ivan", "Judy",
+	"Ken", "Laura", "Mallory", "Nancy", "Olivia",
+	"Peggy", "Quentin", "Rupert", "Sam", "Trent",
+	"Uma", "Victor", "Wendy", "Xavier", "Yvonne", "Zack",
+}
+
+var names = loadNames("/etc/gone/assets", "names.txt")
+
 // loadNames returns trimmed names from a file or
 // the default names list.
 func loadNames(dir, filename string) []string {
