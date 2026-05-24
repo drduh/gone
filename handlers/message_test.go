@@ -30,8 +30,8 @@ func TestMessageHandlerValid(t *testing.T) {
 	handler := Message(app)
 	handler.ServeHTTP(rr, req)
 
-	if rr.Code < 200 || rr.Code >= 400 {
-		t.Errorf("expected 2xx, got %d", rr.Code)
+	if rr.Code != 200 {
+		t.Errorf("expected 200, got %d", rr.Code)
 	}
 
 	if len(app.Messages) != 1 {
@@ -39,7 +39,7 @@ func TestMessageHandlerValid(t *testing.T) {
 			len(app.Messages))
 	}
 
-	msg := app.Messages[1]
+	msg := app.Messages[0]
 	if msg == nil {
 		t.Fatal("message not found")
 	}
@@ -80,10 +80,9 @@ func TestMessageHandlerExceedLength(t *testing.T) {
 func TestMessageHandlerClear(t *testing.T) {
 	app := newTestApp()
 
-	app.Messages[1] = &storage.Message{
+	app.Messages = append(app.Messages, &storage.Message{
 		Count: 1, Data: messageContent,
-	}
-	app.NumMessages = 1
+	})
 
 	form := url.Values{}
 	form.Set("clear", "true")
@@ -105,16 +104,15 @@ func TestMessageHandlerClear(t *testing.T) {
 func TestMessageHandlerDownloadAll(t *testing.T) {
 	app := newTestApp()
 
-	app.Messages[1] = &storage.Message{
+	app.Messages = append(app.Messages, &storage.Message{
 		Count: 1, Data: messageContent + "1",
-	}
-	app.Messages[2] = &storage.Message{
+	})
+	app.Messages = append(app.Messages, &storage.Message{
 		Count: 2, Data: messageContent + "2",
-	}
-	app.Messages[3] = &storage.Message{
+	})
+	app.Messages = append(app.Messages, &storage.Message{
 		Count: 3, Data: messageContent + "3",
-	}
-	app.NumMessages = 3
+	})
 
 	req := httptest.NewRequest("GET", "/?download=all", nil)
 	rr := httptest.NewRecorder()
@@ -146,8 +144,8 @@ func TestMessageHandlerExceedCount(t *testing.T) {
 		req.Header.Set("Content-Type", contentType)
 		rr := httptest.NewRecorder()
 		handler.ServeHTTP(rr, req)
-		if rr.Code < 200 || rr.Code >= 400 {
-			t.Errorf("expected 2xx, got %d", rr.Code)
+		if rr.Code != 200 {
+			t.Errorf("expected 200, got %d", rr.Code)
 		}
 	}
 

@@ -30,9 +30,9 @@ func TestClearFiles(t *testing.T) {
 // TestClearMessages tests removal of Messages in Storage.
 func TestClearMessages(t *testing.T) {
 	s := &Storage{
-		Messages: map[int]*Message{
-			1: {},
-			2: {},
+		Messages: []*Message{
+			{Count: 1, Data: "hello"},
+			{Count: 2, Data: "world"},
 		},
 	}
 	s.ClearMessages()
@@ -70,9 +70,9 @@ func TestClearStorage(t *testing.T) {
 			"file1": {},
 			"file2": {},
 		},
-		Messages: map[int]*Message{
-			1: {},
-			2: {},
+		Messages: []*Message{
+			{Count: 1, Data: "hello"},
+			{Count: 2, Data: "world"},
 		},
 		WallContent: "test wall content",
 	}

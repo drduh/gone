@@ -14,7 +14,7 @@ func (s *Storage) ClearFiles() {
 
 // ClearMessages removes all Messages from Storage.
 func (s *Storage) ClearMessages() {
-	s.Messages = make(map[int]*Message)
+	s.Messages = []*Message{}
 }
 
 // ClearWall removes all Wall content from Storage.

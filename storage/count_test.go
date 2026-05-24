@@ -5,6 +5,7 @@ import "testing"
 // TestCountFiles tests File counts in Storage.
 func TestCountFiles(t *testing.T) {
 	var s Storage
+
 	s.CountFiles()
 	if s.NumFiles != 0 {
 		t.Fatalf("NumFiles = %d; want 0", s.NumFiles)
@@ -27,6 +28,7 @@ func TestCountFiles(t *testing.T) {
 			Bytes: 14,
 		},
 	}
+
 	s.CountFiles()
 	if s.NumFiles != 2 {
 		t.Fatalf("NumFiles = %d; want 2", s.NumFiles)
@@ -43,6 +45,7 @@ func TestCountFiles(t *testing.T) {
 // TestCountMessages tests Messages counts in Storage.
 func TestCountMessages(t *testing.T) {
 	var s Storage
+
 	s.CountMessages()
 	if s.CharsMessages != 0 {
 		t.Fatalf("CharsMessages = %d; want 0", s.CharsMessages)
@@ -51,23 +54,25 @@ func TestCountMessages(t *testing.T) {
 		t.Fatalf("NumMessages = %d; want 0", s.NumMessages)
 	}
 
-	s.Messages = map[int]*Message{
-		1: {Data: "test message 1"},
+	s.Messages = []*Message{
+		{Count: 1, Data: "message 01"},
 	}
+
 	s.CountMessages()
 	if s.NumMessages != 1 {
 		t.Fatalf("NumMessages = %d; want 1", s.NumMessages)
 	}
-	if s.CharsMessages != 14 {
-		t.Fatalf("CharsMessages = %d; want 14", s.CharsMessages)
+	if s.CharsMessages != 10 {
+		t.Fatalf("CharsMessages = %d; want 10", s.CharsMessages)
 	}
 
-	s.Messages[2] = &Message{
-		Data: "test message 2",
-	}
+	s.Messages = append(s.Messages, &Message{
+		Count: 2, Data: "message 02",
+	})
+
 	s.CountMessages()
-	if s.CharsMessages != 28 {
-		t.Fatalf("CharsMessages = %d; want 28", s.CharsMessages)
+	if s.CharsMessages != 20 {
+		t.Fatalf("CharsMessages = %d; want 20", s.CharsMessages)
 	}
 	if s.NumMessages != 2 {
 		t.Fatalf("NumMessages = %d; want 2", s.NumMessages)
@@ -77,6 +82,7 @@ func TestCountMessages(t *testing.T) {
 // TestCountWall tests Wall content counts in Storage.
 func TestCountWall(t *testing.T) {
 	var s Storage
+
 	s.CountWall()
 	if s.CharsWall != 0 {
 		t.Fatalf("CharsWall = %d; want 0", s.CharsWall)
@@ -86,6 +92,7 @@ func TestCountWall(t *testing.T) {
 	}
 
 	s.WallContent = "test"
+
 	s.CountWall()
 	if s.CharsWall != 4 {
 		t.Fatalf("CharsWall = %d; want 4", s.CharsWall)
@@ -95,6 +102,7 @@ func TestCountWall(t *testing.T) {
 	}
 
 	s.WallContent = "test\r\nwall"
+
 	s.CountWall()
 	if s.CharsWall != 10 {
 		t.Fatalf("CharsWall = %d; want 10", s.CharsWall)
@@ -104,6 +112,7 @@ func TestCountWall(t *testing.T) {
 	}
 
 	s.WallContent = ""
+
 	s.CountWall()
 	if s.CharsWall != 0 {
 		t.Fatalf("CharsWall = %d; want 0", s.CharsWall)

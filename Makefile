@@ -132,6 +132,8 @@ test-cover-total: test-cover
 	@echo "total coverage: $$($(GO) tool cover -func=$(TESTCOVER) | \
 		grep total: | awk '{print $$3}')"
 
+test-cover-all: test-cover-total
+
 lint:
 	@if command -v $(GOLINT) >/dev/null 2>&1 ; then \
 		$(GOLINT) run ./... ; \
@@ -175,6 +177,10 @@ clean-cache:
 clena: clean
 
 coverage: cover
+
+coveage: coverage
+
+coverae: coverage
 
 prod: release
 
