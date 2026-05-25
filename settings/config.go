@@ -34,13 +34,16 @@ type Settings struct {
 	ShowBuild bool `json:"showBuild,omitempty"`
 }
 
-// Audit represents logging preferences.
+// Audit represents auditor/log preferences.
 type Audit struct {
 
-	// Optional file destination for logs
-	Filename string `json:"logFile,omitempty"`
+	// Whether to log debug output
+	LogDebug bool `json:"logDebug,omitempty"`
 
-	// Format for datetime in logs
+	// Optional file destination for log
+	LogFilename string `json:"logFilename,omitempty"`
+
+	// Format for datetime in log
 	TimeFormat string `json:"timeFormat,omitempty"`
 }
 
@@ -60,7 +63,7 @@ type Auth struct {
 	// Require represents paths requiring authentication.
 	Require struct {
 
-		// Clear content
+		// Clear all Storage content
 		Clear bool `json:"clear,omitempty"`
 
 		// Download files

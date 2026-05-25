@@ -2,7 +2,8 @@
   "port":          8080,
   "showBuild":     true,
   "audit": {
-    "logFile":     "",
+    "logDebug":    false,
+    "logFilename": "",
     "timeFormat":  "Monday Jan 2 15:04"
   },
   "auth": {

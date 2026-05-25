@@ -15,7 +15,8 @@ func List(app *config.App) http.HandlerFunc {
 		}
 		files := app.ListFiles()
 		app.Log.Info("serving file list",
-			"files", len(files), "user", req)
+			"files", len(files),
+			"user", req)
 		writeJSON(w, http.StatusOK, files)
 	}
 }
