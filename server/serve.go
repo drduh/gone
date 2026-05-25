@@ -8,19 +8,32 @@ import (
 )
 
 // Serve starts the expiry worker and HTTP server
-// with configured routes to handle.
+// with timeouts and configured routes to handle.
 func Serve(app *config.App) error {
 	go expiryWorker(app)
 
-	app.Log.Info("starting server", "port", app.Port)
+	address := app.GetAddr()
+	app.Log.Info("starting server",
+		"address", address)
+
+	handler := getHandler(app)
+	timeoutIdle := 90 * time.Second
+	timeoutRead := 20 * time.Second
+	timeoutHeader := 20 * time.Second
+	timeoutWrite := 20 * time.Second
+	app.Log.Debug("server timeouts",
+		"idle", timeoutIdle.String(),
+		"read", timeoutRead.String(),
+		"header", timeoutHeader.String(),
+		"write", timeoutWrite.String())
 
 	server := &http.Server{
-		Addr:              app.GetAddr(),
-		Handler:           getHandler(app),
-		IdleTimeout:       90 * time.Second,
-		ReadHeaderTimeout: 10 * time.Second,
-		ReadTimeout:       20 * time.Second,
-		WriteTimeout:      20 * time.Second,
+		Addr:              address,
+		Handler:           handler,
+		IdleTimeout:       timeoutIdle,
+		ReadHeaderTimeout: timeoutHeader,
+		ReadTimeout:       timeoutRead,
+		WriteTimeout:      timeoutWrite,
 	}
 
 	return server.ListenAndServe()

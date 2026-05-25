@@ -1,6 +1,6 @@
-gone is an ephemeral content hosting server written in [Go](https://go.dev/).
+gone is an ephemeral content server written in [Go](https://go.dev/).
 
-The primary goal is to share files or text using an HTML interface or an API.
+The primary goal is to share files and text using an HTML interface and API.
 
 [![test-and-lint](https://github.com/drduh/gone/actions/workflows/test-and-lint.yml/badge.svg)](https://github.com/drduh/gone/actions/workflows/test-and-lint.yml)
 
@@ -11,7 +11,7 @@ The primary goal is to share files or text using an HTML interface or an API.
 - No Javascript required to use HTML-based user interface
 - Share multiple files: upload, download and list feature
 - Files expire after number of downloads or time duration
-- Share short text messages and shared text area for edit
+- Share plain-text messages and shared text area for edit
 - JSON-based configurations, logging and server responses
 - Token (string-based) authentication and request limiter
 
@@ -27,7 +27,7 @@ gone requires [Go](https://go.dev/doc/install) to develop.
 make build
 ```
 
-Binaries are built to the `release` directory for distribution and installation.
+Binaries are built to the `release` directory.
 
 ## Run
 
@@ -41,9 +41,9 @@ make run
 make debug
 ```
 
-## Install
+## Install (Linux)
 
-To install as a service on systemd Linux:
+Install as a service on systemd Linux:
 
 ```
 make install
@@ -57,9 +57,9 @@ Output is in JSON format and can be parsed with `jq`:
 gone | jq '.message'
 ```
 
-# Settings
+# Configuration
 
-[Default settings](https://github.com/drduh/gone/blob/main/settings/defaultSettings.json) are embedded into the application. To make changes, copy and pass a modified settings file using `-config`:
+[Default settings](https://github.com/drduh/gone/blob/main/settings/defaultSettings.json) are embedded into the application. To configure, pass a modified settings file using `-config` or `-settings`:
 
 ```
 gone -config mySettings.json
@@ -75,7 +75,7 @@ Set an empty handler path to disable it; for example, to turn off text features:
 
 # Clients
 
-A basic HTML user interface is available at the `root` path (`/` by default) - [localhost:8080](http://localhost:8080/) when running locally.
+A basic HTML user interface is available at the `root` path (`/` by default) - [127.0.0.1:8080](http://127.0.0.1:8080/) when running locally.
 
 Features are also available using command-line programs such as curl:
 
@@ -84,13 +84,13 @@ Features are also available using command-line programs such as curl:
 Get server status:
 
 ```
-curl localhost:8080/status
+curl 127.0.0.1:8080/status
 ```
 
-Get user/request information:
+Get user request information:
 
 ```
-curl localhost:8080/user
+curl 127.0.0.1:8080/user
 ```
 
 ## Upload
@@ -98,25 +98,25 @@ curl localhost:8080/user
 Upload file:
 
 ```
-curl -F "file=@test.txt" localhost:8080/upload
+curl 127.0.0.1:8080/upload -F "file=@example.txt"
 ```
 
 Upload multiple files:
 
 ```
-curl -F "file=@test.txt" -F "file=@test2.txt" localhost:8080/upload
+curl 127.0.0.1:8080/upload -F "file=@example1.txt" -F "file=@example2.txt"
 ```
 
-With 3 allowed downloads before file expiration:
+Upload file with 5 downloads allowed:
 
 ```
-curl -F "downloads=3" -F "file=@test.txt" localhost:8080/upload
+curl 127.0.0.1:8080/upload -F "downloads=5" -F "file=@example.txt"
 ```
 
-With a 15 minutes file expiration:
+Upload file with 5 minute expiration:
 
 ```
-curl -F "duration=15m" -F "file=@test.txt" localhost:8080/upload
+curl 127.0.0.1:8080/upload -F "duration=5m" -F "file=@example.txt"
 ```
 
 ## List
@@ -124,7 +124,7 @@ curl -F "duration=15m" -F "file=@test.txt" localhost:8080/upload
 List uploaded files:
 
 ```
-curl localhost:8080/list
+curl 127.0.0.1:8080/list
 ```
 
 ## Download
@@ -132,21 +132,21 @@ curl localhost:8080/list
 Download a file ([default settings](https://github.com/drduh/gone/blob/main/settings/defaultSettings.json) require token-based authentication):
 
 ```
-curl -H "X-Auth: mySecret" "localhost:8080/download/test.txt"
+curl 127.0.0.1:8080/download/example.txt -H "X-Auth: mySecret"
 ```
 
 Get static (never expires) content:
 
 ```
-curl localhost:8080/static
+curl 127.0.0.1:8080/static
 ```
 
 ## Message
 
-Post a short text message (use single quotes to wrap special characters):
+Post a plain-text message (use single quotes to wrap special characters):
 
 ```
-curl -s -d 'message=hello, world!' localhost:8080/msg
+curl 127.0.0.1:8080/msg -d 'message=hello, world!'
 ```
 
 ## Wall
@@ -154,13 +154,13 @@ curl -s -d 'message=hello, world!' localhost:8080/msg
 Post multi-line text for shared edit:
 
 ```
-curl -s -F "wall=$(cat /etc/resolv.conf)" localhost:8080/wall
+curl 127.0.0.1:8080 -F "wall=$(cat /etc/resolv.conf)" 127.0.0.1:8080/wall
 ```
 
 Get shared multi-line text:
 
 ```
-curl localhost:8080/wall | jq -r
+curl 127.0.0.1:8080/wall | jq -r
 ```
 
 ## Random
@@ -168,15 +168,15 @@ curl localhost:8080/wall | jq -r
 Get a [random value](https://github.com/drduh/gone/blob/main/util/random.go) of certain type:
 
 ```
-curl localhost:8080/random/
+curl 127.0.0.1:8080/random/
 
-curl localhost:8080/random/coin
+curl 127.0.0.1:8080/random/coin
 
-curl localhost:8080/random/name
+curl 127.0.0.1:8080/random/name
 
-curl localhost:8080/random/nato
+curl 127.0.0.1:8080/random/nato
 
-curl localhost:8080/random/number
+curl 127.0.0.1:8080/random/number
 ```
 
 ## Functions
@@ -243,11 +243,9 @@ The application can run in a container using [`Dockerfile`](https://github.com/d
 On macOS, using [apple/container](https://github.com/apple/container):
 
 ```
-container system start
+make build-container
 
-container build -t gone-$(date +%F) .
-
-container run gone-$(date +%F)
+make run-container
 ```
 
 Get the server IP address:
