@@ -79,7 +79,8 @@ func TestListHandler(t *testing.T) {
 
 	if files[0].Sum != "4dca0fd5f424a31b03ab807cbae77eb32bf2d089eed1cee154b3afed458de0dc" {
 		t.Errorf("expected sum %q, got %q",
-			"4dca0fd5f424a31b03ab807cbae77eb32bf2d089eed1cee154b3afed458de0dc", files[0].Sum)
+			"4dca0fd5f424a31b03ab807cbae77eb32bf2d089eed1cee154b3afed458de0dc",
+			files[0].Sum)
 	}
 }
 

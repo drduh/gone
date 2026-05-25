@@ -3,7 +3,7 @@ package auth
 import "net/http"
 
 // Basic returns true if request header or form value
-// matches configured token.
+// matches configured token, or false with a delay.
 func Basic(header, token string, r *http.Request) bool {
 
 	// Allow access if token is not configured

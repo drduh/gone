@@ -20,7 +20,7 @@ type Storage struct {
 	Files map[string]*File `json:"files,omitempty"`
 
 	// Text messages
-	Messages map[int]*Message `json:"messages,omitempty"`
+	Messages []*Message `json:"messages,omitempty"`
 
 	// Shared wall content
 	WallContent string `json:"wallContent,omitempty"`

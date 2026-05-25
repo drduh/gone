@@ -4,6 +4,7 @@ import (
 	"log"
 
 	"github.com/drduh/gone/audit"
+	"github.com/drduh/gone/auth"
 	"github.com/drduh/gone/settings"
 	"github.com/drduh/gone/util"
 	"github.com/drduh/gone/version"
@@ -31,6 +32,8 @@ func Load() *App {
 	app.Hostname = util.GetHostname()
 	app.Version = version.Get()
 	app.ClearStorage()
+
+	auth.SetTarpit(app.TarpitDelay.GetDuration())
 
 	return &app
 }

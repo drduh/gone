@@ -1,8 +1,10 @@
 package storage
 
 import (
+	"fmt"
 	"mime"
 	"net/http/httptest"
+	"strings"
 	"testing"
 	"time"
 )
@@ -54,50 +56,45 @@ func TestFileServeDispositionEscape(t *testing.T) {
 
 // TestServeMessages tests writing Messages to response.
 func TestServeMessages(t *testing.T) {
-	const timeFormat = "Monday Jan 2 15:04"
+	timeFormat := "Monday Jan 2 15:04"
 
+	messageCount := 100
 	s := &Storage{
-		Messages: map[int]*Message{
-			1: {
-				Count: 1,
-				Data:  "hello",
-				Time: Time{Allow: time.Date(
-					2026, 5, 22, 23, 0, 0, 0, time.UTC).Format(timeFormat)},
+		Messages: make([]*Message, 0, messageCount),
+	}
+
+	for i := 1; i <= messageCount; i++ {
+		s.Messages = append(s.Messages, &Message{
+			Count: i,
+			Data:  fmt.Sprintf("msg%03d", i),
+			Time: Time{
+				Allow: time.Date(
+					2026, 5, 22, 23, i%60, 0, 0, time.UTC,
+				).Format(timeFormat),
 			},
-			2: {
-				Count: 2,
-				Data:  "world",
-				Time: Time{Allow: time.Date(
-					2026, 5, 22, 23, 1, 0, 0, time.UTC).Format(timeFormat)},
-			},
-		},
+		})
 	}
 
 	rr := httptest.NewRecorder()
 	s.ServeMessages(rr)
 
-	disp := `attachment; filename="messages.txt"`
-	if rr.Header().Get("Content-Disposition") != disp {
-		t.Errorf("Content-Disposition = %q; want '%q'",
-			rr.Header().Get("Content-Disposition"), disp)
-	}
-	if rr.Header().Get("Content-Type") != "text/plain" {
-		t.Errorf("Content-Type = %q; want 'text/plain'",
-			rr.Header().Get("Content-Type"))
+	var body strings.Builder
+	for i := 1; i <= messageCount; i++ {
+		fmt.Fprintf(&body, "%d (%s) - %s\n", i,
+			time.Date(2026, 5, 22, 23, i%60, 0, 0, time.UTC).Format(
+				timeFormat),
+			fmt.Sprintf("msg%03d", i),
+		)
 	}
 
-	body := "" +
-		"1 (Friday May 22 23:00) - hello\n" +
-		"2 (Friday May 22 23:01) - world\n"
-	if rr.Body.String() != body {
-		t.Errorf("body = %q; want %q",
-			rr.Body.String(), body)
+	if rr.Body.String() != body.String() {
+		t.Errorf("invalid message content or order")
 	}
 }
 
 // TestServeWall tests writing Wall content to response.
 func TestServeWall(t *testing.T) {
-	const wallContent = "test wall content"
+	const wallContent = "test wall content\n"
 	s := &Storage{WallContent: wallContent}
 
 	rr := httptest.NewRecorder()

@@ -4,6 +4,7 @@ AUTHOR   ?= drduh
 GIT      ?= github.com/$(AUTHOR)
 VERSION  ?= $(shell date +"%Y.%m.%d")
 
+PKG       = ./...
 CMD       = cmd
 SRC       = $(CMD)/main.go
 OUT       = release
@@ -13,6 +14,7 @@ GO       ?= go
 GODOC    ?= ${HOME}/go/bin/godoc
 GOLINT   ?= golangci-lint
 GOSEC    ?= gosec
+GOSTATIC ?= staticcheck
 
 BUILDPKG  = $(GIT)/$(APPNAME)/version
 BUILDARCH = $(shell $(GO) env GOHOSTARCH)
@@ -33,10 +35,13 @@ BUILDFLAG = \
   -X "$(BUILDPKG).User=$(shell whoami)" \
   -X "$(BUILDPKG).Version=$(VERSION)"
 BINNAME   = $(APPNAME)-$(BUILDOS)-$(BUILDARCH)-$(VERSION)
-CMDBUILD  = $(GO) build -trimpath -ldflags '-s -w $(BUILDFLAG)'
-GOBUILD   = GOOS=$(BUILDOS) GOARCH=$(BUILDARCH) $(CMDBUILD) \
+CMDBUILD  = $(GO) build -trimpath \
+            -ldflags '-s -w $(BUILDFLAG)'
+GOBUILD   = GOOS=$(BUILDOS) \
+            GOARCH=$(BUILDARCH) $(CMDBUILD) \
             -o "$(OUT)/$(BINNAME)" "$(SRC)"
-GORACE    = GOOS=$(BUILDOS) GOARCH=$(BUILDARCH) $(CMDBUILD) \
+GORACE    = GOOS=$(BUILDOS) \
+            GOARCH=$(BUILDARCH) $(CMDBUILD) \
             -race -o "$(OUT)/$(BINNAME)-race" "$(SRC)"
 
 SERVICE   = $(APPNAME).service
@@ -55,11 +60,14 @@ MOD_FILE  = 0644
 
 TESTCOVER = testCoverage
 CMDTEST   = $(GO) test -trimpath
-CMDCOVER  = $(CMDTEST) -coverprofile=$(TESTCOVER) ./...
+CMDCOVER  = $(CMDTEST) \
+            -coverprofile=$(TESTCOVER) $(PKG)
 
 TIMEOUT  ?= 1m
 
-WARN      = tput setaf 3 ; printf "%s\n" "${1}" ; tput sgr0
+WARN      = tput setaf 3 ; \
+            printf "%s\n" "${1}" ; \
+            tput sgr0
 
 all: fmt build test lint
 
@@ -114,16 +122,16 @@ reload-service:
 	@sudo systemctl restart $(SERVICE)
 
 fmt:
-	@$(GO) fmt ./...
+	@$(GO) fmt $(PKG)
 
 test:
-	@$(CMDTEST) ./...
+	@$(CMDTEST) $(PKG)
 
 test-race:
-	@$(CMDTEST) -race -timeout=$(TIMEOUT) ./...
+	@$(CMDTEST) -race -timeout=$(TIMEOUT) $(PKG)
 
 test-verbose:
-	@$(CMDTEST) -v ./...
+	@$(CMDTEST) -v $(PKG)
 
 test-cover:
 	@$(CMDCOVER)
@@ -132,25 +140,30 @@ test-cover-total: test-cover
 	@echo "total coverage: $$($(GO) tool cover -func=$(TESTCOVER) | \
 		grep total: | awk '{print $$3}')"
 
+test-cover-all: test-cover-total
+
 lint:
 	@if command -v $(GOLINT) >/dev/null 2>&1 ; then \
-		$(GOLINT) run ./... ; \
-	else \
-		$(call WARN,skipping lint - '$(GOLINT)' not found); \
+		$(GOLINT) run $(PKG) ; else \
+		$(call WARN,skipping '$@': '$(GOLINT)' not found); \
 	fi
 
 lint-verbose:
 	@if command -v $(GOLINT) >/dev/null 2>&1 ; then \
-		$(GOLINT) run --verbose ./... ; \
-	else \
-		$(call WARN,skipping lint - '$(GOLINT)' not found); \
+		$(GOLINT) run --verbose $(PKG) ; else \
+		$(call WARN,skipping '$@': '$(GOLINT)' not found); \
 	fi
 
 sec:
 	@if command -v $(GOSEC) >/dev/null 2>&1 ; then \
-		$(GOSEC) run ./... ; \
-	else \
-		$(call WARN,skipping gosec - '$(GOSEC)' not found); \
+		$(GOSEC) run $(PKG) ; else \
+		$(call WARN,skipping '$@': '$(GOSEC)' not found); \
+	fi
+
+static:
+	@if command -v $(GOSTATIC) >/dev/null 2>&1 ; then \
+		$(GOSTATIC) $(PKG) ; else \
+		$(call WARN,skipping '$@': '$(GOSTATIC)' not found); \
 	fi
 
 build-race: prep
@@ -166,20 +179,31 @@ cover: test-cover
 doc:
 	@$(GODOC) -http :8000
 
-clean:
-	@rm -rf $(OUT) $(TESTCOVER) $(TESTCOVER).html
+clean: clean-coverage
+	@rm -rf $(OUT)
+
+clean-coverage:
+	@rm -rf $(TESTCOVER) $(TESTCOVER).html
 
 clean-cache:
 	@$(GO) clean -cache -testcache -modcache
 
 clena: clean
 
+c: clean
+
 coverage: cover
+
+coveage: coverage
+
+coverae: coverage
 
 prod: release
 
 tset: test
 
 urn: run
+
+r: run
 
 verbose: debug

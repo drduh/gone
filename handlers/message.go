@@ -22,9 +22,11 @@ func Message(app *config.App) http.HandlerFunc {
 		if r.Method == http.MethodPost {
 			if r.FormValue(formFieldClear) != "" {
 				app.Log.Debug("clearing messages",
-					"count", app.NumMessages, "user", req)
+					"count", app.NumMessages,
+					"user", req)
 				app.ClearMessages()
-				app.Log.Info("cleared messages", "user", req)
+				app.Log.Info("cleared messages",
+					"user", req)
 			}
 
 			message := storage.Message{
@@ -52,7 +54,8 @@ func Message(app *config.App) http.HandlerFunc {
 					return
 				}
 
-				if len(app.Messages) >= app.MessageLimits.MaxCount {
+				msgCount := len(app.Messages)
+				if msgCount >= app.MessageLimits.MaxCount {
 					writeJSON(w, http.StatusBadRequest,
 						errorJSON(app.MsgCount))
 					app.Log.Error(app.MsgCount,
@@ -61,10 +64,14 @@ func Message(app *config.App) http.HandlerFunc {
 					return
 				}
 
-				message.Count++
+				msgCount += 1
+				message.Count = msgCount
 				message.Data = formContent
-				app.Messages[message.Count] = &message
-				app.Log.Info("added message", "length", msgLength, "user", req)
+				app.Messages = append(app.Messages, &message)
+				app.Log.Info("added message",
+					"count", msgCount,
+					"length", msgLength,
+					"user", req)
 			}
 
 			if req.IsBrowser {
@@ -75,7 +82,8 @@ func Message(app *config.App) http.HandlerFunc {
 
 		if r.URL.Query().Get("download") == "all" {
 			app.Log.Debug("downloading messages",
-				"count", app.NumMessages, "user", req)
+				"count", app.NumMessages,
+				"user", req)
 			app.ServeMessages(w)
 			return
 		}

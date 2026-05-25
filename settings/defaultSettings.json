@@ -22,7 +22,8 @@
       "upload":    false,
       "user":      false,
       "wall":      false
-    }
+    },
+    "tarpitDelay": "2s"
   },
   "default": {
     "downloads":   1,
