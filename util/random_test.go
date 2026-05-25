@@ -2,7 +2,7 @@ package util
 
 import "testing"
 
-// TestRandomInt tests randomInt returns values within expected range.
+// TestRandomInt tests for a value within expected range.
 func TestRandomInt(t *testing.T) {
 	result := randomInt(9001)
 	if result < 0 || result >= 9001 {
@@ -10,13 +10,14 @@ func TestRandomInt(t *testing.T) {
 	}
 }
 
-// TestRandom tests generated strings for length and uniqueness.
+// TestRandom tests for value length and uniqueness.
 func TestRandom(t *testing.T) {
 	lengths := []int{0, 1, 8, 16, 32, 64}
 	for _, l := range lengths {
 		pass := Random(l)
 		if len(pass) != l {
-			t.Errorf("Random(%d) returned %d, want %d", l, len(pass), l)
+			t.Errorf("Random(%d) returned %d, want %d",
+				l, len(pass), l)
 		}
 	}
 	pass1 := Random(20)
@@ -26,7 +27,7 @@ func TestRandom(t *testing.T) {
 	}
 }
 
-// TestPickRandom tests pickRandom returns value from list or fallback.
+// TestPickRandom tests for a value from list or fallback.
 func TestPickRandom(t *testing.T) {
 	list := []string{"foo", "bar", "zoo"}
 	fallback := "bar"
@@ -48,7 +49,7 @@ func TestPickRandom(t *testing.T) {
 	}
 }
 
-// TestFlipCoin tests FlipCoin returns "heads" or "tails".
+// TestFlipCoin tests for a "heads" or "tails".
 func TestFlipCoin(t *testing.T) {
 	result := FlipCoin()
 	if result != "heads" && result != "tails" {
@@ -56,7 +57,7 @@ func TestFlipCoin(t *testing.T) {
 	}
 }
 
-// TestRandomName tests RandomName returns value from names list or "Bob".
+// TestRandomName tests for a value from names list or "Bob".
 func TestRandomName(t *testing.T) {
 	result := RandomName()
 	found := false
@@ -71,7 +72,7 @@ func TestRandomName(t *testing.T) {
 	}
 }
 
-// TestRandomNato tests RandomNato returns value from nato list or "Bravo".
+// TestRandomNato tests for a value from nato list or "Bravo".
 func TestRandomNato(t *testing.T) {
 	result := RandomNato()
 	found := false
@@ -86,10 +87,25 @@ func TestRandomNato(t *testing.T) {
 	}
 }
 
-// TestRandomNumber tests RandomNumber returns valid zero-padded 3-digit string.
+// TestRandomNumber tests for a valid zero-padded 3-digit string.
 func TestRandomNumber(t *testing.T) {
 	result := RandomNumber()
 	if len(result) != 3 {
 		t.Errorf("RandomNumber returned %s", result)
+	}
+}
+
+// TestRandomHex tests for a valid hex value.
+func TestRandomHex(t *testing.T) {
+	length := 16
+	result := RandomHex(length)
+	if len(result) != length {
+		t.Errorf("expected length %d, got %d",
+			length, len(result))
+	}
+	for _, c := range result {
+		if (c < '0' || c > '9') && (c < 'a' || c > 'f') {
+			t.Errorf("unexpected '%c' in result", c)
+		}
 	}
 }

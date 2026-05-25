@@ -56,7 +56,7 @@ func TestFileServeDispositionEscape(t *testing.T) {
 
 // TestServeMessages tests writing Messages to response.
 func TestServeMessages(t *testing.T) {
-	timeFormat := "Monday Jan 2 15:04"
+	const timeFormat = "Monday Jan 2 15:04"
 
 	messageCount := 100
 	s := &Storage{
@@ -87,6 +87,15 @@ func TestServeMessages(t *testing.T) {
 		)
 	}
 
+	disp := `attachment; filename="messages.txt"`
+	if rr.Header().Get("Content-Disposition") != disp {
+		t.Errorf("Content-Disposition = %q; want '%q'",
+			rr.Header().Get("Content-Disposition"), disp)
+	}
+	if rr.Header().Get("Content-Type") != "text/plain" {
+		t.Errorf("Content-Type = %q; want 'text/plain'",
+			rr.Header().Get("Content-Type"))
+	}
 	if rr.Body.String() != body.String() {
 		t.Errorf("invalid message content or order")
 	}
