@@ -149,12 +149,18 @@ Post a plain-text message (use single quotes to wrap special characters):
 curl 127.0.0.1:8080/msg -d 'message=hello, world!'
 ```
 
+Get message text only:
+
+```
+curl 127.0.0.1:8080/msg | jq '.[].data'
+```
+
 ## Wall
 
 Post multi-line text for shared edit:
 
 ```
-curl 127.0.0.1:8080 -F "wall=$(cat /etc/resolv.conf)" 127.0.0.1:8080/wall
+curl 127.0.0.1:8080/wall -F "wall=$(cat /etc/resolv.conf)"
 ```
 
 Get shared multi-line text:
@@ -238,7 +244,7 @@ make cover
 
 # Container
 
-The application can run in a container using [`Dockerfile`](https://github.com/drduh/gone/blob/main/Dockerfile).
+The application can run in a container using [`Dockerfile`](https://github.com/drduh/gone/blob/main/Dockerfile)
 
 On macOS, using [apple/container](https://github.com/apple/container):
 
