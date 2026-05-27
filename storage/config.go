@@ -38,8 +38,8 @@ type File struct {
 	// Provided filename
 	Name string `json:"name,omitempty"`
 
-	// Contents of upload
-	Data []byte `json:"data,omitempty"`
+	// Contents of upload (not encoded)
+	Data []byte `json:"-"`
 
 	// Content hash sum
 	Sum string `json:"sum,omitempty"`

@@ -17,7 +17,7 @@ func getDefaultTheme(theme string) string {
 	if theme != autoTheme {
 		return theme
 	}
-	if util.IsDaytime() {
+	if util.IsDaytimeAt(time.Now()) {
 		return "light"
 	}
 	return "dark"

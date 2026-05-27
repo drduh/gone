@@ -2,12 +2,11 @@ package util
 
 import "time"
 
-// IsDaytime returns true during daytime,
-// approximately based on current season.
-func IsDaytime() bool {
-	now := time.Now()
-	hour := now.Hour()
-	month := now.Month()
+// IsDaytimeAt returns true during daytime,
+// approximately based on the current season.
+func IsDaytimeAt(t time.Time) bool {
+	hour := t.Hour()
+	month := t.Month()
 
 	var sunrise, sunset int
 	switch {

@@ -12,26 +12,27 @@ import (
 )
 
 // Run loads the application configuration, sets up the
-// signal handler and starts the server.
+// signal handler and starts server, or prints version.
 func Run() {
 	flag.Parse()
 
 	app := config.Load()
+
 	if app.Modes.Version {
 		version.Print()
 		os.Exit(0)
 	}
 
 	app.Log.Info("started v1",
-		"version", app.Version, "host", app.Hostname)
-	if app.Debug {
-		app.Log.Debug("debug enabled", "configuration", app)
-	}
+		"host", app.Hostname,
+		"version", app.Version)
+	app.Log.Debug("debug log enabled",
+		"configuration", app)
 
 	signal.Setup(app)
-
 	if err := server.Serve(app); err != nil {
-		app.Log.Error("server failed", "error", err.Error())
+		app.Log.Error("server failed",
+			"error", err.Error())
 		os.Exit(1)
 	}
 }

@@ -20,8 +20,8 @@ func Load() *App {
 	app.Settings = settings.Load(pathConfig)
 
 	auditor, err := audit.Start(&audit.Config{
-		Debug:      app.Debug,
-		Filename:   app.Filename,
+		Debug:      app.Debug || app.LogDebug,
+		Filename:   app.LogFilename,
 		TimeFormat: app.TimeFormat,
 	})
 	if err != nil {

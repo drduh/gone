@@ -23,6 +23,12 @@ func init() {
 		"Shortcut for -config")
 	flag.StringVar(&pathConfig, "c", defaultPath,
 		"Shortcut for -config")
+	flag.StringVar(&pathConfig, "settings", defaultPath,
+		"Shortcut for -config")
+	flag.StringVar(&pathConfig, "set", defaultPath,
+		"Shortcut for -config")
+	flag.StringVar(&pathConfig, "s", defaultPath,
+		"Shortcut for -config")
 
 	flag.BoolVar(&modeDebug, "debug", defaultMode,
 		"Debug mode")

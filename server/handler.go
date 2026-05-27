@@ -23,8 +23,13 @@ func getHandler(app *config.App) http.Handler {
 	if app.Assets != "" {
 		if _, err := os.Stat(pathAssets); err == nil {
 			app.Log.Debug("assets present", "path", pathAssets)
-			mux.Handle(app.Assets, http.StripPrefix(
-				app.Assets, http.FileServer(http.Dir(pathAssets))))
+			mux.Handle(
+				app.Assets,
+				http.StripPrefix(
+					app.Assets,
+					http.FileServer(http.Dir(pathAssets)),
+				),
+			)
 		} else {
 			app.Log.Warn("missing assets", "path", pathAssets)
 		}

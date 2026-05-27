@@ -33,14 +33,19 @@ func TestLoadNames(t *testing.T) {
 		result   []string
 	}{
 		{
+			name:    "empty file",
+			content: "",
+			result:  defaultNames,
+		},
+		{
+			name:    "newlines only",
+			content: "\n\n",
+			result:  defaultNames,
+		},
+		{
 			name:    "basic",
 			content: "foo\nbar123\nZoo\n",
 			result:  []string{"foo", "bar123", "Zoo"},
-		},
-		{
-			name:    "empty file",
-			content: "\n\n",
-			result:  defaultNames,
 		},
 		{
 			name:    "mix empty lines",
