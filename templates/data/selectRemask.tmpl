@@ -1,0 +1,10 @@
+<!-- selectRemask.tmpl -->
+{{ define "selectRemask" }}
+    <form action="{{ .Paths.UserRemask }}"
+          method="post"
+           style="display:inline;">
+      <button class="selectRemask"
+              title="remask user address"
+               type="submit">remask</button>
+    </form>
+{{ end }}

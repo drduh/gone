@@ -4,9 +4,12 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="{{ .Version.id }}-{{ .Version.version }}">
+    <meta name="viewport"
+       content="width=device-width, initial-scale=1.0">
+    <meta name="description"
+       content="{{ .Version.appId }}-{{ .Version.appVersion }}">
     <title>{{ .Index.Title }}</title>
+    <link rel="icon" href="about:blank">
     {{ if .Index.CSP }} {{- template "csp" . -}} {{ end }}
     {{ if .Theme -}}
     <link href="{{ .Paths.Assets }}style.css"

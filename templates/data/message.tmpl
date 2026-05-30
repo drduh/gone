@@ -25,22 +25,21 @@
     </div>
     <br>
     {{ end }}
-    <form action="" style="display:inline;">
-      <button class="selectRefresh"
-              title="refresh messages"
-               type="submit">refresh</button>
-    </form>
     <form action="{{ .Paths.Message }}"
           method="post"
            style="display:inline;">
-      <input type="hidden" name="clear" value="true">
+      <input name="clear"
+             type="hidden"
+            value="true">
       <button class="selectClear" {{ if not .Storage.Messages }} disabled {{ end }}
               title="clear messages"
                type="submit">clear</button>
     </form>
     <form action="{{ .Paths.Message }}"
            style="display:inline;">
-      <input type="hidden" name="download" value="all">
+      <input name="download"
+             type="hidden"
+            value="all">
       <button class="selectDownload" {{ if not .Storage.Messages }} disabled {{ end }}
               title="download messages"
                type="submit">download</button>

@@ -1,11 +1,20 @@
 <!-- config.tmpl -->
 {{ define "config" }}
-  {{ if .Style.AllowPick -}}
-  <details><summary>config</summary>
+  <details>
+  <summary>config</summary>
     <div class="box">
-      {{- template "selectTheme" . }}
-      {{- template "clearStorage" . }}
+      {{ if .Style.AllowPick -}}
+        {{- template "selectTheme" . }}
+      {{ end }}
+
+      {{- template "selectRefresh" . }}
+
+      {{ if .Paths.UserRemask }}
+        {{- template "selectRemask" . }}
+      {{ end }}
+
+      <br>
+      {{- template "selectClear" . }}
     </div>
   </details>
-  {{ end }}
 {{ end }}

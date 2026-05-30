@@ -24,7 +24,9 @@
     <form action="{{ .Paths.Wall }}"
           method="post"
            style="display:inline;">
-      <input type="hidden" name="clear" value="true">
+      <input name="clear"
+             type="hidden"
+            value="true">
       <button class="selectClear" {{ if not .Storage.WallContent }} disabled {{ end }}
               title="clear wall"
                type="submit">clear</button>
@@ -32,7 +34,9 @@
     <form action="{{ .Paths.Wall }}"
           method="get"
            style="display:inline;">
-      <input type="hidden" name="download" value="all">
+      <input name="download"
+             type="hidden"
+            value="all">
       <button class="selectDownload" {{ if not .Storage.WallContent }} disabled {{ end }}
               title="download wall"
                type="submit">download</button>
