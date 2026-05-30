@@ -45,7 +45,8 @@ func TestParseFormInt(t *testing.T) {
 		tc := tc
 		t.Run(tc.name, func(t *testing.T) {
 			t.Parallel()
-			req, err := http.NewRequest("GET", tc.query, nil)
+			req, err := http.NewRequest(http.MethodPost,
+				tc.query, nil)
 			if err != nil {
 				t.Fatal(err)
 			}
@@ -101,10 +102,12 @@ func TestParseFormDuration(t *testing.T) {
 		tc := tc
 		t.Run(tc.name, func(t *testing.T) {
 			t.Parallel()
-			req, err := http.NewRequest("GET", tc.query, nil)
+			req, err := http.NewRequest(http.MethodPost,
+				tc.query, nil)
 			if err != nil {
 				t.Fatal(err)
 			}
+
 			got := parseFormDuration(req, tc.field, tc.def,
 				settings.Duration{Duration: tc.maximum})
 			if got != tc.want {

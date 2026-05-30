@@ -26,7 +26,7 @@ func Index(app *config.App) http.HandlerFunc {
 		}
 
 		tmpl, err := template.New("index").ParseFS(
-			templates.All, dataTmpl)
+			templates.All, templatesData)
 		if err != nil {
 			writeJSON(w, http.StatusInternalServerError,
 				errorJSON(app.TmplParse))

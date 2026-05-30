@@ -7,6 +7,12 @@ import (
 	"github.com/drduh/gone/config"
 )
 
+const (
+	formContentType = "application/x-www-form-urlencoded"
+	testContentMsgs = "hello, world!"
+	testContentWall = "hello,\r\nworld!\r\n"
+)
+
 // newTestApp sets up an app config for testing.
 func newTestApp() *config.App {
 	app := config.Load()

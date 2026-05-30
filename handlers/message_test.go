@@ -11,20 +11,15 @@ import (
 	"github.com/drduh/gone/storage"
 )
 
-const (
-	contentType    = "application/x-www-form-urlencoded"
-	messageContent = "hello, world!"
-)
-
 // TestMessageHandlerValid tests a valid message post.
 func TestMessageHandlerValid(t *testing.T) {
 	app := newTestApp()
 
 	form := url.Values{}
-	form.Set("message", messageContent)
-	req := httptest.NewRequest(
-		"POST", "/", strings.NewReader(form.Encode()))
-	req.Header.Set("Content-Type", contentType)
+	form.Set("message", testContentMsgs)
+	req := httptest.NewRequest(http.MethodPost,
+		"/", strings.NewReader(form.Encode()))
+	req.Header.Set("Content-Type", formContentType)
 
 	rr := httptest.NewRecorder()
 	handler := Message(app)
@@ -44,9 +39,9 @@ func TestMessageHandlerValid(t *testing.T) {
 		t.Fatal("message not found")
 	}
 
-	if msg.Data != messageContent {
+	if msg.Data != testContentMsgs {
 		t.Errorf("expected message %q, got %q",
-			messageContent, msg.Data)
+			testContentMsgs, msg.Data)
 	}
 }
 
@@ -57,9 +52,9 @@ func TestMessageHandlerExceedLength(t *testing.T) {
 
 	form := url.Values{}
 	form.Set("message", strings.Repeat("a", 1000))
-	req := httptest.NewRequest(
-		"POST", "/", strings.NewReader(form.Encode()))
-	req.Header.Set("Content-Type", contentType)
+	req := httptest.NewRequest(http.MethodPost,
+		"/", strings.NewReader(form.Encode()))
+	req.Header.Set("Content-Type", formContentType)
 
 	rr := httptest.NewRecorder()
 	handler := Message(app)
@@ -81,14 +76,14 @@ func TestMessageHandlerClear(t *testing.T) {
 	app := newTestApp()
 
 	app.Messages = append(app.Messages, &storage.Message{
-		Count: 1, Data: messageContent,
+		Count: 1, Data: testContentMsgs,
 	})
 
 	form := url.Values{}
 	form.Set("clear", "true")
-	req := httptest.NewRequest(
-		"POST", "/", strings.NewReader(form.Encode()))
-	req.Header.Set("Content-Type", contentType)
+	req := httptest.NewRequest(http.MethodPost,
+		"/", strings.NewReader(form.Encode()))
+	req.Header.Set("Content-Type", formContentType)
 
 	rr := httptest.NewRecorder()
 	handler := Message(app)
@@ -105,27 +100,35 @@ func TestMessageHandlerDownloadAll(t *testing.T) {
 	app := newTestApp()
 
 	app.Messages = append(app.Messages, &storage.Message{
-		Count: 1, Data: messageContent + "1",
+		Count: 1, Data: testContentMsgs + "1",
 	})
 	app.Messages = append(app.Messages, &storage.Message{
-		Count: 2, Data: messageContent + "2",
+		Count: 2, Data: testContentMsgs + "2",
 	})
 	app.Messages = append(app.Messages, &storage.Message{
-		Count: 3, Data: messageContent + "3",
+		Count: 3, Data: testContentMsgs + "3",
 	})
 
-	req := httptest.NewRequest("GET", "/?download=all", nil)
+	req := httptest.NewRequest(http.MethodGet,
+		"/?download=all", nil)
+
 	rr := httptest.NewRecorder()
 	handler := Message(app)
 	handler.ServeHTTP(rr, req)
 
 	body := rr.Body.String()
 	for i := 1; i <= 3; i++ {
-		want := messageContent + fmt.Sprint(i)
+		want := testContentMsgs + fmt.Sprint(i)
 		if !strings.Contains(body, want) {
 			t.Errorf("expected message %q, got %q",
 				want, body)
 		}
+	}
+
+	disp := rr.Header().Get("Content-Disposition")
+	if disp != "" &&
+		disp != `attachment; filename="messages.txt"` {
+		t.Errorf("invalid Content-Disposition: %q", disp)
 	}
 }
 
@@ -139,9 +142,10 @@ func TestMessageHandlerExceedCount(t *testing.T) {
 
 	for i := 0; i < app.MessageLimits.MaxCount; i++ {
 		form.Set("message", fmt.Sprintf("msg %d", i+1))
-		req := httptest.NewRequest(
-			"POST", "/", strings.NewReader(form.Encode()))
-		req.Header.Set("Content-Type", contentType)
+		req := httptest.NewRequest(http.MethodPost,
+			"/", strings.NewReader(form.Encode()))
+		req.Header.Set("Content-Type", formContentType)
+
 		rr := httptest.NewRecorder()
 		handler.ServeHTTP(rr, req)
 		if rr.Code != 200 {
@@ -149,10 +153,11 @@ func TestMessageHandlerExceedCount(t *testing.T) {
 		}
 	}
 
-	form.Set("message", messageContent)
-	req := httptest.NewRequest(
-		"POST", "/", strings.NewReader(form.Encode()))
-	req.Header.Set("Content-Type", contentType)
+	form.Set("message", testContentMsgs)
+	req := httptest.NewRequest(http.MethodPost,
+		"/", strings.NewReader(form.Encode()))
+	req.Header.Set("Content-Type", formContentType)
+
 	rr := httptest.NewRecorder()
 	handler.ServeHTTP(rr, req)
 	if rr.Code != http.StatusBadRequest {

@@ -3,14 +3,14 @@
 package handlers
 
 const (
-	dataTmpl = "data/*.tmpl"
-
 	formFieldClear     = "clear"
 	formFieldDownloads = "downloads"
 	formFieldDuration  = "duration"
 	formFieldMessage   = "message"
 	formFieldTheme     = "theme"
 	formFieldWall      = "wall"
+
+	templatesData = "data/*.tmpl"
 )
 
 // Request represents user request metadata.
