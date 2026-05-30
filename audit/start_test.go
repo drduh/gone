@@ -23,7 +23,7 @@ func TestStartValidFilenames(t *testing.T) {
 	}
 	defer cleanupTempDir(t, tempDir)
 
-	testCases := []struct {
+	cases := []struct {
 		name     string
 		filename string
 		debug    bool
@@ -40,7 +40,7 @@ func TestStartValidFilenames(t *testing.T) {
 		{"tab", "foo\tbar.log", false},
 	}
 
-	for _, tc := range testCases {
+	for _, tc := range cases {
 		t.Run(tc.name, func(t *testing.T) {
 			fname := filepath.Join(tempDir, tc.filename)
 			cfg := &Config{
@@ -64,7 +64,7 @@ func TestStartValidFilenames(t *testing.T) {
 // TestStartInvalidFilenames tests Auditor produces error
 // when an invalid filename is used.
 func TestStartInvalidFilenames(t *testing.T) {
-	testCases := []struct {
+	cases := []struct {
 		name     string
 		filename string
 	}{
@@ -74,7 +74,7 @@ func TestStartInvalidFilenames(t *testing.T) {
 			[]byte{'f', 0, 'l', 'e'})},
 	}
 
-	for _, tc := range testCases {
+	for _, tc := range cases {
 		t.Run(tc.name, func(t *testing.T) {
 			cfg := &Config{
 				Filename: tc.filename,
@@ -95,7 +95,7 @@ func TestStartInvalidFilenames(t *testing.T) {
 
 // TestStartDebug tests Auditor starts with debug flag.
 func TestStartDebug(t *testing.T) {
-	testCases := []struct {
+	cases := []struct {
 		name  string
 		debug bool
 	}{
@@ -103,7 +103,7 @@ func TestStartDebug(t *testing.T) {
 		{"debug off", false},
 	}
 
-	for _, tc := range testCases {
+	for _, tc := range cases {
 		t.Run(tc.name, func(t *testing.T) {
 			cfg := &Config{
 				Filename: "",

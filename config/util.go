@@ -13,7 +13,8 @@ func (a *App) Start() {
 // Stop records uptime and exits the application.
 func (a *App) Stop(reason string) {
 	a.Log.Info("stopping application",
-		"reason", reason, "uptime", a.Uptime())
+		"reason", reason,
+		"uptime", a.Uptime())
 	os.Exit(0)
 }
 

@@ -9,8 +9,8 @@ import (
 const (
 	storageVersion = "1"
 
-	filenameMessages = "messages.txt"
-	filenameWall     = "wall.txt"
+	filenameMsgs = "messages.txt"
+	filenameWall = "wall.txt"
 )
 
 // Storage represents content uploaded by users.
@@ -38,7 +38,7 @@ type File struct {
 	// Provided filename
 	Name string `json:"name,omitempty"`
 
-	// Contents of upload (not encoded)
+	// File content (not encoded)
 	Data []byte `json:"-"`
 
 	// Content hash sum

@@ -8,8 +8,6 @@ import (
 	"github.com/drduh/gone/templates"
 )
 
-const templateData = "data/*.tmpl"
-
 // Index handles requests to load and render the index page.
 func Index(app *config.App) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
@@ -17,20 +15,24 @@ func Index(app *config.App) http.HandlerFunc {
 		if req == nil {
 			return
 		}
-		app.Log.Info("serving index", "user", req)
+		app.Log.Info("serving index",
+			"user", req)
 
 		theme := getDefaultTheme(app.Style.Theme)
 		if app.Style.AllowPick {
-			theme = getTheme(w, r, theme,
-				app.Cookie.Id,
+			theme = getTheme(w, r, theme, app.Cookie.Id,
 				app.Cookie.Time.GetDuration(),
 				app.Style.Available)
 		}
 
-		tmpl, err := template.New("index").ParseFS(templates.All, templateData)
+		tmpl, err := template.New("index").ParseFS(
+			templates.All, dataTmpl)
 		if err != nil {
-			writeJSON(w, http.StatusInternalServerError, errorJSON(app.TmplParse))
-			app.Log.Error(app.TmplParse, "error", err.Error(), "user", req)
+			writeJSON(w, http.StatusInternalServerError,
+				errorJSON(app.TmplParse))
+			app.Log.Error(app.TmplParse,
+				"error", err.Error(),
+				"user", req)
 			return
 		}
 
@@ -52,8 +54,11 @@ func Index(app *config.App) http.HandlerFunc {
 		}
 
 		if err = tmpl.Execute(w, response); err != nil {
-			writeJSON(w, http.StatusInternalServerError, errorJSON(app.TmplExec))
-			app.Log.Error(app.TmplExec, "error", err.Error(), "user", req)
+			writeJSON(w, http.StatusInternalServerError,
+				errorJSON(app.TmplExec))
+			app.Log.Error(app.TmplExec,
+				"error", err.Error(),
+				"user", req)
 			return
 		}
 	}

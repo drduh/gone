@@ -7,6 +7,7 @@ import (
 	"io"
 	"log"
 	"os"
+	"path/filepath"
 
 	_ "embed"
 )
@@ -32,20 +33,21 @@ func Load(path string) Settings {
 	return settings
 }
 
-// loadSettings decodes a JSON byte slice into a Settings struct,
-// rejecting unknown fields, trailing data, and invalid configurations.
+// loadSettings decodes a JSON byte slice into Settings,
+// rejecting unknown/trailing data and invalid configs.
 func loadSettings(data []byte, settings *Settings) error {
 	dec := json.NewDecoder(bytes.NewReader(data))
 	dec.DisallowUnknownFields()
 	if err := dec.Decode(settings); err != nil {
-		return fmt.Errorf("failed to decode settings: %w", err)
+		return fmt.Errorf(
+			"failed to decode settings: %w", err)
 	}
 
 	if err := dec.Decode(&struct{}{}); err != io.EOF {
 		if err == nil {
-			return fmt.Errorf("failed to decode settings: trailing data")
+			return fmt.Errorf("failed to decode: trailing data: %w", err)
 		}
-		return fmt.Errorf("failed to decode settings: trailing data: %w", err)
+		return fmt.Errorf("failed to decode: trailing data: %w", err)
 	}
 
 	if err := settings.Validate(); err != nil {
@@ -56,10 +58,22 @@ func loadSettings(data []byte, settings *Settings) error {
 }
 
 // loadSettingsFromFile loads settings from a file at path.
-func loadSettingsFromFile(path string, settings *Settings) error {
-	data, err := os.ReadFile(path)
+func loadSettingsFromFile(p string, s *Settings) error {
+	dir := filepath.Dir(p)
+	file := filepath.Base(p)
+
+	f, err := os.OpenInRoot(dir, file)
 	if err != nil {
-		return fmt.Errorf("failed to read '%s': %w", path, err)
+		return fmt.Errorf("failed to read '%s' from '%s': %w",
+			file, dir, err)
 	}
-	return loadSettings(data, settings)
+	defer func() { _ = f.Close() }()
+
+	data, err := io.ReadAll(f)
+	if err != nil {
+		return fmt.Errorf("failed to read '%s' from '%s': %w",
+			file, dir, err)
+	}
+
+	return loadSettings(data, s)
 }

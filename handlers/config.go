@@ -3,6 +3,8 @@
 package handlers
 
 const (
+	dataTmpl = "data/*.tmpl"
+
 	formFieldClear     = "clear"
 	formFieldDownloads = "downloads"
 	formFieldDuration  = "duration"
@@ -11,7 +13,7 @@ const (
 	formFieldWall      = "wall"
 )
 
-// Request represents user operation metadata.
+// Request represents user request metadata.
 type Request struct {
 
 	// Request path ("/")

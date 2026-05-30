@@ -8,14 +8,15 @@ import (
 	"github.com/drduh/gone/templates"
 )
 
-// User handles requests for user request information.
-func User(app *config.App) http.HandlerFunc {
+// UserInfo handles requests for user request information.
+func UserInfo(app *config.App) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		req := authRequest(w, r, app)
 		if req == nil {
 			return
 		}
-		app.Log.Info("serving user info", "user", req)
+		app.Log.Info("serving user request info",
+			"user", req)
 
 		response := templates.User{
 			Owner: storage.Owner{

@@ -13,10 +13,15 @@ func Clear(app *config.App) http.HandlerFunc {
 		if req == nil {
 			return
 		}
+
 		app.ClearStorage()
-		app.Log.Info("storage cleared", "user", req)
+		app.Log.Info("storage cleared",
+			"user", req)
+
 		if req.IsBrowser {
-			toRoot(w, r, app.Root)
+			toPath(w, r, app.Root)
+		} else {
+			writeJSON(w, http.StatusOK, "storage cleared")
 		}
 	}
 }

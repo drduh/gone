@@ -6,7 +6,7 @@ import (
 	"github.com/drduh/gone/util"
 )
 
-// CountStorage performs all Storage counts.
+// CountStorage counts all Storage content.
 func (s *Storage) CountStorage() {
 	s.CountFiles()
 	s.CountMessages()
@@ -41,7 +41,7 @@ func (s *Storage) CountMessages() {
 }
 
 // CountWall counts the number of characters
-// and lines in Wall contents.
+// and lines in Wall content.
 func (s *Storage) CountWall() {
 	s.CharsWall = len(s.WallContent)
 	if s.WallContent == "" {

@@ -51,12 +51,12 @@ func TestTypoNestedField(t *testing.T) {
 func TestMergeSettings(t *testing.T) {
 	var s Settings
 	if err := loadSettings(defaultSettings, &s); err != nil {
-		t.Fatalf("unexpected error loading default settings: %v", err)
+		t.Fatalf("error loading default settings: %v", err)
 	}
 	if err := loadSettings([]byte(`{"showBuild": false}`), &s); err != nil {
-		t.Fatalf("unexpected error loading override settings: %v", err)
+		t.Fatalf("error loading override settings: %v", err)
 	}
 	if s.ShowBuild != false {
-		t.Fatalf("expected showBuild to be false, got %v", s.ShowBuild)
+		t.Fatalf("expected showBuild:false, got %v", s.ShowBuild)
 	}
 }

@@ -12,11 +12,8 @@ import (
 func Serve(app *config.App) error {
 	go expiryWorker(app)
 
-	address := app.GetAddr()
-	app.Log.Info("starting server",
-		"address", address)
-
 	handler := getHandler(app)
+
 	timeoutIdle := 90 * time.Second
 	timeoutRead := 20 * time.Second
 	timeoutHeader := 20 * time.Second
@@ -26,6 +23,10 @@ func Serve(app *config.App) error {
 		"read", timeoutRead.String(),
 		"header", timeoutHeader.String(),
 		"write", timeoutWrite.String())
+
+	address := app.GetAddr()
+	app.Log.Info("starting server",
+		"address", address)
 
 	server := &http.Server{
 		Addr:              address,
