@@ -1,5 +1,6 @@
 {
-  "port":          8080,
+  "serverAddr":    "",
+  "serverPort":    8080,
   "showBuild":     true,
   "audit": {
     "logDebug":    false,
@@ -21,7 +22,7 @@
       "static":    false,
       "status":    false,
       "upload":    false,
-      "user":      false,
+      "userInfo":  false,
       "wall":      false
     },
     "tarpitDelay": "2s"
@@ -53,9 +54,9 @@
       "time":      "192h"
     },
     "placeholder": {
-      "auth":      "enter secret",
-      "file":      "enter name or id",
-      "message":   "enter message"
+      "auth":      "enter secret token",
+      "file":      "enter file name/id",
+      "message":   "enter text message"
     },
     "style": {
       "allowPick": true,
@@ -93,6 +94,9 @@
       "maxCount":       32,
       "lengthChars":    128
     },
+    "randomLimits": {
+      "strCount":       10
+    },
     "wallLimits": {
       "lengthChars":    2560
     }
@@ -108,7 +112,8 @@
     "static":      "/static",
     "status":      "/status",
     "upload":      "/upload",
-    "user":        "/user",
+    "userInfo":    "/user",
+    "userRemask":  "/user/remask",
     "wall":        "/wall"
   }
 }

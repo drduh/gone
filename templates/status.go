@@ -14,8 +14,11 @@ type Status struct {
 	// Server hostname ("system")
 	Hostname string `json:"hostname,omitempty"`
 
+	// IP address the server is listening on ("127.0.0.1")
+	ServerAddr string `json:"addr,omitempty"`
+
 	// TCP port the server is listening on (8080)
-	Port int `json:"port,omitempty"`
+	ServerPort int `json:"port,omitempty"`
 
 	// Application version and build information
 	Version map[string]string `json:"buildInfo,omitempty"`

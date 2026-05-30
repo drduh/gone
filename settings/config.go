@@ -14,7 +14,7 @@ type Settings struct {
 	// Errors to serve
 	Error `json:"error,omitempty"`
 
-	// User interface options
+	// HTML index page options
 	Index `json:"indexPage,omitempty"`
 
 	// Content sharing defaults
@@ -26,8 +26,11 @@ type Settings struct {
 	// Paths to route
 	Paths `json:"paths,omitempty"`
 
-	// TCP port to listen on
-	Port int `json:"port,omitempty"`
+	// IP address to listen on ("127.0.0.1")
+	ServerAddr string `json:"serverAddr,omitempty"`
+
+	// TCP port to listen on (8080)
+	ServerPort int `json:"serverPort,omitempty"`
 
 	// Show build details in status response
 	// and index footer
@@ -90,8 +93,8 @@ type Auth struct {
 		// Upload files
 		Upload bool `json:"upload,omitempty"`
 
-		// User request
-		User bool `json:"user,omitempty"`
+		// User request information
+		UserInfo bool `json:"userInfo,omitempty"`
 
 		// Read and write wall content
 		Wall bool `json:"wall,omitempty"`
@@ -241,6 +244,13 @@ type Limit struct {
 		MaxCount int `json:"maxCount,omitempty"`
 	} `json:"messageLimits,omitempty"`
 
+	// RandomLimits represents random string limits.
+	RandomLimits struct {
+
+		// Number of random strings to return
+		StrCount int `json:"strCount,omitempty"`
+	} `json:"randomLimits,omitempty"`
+
 	// WallLimits represents wall text limits.
 	WallLimits struct {
 
@@ -282,8 +292,11 @@ type Paths struct {
 	// File upload ("/upload")
 	Upload string `json:"upload,omitempty"`
 
-	// User request ("/user")
-	User string `json:"user,omitempty"`
+	// User request info ("/user")
+	UserInfo string `json:"userInfo,omitempty"`
+
+	// Refresh user request mask ("/user/remask")
+	UserRemask string `json:"userRemask,omitempty"`
 
 	// Shared-edit content read and write ("/wall")
 	Wall string `json:"wall,omitempty"`
