@@ -1,14 +1,29 @@
 package util
 
-import "sync"
+import (
+	"net"
+	"sync"
+)
 
 var masks sync.Map
 
-// Mask creates or loads a replacement address string.
-func Mask(address string) string {
-	if name, ok := masks.Load(address); ok {
-		return name.(string)
+// GetMask creates or loads a masked string.
+func GetMask(s string, refresh bool) string {
+	if !refresh {
+		if name, ok := masks.Load(s); ok {
+			return name.(string)
+		}
 	}
-	mask, _ := masks.LoadOrStore(address, GetRandom(""))
-	return mask.(string)
+	mask := GetRandom("mask")
+	masks.Store(s, mask)
+	return mask
+}
+
+// GetMaskAddr creates or loads a masked addr string.
+func GetMaskAddr(s string, refresh bool) string {
+	addr, _, err := net.SplitHostPort(s)
+	if err != nil {
+		addr = "unknown"
+	}
+	return GetMask(addr, refresh)
 }
