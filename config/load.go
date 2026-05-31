@@ -33,7 +33,7 @@ func Load() *App {
 	app.Version = version.Get()
 	app.ClearStorage()
 
-	auth.SetTarpit(app.TarpitDelay.GetDuration())
+	auth.SetTarpit(app.TarpitDelay.Duration)
 
 	return &app
 }
