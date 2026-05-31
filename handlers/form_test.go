@@ -8,11 +8,12 @@ import (
 	"github.com/drduh/gone/settings"
 )
 
-// TestParseFormInt tests integer form values are parsed.
+// TestParseFormInt tests parsing downloads form values.
 func TestParseFormInt(t *testing.T) {
 	def := 1
 	maximum := 100
-	tests := []struct {
+
+	cases := []struct {
 		name    string
 		query   string
 		field   string
@@ -39,11 +40,13 @@ func TestParseFormInt(t *testing.T) {
 		{"xlarge", "/?downloads=999999999999999999999",
 			"downloads", def, def, maximum}, // overflows int64
 	}
-	for _, tc := range tests {
+
+	for _, tc := range cases {
 		tc := tc
 		t.Run(tc.name, func(t *testing.T) {
 			t.Parallel()
-			req, err := http.NewRequest("GET", tc.query, nil)
+			req, err := http.NewRequest(http.MethodPost,
+				tc.query, nil)
 			if err != nil {
 				t.Fatal(err)
 			}
@@ -56,11 +59,12 @@ func TestParseFormInt(t *testing.T) {
 	}
 }
 
-// TestParseFormDuration tests duration form values are parsed.
+// TestParseFormDuration tests parsing duration form values.
 func TestParseFormDuration(t *testing.T) {
 	def := 1 * time.Hour
 	maximum := 8 * 24 * time.Hour
-	tests := []struct {
+
+	cases := []struct {
 		name    string
 		query   string
 		field   string
@@ -93,14 +97,17 @@ func TestParseFormDuration(t *testing.T) {
 		{"encoded", "/?duration=%32%34%68", "duration",
 			def, 24 * time.Hour, maximum}, // "24h" encoded
 	}
-	for _, tc := range tests {
+
+	for _, tc := range cases {
 		tc := tc
 		t.Run(tc.name, func(t *testing.T) {
 			t.Parallel()
-			req, err := http.NewRequest("GET", tc.query, nil)
+			req, err := http.NewRequest(http.MethodPost,
+				tc.query, nil)
 			if err != nil {
 				t.Fatal(err)
 			}
+
 			got := parseFormDuration(req, tc.field, tc.def,
 				settings.Duration{Duration: tc.maximum})
 			if got != tc.want {

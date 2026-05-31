@@ -75,7 +75,7 @@ func Message(app *config.App) http.HandlerFunc {
 			}
 
 			if req.IsBrowser {
-				toRoot(w, r, app.Root)
+				toPath(w, r, app.Root)
 				return
 			}
 		}
@@ -88,6 +88,9 @@ func Message(app *config.App) http.HandlerFunc {
 			return
 		}
 
+		app.Log.Info("serving message(s)",
+			"count", len(app.Messages),
+			"user", req)
 		writeJSON(w, http.StatusOK, app.Messages)
 	}
 }

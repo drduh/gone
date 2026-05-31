@@ -2,9 +2,9 @@ package settings
 
 import "fmt"
 
-// GetAddr returns the server address based on configured port.
+// GetAddr returns the server address based on configured settings.
 func (s *Settings) GetAddr() string {
-	return fmt.Sprintf(":%d", s.Port)
+	return fmt.Sprintf("%s:%d", s.ServerAddr, s.ServerPort)
 }
 
 // GetMaxFileBytes returns the maximum allowed file size in bytes.

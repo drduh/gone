@@ -2,7 +2,6 @@
 
 * {
   box-sizing: border-box;
-  font-family: "Open Sans", "Helvetica Neue", "Helvetica", "Arial", sans-serif;
 }
 
 html {
@@ -19,6 +18,7 @@ body {
   color: var(--fg-dark);
   display: flex;
   flex-direction: column;
+  font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
   font-size: 1em;
   margin: 1em auto;
 }
@@ -142,6 +142,7 @@ input[type="number"] {
 .selectClear,
 .selectDownload,
 .selectRefresh,
+.selectRemask,
 .selectSubmit {
   width: var(--width-small);
 }
@@ -168,6 +169,7 @@ input[type="number"] {
 .selectMessage:hover,
 .selectPost:hover,
 .selectRefresh:hover,
+.selectRemask:hover,
 .selectSubmit:hover,
 .selectTheme:hover,
 .selectToken:hover,

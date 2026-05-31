@@ -10,7 +10,7 @@ import (
 )
 
 var nato = []string{
-	"Alpha", "Bravo", "Charlie", "Delta", "Echo", "Foxtrot",
+	"Alfa", "Bravo", "Charlie", "Delta", "Echo", "Foxtrot",
 	"Golf", "Hotel", "India", "Juliett", "Kilo", "Lima",
 	"Mike", "November", "Oscar", "Papa", "Quebec", "Romeo",
 	"Sierra", "Tango", "Uniform", "Victor", "Whiskey", "X-ray",
@@ -19,6 +19,9 @@ var nato = []string{
 
 // randomInt returns a random int64 up to max; or -1 on error.
 func randomInt(max int64) int64 {
+	if max <= 0 {
+		return -1
+	}
 	n, err := rand.Int(rand.Reader, big.NewInt(max))
 	if err != nil {
 		return -1
@@ -40,7 +43,7 @@ func pickRandom(list []string, fallback string) string {
 
 // FlipCoin returns "heads" or "tails" at random.
 func FlipCoin() string {
-	if f := randomInt(2); f == 0 {
+	if randomInt(2) == 0 {
 		return "heads"
 	}
 	return "tails"
@@ -89,9 +92,15 @@ func RandomId() string {
 	return base64.RawURLEncoding.EncodeToString(bytes)
 }
 
+// RandomMask returns a name and number combination.
+func RandomMask() string {
+	return RandomName() + RandomNumber()
+}
+
 // Random returns a random string of a given length.
 func Random(length int) string {
-	const charset = "ABCDEFGHJKLMNPQRTVWXYZabcdefghijkmnpqrtvwxyz2346789"
+	const charset = `ABCDEFGHJKLMNPQRTVWXYZ` +
+		`-_2346789` + `abcdefghijkmnpqrtvwxyz`
 	bytes := make([]byte, length)
 	for i := range bytes {
 		n := randomInt(int64(len(charset)))
@@ -115,6 +124,8 @@ func GetRandom(path string) string {
 		response = RandomHex(defaultLength)
 	case "id":
 		response = RandomId()
+	case "mask":
+		response = RandomMask()
 	case "name":
 		response = RandomName()
 	case "nato":
@@ -124,7 +135,7 @@ func GetRandom(path string) string {
 	case "pass":
 		response = Random(defaultLength)
 	default:
-		response = RandomName() + RandomNumber()
+		response = RandomMask()
 	}
 	return response
 }

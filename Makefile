@@ -136,9 +136,10 @@ install-service:
 	@printf "Installed $(DEST_SERV)\n"
 
 reload-service:
-	@printf "Restarting services ...\n"
+	@printf "Restarting services ... "
 	@sudo $(SYSTEMCTL) daemon-reload
 	@sudo $(SYSTEMCTL) restart $(SERVICE)
+	@printf "done\n"
 
 fmt:
 	@$(GOCMD) fmt $(PKG)

@@ -24,36 +24,48 @@ func Upload(app *config.App) http.HandlerFunc {
 		contentLength := r.ContentLength
 
 		if contentLength > maxFileBytes {
-			writeJSON(w, http.StatusRequestEntityTooLarge, errorJSON(app.FileSize))
+			writeJSON(w, http.StatusRequestEntityTooLarge,
+				errorJSON(app.FileSize))
 			app.Log.Error(app.FileSize,
-				"fileSizeMb", contentLength/(1<<20), "user", req)
+				"fileSizeMb", contentLength/(1<<20),
+				"user", req)
 			return
 		}
 
 		app.CountFiles()
 		maxTotalBytes := app.GetMaxTotalFilesBytes()
+		totalBytes := int64(app.SizeFiles) + contentLength
 
-		if maxTotalBytes > 0 && int64(app.SizeFiles)+contentLength > maxTotalBytes {
-			writeJSON(w, http.StatusRequestEntityTooLarge, errorJSON(app.FileSizeAll))
+		if maxTotalBytes > 0 && totalBytes > maxTotalBytes {
+			writeJSON(w, http.StatusRequestEntityTooLarge,
+				errorJSON(app.FileSizeAll))
 			app.Log.Error(app.FileSizeAll,
-				"totalSize", app.SizeFiles, "user", req)
+				"totalSize", app.SizeFiles,
+				"user", req)
 			return
 		}
 
 		r.Body = http.MaxBytesReader(w, r.Body, maxFileBytes)
 		if err := r.ParseMultipartForm(maxFileBytes); err != nil {
-			writeJSON(w, http.StatusInternalServerError, errorJSON(app.Copy))
-			app.Log.Error("upload failed", "error", err.Error(), "user", req)
+			writeJSON(w, http.StatusInternalServerError,
+				errorJSON(app.Copy))
+			app.Log.Error("upload failed",
+				"error", err.Error(),
+				"user", req)
 			return
 		}
 
 		downloadLimit := parseFormInt(r, formFieldDownloads,
 			app.Downloads, app.FileLimits.MaxDownloads)
-		app.Log.Debug("got form value", formFieldDownloads, downloadLimit)
+		app.Log.Debug("got downloads form value",
+			formFieldDownloads, downloadLimit,
+			"user", req)
 
 		durationLimit := parseFormDuration(r, formFieldDuration,
 			app.Expiration.Duration, app.FileLimits.MaxDuration)
-		app.Log.Debug("got form value", formFieldDuration, durationLimit)
+		app.Log.Debug("got duration form value",
+			formFieldDuration, durationLimit,
+			"user", req)
 
 		var upload storage.File
 		var uploads []storage.File
@@ -62,8 +74,10 @@ func Upload(app *config.App) http.HandlerFunc {
 
 		formFileContent := r.MultipartForm.File["file"]
 		if formFileContent == nil {
-			writeJSON(w, http.StatusBadRequest, errorJSON(app.Form))
-			app.Log.Error(app.Form, "user", req)
+			writeJSON(w, http.StatusBadRequest,
+				errorJSON(app.Form))
+			app.Log.Error(app.Form,
+				"user", req)
 			return
 		}
 		wg.Add(len(formFileContent))
@@ -75,19 +89,26 @@ func Upload(app *config.App) http.HandlerFunc {
 				defer mu.Unlock()
 				file, err := fileHeader.Open()
 				if err != nil {
-					app.Log.Error(app.Copy, "error", err.Error(), "user", req)
+					app.Log.Error(app.Copy,
+						"error", err.Error(),
+						"user", req)
 				}
 				defer func() {
 					if err := file.Close(); err != nil {
-						app.Log.Error(app.Form, "error", err.Error(), "user", req)
+						app.Log.Error(app.Form,
+							"error", err.Error(),
+							"user", req)
 						return
 					}
 				}()
 
 				var buf bytes.Buffer
 				if _, err := io.Copy(&buf, file); err != nil {
-					writeJSON(w, http.StatusInternalServerError, errorJSON(app.Copy))
-					app.Log.Error(app.Copy, "error", err.Error(), "user", req)
+					writeJSON(w, http.StatusInternalServerError,
+						errorJSON(app.Copy))
+					app.Log.Error(app.Copy,
+						"error", err.Error(),
+						"user", req)
 					return
 				}
 
@@ -139,13 +160,14 @@ func Upload(app *config.App) http.HandlerFunc {
 		}
 		wg.Wait()
 
+		app.Log.Info("files uploaded",
+			"files", uploads,
+			"user", req)
+
 		if req.IsBrowser {
-			toRoot(w, r, app.Root)
+			toPath(w, r, app.Root)
 		} else {
 			writeJSON(w, http.StatusOK, uploads)
 		}
-
-		app.Log.Info("file(s) uploaded",
-			"files", uploads, "user", req)
 	}
 }

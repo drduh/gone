@@ -15,7 +15,8 @@ func Status(app *config.App) http.HandlerFunc {
 		if req == nil {
 			return
 		}
-		app.Log.Info("serving status", "user", req)
+		app.Log.Info("serving status",
+			"user", req)
 
 		versionInfo := version.Get()
 		if !app.ShowBuild {
@@ -25,15 +26,17 @@ func Status(app *config.App) http.HandlerFunc {
 		}
 
 		app.CountStorage()
+
 		response := templates.Status{
-			Version:  versionInfo,
-			Port:     app.Port,
-			Uptime:   app.Uptime(),
-			Hostname: app.Hostname,
-			Index:    app.Index,
-			Default:  app.Default,
-			Limit:    app.Limit,
-			Sizes:    app.Sizes,
+			Version:    versionInfo,
+			ServerAddr: app.ServerAddr,
+			ServerPort: app.ServerPort,
+			Uptime:     app.Uptime(),
+			Hostname:   app.Hostname,
+			Index:      app.Index,
+			Default:    app.Default,
+			Limit:      app.Limit,
+			Sizes:      app.Sizes,
 		}
 
 		writeJSON(w, http.StatusOK, response)

@@ -1,12 +1,20 @@
 package settings
 
-import "fmt"
+import (
+	"fmt"
+	"net"
+)
 
 // Validate returns an error if a setting is determined to be invalid.
 func (s *Settings) Validate() error {
-	if s.Port < 1 || s.Port > 65535 {
-		return fmt.Errorf("port must be 1..65535, got %d",
-			s.Port)
+	if s.ServerAddr != "" && net.ParseIP(s.ServerAddr) == nil {
+		return fmt.Errorf("server address must be valid IP: %s",
+			s.ServerAddr)
+	}
+
+	if s.ServerPort < 1 || s.ServerPort > 65535 {
+		return fmt.Errorf("server port must be 1..65535, got %d",
+			s.ServerPort)
 	}
 
 	if s.TimeFormat == "" {

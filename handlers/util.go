@@ -1,7 +1,6 @@
 package handlers
 
 import (
-	"net"
 	"net/http"
 	"strings"
 
@@ -10,9 +9,28 @@ import (
 	"github.com/drduh/gone/util"
 )
 
-// toRoot redirects an HTTP request to the root/index handler.
-func toRoot(w http.ResponseWriter, r *http.Request, rootPath string) {
-	http.Redirect(w, r, rootPath, http.StatusSeeOther)
+// authRequest returns only allowed parsed http Requests,
+// rejecting unauthenticated and unauthorized attempts.
+func authRequest(w http.ResponseWriter,
+	r *http.Request, app *config.App) *Request {
+	req := parseRequest(r)
+
+	if !isAuthenticated(app, r) {
+		deny(w, http.StatusForbidden, app.Deny)
+		app.Log.Error(app.Deny,
+			"user", req)
+		return nil
+	}
+
+	if !app.Authorize(app.ReqsPerMinute) {
+		deny(w, http.StatusTooManyRequests, app.RateLimit)
+		app.Log.Error(app.RateLimit,
+			"limit", app.ReqsPerMinute,
+			"user", req)
+		return nil
+	}
+
+	return req
 }
 
 // isAuthenticated returns true if authentication for a route
@@ -28,16 +46,20 @@ func isAuthenticated(app *config.App, r *http.Request) bool {
 		app.Static:   app.Require.Static,
 		app.Status:   app.Require.Status,
 		app.Upload:   app.Require.Upload,
-		app.User:     app.Require.User,
+		app.UserInfo: app.Require.UserInfo,
 		app.Wall:     app.Require.Wall,
 	}
 
 	path := util.GetBasePath(r.URL.Path)
 	required, exists := reqs[path]
 	app.Log.Debug("checking authn",
-		"path", path, "required", required, "exists", exists)
+		"path", path,
+		"required", required,
+		"exists", exists)
+
 	if !exists || !required {
-		app.Log.Debug("authn not required", "path", r.URL.Path)
+		app.Log.Debug("authn not required",
+			"path", path)
 		return true
 	}
 
@@ -46,14 +68,11 @@ func isAuthenticated(app *config.App, r *http.Request) bool {
 
 // parseRequest returns a Request with masked address.
 func parseRequest(r *http.Request) *Request {
-	address, _, err := net.SplitHostPort(r.RemoteAddr)
-	if err != nil {
-		address = "unknown address"
-	}
+	mask := getMask(r.RemoteAddr)
 	return &Request{
 		Address: r.RemoteAddr,
 		Agent:   r.UserAgent(),
-		Mask:    util.Mask(address),
+		Mask:    mask,
 		Path:    r.URL.String(),
 		IsBrowser: strings.Contains(
 			r.Header.Get("Accept"), "text/html",
@@ -61,20 +80,18 @@ func parseRequest(r *http.Request) *Request {
 	}
 }
 
-// authRequest returns only allowed parsed http Requests,
-// rejecting unauthenticated and unauthorized attempts.
-func authRequest(w http.ResponseWriter,
-	r *http.Request, app *config.App) *Request {
-	req := parseRequest(r)
-	if !isAuthenticated(app, r) {
-		deny(w, http.StatusForbidden, app.Deny)
-		app.Log.Error(app.Deny, "user", req)
-		return nil
-	}
-	if !app.Authorize(app.ReqsPerMinute) {
-		deny(w, http.StatusTooManyRequests, app.RateLimit)
-		app.Log.Error(app.RateLimit, "user", req)
-		return nil
-	}
-	return req
+// toPath redirects an HTTP request to a path.
+func toPath(w http.ResponseWriter,
+	r *http.Request, path string) {
+	http.Redirect(w, r, path, http.StatusSeeOther)
+}
+
+// getMask returns a masked address string.
+func getMask(addr string) string {
+	return util.GetMaskAddr(addr, false)
+}
+
+// refreshMask sets a new masked address.
+func refreshMask(addr string) {
+	util.GetMaskAddr(addr, true)
 }

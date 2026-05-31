@@ -9,9 +9,11 @@ const (
 	formFieldMessage   = "message"
 	formFieldTheme     = "theme"
 	formFieldWall      = "wall"
+
+	templatesData = "data/*.tmpl"
 )
 
-// Request represents user operation metadata.
+// Request represents user request metadata.
 type Request struct {
 
 	// Request path ("/")

@@ -33,6 +33,6 @@ type App struct {
 	// Uploaded content storage
 	storage.Storage
 
-	// Global rate limiting requests throttle
+	// Global requests rate limiter
 	auth.RequestThrottle
 }

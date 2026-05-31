@@ -19,28 +19,34 @@ func Wall(app *config.App) http.HandlerFunc {
 		if r.Method == http.MethodPost {
 			if r.FormValue(formFieldClear) != "" {
 				app.Log.Debug("clearing wall",
-					"length", app.CharsWall, "user", req)
+					"length", app.CharsWall,
+					"user", req)
 				app.ClearWall()
-				app.Log.Info("cleared wall", "user", req)
+				app.Log.Info("cleared wall",
+					"user", req)
 			}
 
 			formContent := r.FormValue(formFieldWall)
 			if formContent != "" {
 				app.Log.Debug("updating wall",
-					"length", len(formContent), "user", req)
+					"length", len(formContent),
+					"user", req)
 				app.WallContent = formContent
-				app.Log.Info("updated wall", "user", req)
+				app.Log.Info("updated wall",
+					"length", len(formContent),
+					"user", req)
 			}
 
 			if req.IsBrowser {
-				toRoot(w, r, app.Root)
+				toPath(w, r, app.Root)
 				return
 			}
 		}
 
 		if r.URL.Query().Get("download") == "all" {
 			app.ServeWall(w)
-			app.Log.Info("downloaded wall", "user", req)
+			app.Log.Info("downloaded wall",
+				"user", req)
 			return
 		}
 

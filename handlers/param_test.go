@@ -9,7 +9,7 @@ import (
 // TestGetRequestParameter validates the parameter value
 // is read from the URL or form.
 func TestGetRequestParameter(t *testing.T) {
-	tests := []struct {
+	cases := []struct {
 		name    string
 		request *http.Request
 		pathLen int
@@ -59,7 +59,7 @@ func TestGetRequestParameter(t *testing.T) {
 			want:    "",
 		},
 	}
-	for _, test := range tests {
+	for _, test := range cases {
 		t.Run(test.name, func(t *testing.T) {
 			result := getRequestParameter(test.request, test.pathLen, test.field)
 			if result != test.want {
