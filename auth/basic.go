@@ -1,30 +1,21 @@
 package auth
 
-import "net/http"
+import "crypto/subtle"
 
-// Basic returns true if request header or form value
-// matches configured token, or false with a delay.
-func Basic(header, token string, r *http.Request) bool {
+// auth returns true if all bytes are equal.
+func auth(secret, token []byte) bool {
+	return subtle.ConstantTimeCompare(secret, token) == 1
+}
 
-	// Allow access if token is not configured
-	if token == "" {
-		return true
+// Basic returns true if token matches secret.
+func Basic(secret, token []byte) bool {
+	if len(token) == 0 {
+		return false
 	}
 
-	// Check header for non-empty token and validate
-	tokenHeader := r.Header.Get(header)
-	if tokenHeader != "" && tokenHeader == token {
+	if auth(secret, token) {
 		return true
 	}
-
-	// Check form field value
-	tokenForm := r.FormValue(header)
-	if tokenForm != "" && tokenForm == token {
-		return true
-	}
-
-	// Slow failed attempts
-	applyTarpit()
 
 	return false
 }

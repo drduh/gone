@@ -1,48 +1,36 @@
 package auth
 
-import (
-	"net/http"
-	"net/url"
-	"testing"
-)
+import "testing"
 
-// TestBasic tests authentication with header and form values.
+// TestBasic test basic token auth.
 func TestBasic(t *testing.T) {
-	orig := Tarpit
-	t.Cleanup(func() { SetTarpit(orig) })
-	SetTarpit(0)
-	headerName := "X-Auth"
-	tests := []struct {
-		testName    string
-		tokenValue  string
-		headerValue string
-		formValue   string
+	secret := []byte("correct-token")
+
+	cases := []struct {
+		name  string
+		token []byte
+		want  bool
 	}{
-		{"noAuth", "", "", ""},
-		{"headerPass", "valid-token", "valid-token", ""},
-		{"headerFail", "valid-token", "wrong-token", ""},
-		{"formPass", "valid-token", "", "valid-token"},
-		{"formFail", "valid-token", "", "wrong-token"},
-		{"allPass", "valid-token", "valid-token", "valid-token"},
+		{"correct token",
+			[]byte("correct-token"), true},
+		{"incorrect token",
+			[]byte("incorrect-token"), false},
+		{"correct token with trailing byte",
+			[]byte("correct-tokenz"), false},
+		{"partial correct token",
+			[]byte("correct"), false},
+		{"empty token",
+			[]byte{}, false},
+		{"nil token",
+			nil, false},
 	}
-	for _, tt := range tests {
-		t.Run(tt.testName, func(t *testing.T) {
-			req := &http.Request{
-				Header: map[string][]string{headerName: {tt.headerValue}},
-				Form:   url.Values{headerName: {tt.formValue}},
-			}
-			req.PostForm = req.Form
-			allowed := false
-			if tt.tokenValue == "" {
-				allowed = true
-			} else if tt.headerValue == tt.tokenValue {
-				allowed = true
-			} else if tt.formValue == tt.tokenValue {
-				allowed = true
-			}
-			ret := Basic(headerName, tt.tokenValue, req)
-			if ret != allowed {
-				t.Errorf("expected %v, got %v", allowed, ret)
+
+	for _, tc := range cases {
+		t.Run(tc.name, func(t *testing.T) {
+			got := Basic(secret, tc.token)
+			if got != tc.want {
+				t.Errorf("Basic(%q, %q) should be %v",
+					secret, tc.token, tc.want)
 			}
 		})
 	}
