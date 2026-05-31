@@ -1,8 +1,8 @@
-.DS_Store
 *.log
 *.out
 *.sh
+*.test
+.DS_Store
 main
 release
 testCoverage*
-*test

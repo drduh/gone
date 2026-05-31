@@ -126,8 +126,7 @@ func TestMessageHandlerDownloadAll(t *testing.T) {
 	}
 
 	disp := rr.Header().Get("Content-Disposition")
-	if disp != "" &&
-		disp != `attachment; filename="messages.txt"` {
+	if disp != `attachment; filename="messages.txt"` {
 		t.Errorf("invalid Content-Disposition: %q", disp)
 	}
 }

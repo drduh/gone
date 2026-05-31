@@ -15,7 +15,7 @@ func TestWallGet(t *testing.T) {
 
 	req := httptest.NewRequest(http.MethodGet,
 		app.Wall, nil)
-	req.RemoteAddr = "127.0.0.1:12345"
+	req.RemoteAddr = testAddrAndPort
 
 	rr := httptest.NewRecorder()
 	Wall(app).ServeHTTP(rr, req)
@@ -44,7 +44,7 @@ func TestWallPostUpdate(t *testing.T) {
 	req := httptest.NewRequest(http.MethodPost,
 		app.Wall, strings.NewReader(values))
 	req.Header.Set("Content-Type", formContentType)
-	req.RemoteAddr = "127.0.0.1:12345"
+	req.RemoteAddr = testAddrAndPort
 
 	rr := httptest.NewRecorder()
 	Wall(app).ServeHTTP(rr, req)
@@ -73,7 +73,7 @@ func TestWallPostClear(t *testing.T) {
 	req := httptest.NewRequest(http.MethodPost,
 		app.Wall, strings.NewReader(values))
 	req.Header.Set("Content-Type", formContentType)
-	req.RemoteAddr = "127.0.0.1:12345"
+	req.RemoteAddr = testAddrAndPort
 
 	rr := httptest.NewRecorder()
 	Wall(app).ServeHTTP(rr, req)
@@ -103,7 +103,7 @@ func TestWallGetDownloadAll(t *testing.T) {
 
 	req := httptest.NewRequest(http.MethodGet,
 		app.Wall+"?download=all", nil)
-	req.RemoteAddr = "127.0.0.1:12345"
+	req.RemoteAddr = testAddrAndPort
 
 	rr := httptest.NewRecorder()
 	Wall(app).ServeHTTP(rr, req)
@@ -120,8 +120,7 @@ func TestWallGetDownloadAll(t *testing.T) {
 	}
 
 	disp := rr.Header().Get("Content-Disposition")
-	if disp != "" &&
-		disp != `attachment; filename="wall.txt"` {
+	if disp != `attachment; filename="wall.txt"` {
 		t.Errorf("invalid Content-Disposition: %q", disp)
 	}
 }

@@ -34,7 +34,7 @@ func TestListHandler(t *testing.T) {
 
 	rr := httptest.NewRecorder()
 	req := httptest.NewRequest(http.MethodGet, app.List, nil)
-	req.RemoteAddr = "127.0.0.1:12345"
+	req.RemoteAddr = testAddrAndPort
 
 	List(app).ServeHTTP(rr, req)
 
@@ -92,7 +92,7 @@ func TestListHandlerForbidden(t *testing.T) {
 
 	rr := httptest.NewRecorder()
 	req := httptest.NewRequest(http.MethodGet, app.List, nil)
-	req.RemoteAddr = "127.0.0.1:12345"
+	req.RemoteAddr = testAddrAndPort
 
 	List(app).ServeHTTP(rr, req)
 

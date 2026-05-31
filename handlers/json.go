@@ -12,9 +12,7 @@ func deny(w http.ResponseWriter, code int, reason string) {
 
 // errorJSON returns an error string map containing the string.
 func errorJSON(s string) map[string]string {
-	return map[string]string{
-		"error": s,
-	}
+	return map[string]string{"error": s}
 }
 
 // writeJSON serves a JSON response with data.

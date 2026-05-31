@@ -76,11 +76,13 @@ button[type="submit"],
 input[type="checkbox"],
 input[type="file"],
 input[type="number"],
+input[type="password"],
 input[type="submit"],
 input[type="text"],
 input::file-selector-button,
 .wallContent,
 select {
+  appearance: none;
   background-color: var(--bg-dark);
   border: none;
   border-radius: var(--box-radius);

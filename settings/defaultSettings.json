@@ -1,11 +1,11 @@
 {
-  "serverAddr":    "",
+  "serverAddr":    "127.0.0.1",
   "serverPort":    8080,
   "showBuild":     true,
   "audit": {
     "logDebug":    false,
     "logFilename": "",
-    "timeFormat":  "Monday Jan 2 15:04"
+    "timeFormat":  "Monday Jan 2 15:04:05"
   },
   "auth": {
     "basic": {

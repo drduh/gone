@@ -17,9 +17,11 @@ func getDefaultTheme(theme string) string {
 	if theme != autoTheme {
 		return theme
 	}
+
 	if util.IsDaytimeAt(time.Now()) {
 		return "light"
 	}
+
 	return "dark"
 }
 
@@ -36,5 +38,6 @@ func getTheme(w http.ResponseWriter, r *http.Request,
 		http.SetCookie(w, auth.NewCookie(theme, id, t))
 		return theme
 	}
+
 	return auth.GetCookie(w, r, defaultTheme, id, t)
 }
