@@ -24,7 +24,6 @@ func TestWriteJSON(t *testing.T) {
 			"Content-Type"); ct != "application/json; charset=utf-8" {
 			t.Errorf("unexpected Content-Type: %s", ct)
 		}
-
 		var got map[string]string
 		if err := json.NewDecoder(rr.Body).Decode(&got); err != nil {
 			t.Fatalf("failed to decode response body: %v", err)
@@ -47,12 +46,13 @@ func TestWriteJSON(t *testing.T) {
 	})
 
 	t.Run("validate struct encoding", func(t *testing.T) {
+		rr := httptest.NewRecorder()
+
 		type User struct {
 			ID   int    `json:"id"`
 			Name string `json:"name"`
 		}
 
-		rr := httptest.NewRecorder()
 		writeJSON(rr, http.StatusOK,
 			User{ID: 1, Name: "Bob"})
 
@@ -60,7 +60,6 @@ func TestWriteJSON(t *testing.T) {
 			t.Fatalf("expected %d, got %d",
 				http.StatusOK, rr.Code)
 		}
-
 		var got User
 		if err := json.NewDecoder(rr.Body).Decode(&got); err != nil {
 			t.Fatalf("failed to decode body: %v", err)
@@ -72,8 +71,13 @@ func TestWriteJSON(t *testing.T) {
 
 	t.Run("validate slice encoding", func(t *testing.T) {
 		rr := httptest.NewRecorder()
+
 		writeJSON(rr, http.StatusOK, []int{1, 2, 3})
 
+		if rr.Code != http.StatusOK {
+			t.Errorf("expected %d, got %d",
+				http.StatusOK, rr.Code)
+		}
 		var got []int
 		if err := json.NewDecoder(rr.Body).Decode(&got); err != nil {
 			t.Fatalf("failed to decode body: %v", err)
@@ -86,6 +90,7 @@ func TestWriteJSON(t *testing.T) {
 
 	t.Run("validate nil encoding", func(t *testing.T) {
 		rr := httptest.NewRecorder()
+
 		writeJSON(rr, http.StatusOK, nil)
 
 		if rr.Code != http.StatusOK {

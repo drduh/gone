@@ -18,11 +18,11 @@ var nato = []string{
 }
 
 // randomInt returns a random int64 up to max; or -1 on error.
-func randomInt(max int64) int64 {
-	if max <= 0 {
+func randomInt(maximum int64) int64 {
+	if maximum <= 0 {
 		return -1
 	}
-	n, err := rand.Int(rand.Reader, big.NewInt(max))
+	n, err := rand.Int(rand.Reader, big.NewInt(maximum))
 	if err != nil {
 		return -1
 	}
@@ -43,7 +43,8 @@ func pickRandom(list []string, fallback string) string {
 
 // FlipCoin returns "heads" or "tails" at random.
 func FlipCoin() string {
-	if randomInt(2) == 0 {
+	const coinSides = 2
+	if randomInt(coinSides) == 0 {
 		return "heads"
 	}
 	return "tails"
@@ -63,7 +64,7 @@ func RandomHex(length int) string {
 // RandomName returns a random string from the names list,
 // like "Alice", "Zack"; or "Bob" on error.
 func RandomName() string {
-	return pickRandom(names, "Bob")
+	return pickRandom(loadedNames, "Bob")
 }
 
 // RandomNato returns a random string from the nato list,
@@ -75,7 +76,8 @@ func RandomNato() string {
 // RandomNumber returns a zero-padded 3-digit string,
 // like "007", "123", "999"; or "000" on error.
 func RandomNumber() string {
-	n := randomInt(1000)
+	const maxNumber = 999
+	n := randomInt(maxNumber)
 	if n < 0 {
 		return "000"
 	}
@@ -85,7 +87,8 @@ func RandomNumber() string {
 // RandomId returns a 32-byte URL-encoded random string;
 // or "unknown" on error.
 func RandomId() string {
-	bytes := make([]byte, 32)
+	const randomTokenBytes = 32
+	bytes := make([]byte, randomTokenBytes)
 	if _, err := rand.Read(bytes); err != nil {
 		return "unknown"
 	}

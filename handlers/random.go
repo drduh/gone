@@ -19,7 +19,7 @@ func Random(app *config.App) http.HandlerFunc {
 			len(app.Random), "random")
 		count := app.RandomLimits.StrCount
 		results := make([]string, count)
-		for i := 0; i < count; i++ {
+		for i := range count {
 			results[i] = util.GetRandom(path)
 		}
 

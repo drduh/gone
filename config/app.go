@@ -12,18 +12,6 @@ import (
 // App represents the global application configuration.
 type App struct {
 
-	// Application version and build info
-	Version map[string]string
-
-	// Server hostname
-	Hostname string
-
-	// Server start time
-	StartTime time.Time
-
-	// Structured logger/output
-	Log *slog.Logger
-
 	// Application modes (debug, version, etc.)
 	Modes
 
@@ -35,4 +23,16 @@ type App struct {
 
 	// Global requests rate limiter
 	auth.RequestThrottle
+
+	// Application version and build info
+	Version map[string]string
+
+	// Server hostname
+	Hostname string
+
+	// Server start time
+	StartTime time.Time
+
+	// Structured logger/output
+	Log *slog.Logger
 }
