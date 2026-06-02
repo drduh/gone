@@ -8,6 +8,18 @@ import (
 // Status represents server state and configuration.
 type Status struct {
 
+	// Defaults configuration
+	settings.Default `json:"defaultOptions,omitempty"`
+
+	// Limits configuration
+	settings.Limit `json:"limits"`
+
+	// Index page configuration
+	settings.Index `json:"indexPage"`
+
+	// Storage content total sizes
+	storage.Sizes `json:"storageSizes"`
+
 	// Formatted time since start ("3m45s")
 	Uptime string `json:"uptime,omitempty"`
 
@@ -22,16 +34,4 @@ type Status struct {
 
 	// Application version and build information
 	Version map[string]string `json:"buildInfo,omitempty"`
-
-	// Defaults configuration
-	settings.Default `json:"defaultOptions,omitempty"`
-
-	// Limits configuration
-	settings.Limit `json:"limits,omitempty"`
-
-	// Index page configuration
-	settings.Index `json:"indexPage,omitempty"`
-
-	// Storage content total sizes
-	storage.Sizes `json:"storageSizes,omitempty"`
 }

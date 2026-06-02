@@ -24,7 +24,7 @@ func (f *File) setId() {
 }
 
 // SetSize sets File byte count, content length and
-// and formatted size.
+// formatted size.
 func (f *File) setSize() {
 	f.Bytes = len(f.Data)
 	f.Length = strconv.Itoa(f.Bytes)

@@ -16,6 +16,9 @@ const (
 // Storage represents content uploaded by users.
 type Storage struct {
 
+	// Storage content total sizes
+	Sizes `json:"storageSizes,omitempty"`
+
 	// Uploaded files
 	Files map[string]*File `json:"files,omitempty"`
 
@@ -24,13 +27,19 @@ type Storage struct {
 
 	// Shared wall content
 	WallContent string `json:"wallContent,omitempty"`
-
-	// Storage content total sizes
-	Sizes `json:"storageSizes,omitempty"`
 }
 
 // File represents a user-uploaded file.
 type File struct {
+
+	// Downloads information
+	Downloads `json:"downloads,omitempty"`
+
+	// Uploader information
+	Owner `json:"owner,omitempty"`
+
+	// Timing information
+	Time `json:"time,omitempty"`
 
 	// Unique identifier
 	Id string `json:"id,omitempty"`
@@ -44,9 +53,6 @@ type File struct {
 	// Content hash sum
 	Sum string `json:"sum,omitempty"`
 
-	// Downloads information
-	Downloads `json:"downloads,omitempty"`
-
 	// Number of bytes
 	Bytes int `json:"bytes,omitempty"`
 
@@ -58,28 +64,22 @@ type File struct {
 
 	// File type (based on name extension)
 	Type string `json:"type,omitempty"`
-
-	// Uploader information
-	Owner `json:"owner,omitempty"`
-
-	// Timing information
-	Time `json:"time,omitempty"`
 }
 
 // Message represents a user-submitted text message.
 type Message struct {
-
-	// Message count/order
-	Count int `json:"count,omitempty"`
-
-	// Message content
-	Data string `json:"data,omitempty"`
 
 	// Owner information
 	Owner `json:"owner,omitempty"`
 
 	// Timing information
 	Time `json:"time,omitempty"`
+
+	// Message count/order
+	Count int `json:"count,omitempty"`
+
+	// Message content
+	Data string `json:"data,omitempty"`
 }
 
 // Owner represents metadata about a user.

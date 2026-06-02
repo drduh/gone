@@ -16,6 +16,7 @@ func authRequest(w http.ResponseWriter,
 	req := parseRequest(r)
 
 	if !isAuthenticated(app, r) {
+		auth.ApplyTarpit()
 		deny(w, http.StatusForbidden, app.Deny)
 		app.Log.Error(app.Deny,
 			"user", req)
@@ -23,6 +24,7 @@ func authRequest(w http.ResponseWriter,
 	}
 
 	if !app.Authorize(app.ReqsPerMinute) {
+		auth.ApplyTarpit()
 		deny(w, http.StatusTooManyRequests, app.RateLimit)
 		app.Log.Error(app.RateLimit,
 			"limit", app.ReqsPerMinute,
@@ -31,6 +33,16 @@ func authRequest(w http.ResponseWriter,
 	}
 
 	return req
+}
+
+// getToken reads the token from the request header,
+// or posted form value.
+func getToken(field string, r *http.Request) []byte {
+	value := r.Header.Get(field)
+	if value == "" {
+		value = r.PostFormValue(field)
+	}
+	return []byte(value)
 }
 
 // isAuthenticated returns true if authentication for a route
@@ -63,7 +75,9 @@ func isAuthenticated(app *config.App, r *http.Request) bool {
 		return true
 	}
 
-	return auth.Basic(app.Basic.Field, app.Basic.Token, r)
+	token := getToken(app.Basic.Field, r)
+	secret := []byte(app.Basic.Token)
+	return auth.Basic(secret, token)
 }
 
 // parseRequest returns a Request with masked address.

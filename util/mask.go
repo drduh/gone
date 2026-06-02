@@ -7,11 +7,16 @@ import (
 
 var masks sync.Map
 
-// GetMask creates or loads a masked string.
+// GetMask creates or loads a masked string, with
+// an option to refresh an assigned mask.
 func GetMask(s string, refresh bool) string {
 	if !refresh {
 		if name, ok := masks.Load(s); ok {
-			return name.(string)
+			str, ok := name.(string)
+			if !ok {
+				return "maskError"
+			}
+			return str
 		}
 	}
 	mask := GetRandom("mask")

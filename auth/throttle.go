@@ -10,8 +10,7 @@ func getCutoff(t time.Time) time.Time {
 }
 
 // Authorize returns true if the RequestThrottle limit
-// is not exceeded within the cutoff period, or returns
-// false and slows fails attempts.
+// is not exceeded within the cutoff period.
 func (r *RequestThrottle) Authorize(limit int) bool {
 	if limit <= 0 {
 		return true
@@ -31,7 +30,6 @@ func (r *RequestThrottle) Authorize(limit int) bool {
 	}
 
 	if len(times) >= limit {
-		applyTarpit()
 		return false
 	}
 

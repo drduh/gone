@@ -8,6 +8,24 @@ import (
 // Index represents index HTML page elements.
 type Index struct {
 
+	// Authentication configuration
+	settings.Auth
+
+	// Content sharing defaults
+	settings.Default
+
+	// Index page HTML properties
+	settings.Index
+
+	// Content limits
+	settings.Limit
+
+	// Configured routable paths
+	settings.Paths
+
+	// Configured storage (Files, Messages, Wall)
+	storage.Storage
+
 	// Display build details in footer
 	ShowBuild bool
 
@@ -28,22 +46,4 @@ type Index struct {
 
 	// Application version/build information
 	Version map[string]string
-
-	// Authentication configuration
-	settings.Auth
-
-	// Content sharing defaults
-	settings.Default
-
-	// Index page HTML properties
-	settings.Index
-
-	// Content limits
-	settings.Limit
-
-	// Configured routable paths
-	settings.Paths
-
-	// Configured storage (Files, Messages, Wall)
-	storage.Storage
 }

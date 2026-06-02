@@ -5,6 +5,7 @@ import (
 	"net/http"
 	"net/http/httptest"
 	"net/url"
+	"strconv"
 	"strings"
 	"testing"
 
@@ -118,7 +119,7 @@ func TestMessageHandlerDownloadAll(t *testing.T) {
 
 	body := rr.Body.String()
 	for i := 1; i <= 3; i++ {
-		want := testContentMsgs + fmt.Sprint(i)
+		want := testContentMsgs + strconv.Itoa(i)
 		if !strings.Contains(body, want) {
 			t.Errorf("expected message %q, got %q",
 				want, body)
@@ -126,8 +127,7 @@ func TestMessageHandlerDownloadAll(t *testing.T) {
 	}
 
 	disp := rr.Header().Get("Content-Disposition")
-	if disp != "" &&
-		disp != `attachment; filename="messages.txt"` {
+	if disp != `attachment; filename="messages.txt"` {
 		t.Errorf("invalid Content-Disposition: %q", disp)
 	}
 }
@@ -140,7 +140,7 @@ func TestMessageHandlerExceedCount(t *testing.T) {
 	handler := Message(app)
 	form := url.Values{}
 
-	for i := 0; i < app.MessageLimits.MaxCount; i++ {
+	for i := range app.MessageLimits.MaxCount {
 		form.Set("message", fmt.Sprintf("msg %d", i+1))
 		req := httptest.NewRequest(http.MethodPost,
 			"/", strings.NewReader(form.Encode()))

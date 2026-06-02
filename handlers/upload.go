@@ -46,6 +46,7 @@ func Upload(app *config.App) http.HandlerFunc {
 		}
 
 		r.Body = http.MaxBytesReader(w, r.Body, maxFileBytes)
+		//gosec:disable G120: memory bounded by MaxBytesReader
 		if err := r.ParseMultipartForm(maxFileBytes); err != nil {
 			writeJSON(w, http.StatusInternalServerError,
 				errorJSON(app.Copy))

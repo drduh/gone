@@ -6,7 +6,7 @@
     {{ else }}
     {{ if .Auth.Require.List }}
     <form action="{{ .Paths.List }}"
-          method="get">
+          method="post">
       {{ template "auth" . }}
       <input class="selectSubmit"
               type="submit"
@@ -14,7 +14,7 @@
     </form>
     {{ end }}
     <form action="{{ .Paths.Download }}"
-          method="get">
+          method="post">
       <br>
       {{ if not .Auth.Require.List }}
       <table>
@@ -31,17 +31,17 @@
         {{ range .Storage.Files }}
         <tr class="list-row">
           <td>
-            <label for="{{ .Id }}">{{ .Name }}
-              <br>({{ printf "%.6s" .Sum }})</label>
-            <input id="{{ .Id }}"
+            <label for="{{ printf "%.8s" .Id }}">{{ .Name }}
+              <br>({{ printf "%.8s" .Sum }})</label>
+            <input id="{{ printf "%.8s" .Id }}"
                  name="name"
                  type="radio"
                 value="{{ .Id }}" required>
           </td>
-          <td><label for="{{ .Id }}">{{ .Size }}</label></td>
-          <td><label for="{{ .Id }}">{{ .Type }}</label></td>
-          <td><label for="{{ .Id }}">{{ .Owner.Mask }}</label></td>
-          <td><label for="{{ .Id }}">{{ .Time.Remain }}</label></td>
+          <td><label for="{{ printf "%.8s" .Id }}">{{ .Size }}</label></td>
+          <td><label for="{{ printf "%.8s" .Id }}">{{ .Type }}</label></td>
+          <td><label for="{{ printf "%.8s" .Id }}">{{ .Owner.Mask }}</label></td>
+          <td><label for="{{ printf "%.8s" .Id }}">{{ .Time.Remain }}</label></td>
         </tr>
         {{ end }}
         </tbody>

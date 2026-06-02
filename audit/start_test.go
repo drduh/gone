@@ -6,22 +6,10 @@ import (
 	"testing"
 )
 
-// Temporary test directory cleanup.
-func cleanupTempDir(t *testing.T, tempDir string) {
-	t.Helper()
-	if err := os.RemoveAll(tempDir); err != nil {
-		t.Fatalf("failed to remove temp dir: %v", err)
-	}
-}
-
 // TestStartValidFilenames tests Auditor starts
 // with a valid filename.
 func TestStartValidFilenames(t *testing.T) {
-	tempDir, err := os.MkdirTemp("", "test-auditor-*")
-	if err != nil {
-		t.Fatalf("failed to create temp dir: %v", err)
-	}
-	defer cleanupTempDir(t, tempDir)
+	tempDir := t.TempDir()
 
 	cases := []struct {
 		name     string

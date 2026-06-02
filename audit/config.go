@@ -13,10 +13,12 @@ type Auditor struct {
 	// Configured options
 	Config
 
-	// Structured logger with custom handler
-	Log *slog.Logger
+	// Custom handler
 	slog.Handler
 	*log.Logger
+
+	// Structured logger
+	Log *slog.Logger
 }
 
 // Config represents an Auditor configuration.

@@ -15,7 +15,7 @@ var defaultNames = []string{
 	"Uma", "Victor", "Wendy", "Xavier", "Yvonne", "Zack",
 }
 
-var names = loadNames("/etc/gone/assets", "names.txt")
+var loadedNames = loadNames("/etc/gone/assets", "names.txt")
 
 // loadNames returns trimmed names from a file or
 // the default names list.

@@ -1,18 +1,25 @@
 package auth
 
-import "time"
+import (
+	"math/rand"
+	"sync/atomic"
+	"time"
+)
 
-var Tarpit = 2 * time.Second
+const jitterFactor = 0.2
 
-// SetTarpit configures the tarpit delay.
+var tarpit atomic.Int64
+
 func SetTarpit(d time.Duration) {
-	Tarpit = d
+	tarpit.Store(int64(d))
 }
 
-// applyTarpit applies the configured delay.
-func applyTarpit() {
-	if Tarpit <= 0 {
+func ApplyTarpit() {
+	base := time.Duration(tarpit.Load())
+	if base <= 0 {
 		return
 	}
-	time.Sleep(Tarpit)
+	jitter := time.Duration(
+		float64(base) * jitterFactor * rand.Float64())
+	time.Sleep(base + jitter)
 }

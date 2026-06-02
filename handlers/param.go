@@ -4,9 +4,11 @@ import "net/http"
 
 // getRequestParameter returns a parameter from the request
 // URL or a form value.
-func getRequestParameter(r *http.Request,
-	pathLen int, fieldName string) string {
-
+func getRequestParameter(
+	r *http.Request,
+	pathLen int,
+	fieldName string,
+) string {
 	if pathLen > len(r.URL.Path) {
 		return ""
 	}

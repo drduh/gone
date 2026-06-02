@@ -1,6 +1,9 @@
 package util
 
-import "testing"
+import (
+	"slices"
+	"testing"
+)
 
 // TestRandomInt tests for a value within expected range.
 func TestRandomInt(t *testing.T) {
@@ -33,13 +36,7 @@ func TestPickRandom(t *testing.T) {
 	fallback := "bar"
 
 	result := pickRandom(list, fallback)
-	found := false
-	for _, v := range list {
-		if result == v {
-			found = true
-			break
-		}
-	}
+	found := slices.Contains(list, result)
 	if !found && result != fallback {
 		t.Errorf("pickRandom returned %s", result)
 	}
@@ -60,13 +57,7 @@ func TestFlipCoin(t *testing.T) {
 // TestRandomName tests for a value from names list or "Bob".
 func TestRandomName(t *testing.T) {
 	result := RandomName()
-	found := false
-	for _, v := range names {
-		if result == v {
-			found = true
-			break
-		}
-	}
+	found := slices.Contains(loadedNames, result)
 	if !found && result != "Bob" {
 		t.Errorf("RandomName returned %s", result)
 	}
@@ -75,13 +66,7 @@ func TestRandomName(t *testing.T) {
 // TestRandomNato tests for a value from nato list or "Bravo".
 func TestRandomNato(t *testing.T) {
 	result := RandomNato()
-	found := false
-	for _, v := range nato {
-		if result == v {
-			found = true
-			break
-		}
-	}
+	found := slices.Contains(nato, result)
 	if !found && result != "Bravo" {
 		t.Errorf("RandomNato returned %s", result)
 	}

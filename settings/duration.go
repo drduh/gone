@@ -17,7 +17,7 @@ type Duration struct {
 
 // GetDuration converts a Duration to time.Duration.
 func (d *Duration) GetDuration() time.Duration {
-	return time.Duration(d.Duration)
+	return d.Duration
 }
 
 // UnmarshalJSON parses strings like "10", "10s", "30m", "20h".
