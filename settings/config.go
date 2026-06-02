@@ -6,25 +6,25 @@ package settings
 type Settings struct {
 
 	// Auditor options
-	Audit `json:"audit,omitempty"`
+	Audit `json:"audit"`
 
 	// Authentication requirements
-	Auth `json:"auth,omitempty"`
+	Auth `json:"auth"`
 
 	// Errors to serve
-	Error `json:"error,omitempty"`
+	Error `json:"error"`
 
 	// HTML index page options
-	Index `json:"indexPage,omitempty"`
+	Index `json:"indexPage"`
 
 	// Content sharing defaults
-	Default `json:"default,omitempty"`
+	Default `json:"default"`
 
 	// Content limits
-	Limit `json:"limit,omitempty"`
+	Limit `json:"limit"`
 
 	// Paths to route
-	Paths `json:"paths,omitempty"`
+	Paths `json:"paths"`
 
 	// IP address to listen on ("127.0.0.1")
 	ServerAddr string `json:"serverAddr,omitempty"`
@@ -61,7 +61,7 @@ type Auth struct {
 
 		// Authentication token string ("mySecret")
 		Token string `json:"token,omitempty"`
-	} `json:"basic,omitempty"`
+	} `json:"basic"`
 
 	// Require represents paths requiring authentication.
 	Require struct {
@@ -98,10 +98,10 @@ type Auth struct {
 
 		// Read and write wall content
 		Wall bool `json:"wall,omitempty"`
-	} `json:"require,omitempty"`
+	} `json:"require"`
 
 	// Duration to delay failed requests
-	TarpitDelay Duration `json:"tarpitDelay,omitempty"`
+	TarpitDelay Duration `json:"tarpitDelay"`
 }
 
 // Error represents responses error message strings.
@@ -163,8 +163,8 @@ type Index struct {
 		Id string `json:"id,omitempty"`
 
 		// Time cookie is valid for ("192h")
-		Time Duration `json:"time,omitempty"`
-	} `json:"cookie,omitempty"`
+		Time Duration `json:"time"`
+	} `json:"cookie"`
 
 	// Style represents theme options.
 	Style struct {
@@ -177,7 +177,7 @@ type Index struct {
 
 		// Theme to style with ("auto" for time-based option)
 		Theme string `json:"theme,omitempty"`
-	} `json:"style,omitempty"`
+	} `json:"style"`
 
 	// Placeholder represents placeholder text in forms.
 	Placeholder struct {
@@ -190,7 +190,7 @@ type Index struct {
 
 		// Message input field
 		Message string `json:"message,omitempty"`
-	} `json:"placeholder,omitempty"`
+	} `json:"placeholder"`
 }
 
 // Default represents content sharing default options.
@@ -200,7 +200,7 @@ type Default struct {
 	Downloads int `json:"downloads,omitempty"`
 
 	// Period of time before removing Files
-	Expiration Duration `json:"duration,omitempty"`
+	Expiration Duration `json:"duration"`
 }
 
 // Content represents limits on content.
@@ -213,13 +213,13 @@ type Limit struct {
 	FileLimits struct {
 
 		// Frequency of file expiration check
-		ExpiryCheck Duration `json:"expiryCheck,omitempty"`
+		ExpiryCheck Duration `json:"expiryCheck"`
 
 		// Maximum number of downloads until expiration
 		MaxDownloads int `json:"maxDownloads,omitempty"`
 
 		// Maximum duration until expiration
-		MaxDuration Duration `json:"maxDuration,omitempty"`
+		MaxDuration Duration `json:"maxDuration"`
 
 		// Extra characters allowed in file names
 		NameExtraChars string `json:"nameExtraChars,omitempty"`
@@ -232,7 +232,7 @@ type Limit struct {
 
 		// Maximum total size for all files (in Megabytes)
 		SizeTotalMb int64 `json:"sizeTotalMb,omitempty"`
-	} `json:"fileLimits,omitempty"`
+	} `json:"fileLimits"`
 
 	// MessageLimits represents message text limits.
 	MessageLimits struct {
@@ -242,21 +242,21 @@ type Limit struct {
 
 		// Maximum count of text messages
 		MaxCount int `json:"maxCount,omitempty"`
-	} `json:"messageLimits,omitempty"`
+	} `json:"messageLimits"`
 
 	// RandomLimits represents random string limits.
 	RandomLimits struct {
 
 		// Number of random strings to return
 		StrCount int `json:"strCount,omitempty"`
-	} `json:"randomLimits,omitempty"`
+	} `json:"randomLimits"`
 
 	// WallLimits represents wall text limits.
 	WallLimits struct {
 
 		// Maximum length of characters in wall content
 		LengthChars int `json:"lengthChars,omitempty"`
-	} `json:"wallLimits,omitempty"`
+	} `json:"wallLimits"`
 }
 
 // Paths represents paths to handle.

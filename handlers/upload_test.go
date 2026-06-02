@@ -17,7 +17,8 @@ func TestUploadFileTooLarge(t *testing.T) {
 	app := newTestApp()
 
 	reqBody := strings.NewReader("dummy")
-	req := httptest.NewRequest(http.MethodPost, "/upload", reqBody)
+	req := httptest.NewRequestWithContext(t.Context(),
+		http.MethodPost, "/upload", reqBody)
 	req.ContentLength = (app.FileLimits.SizeEachMb << 20) + 1
 
 	w := httptest.NewRecorder()
@@ -50,7 +51,8 @@ func TestUploadNoFile(t *testing.T) {
 		t.Fatalf("close multipart writer: %v", err)
 	}
 
-	req := httptest.NewRequest(http.MethodPost, "/upload", &b)
+	req := httptest.NewRequestWithContext(t.Context(),
+		http.MethodPost, "/upload", &b)
 	req.Header.Set("Content-Type", mw.FormDataContentType())
 
 	w := httptest.NewRecorder()
@@ -90,7 +92,8 @@ func TestUploadSuccess(t *testing.T) {
 		t.Fatalf("close multipart writer: %v", err)
 	}
 
-	req := httptest.NewRequest(http.MethodPost, "/upload", &b)
+	req := httptest.NewRequestWithContext(t.Context(),
+		http.MethodPost, "/upload", &b)
 	req.Header.Set("Content-Type", mw.FormDataContentType())
 
 	w := httptest.NewRecorder()

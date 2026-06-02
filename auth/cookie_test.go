@@ -16,8 +16,16 @@ const (
 
 // TestCookieExists tests GetCookie reads a cookie when it exists.
 func TestCookieExists(t *testing.T) {
-	req := httptest.NewRequest("GET", "/", nil)
-	req.AddCookie(&http.Cookie{Name: cookieId, Value: cookieValue})
+	req := httptest.NewRequestWithContext(t.Context(),
+		http.MethodGet, "/", nil)
+	req.AddCookie(&http.Cookie{
+		Name:     cookieId,
+		HttpOnly: true,
+		SameSite: http.SameSiteStrictMode,
+		Secure:   true,
+		Value:    cookieValue},
+	)
+
 	rr := httptest.NewRecorder()
 
 	result := GetCookie(rr, req, "default-value", cookieId, time.Hour)
@@ -29,7 +37,9 @@ func TestCookieExists(t *testing.T) {
 // TestCookieNotExists tests GetCookie sets and reads a cookie
 // when it does not exist.
 func TestCookieNotExists(t *testing.T) {
-	req := httptest.NewRequest("GET", "/", nil)
+	req := httptest.NewRequestWithContext(t.Context(),
+		http.MethodGet, "/", nil)
+
 	rr := httptest.NewRecorder()
 
 	result := GetCookie(rr, req, cookieValue, cookieId, time.Hour)

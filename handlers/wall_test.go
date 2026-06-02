@@ -13,8 +13,8 @@ func TestWallGet(t *testing.T) {
 	app := newTestApp()
 	app.WallContent = testContentWall
 
-	req := httptest.NewRequest(http.MethodGet,
-		app.Wall, nil)
+	req := httptest.NewRequestWithContext(t.Context(),
+		http.MethodGet, app.Wall, nil)
 	req.RemoteAddr = testAddrAndPort
 
 	rr := httptest.NewRecorder()
@@ -41,8 +41,8 @@ func TestWallPostUpdate(t *testing.T) {
 	app := newTestApp()
 	values := "wall=new content"
 
-	req := httptest.NewRequest(http.MethodPost,
-		app.Wall, strings.NewReader(values))
+	req := httptest.NewRequestWithContext(t.Context(),
+		http.MethodPost, app.Wall, strings.NewReader(values))
 	req.Header.Set("Content-Type", formContentType)
 	req.RemoteAddr = testAddrAndPort
 
@@ -70,8 +70,8 @@ func TestWallPostClear(t *testing.T) {
 	app.WallContent = testContentWall
 
 	values := formFieldClear + "=1"
-	req := httptest.NewRequest(http.MethodPost,
-		app.Wall, strings.NewReader(values))
+	req := httptest.NewRequestWithContext(t.Context(),
+		http.MethodPost, app.Wall, strings.NewReader(values))
 	req.Header.Set("Content-Type", formContentType)
 	req.RemoteAddr = testAddrAndPort
 
@@ -101,8 +101,8 @@ func TestWallGetDownloadAll(t *testing.T) {
 	app := newTestApp()
 	app.WallContent = testContentWall
 
-	req := httptest.NewRequest(http.MethodGet,
-		app.Wall+"?download=all", nil)
+	req := httptest.NewRequestWithContext(t.Context(),
+		http.MethodGet, app.Wall+"?download=all", nil)
 	req.RemoteAddr = testAddrAndPort
 
 	rr := httptest.NewRecorder()

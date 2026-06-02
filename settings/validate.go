@@ -1,6 +1,7 @@
 package settings
 
 import (
+	"errors"
 	"fmt"
 	"net"
 )
@@ -18,11 +19,11 @@ func (s *Settings) Validate() error {
 	}
 
 	if s.TimeFormat == "" {
-		return fmt.Errorf("timeFormat must not be empty")
+		return errors.New("timeFormat must not be empty")
 	}
 
 	if s.Basic.Field != "" && s.Basic.Token == "" {
-		return fmt.Errorf("token must be set with basic auth")
+		return errors.New("token must be set with basic auth")
 	}
 
 	if s.Downloads < 1 {
@@ -38,7 +39,7 @@ func (s *Settings) Validate() error {
 	if s.FileLimits.NameLength < 1 ||
 		s.MessageLimits.LengthChars < 1 ||
 		s.WallLimits.LengthChars < 1 {
-		return fmt.Errorf("max content limits must be >1")
+		return errors.New("max content limits must be >1")
 	}
 
 	if s.FileLimits.SizeEachMb < 1 {

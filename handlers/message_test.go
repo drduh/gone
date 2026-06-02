@@ -18,11 +18,12 @@ func TestMessageHandlerValid(t *testing.T) {
 
 	form := url.Values{}
 	form.Set("message", testContentMsgs)
-	req := httptest.NewRequest(http.MethodPost,
-		"/", strings.NewReader(form.Encode()))
+	req := httptest.NewRequestWithContext(t.Context(),
+		http.MethodPost, "/", strings.NewReader(form.Encode()))
 	req.Header.Set("Content-Type", formContentType)
 
 	rr := httptest.NewRecorder()
+
 	handler := Message(app)
 	handler.ServeHTTP(rr, req)
 
@@ -53,11 +54,12 @@ func TestMessageHandlerExceedLength(t *testing.T) {
 
 	form := url.Values{}
 	form.Set("message", strings.Repeat("a", 1000))
-	req := httptest.NewRequest(http.MethodPost,
-		"/", strings.NewReader(form.Encode()))
+	req := httptest.NewRequestWithContext(t.Context(),
+		http.MethodPost, "/", strings.NewReader(form.Encode()))
 	req.Header.Set("Content-Type", formContentType)
 
 	rr := httptest.NewRecorder()
+
 	handler := Message(app)
 	handler.ServeHTTP(rr, req)
 
@@ -82,11 +84,12 @@ func TestMessageHandlerClear(t *testing.T) {
 
 	form := url.Values{}
 	form.Set("clear", "true")
-	req := httptest.NewRequest(http.MethodPost,
-		"/", strings.NewReader(form.Encode()))
+	req := httptest.NewRequestWithContext(t.Context(),
+		http.MethodPost, "/", strings.NewReader(form.Encode()))
 	req.Header.Set("Content-Type", formContentType)
 
 	rr := httptest.NewRecorder()
+
 	handler := Message(app)
 	handler.ServeHTTP(rr, req)
 
@@ -110,10 +113,11 @@ func TestMessageHandlerDownloadAll(t *testing.T) {
 		Count: 3, Data: testContentMsgs + "3",
 	})
 
-	req := httptest.NewRequest(http.MethodGet,
-		"/?download=all", nil)
+	req := httptest.NewRequestWithContext(t.Context(),
+		http.MethodGet, "/?download=all", nil)
 
 	rr := httptest.NewRecorder()
+
 	handler := Message(app)
 	handler.ServeHTTP(rr, req)
 
@@ -142,11 +146,12 @@ func TestMessageHandlerExceedCount(t *testing.T) {
 
 	for i := range app.MessageLimits.MaxCount {
 		form.Set("message", fmt.Sprintf("msg %d", i+1))
-		req := httptest.NewRequest(http.MethodPost,
-			"/", strings.NewReader(form.Encode()))
+		req := httptest.NewRequestWithContext(t.Context(),
+			http.MethodPost, "/", strings.NewReader(form.Encode()))
 		req.Header.Set("Content-Type", formContentType)
 
 		rr := httptest.NewRecorder()
+
 		handler.ServeHTTP(rr, req)
 		if rr.Code != 200 {
 			t.Errorf("expected 200, got %d", rr.Code)
@@ -154,11 +159,12 @@ func TestMessageHandlerExceedCount(t *testing.T) {
 	}
 
 	form.Set("message", testContentMsgs)
-	req := httptest.NewRequest(http.MethodPost,
-		"/", strings.NewReader(form.Encode()))
+	req := httptest.NewRequestWithContext(t.Context(),
+		http.MethodPost, "/", strings.NewReader(form.Encode()))
 	req.Header.Set("Content-Type", formContentType)
 
 	rr := httptest.NewRecorder()
+
 	handler.ServeHTTP(rr, req)
 	if rr.Code != http.StatusBadRequest {
 		t.Errorf("expected 400, got %d", rr.Code)

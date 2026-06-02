@@ -33,7 +33,9 @@ func TestListHandler(t *testing.T) {
 	app.Files = map[string]*storage.File{f.Id: f}
 
 	rr := httptest.NewRecorder()
-	req := httptest.NewRequest(http.MethodGet, app.List, nil)
+
+	req := httptest.NewRequestWithContext(t.Context(),
+		http.MethodGet, app.List, nil)
 	req.RemoteAddr = testAddrAndPort
 
 	List(app).ServeHTTP(rr, req)
@@ -91,7 +93,9 @@ func TestListHandlerForbidden(t *testing.T) {
 	auth.SetTarpit(0)
 
 	rr := httptest.NewRecorder()
-	req := httptest.NewRequest(http.MethodGet, app.List, nil)
+
+	req := httptest.NewRequestWithContext(t.Context(),
+		http.MethodGet, app.List, nil)
 	req.RemoteAddr = testAddrAndPort
 
 	List(app).ServeHTTP(rr, req)

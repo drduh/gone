@@ -11,37 +11,40 @@ import (
 
 // parseFormInt reads an integer form value or returns the default.
 func parseFormInt(r *http.Request, field string, def, maximum int) int {
-	input := r.FormValue(field)
-	if input != "" {
-		input = strings.TrimSpace(input)
-		if v, err := strconv.Atoi(input); err == nil {
-			if v <= 0 {
-				return def
-			}
-			if v > maximum {
-				return maximum
-			}
-			return v
-		}
+	input := strings.TrimSpace(r.FormValue(field))
+	if input == "" {
+		return def
 	}
-	return def
+	v, err := strconv.Atoi(input)
+	if err != nil {
+		return def
+	}
+	if v <= 0 {
+		return def
+	}
+	if v > maximum {
+		return maximum
+	}
+	return v
 }
 
 // parseFormDuration reads a duration form value or returns the default.
 func parseFormDuration(r *http.Request, field string,
 	def time.Duration, maximum settings.Duration) time.Duration {
-	input := r.FormValue(field)
-	if input != "" {
-		input = strings.TrimSpace(input)
-		if d, err := time.ParseDuration(input); err == nil {
-			if d < time.Second {
-				return def
-			}
-			if d > maximum.GetDuration() {
-				return maximum.GetDuration()
-			}
-			return d
-		}
+	input := strings.TrimSpace(r.FormValue(field))
+	if input == "" {
+		return def
 	}
-	return def
+	d, err := time.ParseDuration(input)
+	if err != nil {
+		return def
+	}
+	if d < time.Second {
+		return def
+	}
+	maxDuration := maximum.GetDuration()
+	if d > maxDuration {
+		return maxDuration
+	}
+	return d
 }

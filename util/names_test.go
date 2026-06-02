@@ -9,14 +9,17 @@ import (
 
 func setupNames(t *testing.T, dir, filename, content string) {
 	t.Helper()
+
 	path := filepath.Join(dir, filename)
+
 	if content == "" {
 		if err := os.Remove(path); err != nil && !os.IsNotExist(err) {
 			t.Fatalf("setupNames remove %s: %v", path, err)
 		}
 		return
 	}
-	err := os.WriteFile(path, []byte(content), 0o644)
+
+	err := os.WriteFile(path, []byte(content), 0o600)
 	if err != nil {
 		t.Fatalf("setupNames write %s: %v", path, err)
 	}

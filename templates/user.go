@@ -6,8 +6,8 @@ import "github.com/drduh/gone/storage"
 type User struct {
 
 	// Request details
-	storage.Owner `json:"user,omitempty"`
+	storage.Owner `json:"user"`
 
 	// Whether the request originated from a browser
-	IsBrowser bool `json:"isBrowser"`
+	IsBrowser bool `json:"isBrowser,omitempty"`
 }
