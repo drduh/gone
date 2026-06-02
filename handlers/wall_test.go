@@ -90,10 +90,8 @@ func TestWallPostClear(t *testing.T) {
 	if got != "" {
 		t.Errorf("expected wall content cleared, got %q", got)
 	}
-	if app.WallContent != "" {
-		t.Errorf("expected app.WallContent cleared, got %q",
-			app.WallContent)
-	}
+
+	assertWallClear(t, app)
 }
 
 // TestWallGetDownloadAll tests downloading wall content.

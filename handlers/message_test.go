@@ -93,10 +93,7 @@ func TestMessageHandlerClear(t *testing.T) {
 	handler := Message(app)
 	handler.ServeHTTP(rr, req)
 
-	if len(app.Messages) != 0 {
-		t.Errorf("expected messages cleared, got %d",
-			len(app.Messages))
-	}
+	assertMessagesClear(t, app)
 }
 
 // TestMessageHandlerDownloadAll test all messages download.

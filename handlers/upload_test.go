@@ -31,7 +31,8 @@ func TestUploadFileTooLarge(t *testing.T) {
 	}
 
 	var resp map[string]string
-	if err := json.Unmarshal(w.Body.Bytes(), &resp); err != nil {
+	if err := json.Unmarshal(
+		w.Body.Bytes(), &resp); err != nil {
 		t.Fatalf("failed to parse response: %v", err)
 	}
 
@@ -53,7 +54,8 @@ func TestUploadNoFile(t *testing.T) {
 
 	req := httptest.NewRequestWithContext(t.Context(),
 		http.MethodPost, "/upload", &b)
-	req.Header.Set("Content-Type", mw.FormDataContentType())
+	req.Header.Set("Content-Type",
+		mw.FormDataContentType())
 
 	w := httptest.NewRecorder()
 	handler := Upload(app)
@@ -65,7 +67,8 @@ func TestUploadNoFile(t *testing.T) {
 	}
 
 	var resp map[string]string
-	if err := json.Unmarshal(w.Body.Bytes(), &resp); err != nil {
+	if err := json.Unmarshal(
+		w.Body.Bytes(), &resp); err != nil {
 		t.Fatalf("failed to parse response: %v", err)
 	}
 
@@ -94,7 +97,8 @@ func TestUploadSuccess(t *testing.T) {
 
 	req := httptest.NewRequestWithContext(t.Context(),
 		http.MethodPost, "/upload", &b)
-	req.Header.Set("Content-Type", mw.FormDataContentType())
+	req.Header.Set("Content-Type",
+		mw.FormDataContentType())
 
 	w := httptest.NewRecorder()
 	handler := Upload(app)
@@ -106,12 +110,14 @@ func TestUploadSuccess(t *testing.T) {
 	}
 
 	var uploads []storage.File
-	if err := json.Unmarshal(w.Body.Bytes(), &uploads); err != nil {
+	if err := json.Unmarshal(
+		w.Body.Bytes(), &uploads); err != nil {
 		t.Fatalf("failed to parse response: %v", err)
 	}
 
 	if len(uploads) != 1 {
-		t.Fatalf("expected 1 upload, got %d", len(uploads))
+		t.Fatalf("expected 1 upload, got %d",
+			len(uploads))
 	}
 
 	if uploads[0].Name != "upload_test.txt" {
