@@ -66,7 +66,7 @@ DEST_CONF = $(CONF_DIR)/config
 DEST_CSS  = $(CONF_DIR)/$(ASSET_CSS)
 DEST_SERV = /etc/systemd/system/$(SERVICE)
 
-MOD_BIN   = 0755
+MOD_EXEC  = 0755
 MOD_FILE  = 0644
 
 TESTCOVER = testCoverage
@@ -111,29 +111,45 @@ build-container: prep-container
 	@$(CONTAIN) build -t $(APPNAME)-$(APPVERS) .
 
 install: install-assets install-bin \
-	install-config \
-	install-service reload-service
+	install-logdir \
+	install-service reload-service \
+	check-service
 
 install-assets:
-	@sudo install -Dm \
-		$(MOD_FILE) $(ASSET_CSS) $(DEST_CSS)
-	@printf "Installed $(DEST_CSS)\n"
+	@printf "Installing $(DEST_CSS) ... "
+	@sudo install -Dm $(MOD_FILE) \
+		$(ASSET_CSS) $(DEST_CSS)
+	@printf "done\n"
 
 install-bin: build
-	@sudo install -Dm \
-		$(MOD_BIN) $(OUT)/$(BINNAME) $(DEST_BIN)
-	@printf "Installed $(DEST_BIN)\n"
+	@printf "Installing $(BINNAME) to $(DEST_BIN) ... "
+	@sudo install -Dm $(MOD_EXEC) \
+		-o root -g $(APPNAME) $(OUT)/$(BINNAME) $(DEST_BIN)
+	@printf "done\n"
 
-install-config:
-	@sudo install -Dm \
-		$(MOD_FILE) $(SETTINGS) $(DEST_CONF)
-	@printf "Installed $(DEST_CONF)\n"
+install-logdir:
+	@printf "Installing /var/log/$(APPNAME) ... "
+	@sudo install -Dm $(MOD_EXEC) \
+		-o $(APPNAME) -g $(APPNAME) -d /var/log/$(APPNAME)
+	@printf "done\n"
 
-install-service:
-	@sudo install -Dm \
-		$(MOD_FILE) $(SERVICE) $(DEST_SERV)
+install-user:
+	@id -u $(APPNAME) > /dev/null 2>&1 || \
+		sudo useradd --system --no-create-home \
+		--shell /usr/sbin/nologin $(APPNAME)
+
+install-config: install-user
+	@printf "Installing $(DEST_CONF) ... "
+	@sudo install -Dm $(MOD_FILE) \
+		-o root -g $(APPNAME) $(SETTINGS) $(DEST_CONF)
+	@printf "done\n"
+
+install-service: install-config
+	@printf "Installing $(DEST_SERV) ... "
+	@sudo install -Dm $(MOD_FILE) \
+		$(SERVICE) $(DEST_SERV)
 	@sudo $(SYSTEMCTL) enable $(SERVICE)
-	@printf "Installed $(DEST_SERV)\n"
+	@printf "done\n"
 
 reload-service:
 	@printf "Restarting services ... "
@@ -141,17 +157,31 @@ reload-service:
 	@sudo $(SYSTEMCTL) restart $(SERVICE)
 	@printf "done\n"
 
+check-service:
+	@printf "Checking service install ... \n"
+	@sleep 2
+	@$(SYSTEMCTL) status $(APPNAME) || \
+		$(DEST_BIN) -conf $(DEST_CONF)
+
+uninstall-service:
+	@sudo $(SYSTEMCTL) stop $(APPNAME)
+	@sudo $(SYSTEMCTL) disable $(APPNAME)
+	@sudo rm -f /etc/systemd/system/$(APPNAME)
+
 fmt:
 	@$(GOCMD) fmt $(PKG)
 
 test:
-	@$(CMDTEST) $(PKG)
+	@$(CMDTEST) -timeout=$(TIMEOUT) $(PKG)
 
 test-race:
 	@$(CMDTEST) -race -timeout=$(TIMEOUT) $(PKG)
 
+test-short:
+	@$(CMDTEST) -short -timeout=$(TIMEOUT) $(PKG)
+
 test-verbose:
-	@$(CMDTEST) -v $(PKG)
+	@$(CMDTEST) -v -timeout=$(TIMEOUT) $(PKG)
 
 test-cover:
 	@$(CMDCOVER)
@@ -210,6 +240,7 @@ clean-coverage:
 
 clean-cache:
 	@$(GOCMD) clean -cache -testcache -modcache
+	@$(GOLINT) cache clean
 
 c: clean
 celan: clean
