@@ -1,9 +1,13 @@
 package handlers
 
 import (
+	"encoding/json"
 	"log/slog"
+	"net/http"
+	"net/http/httptest"
 	"testing"
 
+	"github.com/drduh/gone/auth"
 	"github.com/drduh/gone/config"
 	"github.com/drduh/gone/storage"
 )
@@ -40,6 +44,50 @@ func newTestAppWithStorage() *config.App {
 		WallContent: "test wall content",
 	}
 	return app
+}
+
+// serveDeniedRequest helps serve requests to deny,
+// by setting tarpit duration to 0.
+func serveDeniedRequest(
+	t *testing.T,
+	handler http.HandlerFunc,
+	req *http.Request,
+) *httptest.ResponseRecorder {
+	t.Helper()
+
+	auth.SetTarpit(0)
+
+	if req.RemoteAddr == "" {
+		req.RemoteAddr = testAddrAndPort
+	}
+
+	rr := httptest.NewRecorder()
+	handler.ServeHTTP(rr, req)
+	return rr
+}
+
+// assertDenied tests request denial.
+func assertDenied(
+	t *testing.T,
+	rr *httptest.ResponseRecorder,
+	want string) {
+	t.Helper()
+
+	if rr.Code != http.StatusForbidden {
+		t.Fatalf("expected status %d, got %d",
+			http.StatusForbidden, rr.Code)
+	}
+
+	var body map[string]string
+	if err := json.NewDecoder(
+		rr.Body).Decode(&body); err != nil {
+		t.Fatalf("failed to decode: %v", err)
+	}
+
+	if got := body["error"]; got != want {
+		t.Fatalf("expected error %q, got %q",
+			want, got)
+	}
 }
 
 // assertStorageClear tests Storage is empty.

@@ -122,3 +122,23 @@ func TestWallGetDownloadAll(t *testing.T) {
 		t.Errorf("invalid Content-Disposition: %q", disp)
 	}
 }
+
+// TestWallDeny tests denied Wall requests.
+func TestWallDeny(t *testing.T) {
+	app := newTestApp()
+	app.Require.Wall = true
+	app.WallContent = testContentWall
+
+	req := httptest.NewRequestWithContext(t.Context(),
+		http.MethodPost,
+		app.Wall, strings.NewReader("wall=new content"))
+	req.Header.Set("Content-Type", formContentType)
+	rr := serveDeniedRequest(t, Wall(app), req)
+
+	assertDenied(t, rr, app.Deny)
+
+	if app.WallContent != testContentWall {
+		t.Fatalf("expected wall content unchanged, got %q",
+			app.WallContent)
+	}
+}

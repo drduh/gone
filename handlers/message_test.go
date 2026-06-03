@@ -173,3 +173,35 @@ func TestMessageHandlerExceedCount(t *testing.T) {
 			want, rr.Body.String())
 	}
 }
+
+// TestMessageDeny tests denied Message requests.
+func TestMessageDeny(t *testing.T) {
+	app := newTestApp()
+	app.Require.Message = true
+
+	app.Messages = append(app.Messages, &storage.Message{
+		Count: 1,
+		Data:  "existing",
+	})
+
+	form := url.Values{}
+	form.Set("message", testContentMsgs)
+
+	req := httptest.NewRequestWithContext(t.Context(),
+		http.MethodPost,
+		app.Message, strings.NewReader(form.Encode()))
+	req.Header.Set("Content-Type", formContentType)
+
+	rr := serveDeniedRequest(t, Message(app), req)
+
+	assertDenied(t, rr, app.Deny)
+
+	if got := len(app.Messages); got != 1 {
+		t.Fatalf("expected messages unchanged, got %d",
+			got)
+	}
+	if app.Messages[0].Data != "existing" {
+		t.Fatalf("expected existing message, got %q",
+			app.Messages[0].Data)
+	}
+}

@@ -136,3 +136,21 @@ func TestUploadSuccess(t *testing.T) {
 		t.Fatalf("file not found in storage")
 	}
 }
+
+// TestUploadDeny tests denied Upload requests.
+func TestUploadDeny(t *testing.T) {
+	app := newTestApp()
+	app.Require.Upload = true
+
+	req := httptest.NewRequestWithContext(t.Context(),
+		http.MethodPost,
+		app.Upload, strings.NewReader("dummy"))
+	rr := serveDeniedRequest(t, Upload(app), req)
+
+	assertDenied(t, rr, app.Deny)
+
+	if len(app.Files) != 0 {
+		t.Fatalf("expected no files uploaded, got %d",
+			len(app.Files))
+	}
+}
