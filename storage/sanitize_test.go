@@ -69,7 +69,7 @@ func TestTruncateName(t *testing.T) {
 }
 
 // TestSanitizeName validates filenames do not exceed
-// length nor contain disallowed special characters.
+// length nor contain unapproved special characters.
 func TestSanitizeName(t *testing.T) {
 	tests := []struct {
 		input      string
@@ -143,7 +143,8 @@ func TestSanitizeName(t *testing.T) {
 	}
 	for _, test := range tests {
 		t.Run(test.input, func(t *testing.T) {
-			result := SanitizeName(test.input, test.extraChars, test.maxLength)
+			result := SanitizeName(
+				test.input, test.extraChars, test.maxLength)
 			if result != test.want {
 				t.Fatalf("length: %d, special: '%s', got: '%s', want: '%s'",
 					test.maxLength, test.extraChars, result, test.want)

@@ -10,6 +10,8 @@ import (
 
 // TestParseFormInt tests parsing downloads form values.
 func TestParseFormInt(t *testing.T) {
+	t.Parallel()
+
 	def := 1
 	maximum := 100
 
@@ -44,8 +46,8 @@ func TestParseFormInt(t *testing.T) {
 	for _, tc := range cases {
 		t.Run(tc.name, func(t *testing.T) {
 			t.Parallel()
-			req, err := http.NewRequest(http.MethodPost,
-				tc.query, nil)
+			req, err := http.NewRequestWithContext(t.Context(),
+				http.MethodPost, tc.query, nil)
 			if err != nil {
 				t.Fatal(err)
 			}
@@ -60,6 +62,8 @@ func TestParseFormInt(t *testing.T) {
 
 // TestParseFormDuration tests parsing duration form values.
 func TestParseFormDuration(t *testing.T) {
+	t.Parallel()
+
 	def := 1 * time.Hour
 	maximum := 8 * 24 * time.Hour
 
@@ -100,8 +104,8 @@ func TestParseFormDuration(t *testing.T) {
 	for _, tc := range cases {
 		t.Run(tc.name, func(t *testing.T) {
 			t.Parallel()
-			req, err := http.NewRequest(http.MethodPost,
-				tc.query, nil)
+			req, err := http.NewRequestWithContext(t.Context(),
+				http.MethodPost, tc.query, nil)
 			if err != nil {
 				t.Fatal(err)
 			}

@@ -17,7 +17,7 @@ const (
 type Storage struct {
 
 	// Storage content total sizes
-	Sizes `json:"storageSizes,omitempty"`
+	Sizes `json:"storageSizes"`
 
 	// Uploaded files
 	Files map[string]*File `json:"files,omitempty"`
@@ -33,13 +33,13 @@ type Storage struct {
 type File struct {
 
 	// Downloads information
-	Downloads `json:"downloads,omitempty"`
+	Downloads `json:"downloads"`
 
 	// Uploader information
-	Owner `json:"owner,omitempty"`
+	Owner `json:"owner"`
 
 	// Timing information
-	Time `json:"time,omitempty"`
+	Time `json:"time"`
 
 	// Unique identifier
 	Id string `json:"id,omitempty"`
@@ -70,10 +70,10 @@ type File struct {
 type Message struct {
 
 	// Owner information
-	Owner `json:"owner,omitempty"`
+	Owner `json:"owner"`
 
 	// Timing information
-	Time `json:"time,omitempty"`
+	Time `json:"time"`
 
 	// Message count/order
 	Count int `json:"count,omitempty"`
@@ -111,7 +111,7 @@ type Time struct {
 	Remain string `json:"remain,omitempty"`
 
 	// Absolute upload datetime
-	Upload time.Time `json:"upload,omitempty"`
+	Upload time.Time `json:"upload"`
 }
 
 // Downloads represents user content downloads metadata.

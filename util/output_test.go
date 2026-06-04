@@ -55,7 +55,11 @@ func TestGetOutputAppends(t *testing.T) {
 	if _, err := fmt.Fprint(first, "hello"); err != nil {
 		t.Fatalf("first write error: %v", err)
 	}
-	if err := first.(*os.File).Close(); err != nil {
+	f1, ok := first.(*os.File)
+	if !ok {
+		t.Fatalf("expected *os.File, got %T", first)
+	}
+	if err := f1.Close(); err != nil {
 		t.Fatalf("first close error: %v", err)
 	}
 
@@ -66,7 +70,11 @@ func TestGetOutputAppends(t *testing.T) {
 	if _, err := fmt.Fprint(second, " world"); err != nil {
 		t.Fatalf("second write error: %v", err)
 	}
-	if err := second.(*os.File).Close(); err != nil {
+	f2, ok := second.(*os.File)
+	if !ok {
+		t.Fatalf("expected *os.File, got %T", second)
+	}
+	if err := f2.Close(); err != nil {
 		t.Fatalf("second close error: %v", err)
 	}
 

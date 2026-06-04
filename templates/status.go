@@ -9,7 +9,7 @@ import (
 type Status struct {
 
 	// Defaults configuration
-	settings.Default `json:"defaultOptions,omitempty"`
+	settings.Default `json:"defaultOptions"`
 
 	// Limits configuration
 	settings.Limit `json:"limits"`

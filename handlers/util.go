@@ -16,19 +16,19 @@ func authRequest(w http.ResponseWriter,
 	req := parseRequest(r)
 
 	if !isAuthenticated(app, r) {
-		auth.ApplyTarpit()
-		deny(w, http.StatusForbidden, app.Deny)
 		app.Log.Error(app.Deny,
 			"user", req)
+		auth.ApplyTarpit()
+		deny(w, http.StatusForbidden, app.Deny)
 		return nil
 	}
 
 	if !app.Authorize(app.ReqsPerMinute) {
-		auth.ApplyTarpit()
-		deny(w, http.StatusTooManyRequests, app.RateLimit)
 		app.Log.Error(app.RateLimit,
 			"limit", app.ReqsPerMinute,
 			"user", req)
+		auth.ApplyTarpit()
+		deny(w, http.StatusTooManyRequests, app.RateLimit)
 		return nil
 	}
 

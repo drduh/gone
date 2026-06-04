@@ -12,5 +12,6 @@ func Print() {
 	if err != nil {
 		return
 	}
+	//nolint:forbidigo
 	fmt.Println(string(data))
 }

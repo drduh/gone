@@ -7,13 +7,12 @@ import (
 	"testing"
 	"time"
 
-	"github.com/drduh/gone/auth"
 	"github.com/drduh/gone/storage"
 	"github.com/drduh/gone/util"
 )
 
-// TestListHandler tests a successful file list op.
-func TestListHandler(t *testing.T) {
+// TestList tests a successful file list op.
+func TestList(t *testing.T) {
 	app := newTestApp()
 	app.Require.List = false
 
@@ -32,10 +31,11 @@ func TestListHandler(t *testing.T) {
 	f.Id = "1ABCDEF"
 	app.Files = map[string]*storage.File{f.Id: f}
 
-	rr := httptest.NewRecorder()
-	req := httptest.NewRequest(http.MethodGet, app.List, nil)
+	req := httptest.NewRequestWithContext(t.Context(),
+		http.MethodGet, app.List, nil)
 	req.RemoteAddr = testAddrAndPort
 
+	rr := httptest.NewRecorder()
 	List(app).ServeHTTP(rr, req)
 
 	if rr.Code != http.StatusOK {
@@ -48,8 +48,9 @@ func TestListHandler(t *testing.T) {
 	}
 
 	var files []storage.File
-	if err := json.NewDecoder(rr.Body).Decode(&files); err != nil {
-		t.Fatalf("failed to decode response: %v", err)
+	if err := json.NewDecoder(
+		rr.Body).Decode(&files); err != nil {
+		t.Fatalf("failed to decode: %v", err)
 	}
 
 	if len(files) != 1 {
@@ -84,29 +85,14 @@ func TestListHandler(t *testing.T) {
 	}
 }
 
-// TestListHandlerForbidden test a forbidden file list op.
-func TestListHandlerForbidden(t *testing.T) {
+// TestListDeny tests denied List requests.
+func TestListDeny(t *testing.T) {
 	app := newTestApp()
 	app.Require.List = true
-	auth.SetTarpit(0)
 
-	rr := httptest.NewRecorder()
-	req := httptest.NewRequest(http.MethodGet, app.List, nil)
-	req.RemoteAddr = testAddrAndPort
+	req := httptest.NewRequestWithContext(t.Context(),
+		http.MethodGet, app.List, nil)
+	rr := serveDeniedRequest(t, List(app), req)
 
-	List(app).ServeHTTP(rr, req)
-
-	if rr.Code != http.StatusForbidden {
-		t.Fatalf("expected status %d, got %d",
-			http.StatusForbidden, rr.Code)
-	}
-
-	var body map[string]string
-	if err := json.NewDecoder(rr.Body).Decode(&body); err != nil {
-		t.Fatalf("failed to decode response: %v", err)
-	}
-
-	if got := body["error"]; got != app.Deny {
-		t.Fatalf("expected error %q, got %q", app.Deny, got)
-	}
+	assertDenied(t, rr, app.Deny)
 }

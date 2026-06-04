@@ -30,6 +30,7 @@ func Run() {
 		"configuration", app)
 
 	signal.Setup(app)
+
 	if err := server.Serve(app); err != nil {
 		app.Log.Error("server failed",
 			"error", err.Error())

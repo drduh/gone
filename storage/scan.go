@@ -5,6 +5,7 @@ import (
 	"net/http"
 	"path/filepath"
 	"strconv"
+	"strings"
 
 	"github.com/drduh/gone/util"
 )
@@ -36,18 +37,31 @@ func (f *File) setSum() {
 	f.Sum = util.Sum(f.Data)
 }
 
-// SetType sets File content type based on content type,
-// or filename extension for empty files.
+// SetType sets File content type based on extension
+// override, contents, or filename extension.
 func (f *File) setType() {
+	const defaultType = "application/octet-stream"
+
+	overrides := map[string]string{
+		".apk": "application/vnd.android.package-archive",
+	}
+
+	ext := strings.ToLower(filepath.Ext(f.Name))
+
+	if t, ok := overrides[ext]; ok {
+		f.Type = t
+		return
+	}
+
 	if len(f.Data) > 0 {
 		f.Type = http.DetectContentType(f.Data)
-	} else {
-		ext := filepath.Ext(f.Name)
-		if t := mime.TypeByExtension(ext); t != "" {
-			f.Type = t
-		}
+		return
 	}
-	if f.Type == "" {
-		f.Type = "application/octet-stream"
+
+	if t := mime.TypeByExtension(ext); t != "" {
+		f.Type = t
+		return
 	}
+
+	f.Type = defaultType
 }
