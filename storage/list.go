@@ -28,8 +28,8 @@ func (s *Storage) ListFiles() []File {
 			},
 			Downloads: Downloads{
 				Allow:  file.Downloads.Allow,
+				Count:  file.Count,
 				Remain: file.NumRemaining(),
-				Total:  file.Total,
 			},
 		}
 		files = append(files, f)

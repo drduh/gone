@@ -42,7 +42,7 @@ func Download(app *config.App) http.HandlerFunc {
 			"id", file.Id,
 			"name", file.Name,
 			"size", file.Size,
-			"downloads", file.Total,
+			"downloads", file.Count,
 			"user", req)
 
 		reason := file.IsExpired()
@@ -52,7 +52,7 @@ func Download(app *config.App) http.HandlerFunc {
 				"reason", reason,
 				"id", file.Id,
 				"name", file.Name,
-				"downloads", file.Total)
+				"downloads", file.Count)
 		}
 	}
 }

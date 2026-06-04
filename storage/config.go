@@ -123,8 +123,8 @@ type Downloads struct {
 	// Remaining number of downloads to expiration
 	Remain int `json:"remain,omitempty"`
 
-	// Total number of downloads
-	Total int `json:"total,omitempty"`
+	// Number of downloads
+	Count int `json:"count,omitempty"`
 }
 
 // Sizes represents Storage content sizes.

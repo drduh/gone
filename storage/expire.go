@@ -11,7 +11,7 @@ func (f *File) GetLifetime() time.Duration {
 // IsExpires returns a reason if File is expired,
 // or an empty string if File is not expired.
 func (f *File) IsExpired() string {
-	if f.Total >= f.Downloads.Allow {
+	if f.Count >= f.Downloads.Allow {
 		return "limit downloads"
 	}
 	if f.GetLifetime() > f.Duration {
@@ -23,7 +23,7 @@ func (f *File) IsExpired() string {
 // NumRemaining returns the number of downloads remaining
 // until File expiration.
 func (f *File) NumRemaining() int {
-	return f.Downloads.Allow - f.Total
+	return f.Downloads.Allow - f.Count
 }
 
 // TimeRemaining returns the relative duration remaining
