@@ -2,7 +2,7 @@ gone is an ephemeral content server written in [Go](https://go.dev/).
 
 The primary goal is to share files and text using an HTML interface and API.
 
-[![test-and-lint](https://github.com/drduh/gone/actions/workflows/test-and-lint.yml/badge.svg)](https://github.com/drduh/gone/actions/workflows/test-and-lint.yml)
+[![test](https://github.com/drduh/gone/actions/workflows/test.yml/badge.svg)](https://github.com/drduh/gone/actions/workflows/test.yml) [![lint](https://github.com/drduh/gone/actions/workflows/lint.yml/badge.svg)](https://github.com/drduh/gone/actions/workflows/lint.yml)
 
 ## Features
 
