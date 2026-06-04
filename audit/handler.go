@@ -29,7 +29,10 @@ func (a *Auditor) Handle(ctx context.Context, r slog.Record) error {
 	})
 	if err != nil {
 		a.Printf(marshalErrFmt,
-			r.Time.Format(a.TimeFormat), r.Message, err.Error())
+			r.Time.Format(a.TimeFormat),
+			r.Message,
+			err.Error(),
+		)
 		return fmt.Errorf("marshal log record: %w", err)
 	}
 
