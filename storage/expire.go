@@ -8,13 +8,15 @@ func (f *File) GetLifetime() time.Duration {
 	return time.Since(f.Time.Upload).Round(time.Second)
 }
 
-// IsExpires returns a reason if File is expired,
-// or an empty string if File is not expired.
+// IsExpired returns a reason the File is expired,
+// or an empty string when the File isn't expired.
 func (f *File) IsExpired() string {
-	if f.Count >= f.Downloads.Allow {
+	if f.Downloads.Allow > 0 &&
+		f.Count >= f.Downloads.Allow {
 		return "limit downloads"
 	}
-	if f.GetLifetime() > f.Duration {
+	if f.Duration > 0 &&
+		f.GetLifetime() > f.Duration {
 		return "limit duration"
 	}
 	return ""

@@ -3,15 +3,15 @@ package storage
 // ListFiles returns a list of non-expired Files in Storage,
 // removing expired Files in the process.
 func (s *Storage) ListFiles() []File {
+	s.UpdateTimeRemaining()
+
 	files := make([]File, 0, len(s.Files))
 	for _, file := range s.Files {
-		reason := file.IsExpired()
-		if reason != "" {
+		if file.IsExpired() != "" {
 			s.Expire(file)
-			break
+			continue
 		}
 
-		s.UpdateTimeRemaining()
 		f := File{
 			Id:   file.Id,
 			Name: file.Name,
@@ -28,8 +28,8 @@ func (s *Storage) ListFiles() []File {
 			},
 			Downloads: Downloads{
 				Allow:  file.Downloads.Allow,
-				Count:  file.Count,
 				Remain: file.NumRemaining(),
+				Count:  file.Count,
 			},
 		}
 		files = append(files, f)
