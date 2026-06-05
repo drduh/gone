@@ -9,7 +9,7 @@ import (
 	"github.com/drduh/gone/storage"
 )
 
-// Message handles requests to read and modify Messages in Storage.
+// Message handles requests to read and modify Messages.
 func Message(app *config.App) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		req := authRequest(w, r, app)
@@ -29,49 +29,8 @@ func Message(app *config.App) http.HandlerFunc {
 					"user", req)
 			}
 
-			message := storage.Message{
-				Count: app.NumMessages,
-				Owner: storage.Owner{
-					Agent: req.Agent,
-					Mask:  req.Mask,
-				},
-				Time: storage.Time{
-					Allow: time.Now().Format(app.TimeFormat),
-				},
-			}
-
-			formContent := strings.TrimSpace(
-				r.PostFormValue(formFieldMessage))
-			if formContent != "" {
-				msgLength := len(formContent)
-				if msgLength > app.MessageLimits.LengthChars {
-					writeJSON(w, http.StatusBadRequest,
-						errorJSON(app.MsgLength))
-					app.Log.Error(app.MsgLength,
-						"length", msgLength,
-						"limit", app.MessageLimits.LengthChars,
-						"user", req)
-					return
-				}
-
-				msgCount := len(app.Messages)
-				if msgCount >= app.MessageLimits.MaxCount {
-					writeJSON(w, http.StatusBadRequest,
-						errorJSON(app.MsgCount))
-					app.Log.Error(app.MsgCount,
-						"count", app.MessageLimits.MaxCount,
-						"user", req)
-					return
-				}
-
-				msgCount += 1
-				message.Count = msgCount
-				message.Data = formContent
-				app.Messages = append(app.Messages, &message)
-				app.Log.Info("added message",
-					"count", msgCount,
-					"length", msgLength,
-					"user", req)
+			if !addMessage(w, r, app, req) {
+				return
 			}
 
 			if req.IsBrowser {
@@ -93,4 +52,60 @@ func Message(app *config.App) http.HandlerFunc {
 			"user", req)
 		writeJSON(w, http.StatusOK, app.Messages)
 	}
+}
+
+// addMessage validates and appends a Message.
+func addMessage(
+	w http.ResponseWriter,
+	r *http.Request,
+	app *config.App,
+	req *Request,
+) bool {
+	formContent := strings.TrimSpace(
+		r.PostFormValue(formFieldMessage))
+	if formContent == "" {
+		return true
+	}
+
+	msgLength := len(formContent)
+	if msgLength > app.MessageLimits.LengthChars {
+		writeJSON(w, http.StatusBadRequest,
+			errorJSON(app.MsgLength))
+		app.Log.Error(app.MsgLength,
+			"limit", app.MessageLimits.LengthChars,
+			"length", msgLength,
+			"user", req)
+		return false
+	}
+
+	msgCount := len(app.Messages)
+	if msgCount >= app.MessageLimits.MaxCount {
+		writeJSON(w, http.StatusBadRequest,
+			errorJSON(app.MsgCount))
+		app.Log.Error(app.MsgCount,
+			"limit", app.MessageLimits.MaxCount,
+			"count", msgCount,
+			"user", req)
+		return false
+	}
+
+	message := storage.Message{
+		Count: msgCount + 1,
+		Data:  formContent,
+		Owner: storage.Owner{
+			Agent: req.Agent,
+			Mask:  req.Mask,
+		},
+		Time: storage.Time{
+			Allow: time.Now().Format(app.TimeFormat),
+		},
+	}
+
+	app.Messages = append(app.Messages, &message)
+	app.Log.Info("added message",
+		"count", message.Count,
+		"length", msgLength,
+		"user", req)
+
+	return true
 }
