@@ -19,7 +19,7 @@ func ApplyTarpit() {
 	if base <= 0 {
 		return
 	}
-	j := rand.Float64() //nolint:gosec
+	j := rand.Float64() // #nosec G404
 	jitter := time.Duration(
 		float64(base) * jitterFactor * j)
 	time.Sleep(base + jitter)

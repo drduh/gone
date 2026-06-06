@@ -33,7 +33,7 @@ func expireFiles(app *config.App) {
 				"reason", reason,
 				"id", f.Id, "name", f.Name,
 				"available", lifetime.String(),
-				"downloads", f.Total)
+				"downloads", f.Count)
 		}
 	}
 }

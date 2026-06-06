@@ -166,7 +166,7 @@ check-service:
 uninstall-service:
 	@sudo $(SYSTEMCTL) stop $(APPNAME)
 	@sudo $(SYSTEMCTL) disable $(APPNAME)
-	@sudo rm -f /etc/systemd/system/$(APPNAME)
+	@sudo rm -f $(DEST_SERV)
 
 fmt:
 	@$(GOCMD) fmt $(PKG)
@@ -182,16 +182,6 @@ test-short:
 
 test-verbose:
 	@$(CMDTEST) -v -timeout=$(TIMEOUT) $(PKG)
-
-test-cover:
-	@$(CMDCOVER)
-
-test-cover-total: test-cover
-	@echo "total coverage: \
-		$$($(GOCMD) tool cover -func=$(TESTCOVER) | \
-		grep total: | awk '{print $$3}')"
-
-test-cover-all: test-cover-total
 
 lint:
 	@if command -v $(GOLINT) >/dev/null 2>&1 ; then \
@@ -223,15 +213,6 @@ build-race: prep
 race: build-race
 	@$(OUT)/$(BINNAME)-race -debug
 
-cover: test-cover
-	@$(GOCMD) tool cover \
-		-html=$(TESTCOVER) -o $(TESTCOVER).html
-	@printf "cover: %s\n" \
-		"$$(file $(TESTCOVER).html)"
-
-doc:
-	@$(GODOC) -http :8000
-
 clean: clean-coverage
 	@rm -rf $(OUT)
 
@@ -242,6 +223,20 @@ clean-cache:
 	@$(GOCMD) clean -cache -testcache -modcache
 	@$(GOLINT) cache clean
 
+cover: test-cover
+	@$(GOCMD) tool cover \
+		-html=$(TESTCOVER) -o $(TESTCOVER).html
+	@printf "total test coverage: %s" \
+		"$$($(GOCMD) tool cover -func=$(TESTCOVER) | \
+		grep total: | awk '{print $$3}')"
+	@printf " - see %s\n" "$(TESTCOVER).html"
+
+test-cover:
+	@$(CMDCOVER)
+
+doc:
+	@$(GODOC) -http :8000
+
 c: clean
 celan: clean
 clena: clean
@@ -251,6 +246,7 @@ coverage: cover
 d: debug
 devug: debug
 f: fmt
+litn: lint
 prod: release
 t: test
 tset: test

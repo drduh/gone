@@ -21,7 +21,7 @@ func (f *File) Serve(w http.ResponseWriter) {
 	}
 
 	if n == f.Bytes {
-		f.Total++
+		f.Count++
 	}
 }
 
