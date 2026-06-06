@@ -84,9 +84,9 @@ func RandomNumber() string {
 	return fmt.Sprintf("%03d", n)
 }
 
-// RandomId returns a 32-byte URL-encoded random string;
+// RandomID returns a 32-byte URL-encoded random string;
 // or "unknown" on error.
-func RandomId() string {
+func RandomID() string {
 	const randomTokenBytes = 32
 	bytes := make([]byte, randomTokenBytes)
 	if _, err := rand.Read(bytes); err != nil {
@@ -119,14 +119,16 @@ func Random(length int) string {
 // GetRandom returns a random string by requested path.
 func GetRandom(path string) string {
 	const defaultLength = 20
+
 	var response string
+
 	switch path {
 	case "coin":
 		response = FlipCoin()
 	case "hex":
 		response = RandomHex(defaultLength)
 	case "id":
-		response = RandomId()
+		response = RandomID()
 	case "mask":
 		response = RandomMask()
 	case "name":

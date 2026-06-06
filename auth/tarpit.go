@@ -10,10 +10,13 @@ const jitterFactor = 0.2
 
 var tarpit atomic.Int64
 
+// SetTarpit sets the base delay.
 func SetTarpit(d time.Duration) {
 	tarpit.Store(int64(d))
 }
 
+// ApplyTarpit sleeps for the configured
+// tarpit delay plus a jitter duration.
 func ApplyTarpit() {
 	base := time.Duration(tarpit.Load())
 	if base <= 0 {

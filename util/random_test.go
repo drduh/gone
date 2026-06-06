@@ -88,6 +88,7 @@ func TestRandomHex(t *testing.T) {
 		t.Errorf("expected length %d, got %d",
 			length, len(result))
 	}
+
 	for _, c := range result {
 		if (c < '0' || c > '9') && (c < 'a' || c > 'f') {
 			t.Errorf("unexpected '%c' in result", c)

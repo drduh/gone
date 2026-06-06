@@ -42,7 +42,7 @@ type File struct {
 	Time `json:"time"`
 
 	// Unique identifier
-	Id string `json:"id,omitempty"`
+	ID string `json:"id,omitempty"`
 
 	// Provided filename
 	Name string `json:"name,omitempty"`

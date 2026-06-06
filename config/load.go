@@ -17,7 +17,12 @@ func Load() *App {
 	app.Start()
 	app.Debug = modeDebug
 	app.Modes.Version = modeVersion
-	app.Settings = settings.Load(pathConfig)
+
+	s, err := settings.Load(pathConfig)
+	if err != nil {
+		log.Fatalf("failed loading settings: %v", err)
+	}
+	app.Settings = s
 
 	auditor, err := audit.Start(&audit.Config{
 		Debug:      app.Debug || app.LogDebug,

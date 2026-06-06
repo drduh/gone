@@ -5,7 +5,7 @@ import (
 	"testing"
 )
 
-const fileIdLength = 44 // storageVersion "1" + 32 bytes
+const fileIDLength = 44 // storageVersion "1" + 32 bytes
 
 // TestFileScan tests all scan attributes are set.
 func TestFileScan(t *testing.T) {
@@ -90,9 +90,9 @@ func TestFileScan(t *testing.T) {
 			f := tt.file
 			f.Scan()
 
-			if len(f.Id) != fileIdLength {
+			if len(f.ID) != fileIDLength {
 				t.Fatalf("id length = %d; want %d",
-					len(f.Id), fileIdLength)
+					len(f.ID), fileIDLength)
 			}
 			if f.Bytes != tt.size {
 				t.Fatalf("bytes = %d; want %d",
@@ -114,16 +114,16 @@ func TestFileScan(t *testing.T) {
 	}
 }
 
-// TestSetId tests File id has valid length.
-func TestSetId(t *testing.T) {
+// TestSetID tests File id has valid length.
+func TestSetID(t *testing.T) {
 	f := &File{}
-	f.setId()
-	if f.Id == "" {
+	f.setID()
+	if f.ID == "" {
 		t.Fatalf("id is empty")
 	}
-	if len(f.Id) != fileIdLength {
-		t.Fatalf("id is incorrect length: %v",
-			len(f.Id))
+	if len(f.ID) != fileIDLength {
+		t.Fatalf("id length is incorrect: %v",
+			len(f.ID))
 	}
 }
 

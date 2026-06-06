@@ -39,7 +39,7 @@ func Download(app *config.App) http.HandlerFunc {
 
 		file.Serve(w)
 		app.Log.Info("served file",
-			"id", file.Id,
+			"id", file.ID,
 			"name", file.Name,
 			"size", file.Size,
 			"downloads", file.Count,
@@ -50,7 +50,7 @@ func Download(app *config.App) http.HandlerFunc {
 			app.Expire(file)
 			app.Log.Info("removed file",
 				"reason", reason,
-				"id", file.Id,
+				"id", file.ID,
 				"name", file.Name,
 				"downloads", file.Count)
 		}

@@ -3,7 +3,7 @@ package version
 // Get returns application version and build details.
 func Get() map[string]string {
 	return map[string]string{
-		"appId":         Id,
+		"appID":         ID,
 		"appVersion":    Version,
 		"buildArch":     Arch,
 		"buildCommit":   Commit,

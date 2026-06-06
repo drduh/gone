@@ -31,17 +31,17 @@
         {{ range .Storage.Files }}
         <tr class="list-row">
           <td>
-            <label for="{{ printf "%.8s" .Id }}">{{ .Name }}
+            <label for="{{ printf "%.8s" .ID }}">{{ .Name }}
               <br>({{ printf "%.8s" .Sum }})</label>
-            <input id="{{ printf "%.8s" .Id }}"
+            <input id="{{ printf "%.8s" .ID }}"
                  name="name"
                  type="radio"
-                value="{{ .Id }}" required>
+                value="{{ .ID }}" required>
           </td>
-          <td><label for="{{ printf "%.8s" .Id }}">{{ .Size }}</label></td>
-          <td><label for="{{ printf "%.8s" .Id }}">{{ .Type }}</label></td>
-          <td><label for="{{ printf "%.8s" .Id }}">{{ .Owner.Mask }}</label></td>
-          <td><label for="{{ printf "%.8s" .Id }}">{{ .Time.Remain }}</label></td>
+          <td><label for="{{ printf "%.8s" .ID }}">{{ .Size }}</label></td>
+          <td><label for="{{ printf "%.8s" .ID }}">{{ .Type }}</label></td>
+          <td><label for="{{ printf "%.8s" .ID }}">{{ .Owner.Mask }}</label></td>
+          <td><label for="{{ printf "%.8s" .ID }}">{{ .Time.Remain }}</label></td>
         </tr>
         {{ end }}
         </tbody>

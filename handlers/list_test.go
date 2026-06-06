@@ -28,8 +28,8 @@ func TestList(t *testing.T) {
 	}
 
 	f.Scan()
-	f.Id = "1ABCDEF"
-	app.Files = map[string]*storage.File{f.Id: f}
+	f.ID = "1ABCDEF"
+	app.Files = map[string]*storage.File{f.ID: f}
 
 	req := httptest.NewRequestWithContext(t.Context(),
 		http.MethodGet, app.List, nil)
@@ -62,9 +62,9 @@ func TestList(t *testing.T) {
 			10, files[0].Downloads.Remain)
 	}
 
-	if files[0].Id != "1ABCDEF" {
+	if files[0].ID != "1ABCDEF" {
 		t.Errorf("expected id %q, got %q",
-			"1ABCDEF", files[0].Id)
+			"1ABCDEF", files[0].ID)
 	}
 
 	if files[0].Name != "test.txt" {

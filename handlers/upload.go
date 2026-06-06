@@ -9,6 +9,7 @@ import (
 	"time"
 
 	"github.com/drduh/gone/config"
+	"github.com/drduh/gone/settings"
 	"github.com/drduh/gone/storage"
 )
 
@@ -27,7 +28,8 @@ func Upload(app *config.App) http.HandlerFunc {
 			writeJSON(w, http.StatusRequestEntityTooLarge,
 				errorJSON(app.FileSize))
 			app.Log.Error(app.FileSize,
-				"fileSizeMb", contentLength/(1<<20),
+				"fileSizeMB", settings.BytesToMegabytes(
+					contentLength),
 				"user", req)
 			return
 		}
@@ -135,10 +137,10 @@ func Upload(app *config.App) http.HandlerFunc {
 
 				f.Scan()
 
-				app.Files[f.Id] = f
+				app.Files[f.ID] = f
 
 				upload = storage.File{
-					Id:   f.Id,
+					ID:   f.ID,
 					Name: f.Name,
 					Size: f.Size,
 					Sum:  f.Sum,

@@ -18,6 +18,7 @@ func TestGetMask(t *testing.T) {
 	}
 
 	seen := make(map[string]string)
+
 	for _, tc := range cases {
 		mask1 := GetMask(tc.addr, false)
 		if mask1 != GetMask(tc.addr, false) {
@@ -53,6 +54,7 @@ func TestGetMaskInvalid(t *testing.T) {
 	}
 
 	unknownMask := ""
+
 	for _, addr := range cases {
 		mask := GetMaskAddr(addr, false)
 		if unknownMask == "" {

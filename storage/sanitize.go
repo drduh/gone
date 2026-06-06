@@ -33,6 +33,7 @@ func SanitizeName(input, extraChars string, maxLength int) string {
 // removeInvalidChars removes all invalid characters.
 func removeInvalidChars(filename string, allowed string) string {
 	var result strings.Builder
+
 	for _, char := range filename {
 		if (char >= '0' && char <= '9') ||
 			(char >= 'a' && char <= 'z') ||

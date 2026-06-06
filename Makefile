@@ -22,7 +22,7 @@ CONTAIN  ?= container
 DOCKER   ?= docker
 
 BUILDARCH = $(shell $(GOCMD) env GOHOSTARCH)
-BUILDGIT  = $(shell git log -1 --format=%h \
+BUILDGIT  = $(shell git log -1 --format=%H \
             2>/dev/null || printf "unknown")
 BUILDHOST = $(shell hostname -f)
 BUILDOS   = $(shell $(GOCMD) env GOHOSTOS)
@@ -35,7 +35,7 @@ BUILDFLAG = -X "$(VERSPKG).Arch=$(BUILDARCH)" \
             -X "$(VERSPKG).Commit=$(BUILDGIT)" \
             -X "$(VERSPKG).Go=$(BUILDVERS)" \
             -X "$(VERSPKG).Host=$(BUILDHOST)" \
-            -X "$(VERSPKG).Id=$(APPNAME)" \
+            -X "$(VERSPKG).ID=$(APPNAME)" \
             -X "$(VERSPKG).Path=$(BUILDPATH)" \
             -X "$(VERSPKG).System=$(BUILDOS)" \
             -X "$(VERSPKG).Time=$(BUILDTIME)" \
@@ -240,6 +240,7 @@ doc:
 c: clean
 celan: clean
 clena: clean
+coen: coverage
 coveage: coverage
 coverae: coverage
 coverage: cover

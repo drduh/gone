@@ -4,19 +4,22 @@ import "time"
 
 const throttleInterval = 1 * time.Minute
 
-// getCutoff returns the rate-limit window cutoff.
-func getCutoff(t time.Time) time.Time {
-	return t.Add(-throttleInterval)
-}
-
 // Authorize returns true if the RequestThrottle limit
 // is not exceeded within the cutoff period.
 func (r *RequestThrottle) Authorize(limit int) bool {
+	return r.authorizeAt(limit, time.Now())
+}
+
+// authorizeAt returns true if the RequestThrottle limit
+// is not exceeded within the cutoff period.
+func (r *RequestThrottle) authorizeAt(
+	limit int,
+	now time.Time,
+) bool {
 	if limit <= 0 {
 		return true
 	}
 
-	now := time.Now()
 	cut := getCutoff(now)
 
 	r.Lease.Lock()
@@ -37,4 +40,9 @@ func (r *RequestThrottle) Authorize(limit int) bool {
 	r.RequestTimes = times
 
 	return true
+}
+
+// getCutoff returns the rate-limit window cutoff.
+func getCutoff(t time.Time) time.Time {
+	return t.Add(-throttleInterval)
 }

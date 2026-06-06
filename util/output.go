@@ -7,6 +7,8 @@ import (
 	"path/filepath"
 )
 
+const filePerm os.FileMode = 0o600
+
 // GetOutput returns the destination file or stdout writer.
 func GetOutput(p string) (io.Writer, error) {
 	if p == "" {
@@ -24,7 +26,8 @@ func GetOutput(p string) (io.Writer, error) {
 	defer func() { _ = root.Close() }()
 
 	dest, err := root.OpenFile(file,
-		os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0600)
+		os.O_CREATE|os.O_WRONLY|os.O_APPEND,
+		filePerm)
 	if err != nil {
 		return nil, fmt.Errorf(
 			"failed to open file '%s': %w", file, err)

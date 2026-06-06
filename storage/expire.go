@@ -37,7 +37,7 @@ func (f *File) TimeRemaining() time.Duration {
 
 // Expire removes a File from Storage by id.
 func (s *Storage) Expire(f *File) {
-	delete(s.Files, f.Id)
+	delete(s.Files, f.ID)
 }
 
 // UpdateTimeRemaining updates the time remaining until
@@ -45,6 +45,6 @@ func (s *Storage) Expire(f *File) {
 func (s *Storage) UpdateTimeRemaining() {
 	for _, file := range s.Files {
 		file.Time.Remain = file.TimeRemaining().String()
-		s.Files[file.Id] = file
+		s.Files[file.ID] = file
 	}
 }

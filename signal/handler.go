@@ -10,9 +10,11 @@ import (
 	"github.com/drduh/gone/config"
 )
 
+const sigChanBuffer = 2
+
 // Setup configures and listens for signals.
 func Setup(app *config.App) {
-	sigChan := make(chan os.Signal, 2)
+	sigChan := make(chan os.Signal, sigChanBuffer)
 	signals := []os.Signal{
 		os.Interrupt,
 		syscall.SIGTERM,

@@ -2,6 +2,8 @@ package templates
 
 import _ "embed"
 
+// StaticData contains embedded files data.
+//
 //go:embed data/static.txt
 var StaticData string
 

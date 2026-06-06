@@ -18,6 +18,7 @@ func (s *Storage) CountStorage() {
 func (s *Storage) CountFiles() {
 	s.NumFiles = len(s.Files)
 	total := 0
+
 	for _, file := range s.Files {
 		total += file.Bytes
 	}
@@ -34,6 +35,7 @@ func (s *Storage) CountFiles() {
 func (s *Storage) CountMessages() {
 	s.NumMessages = len(s.Messages)
 	total := 0
+
 	for _, message := range s.Messages {
 		total += len(message.Data)
 	}

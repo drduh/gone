@@ -2,20 +2,20 @@ package storage
 
 import "testing"
 
-// TestFindFileId tests a File found in Storage by id.
-func TestFindFileId(t *testing.T) {
+// TestFindFileID tests a File found in Storage by id.
+func TestFindFileID(t *testing.T) {
 	s := &Storage{
 		Files: map[string]*File{
-			"1": {Id: "id1", Name: "file1"},
-			"2": {Id: "id2", Name: "file2"},
+			"1": {ID: "id1", Name: "file1"},
+			"2": {ID: "id2", Name: "file2"},
 		},
 	}
 	got := s.FindFile("id2")
 	if got == nil {
 		t.Fatalf("FindFile returned nil")
 	}
-	if got.Id != "id2" {
-		t.Fatalf("FindFile returned %q; want %q", got.Id, "id2")
+	if got.ID != "id2" {
+		t.Fatalf("FindFile returned %q; want %q", got.ID, "id2")
 	}
 }
 
@@ -23,8 +23,8 @@ func TestFindFileId(t *testing.T) {
 func TestFindFileName(t *testing.T) {
 	s := &Storage{
 		Files: map[string]*File{
-			"1": {Id: "id1", Name: "file1"},
-			"2": {Id: "id2", Name: "file2"},
+			"1": {ID: "id1", Name: "file1"},
+			"2": {ID: "id2", Name: "file2"},
 		},
 	}
 	got := s.FindFile("file1")
@@ -40,7 +40,7 @@ func TestFindFileName(t *testing.T) {
 func TestFindFileNotFound(t *testing.T) {
 	s := &Storage{
 		Files: map[string]*File{
-			"1": {Id: "id1", Name: "file1"},
+			"1": {ID: "id1", Name: "file1"},
 		},
 	}
 	got := s.FindFile("file2")

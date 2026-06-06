@@ -13,7 +13,7 @@ func (s *Storage) ListFiles() []File {
 		}
 
 		f := File{
-			Id:   file.Id,
+			ID:   file.ID,
 			Name: file.Name,
 			Size: file.Size,
 			Sum:  file.Sum,

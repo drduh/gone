@@ -12,16 +12,16 @@ import (
 
 // Scan identifies and sets File attributes.
 func (f *File) Scan() {
-	f.setId()
+	f.setID()
 	f.setSize()
 	f.setSum()
 	f.setType()
 }
 
-// SetId sets a versioned File id using encoded
+// SetID sets a versioned File id using encoded
 // random bytes.
-func (f *File) setId() {
-	f.Id = storageVersion + util.RandomId()
+func (f *File) setID() {
+	f.ID = storageVersion + util.RandomID()
 }
 
 // SetSize sets File byte count, content length and

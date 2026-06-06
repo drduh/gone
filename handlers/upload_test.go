@@ -126,6 +126,7 @@ func TestUploadSuccess(t *testing.T) {
 	}
 
 	found := false
+
 	for _, f := range app.Files {
 		if f.Name == "upload_test.txt" {
 			found = true

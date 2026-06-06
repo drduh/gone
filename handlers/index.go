@@ -15,18 +15,19 @@ func Index(app *config.App) http.HandlerFunc {
 		if req == nil {
 			return
 		}
+
 		app.Log.Info("serving index",
 			"user", req)
 
 		theme := getDefaultTheme(app.Style.Theme)
 		if app.Style.AllowPick {
-			theme = getTheme(w, r, theme, app.Cookie.Id,
+			theme = getTheme(w, r, theme, app.Cookie.ID,
 				app.Cookie.Time.GetDuration(),
 				app.Style.Available)
 		}
 
 		tmpl, err := template.New("index").ParseFS(
-			templates.All, templatesData)
+			templates.TemplatesData, templatesData)
 		if err != nil {
 			writeJSON(w, http.StatusInternalServerError,
 				errorJSON(app.TmplParse))
