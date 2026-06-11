@@ -23,7 +23,7 @@ func Run() {
 		os.Exit(0)
 	}
 
-	app.Log.Info("started v1",
+	app.Log.Info("starting v1",
 		"host", app.Hostname,
 		"version", app.Version)
 	app.Log.Debug("debug log enabled",
@@ -32,7 +32,7 @@ func Run() {
 	signal.Setup(app)
 
 	if err := server.Serve(app); err != nil {
-		app.Log.Error("server failed",
+		app.Log.Error("failed to start v1",
 			"error", err.Error())
 		os.Exit(1)
 	}

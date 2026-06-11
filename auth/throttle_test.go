@@ -24,7 +24,7 @@ func TestAuthorizeDeny(t *testing.T) {
 	})
 
 	limit := 2
-	if r.authorizeAt(limit, now) {
+	if r.isAuthorizedAt(limit, now) {
 		t.Fatalf("expect deny with request limit %d", limit)
 	}
 }
@@ -39,12 +39,27 @@ func TestAuthorizeExpired(t *testing.T) {
 	})
 
 	limit := 2
-	if !r.authorizeAt(limit, now) {
+	if !r.isAuthorizedAt(limit, now) {
 		t.Fatal("expect allow with only one recent request")
 	}
 
 	if got := len(r.RequestTimes); got != limit {
 		t.Fatalf("len(RequestTimes) = %d, want %d",
 			got, limit)
+	}
+}
+
+// TestAuthorizeUnlimited tests unlimited Throttle.
+func TestAuthorizeUnlimited(t *testing.T) {
+	now := time.Date(2026, 12, 31, 12, 0, 0, 0, time.UTC)
+
+	r := newThrottle([]time.Time{
+		now.Add(-10 * time.Second),
+		now.Add(-20 * time.Second),
+		now.Add(-30 * time.Second),
+	})
+
+	if !r.isAuthorizedAt(0, now) {
+		t.Fatal("expect allow with no limit set")
 	}
 }

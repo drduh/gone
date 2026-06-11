@@ -1,6 +1,7 @@
 package server
 
 import (
+	"fmt"
 	"net/http"
 	"time"
 
@@ -37,5 +38,9 @@ func Serve(app *config.App) error {
 		WriteTimeout:      timeoutWrite,
 	}
 
-	return server.ListenAndServe()
+	if err := server.ListenAndServe(); err != nil {
+		return fmt.Errorf("server failed: %w", err)
+	}
+
+	return nil
 }
