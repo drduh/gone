@@ -69,7 +69,7 @@ func TestServeMessages(t *testing.T) {
 			Data:  fmt.Sprintf("msg%03d", i),
 			Time: Time{
 				Allow: time.Date(
-					2026, 5, 22, 23, i%60, 0, 0, time.UTC,
+					2026, 12, 31, 23, i%60, 0, 0, time.UTC,
 				).Format(timeFormat),
 			},
 		})
@@ -81,7 +81,7 @@ func TestServeMessages(t *testing.T) {
 	var body strings.Builder
 	for i := 1; i <= messageCount; i++ {
 		fmt.Fprintf(&body, "%d (%s) - %s\n", i,
-			time.Date(2026, 5, 22, 23, i%60, 0, 0, time.UTC).Format(
+			time.Date(2026, 12, 31, 23, i%60, 0, 0, time.UTC).Format(
 				timeFormat),
 			fmt.Sprintf("msg%03d", i),
 		)
