@@ -13,7 +13,7 @@ func TestListFiles(t *testing.T) {
 	s := &Storage{
 		Files: map[string]*File{
 			"durationExpired": {
-				Id:   "durationExpire",
+				ID:   "durationExpire",
 				Name: "durationExpire.txt",
 				Downloads: Downloads{
 					Allow: 5,
@@ -25,7 +25,7 @@ func TestListFiles(t *testing.T) {
 				},
 			},
 			"downloadExpired": {
-				Id:   "downloadExpire",
+				ID:   "downloadExpire",
 				Name: "downloadExpire.txt",
 				Downloads: Downloads{
 					Allow: 1,
@@ -37,7 +37,7 @@ func TestListFiles(t *testing.T) {
 				},
 			},
 			"active1": {
-				Id:   "active1",
+				ID:   "active1",
 				Name: "active1.txt",
 				Downloads: Downloads{
 					Allow: 2,
@@ -49,7 +49,7 @@ func TestListFiles(t *testing.T) {
 				},
 			},
 			"active2": {
-				Id:   "active2",
+				ID:   "active2",
 				Name: "active2.txt",
 				Downloads: Downloads{
 					Allow: 3,
@@ -71,8 +71,9 @@ func TestListFiles(t *testing.T) {
 
 	gotIDs := make([]string, 0, len(got))
 	for _, f := range got {
-		gotIDs = append(gotIDs, f.Id)
+		gotIDs = append(gotIDs, f.ID)
 	}
+
 	slices.Sort(gotIDs)
 
 	wantIDs := []string{"active1", "active2"}

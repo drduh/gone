@@ -3,5 +3,7 @@ package templates
 
 import "embed"
 
+// TemplatesData contains embedded template files.
+//
 //go:embed data/*.tmpl
-var All embed.FS
+var TemplatesData embed.FS

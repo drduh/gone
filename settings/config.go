@@ -160,7 +160,7 @@ type Index struct {
 	Cookie struct {
 
 		// Label ("goneTheme")
-		Id string `json:"id,omitempty"`
+		ID string `json:"id,omitempty"`
 
 		// Time cookie is valid for ("192h")
 		Time Duration `json:"time"`
@@ -203,7 +203,7 @@ type Default struct {
 	Expiration Duration `json:"duration"`
 }
 
-// Content represents limits on content.
+// Limit represents limits on content.
 type Limit struct {
 
 	// Global requests per minute to rate limit

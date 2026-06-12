@@ -7,7 +7,7 @@ ARG AUTHOR=drduh
 ARG GITNAME=github.com
 RUN set -eu; \
   BUILDARCH="$(go env GOHOSTARCH)"; \
-  BUILDGIT="$(git log -1 --format=%h 2>/dev/null || printf '0000000')"; \
+  BUILDGIT="$(git log -1 --format=%H 2>/dev/null || printf '0000000')"; \
   BUILDHOST="$(hostname 2>/dev/null || true)"; \
   BUILDOS="$(go env GOHOSTOS)"; \
   BUILDPATH="$(pwd)"; \
@@ -20,7 +20,7 @@ RUN set -eu; \
              -X ${VERSPKG}.Commit=${BUILDGIT} \
              -X ${VERSPKG}.Go=${BUILDVERS} \
              -X ${VERSPKG}.Host=${BUILDHOST} \
-             -X ${VERSPKG}.Id=${APPNAME} \
+             -X ${VERSPKG}.ID=${APPNAME} \
              -X ${VERSPKG}.Path=${BUILDPATH} \
              -X ${VERSPKG}.System=${BUILDOS} \
              -X ${VERSPKG}.Time=${BUILDTIME} \

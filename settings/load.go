@@ -3,9 +3,9 @@ package settings
 import (
 	"bytes"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"io"
-	"log"
 	"os"
 	"path/filepath"
 
@@ -15,22 +15,28 @@ import (
 //go:embed defaultSettings.json
 var defaultSettings []byte
 
+var errTrailingData = errors.New("trailing data in settings")
+
 // Load returns the application configuration from
 // a settings file or the default embedded settings.
-func Load(path string) Settings {
+func Load(path string) (Settings, error) {
 	var settings Settings
 
-	if err := loadSettings(defaultSettings, &settings); err != nil {
-		log.Fatalf("failed loading default settings: %v", err)
+	if err := loadSettings(
+		defaultSettings, &settings); err != nil {
+		return Settings{}, fmt.Errorf(
+			"default settings: %w", err)
 	}
 
 	if path != "" {
-		if err := loadSettingsFromFile(path, &settings); err != nil {
-			log.Fatalf("failed loading settings from file: %v", err)
+		if err := loadSettingsFromFile(
+			path, &settings); err != nil {
+			return Settings{}, fmt.Errorf(
+				"settings file: %w", err)
 		}
 	}
 
-	return settings
+	return settings, nil
 }
 
 // loadSettings decodes a JSON byte slice into Settings,
@@ -44,14 +50,12 @@ func loadSettings(data []byte, settings *Settings) error {
 	}
 
 	if err := dec.Decode(&struct{}{}); err != io.EOF {
-		if err == nil {
-			return fmt.Errorf("failed to decode: trailing data: %w", err)
-		}
-		return fmt.Errorf("failed to decode: trailing data: %w", err)
+		return errTrailingData
 	}
 
 	if err := settings.Validate(); err != nil {
-		return fmt.Errorf("failed to validate settings: %w", err)
+		return fmt.Errorf(
+			"failed to validate: %w", err)
 	}
 
 	return nil
@@ -64,15 +68,15 @@ func loadSettingsFromFile(p string, s *Settings) error {
 
 	f, err := os.OpenInRoot(dir, file)
 	if err != nil {
-		return fmt.Errorf("failed to read '%s' from '%s': %w",
-			file, dir, err)
+		return fmt.Errorf(
+			"failed to read '%s' from '%s': %w", file, dir, err)
 	}
 	defer func() { _ = f.Close() }()
 
 	data, err := io.ReadAll(f)
 	if err != nil {
-		return fmt.Errorf("failed to read '%s' from '%s': %w",
-			file, dir, err)
+		return fmt.Errorf(
+			"failed to read '%s' from '%s': %w", file, dir, err)
 	}
 
 	return loadSettings(data, s)

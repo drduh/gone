@@ -9,6 +9,7 @@ func IsDaytimeAt(t time.Time) bool {
 	month := t.Month()
 
 	var sunrise, sunset int
+
 	switch {
 	case month >= time.March && month <= time.May:
 		sunrise, sunset = 6, 20 // spring

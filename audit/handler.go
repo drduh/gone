@@ -7,14 +7,17 @@ import (
 	"log/slog"
 )
 
-const marshalErrFmt = `{"time":%q,` +
+const errMarshal = `{"time":%q,` +
 	`"level":"ERROR",` +
-	`"message":"failed to marshal audit event",` +
+	`"message":"failed to marshal event",` +
 	`"event":%q,` +
 	`"error":%q}`
 
-// Handle formats and outputs audit events in JSON format.
-func (a *Auditor) Handle(ctx context.Context, r slog.Record) error {
+// Handle formats and prints audit events in JSON format.
+func (a *Auditor) Handle(
+	ctx context.Context,
+	r slog.Record,
+) error {
 	data := make(map[string]any, r.NumAttrs())
 	r.Attrs(func(attr slog.Attr) bool {
 		data[attr.Key] = attr.Value.Any()
@@ -28,7 +31,7 @@ func (a *Auditor) Handle(ctx context.Context, r slog.Record) error {
 		Data:    data,
 	})
 	if err != nil {
-		a.Printf(marshalErrFmt,
+		a.Printf(errMarshal,
 			r.Time.Format(a.TimeFormat),
 			r.Message,
 			err.Error(),

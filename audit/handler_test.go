@@ -35,7 +35,9 @@ func TestHandleMarshalable(t *testing.T) {
 			err, buf.String())
 	}
 
-	for _, field := range []string{"time", "level", "message", "data"} {
+	for _, field := range []string{
+		"time", "level", "message", "data",
+	} {
 		if _, ok := entry[field]; !ok {
 			t.Errorf("expected %q in log entry, got: %v",
 				field, entry)
@@ -56,25 +58,30 @@ func TestHandleUnmarshallable(t *testing.T) {
 
 	output := buf.String()
 	if output == "" {
-		t.Fatal("expected output for marshal error, got nothing")
+		t.Fatal("no output for marshal error")
 	}
 
 	var entry map[string]any
-	if err := json.Unmarshal([]byte(output), &entry); err != nil {
-		t.Fatalf("expected valid json fallback, got error: %v\noutput: %s",
+	if err := json.Unmarshal(
+		[]byte(output), &entry); err != nil {
+		t.Fatalf("expected json, got error: %v\noutput: %s",
 			err, output)
 	}
 
 	if entry["level"] != "ERROR" {
-		t.Errorf("expected level ERROR, got %q", entry["level"])
+		t.Errorf("expected level ERROR, got %q",
+			entry["level"])
 	}
 	if entry["event"] != "forbidden" {
-		t.Errorf("expected event %q, got %q", "forbidden", entry["event"])
+		t.Errorf("expected event %q, got %q",
+			"forbidden", entry["event"])
 	}
 	if _, ok := entry["error"]; !ok {
-		t.Errorf("expected 'error' in fallback log entry, got: %v", entry)
+		t.Errorf("expected 'error' in log, got: %v",
+			entry)
 	}
 	if _, ok := entry["time"]; !ok {
-		t.Errorf("expected 'time' in fallback log entry, got: %v", entry)
+		t.Errorf("expected 'time' in log, got: %v",
+			entry)
 	}
 }

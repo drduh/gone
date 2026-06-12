@@ -14,7 +14,10 @@ func Static(app *config.App) http.HandlerFunc {
 		if req == nil {
 			return
 		}
-		app.Log.Info("serving static", "user", req)
+
+		app.Log.Info("serving static",
+			"user", req)
+
 		writeJSON(w, http.StatusOK, templates.Static{
 			Data: templates.StaticData,
 		})

@@ -8,7 +8,7 @@ import (
 )
 
 const (
-	cookieId    = "test-cookie"
+	cookieID    = "test-cookie"
 	cookieMode  = http.SameSiteStrictMode
 	cookieTime  = time.Hour
 	cookieValue = "cookie-value"
@@ -19,7 +19,7 @@ func TestCookieExists(t *testing.T) {
 	req := httptest.NewRequestWithContext(t.Context(),
 		http.MethodGet, "/", nil)
 	req.AddCookie(&http.Cookie{
-		Name:     cookieId,
+		Name:     cookieID,
 		HttpOnly: true,
 		SameSite: http.SameSiteStrictMode,
 		Secure:   true,
@@ -28,7 +28,7 @@ func TestCookieExists(t *testing.T) {
 
 	rr := httptest.NewRecorder()
 
-	result := GetCookie(rr, req, "default-value", cookieId, time.Hour)
+	result := GetCookie(rr, req, "default-value", cookieID, time.Hour)
 	if result != cookieValue {
 		t.Errorf("Expected %q, got %q", cookieValue, result)
 	}
@@ -42,14 +42,14 @@ func TestCookieNotExists(t *testing.T) {
 
 	rr := httptest.NewRecorder()
 
-	result := GetCookie(rr, req, cookieValue, cookieId, time.Hour)
+	result := GetCookie(rr, req, cookieValue, cookieID, time.Hour)
 	if result != cookieValue {
 		t.Errorf("Expected %q, got %q", cookieValue, result)
 	}
 
 	cookies := rr.Result().Cookies()
 	if len(cookies) != 1 ||
-		cookies[0].Name != cookieId ||
+		cookies[0].Name != cookieID ||
 		cookies[0].Value != cookieValue {
 		t.Errorf("Cookie was not set correctly")
 	}
@@ -66,21 +66,25 @@ func TestCookieNotExists(t *testing.T) {
 
 // TestNewCookie tests NewCookie correctly sets a cookie.
 func TestNewCookie(t *testing.T) {
-	cookie := NewCookie(cookieValue, cookieId, cookieTime)
+	cookie := NewCookie(cookieValue, cookieID, cookieTime)
 	if cookie.Path != "/" {
-		t.Errorf("Expected Path=%q, got %q", "/", cookie.Path)
+		t.Errorf("Expected Path=%q, got %q", "/",
+			cookie.Path)
 	}
-	if cookie.Name != cookieId {
-		t.Errorf("Expected Id=%q, got %q", cookieId, cookie.Name)
+	if cookie.Name != cookieID {
+		t.Errorf("Expected ID=%q, got %q",
+			cookieID, cookie.Name)
 	}
 	if cookie.Value != cookieValue {
-		t.Errorf("Expected Value=%q, got %q", cookieValue, cookie.Value)
+		t.Errorf("Expected Value=%q, got %q",
+			cookieValue, cookie.Value)
 	}
 	if !cookie.HttpOnly {
 		t.Errorf("Expected HttpOnly=true, got false")
 	}
 	if cookie.SameSite != cookieMode {
-		t.Errorf("Expected SameSite=%d, got %d", cookieMode, cookie.SameSite)
+		t.Errorf("Expected SameSite=%d, got %d",
+			cookieMode, cookie.SameSite)
 	}
 	if !cookie.Secure {
 		t.Errorf("Expected Secure=true, got false")

@@ -2,20 +2,26 @@ package storage
 
 import "testing"
 
-// TestFindFileId tests a File found in Storage by id.
-func TestFindFileId(t *testing.T) {
+// TestFindFileID tests a File found in Storage by id.
+func TestFindFileID(t *testing.T) {
 	s := &Storage{
 		Files: map[string]*File{
-			"1": {Id: "id1", Name: "file1"},
-			"2": {Id: "id2", Name: "file2"},
+			"1": {ID: "id1", Name: "file1"},
+			"2": {ID: "id2", Name: "file2"},
 		},
 	}
+
 	got := s.FindFile("id2")
 	if got == nil {
 		t.Fatalf("FindFile returned nil")
 	}
-	if got.Id != "id2" {
-		t.Fatalf("FindFile returned %q; want %q", got.Id, "id2")
+	if got.ID != "id2" {
+		t.Fatalf("FindFile returned %q; want %q",
+			got.ID, "id2")
+	}
+	if got.Name != "file2" {
+		t.Fatalf("FindFile returned %q; want %q",
+			got.Name, "file2")
 	}
 }
 
@@ -23,35 +29,43 @@ func TestFindFileId(t *testing.T) {
 func TestFindFileName(t *testing.T) {
 	s := &Storage{
 		Files: map[string]*File{
-			"1": {Id: "id1", Name: "file1"},
-			"2": {Id: "id2", Name: "file2"},
+			"1": {ID: "id1", Name: "file1"},
+			"2": {ID: "id2", Name: "file2"},
 		},
 	}
+
 	got := s.FindFile("file1")
 	if got == nil {
 		t.Fatalf("FindFile returned nil")
 	}
+	if got.ID != "id1" {
+		t.Fatalf("FindFile returned %q; want %q",
+			got.ID, "id1")
+	}
 	if got.Name != "file1" {
-		t.Fatalf("FindFile returned %q; want %q", got.Name, "file1")
+		t.Fatalf("FindFile returned %q; want %q",
+			got.Name, "file1")
 	}
 }
 
-// TestFindFileNotFound tests a File not found in Storage by name.
+// TestFindFileNotFound tests a File not found in Storage.
 func TestFindFileNotFound(t *testing.T) {
 	s := &Storage{
 		Files: map[string]*File{
-			"1": {Id: "id1", Name: "file1"},
+			"1": {ID: "id1", Name: "file1"},
 		},
 	}
+
 	got := s.FindFile("file2")
 	if got != nil {
 		t.Fatalf("FindFile returned %#v; want nil", got)
 	}
 }
 
-// TestFindFileNil tests no Files are found in empty Storage.
-func TestFindFileNil(t *testing.T) {
+// TestFindFileEmptyStorage tests empty Storage (no Files).
+func TestFindFileEmptyStorage(t *testing.T) {
 	s := &Storage{Files: nil}
+
 	got := s.FindFile("file1")
 	if got != nil {
 		t.Fatalf("FindFile returned %#v; want nil", got)
