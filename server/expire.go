@@ -37,7 +37,7 @@ func expireFiles(app *config.App) {
 		reason := f.IsExpired()
 		if reason != "" {
 			app.Expire(f)
-			app.Log.Info("removed file",
+			app.Log.Info("removed expired file",
 				"reason", reason,
 				"id", f.ID,
 				"name", f.Name,

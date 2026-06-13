@@ -31,7 +31,9 @@ func TestTarpitDelay(t *testing.T) {
 		t.Run(tc.name, func(t *testing.T) {
 			SetTarpit(tc.tarpit)
 			start := time.Now()
+
 			ApplyTarpit()
+
 			elapsed := time.Since(start)
 
 			if elapsed < tc.wantMin {
@@ -55,9 +57,11 @@ func TestTarpitJitter(t *testing.T) {
 	SetTarpit(base)
 
 	const samples = 10
+
 	delays := make([]time.Duration, samples)
 	for i := range delays {
 		start := time.Now()
+
 		ApplyTarpit()
 		delays[i] = time.Since(start)
 	}
