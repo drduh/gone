@@ -3,24 +3,8 @@ package audit
 import (
 	"bytes"
 	"encoding/json"
-	"io"
-	"log"
-	"log/slog"
 	"testing"
 )
-
-// newTestAuditor creates a new Auditor writing to buf.
-func newTestAuditor(buf *bytes.Buffer) *Auditor {
-	a := &Auditor{
-		Config: Config{
-			TimeFormat: "2006-01-02 15:04:05",
-		},
-		Handler: slog.NewJSONHandler(io.Discard, nil),
-		Logger:  log.New(buf, "", 0),
-	}
-	a.Log = slog.New(a)
-	return a
-}
 
 // TestHandleMarshalable tests a log entry is written
 // as valid JSON with expected fields.
@@ -30,8 +14,9 @@ func TestHandleMarshalable(t *testing.T) {
 	a.Log.Info("test event", "key", "value")
 
 	var entry map[string]any
-	if err := json.Unmarshal(buf.Bytes(), &entry); err != nil {
-		t.Fatalf("expected valid json, got error: %v\noutput: %s",
+	if err := json.Unmarshal(
+		buf.Bytes(), &entry); err != nil {
+		t.Fatalf("expected json, got error: %v\noutput: %s",
 			err, buf.String())
 	}
 

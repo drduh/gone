@@ -24,8 +24,10 @@ func TestWriteJSON(t *testing.T) {
 			"Content-Type"); ct != "application/json; charset=utf-8" {
 			t.Errorf("unexpected Content-Type: %s", ct)
 		}
+
 		var got map[string]string
-		if err := json.NewDecoder(rr.Body).Decode(&got); err != nil {
+		if err := json.NewDecoder(
+			rr.Body).Decode(&got); err != nil {
 			t.Fatalf("failed to decode response body: %v", err)
 		}
 		if got["hello"] != "world" {
@@ -60,8 +62,10 @@ func TestWriteJSON(t *testing.T) {
 			t.Fatalf("expected %d, got %d",
 				http.StatusOK, rr.Code)
 		}
+
 		var got User
-		if err := json.NewDecoder(rr.Body).Decode(&got); err != nil {
+		if err := json.NewDecoder(
+			rr.Body).Decode(&got); err != nil {
 			t.Fatalf("failed to decode body: %v", err)
 		}
 		if got.ID != 1 || got.Name != "Bob" {
@@ -78,8 +82,10 @@ func TestWriteJSON(t *testing.T) {
 			t.Errorf("expected %d, got %d",
 				http.StatusOK, rr.Code)
 		}
+
 		var got []int
-		if err := json.NewDecoder(rr.Body).Decode(&got); err != nil {
+		if err := json.NewDecoder(
+			rr.Body).Decode(&got); err != nil {
 			t.Fatalf("failed to decode body: %v", err)
 		}
 		if len(got) != 3 ||

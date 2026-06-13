@@ -15,6 +15,7 @@ func UserInfo(app *config.App) http.HandlerFunc {
 		if req == nil {
 			return
 		}
+
 		app.Log.Info("serving user request info",
 			"user", req)
 

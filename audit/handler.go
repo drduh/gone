@@ -15,7 +15,7 @@ const errMarshal = `{"time":%q,` +
 
 // Handle formats and prints audit events in JSON format.
 func (a *Auditor) Handle(
-	ctx context.Context,
+	_ context.Context,
 	r slog.Record,
 ) error {
 	data := make(map[string]any, r.NumAttrs())

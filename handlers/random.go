@@ -18,6 +18,7 @@ func Random(app *config.App) http.HandlerFunc {
 		path := getRequestParameter(r,
 			len(app.Random), "random")
 		count := app.RandomLimits.StrCount
+
 		results := make([]string, count)
 		for i := range count {
 			results[i] = util.GetRandom(path)

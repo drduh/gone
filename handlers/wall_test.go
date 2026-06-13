@@ -26,7 +26,8 @@ func TestWallGet(t *testing.T) {
 	}
 
 	var got string
-	if err := json.NewDecoder(rr.Body).Decode(&got); err != nil {
+	if err := json.NewDecoder(
+		rr.Body).Decode(&got); err != nil {
 		t.Fatalf("failed to decode response: %v", err)
 	}
 
@@ -55,7 +56,8 @@ func TestWallPostUpdate(t *testing.T) {
 	}
 
 	var got string
-	if err := json.NewDecoder(rr.Body).Decode(&got); err != nil {
+	if err := json.NewDecoder(
+		rr.Body).Decode(&got); err != nil {
 		t.Fatalf("failed to decode wall response: %v", err)
 	}
 	if got != "new content" {
@@ -84,7 +86,8 @@ func TestWallPostClear(t *testing.T) {
 	}
 
 	var got string
-	if err := json.NewDecoder(rr.Body).Decode(&got); err != nil {
+	if err := json.NewDecoder(
+		rr.Body).Decode(&got); err != nil {
 		t.Fatalf("failed to decode wall response: %v", err)
 	}
 	if got != "" {

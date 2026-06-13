@@ -44,6 +44,7 @@ func Message(app *config.App) http.HandlerFunc {
 				"count", app.NumMessages,
 				"user", req)
 			app.ServeMessages(w)
+
 			return
 		}
 
@@ -75,6 +76,7 @@ func addMessage(
 			"limit", app.MessageLimits.LengthChars,
 			"length", msgLength,
 			"user", req)
+
 		return false
 	}
 
@@ -86,6 +88,7 @@ func addMessage(
 			"limit", app.MessageLimits.MaxCount,
 			"count", msgCount,
 			"user", req)
+
 		return false
 	}
 

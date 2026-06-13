@@ -15,6 +15,7 @@ func Status(app *config.App) http.HandlerFunc {
 		if req == nil {
 			return
 		}
+
 		app.Log.Info("serving status",
 			"user", req)
 
