@@ -20,6 +20,8 @@ jobs:
       with:
         go-version-file: 'go.mod'
 
-    - uses: securego/gosec@9e6a9843d7a4a6e3e9a8539b02612c8a4aa3f889 # 2.27.1
-      with:
-        args: ./...
+    - name: Install gosec
+      run: go install github.com/securego/gosec/v2/cmd/gosec@latest
+
+    - name: Run gosec
+      run: gosec ./...
