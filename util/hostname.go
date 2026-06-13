@@ -8,5 +8,6 @@ func GetHostname() string {
 	if err != nil {
 		h = "unknown"
 	}
+
 	return h
 }

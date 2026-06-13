@@ -16,11 +16,13 @@ func GetMask(s string, refresh bool) string {
 			if !ok {
 				return "maskError"
 			}
+
 			return str
 		}
 	}
 	mask := GetRandom("mask")
 	masks.Store(s, mask)
+
 	return mask
 }
 
@@ -30,5 +32,6 @@ func GetMaskAddr(s string, refresh bool) string {
 	if err != nil {
 		addr = "unknown"
 	}
+
 	return GetMask(addr, refresh)
 }

@@ -2,8 +2,23 @@ package util
 
 import "testing"
 
+// TestUpperFirst tests first character is capitalized.
+func TestUpperFirst(t *testing.T) {
+	t.Parallel()
+
+	if got := upperFirst(""); got != "" {
+		t.Fatalf("got %q, want empty string", got)
+	}
+
+	if got := upperFirst("oak"); got != "Oak" {
+		t.Fatalf("got %q, want %q", got, "Oak")
+	}
+}
+
 // TestIsNumeric tests strings for numeric characters.
 func TestIsNumeric(t *testing.T) {
+	t.Parallel()
+
 	tests := []struct {
 		input  string
 		expect bool
@@ -34,6 +49,8 @@ func TestIsNumeric(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.input, func(t *testing.T) {
+			t.Parallel()
+
 			if got := IsNumeric(tt.input); got != tt.expect {
 				t.Errorf("%q = %v; expect %v",
 					tt.input, got, tt.expect)

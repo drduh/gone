@@ -16,6 +16,7 @@ func setupNames(t *testing.T, dir, filename, content string) {
 		if err := os.Remove(path); err != nil && !os.IsNotExist(err) {
 			t.Fatalf("setupNames remove %s: %v", path, err)
 		}
+
 		return
 	}
 
@@ -38,12 +39,12 @@ func TestLoadNames(t *testing.T) {
 		{
 			name:    "empty file",
 			content: "",
-			result:  defaultNames,
+			result:  defaultNames(),
 		},
 		{
 			name:    "newlines only",
 			content: "\n\n",
-			result:  defaultNames,
+			result:  defaultNames(),
 		},
 		{
 			name:    "basic",
@@ -83,8 +84,9 @@ func TestLoadNames(t *testing.T) {
 func TestLoadNamesMissingFile(t *testing.T) {
 	t.Parallel()
 	dir := t.TempDir()
+
 	got := loadNames(dir, "does-not-exist.txt")
-	if !slices.Equal(got, defaultNames) {
+	if !slices.Equal(got, defaultNames()) {
 		t.Errorf("expected default names, got %v", got)
 	}
 }

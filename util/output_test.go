@@ -12,11 +12,13 @@ func TestGetOutput(t *testing.T) {
 	if err != nil {
 		t.Fatalf("empty filename error: %v", err)
 	}
+
 	if writer != os.Stdout {
 		t.Errorf("expected stdout writer, got %v", writer)
 	}
 
 	testFile := "test.txt"
+
 	writer, err = GetOutput(testFile)
 	if err != nil {
 		t.Fatalf("got error: %v", err)
@@ -34,10 +36,12 @@ func TestGetOutput(t *testing.T) {
 	}
 
 	badFile := string([]byte{0})
+
 	writer, err = GetOutput(badFile)
 	if err == nil {
 		t.Errorf("did not receive error")
 	}
+
 	if writer != nil {
 		t.Errorf("did not expect writer")
 	}
@@ -59,6 +63,7 @@ func TestGetOutputAppends(t *testing.T) {
 	if !ok {
 		t.Fatalf("expected *os.File, got %T", first)
 	}
+
 	if err := f1.Close(); err != nil {
 		t.Fatalf("first close error: %v", err)
 	}
