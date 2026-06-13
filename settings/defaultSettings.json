@@ -62,8 +62,8 @@
       "allowPick": true,
       "theme":     "auto",
       "available": [
-        "dark",
         "light",
+        "dark",
         "navy",
         "rose",
         "green",
@@ -75,7 +75,8 @@
         "beach",
         "dusk",
         "neon",
-        "night"
+        "night",
+        "ember"
       ]
     }
   },
