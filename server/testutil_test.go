@@ -12,6 +12,6 @@ import (
 func newTestApp(files map[string]*storage.File) *config.App {
 	app := config.Load()
 	app.Log = slog.New(slog.DiscardHandler)
-	app.Storage.Files = files
+	app.Files = files
 	return app
 }

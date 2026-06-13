@@ -75,7 +75,7 @@ func (s *Settings) validateServer() error {
 func (s *Settings) validateAuth() error {
 	if s.TarpitDelay.GetDuration() < 0 {
 		return fmt.Errorf("%w - not %s",
-			errTarpitDelay, s.TarpitDelay.Duration.String())
+			errTarpitDelay, s.TarpitDelay.String())
 	}
 
 	if s.Basic.Field != "" && s.Basic.Token == "" {
