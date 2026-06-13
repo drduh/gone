@@ -3,16 +3,10 @@
   <details>
   <summary>config</summary>
     <div class="box">
-      {{ if .Style.AllowPick -}}
-        {{- template "selectTheme" . }}
-      {{ end }}
-
       {{- template "selectRefresh" . }}
-
       {{ if .Paths.UserRemask }}
         {{- template "selectRemask" . }}
       {{ end }}
-
       <br>
       {{- template "selectClear" . }}
     </div>

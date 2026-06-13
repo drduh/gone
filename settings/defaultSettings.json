@@ -62,21 +62,9 @@
       "allowPick": true,
       "theme":     "auto",
       "available": [
-        "light",
-        "dark",
-        "navy",
-        "rose",
-        "green",
-        "lime",
-        "pink",
-        "gold",
-        "purple",
-        "lush",
-        "beach",
-        "dusk",
-        "neon",
-        "night",
-        "ember"
+        "light", "dark", "navy", "rose", "green",
+        "lime", "pink", "gold", "purple", "lush",
+        "beach", "dusk", "neon", "night", "ember"
       ]
     }
   },
