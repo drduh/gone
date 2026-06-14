@@ -3,7 +3,6 @@ package v1
 
 import (
 	"flag"
-	"os"
 
 	"github.com/drduh/gone/config"
 	"github.com/drduh/gone/server"
@@ -13,14 +12,14 @@ import (
 
 // Run loads the application configuration, sets up the
 // signal handler and starts server, or prints version.
-func Run() {
+func Run() int {
 	flag.Parse()
 
 	app := config.Load()
 
 	if app.Modes.Version {
 		version.Print()
-		os.Exit(0)
+		return 0
 	}
 
 	app.Log.Info("starting v1",
@@ -34,6 +33,8 @@ func Run() {
 	if err := server.Serve(app); err != nil {
 		app.Log.Error("failed to start v1",
 			"error", err.Error())
-		os.Exit(1)
+		return 1
 	}
+
+	return 0
 }

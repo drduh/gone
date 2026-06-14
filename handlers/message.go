@@ -12,7 +12,7 @@ import (
 // Message handles requests to read and modify Messages.
 func Message(app *config.App) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		req := authRequest(w, r, app)
+		req := AuthRequest(w, r, app)
 		if req == nil {
 			return
 		}
@@ -44,12 +44,14 @@ func Message(app *config.App) http.HandlerFunc {
 				"count", app.NumMessages,
 				"user", req)
 			app.ServeMessages(w)
+
 			return
 		}
 
 		app.Log.Info("serving message(s)",
 			"count", len(app.Messages),
 			"user", req)
+
 		writeJSON(w, http.StatusOK, app.Messages)
 	}
 }
@@ -75,6 +77,7 @@ func addMessage(
 			"limit", app.MessageLimits.LengthChars,
 			"length", msgLength,
 			"user", req)
+
 		return false
 	}
 
@@ -86,6 +89,7 @@ func addMessage(
 			"limit", app.MessageLimits.MaxCount,
 			"count", msgCount,
 			"user", req)
+
 		return false
 	}
 

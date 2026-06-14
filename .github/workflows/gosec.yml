@@ -1,4 +1,4 @@
-name: lint
+name: gosec
 
 on:
   push:
@@ -10,7 +10,7 @@ permissions:
   contents: read
 
 jobs:
-  lint:
+  gosec:
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
@@ -20,6 +20,8 @@ jobs:
       with:
         go-version-file: 'go.mod'
 
-    - uses: golangci/golangci-lint-action@82606bf257cbaff209d206a39f5134f0cfbfd2ee # v9.2.1
-      with:
-        version: v2.12.2
+    - name: Install gosec
+      run: go install github.com/securego/gosec/v2/cmd/gosec@latest
+
+    - name: Run gosec
+      run: gosec ./...

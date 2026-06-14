@@ -9,7 +9,7 @@ import (
 // Wall handles requests to read and modify Wall content in Storage.
 func Wall(app *config.App) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		req := authRequest(w, r, app)
+		req := AuthRequest(w, r, app)
 		if req == nil {
 			return
 		}

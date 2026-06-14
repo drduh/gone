@@ -11,10 +11,11 @@ import (
 // Status handles requests for server status and configuration.
 func Status(app *config.App) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		req := authRequest(w, r, app)
+		req := AuthRequest(w, r, app)
 		if req == nil {
 			return
 		}
+
 		app.Log.Info("serving status",
 			"user", req)
 

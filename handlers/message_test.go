@@ -196,6 +196,7 @@ func TestMessageDownloadAll(t *testing.T) {
 	handler.ServeHTTP(rr, req)
 
 	body := rr.Body.String()
+
 	for i := 1; i <= 3; i++ {
 		want := testContentMsgs + strconv.Itoa(i)
 		if !strings.Contains(body, want) {

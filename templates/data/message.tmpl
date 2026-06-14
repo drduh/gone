@@ -2,7 +2,6 @@
 {{ define "message" }}
   <div class="box">
     <form action="{{ .Paths.Message }}"
-         enctype="application/x-www-form-urlencoded"
           method="post">
       <input class="selectMessage"
               name="message"
@@ -31,7 +30,7 @@
       <input name="clear"
              type="hidden"
             value="true">
-      <button class="selectClear" {{ if not .Storage.Messages }} disabled {{ end }}
+      <button class="selectClear" {{ if not .Storage.Messages -}} disabled {{ end }}
               title="clear messages"
                type="submit">clear</button>
     </form>
@@ -40,7 +39,7 @@
       <input name="download"
              type="hidden"
             value="all">
-      <button class="selectDownload" {{ if not .Storage.Messages }} disabled {{ end }}
+      <button class="selectDownload" {{ if not .Storage.Messages -}} disabled {{ end }}
               title="download messages"
                type="submit">download</button>
     </form>

@@ -9,9 +9,9 @@ import (
 	"github.com/drduh/gone/util"
 )
 
-// authRequest returns only allowed parsed http Requests,
+// AuthRequest returns only allowed parsed http Requests,
 // rejecting unauthenticated and unauthorized attempts.
-func authRequest(w http.ResponseWriter,
+func AuthRequest(w http.ResponseWriter,
 	r *http.Request, app *config.App) *Request {
 	req := parseRequest(r)
 

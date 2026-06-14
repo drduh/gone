@@ -16,7 +16,7 @@ var (
 	Arch = "unknown"
 
 	// Go identifies the version of Go used to
-	// build the application ("go1.26.3")
+	// build the application ("go1.26.4")
 	Go = "unknown"
 
 	// Commit identifies the git commit hash the

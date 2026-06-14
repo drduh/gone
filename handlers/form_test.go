@@ -46,6 +46,7 @@ func TestParseFormInt(t *testing.T) {
 	for _, tc := range cases {
 		t.Run(tc.name, func(t *testing.T) {
 			t.Parallel()
+
 			req, err := http.NewRequestWithContext(t.Context(),
 				http.MethodPost, tc.query, nil)
 			if err != nil {
@@ -104,6 +105,7 @@ func TestParseFormDuration(t *testing.T) {
 	for _, tc := range cases {
 		t.Run(tc.name, func(t *testing.T) {
 			t.Parallel()
+
 			req, err := http.NewRequestWithContext(t.Context(),
 				http.MethodPost, tc.query, nil)
 			if err != nil {

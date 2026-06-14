@@ -10,7 +10,7 @@ import (
 // Static handles requests for static embedded content.
 func Static(app *config.App) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		req := authRequest(w, r, app)
+		req := AuthRequest(w, r, app)
 		if req == nil {
 			return
 		}

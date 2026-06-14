@@ -1,16 +1,27 @@
 <!-- selectTheme.tmpl -->
 {{ define "selectTheme" }}
-    <form action="">
-      <select class="selectTheme"
-               name="theme"
-              title="select a theme">
-        <option value="">select theme</option>
-        {{ range .Style.Available -}}
-        <option value="{{ . }}">{{ . }}</option>
-        {{ end }}
-      </select>
+  {{ if .Style.AllowPick -}}
+  <details>
+  <summary>theme</summary>
+    <div class="box">
+    <form action=""
+          method="get">
+      <div class="themes">
+      {{ range .Style.Available }}
+        <label class="theme-{{ . }}"
+               title="{{ . }}">
+          <input name="theme"
+                 type="radio"
+                value="{{ . }}">
+          <span class="theme">{{ . }}</span>
+        </label>
+      {{ end }}
+      </div>
       <button class="selectTheme"
               title="apply selected theme"
                type="submit">apply theme</button>
     </form>
+    </div>
+  </details>
+  {{ end }}
 {{ end }}

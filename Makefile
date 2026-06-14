@@ -163,7 +163,7 @@ check-service:
 	@$(SYSTEMCTL) status $(APPNAME) || \
 		$(DEST_BIN) -conf $(DEST_CONF)
 
-uninstall-service:
+uninstall:
 	@sudo $(SYSTEMCTL) stop $(APPNAME)
 	@sudo $(SYSTEMCTL) disable $(APPNAME)
 	@sudo rm -f $(DEST_SERV)
@@ -207,7 +207,7 @@ static:
 		$(call WARN,skipping '$@': '$(GOSTATIC)' not found); \
 	fi
 
-build-race: prep
+build-race: prep-build
 	@$(GORACE)
 
 race: build-race
@@ -248,6 +248,7 @@ d: debug
 devug: debug
 f: fmt
 litn: lint
+prep: prep-build
 prod: release
 t: test
 tset: test
