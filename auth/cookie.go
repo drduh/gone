@@ -14,6 +14,7 @@ func GetCookie(w http.ResponseWriter, r *http.Request,
 		http.SetCookie(w, NewCookie(defaultValue, id, t))
 		return defaultValue
 	}
+
 	return cookie.Value
 }
 

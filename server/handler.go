@@ -20,9 +20,9 @@ func getHandler(app *config.App) http.Handler {
 				"path", pathAssets)
 			mux.Handle(
 				app.Assets,
-				http.StripPrefix(
+				wrapAssets(app, http.StripPrefix(
 					app.Assets,
-					http.FileServer(http.Dir(pathAssets)),
+					http.FileServer(http.Dir(pathAssets))),
 				),
 			)
 		} else {
@@ -51,4 +51,16 @@ func getHandler(app *config.App) http.Handler {
 	handle(app.Wall, handlers.Wall(app))
 
 	return mux
+}
+
+// wrapAssets applies rate-limiting to asset handling.
+func wrapAssets(app *config.App, h http.Handler) http.Handler {
+	return http.HandlerFunc(
+		func(w http.ResponseWriter, r *http.Request) {
+			req := handlers.AuthRequest(w, r, app)
+			if req == nil {
+				return
+			}
+			h.ServeHTTP(w, r)
+		})
 }

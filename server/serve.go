@@ -8,11 +8,9 @@ import (
 	"github.com/drduh/gone/config"
 )
 
-// Serve starts the expiry worker and HTTP server
-// with timeouts and configured routes to handle.
-func Serve(app *config.App) error {
-	go expiryWorker(app)
-
+// newServer sets up the HTTP server with
+// configured timeouts and routes to handle.
+func newServer(app *config.App) *http.Server {
 	handler := getHandler(app)
 
 	timeoutIdle := 90 * time.Second
@@ -25,19 +23,21 @@ func Serve(app *config.App) error {
 		"header", timeoutHeader.String(),
 		"write", timeoutWrite.String())
 
-	address := app.GetAddr()
-	app.Log.Info("starting server",
-		"address", address)
-
-	server := &http.Server{
-		Addr:              address,
+	return &http.Server{
+		Addr:              app.GetAddr(),
 		Handler:           handler,
 		IdleTimeout:       timeoutIdle,
 		ReadHeaderTimeout: timeoutHeader,
 		ReadTimeout:       timeoutRead,
 		WriteTimeout:      timeoutWrite,
 	}
+}
 
+// Serve starts the expiry worker and HTTP server.
+func Serve(app *config.App) error {
+	go expiryWorker(app)
+
+	server := newServer(app)
 	if err := server.ListenAndServe(); err != nil {
 		return fmt.Errorf("server failed: %w", err)
 	}

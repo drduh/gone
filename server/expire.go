@@ -6,14 +6,18 @@ import (
 	"github.com/drduh/gone/config"
 )
 
-// expiryWorker checks for and expires Files
-// on the configured "ticker" schedule.
+// expiryWorker starts the expiration loop
+// using the configured ticker interval.
 func expiryWorker(app *config.App) {
 	ticker := time.NewTicker(
 		app.FileLimits.ExpiryCheck.Duration)
 	defer ticker.Stop()
+	runExpiryLoop(app, ticker.C)
+}
 
-	for range ticker.C {
+// runExpiryLoop expires Files on each received tick.
+func runExpiryLoop(app *config.App, t <-chan time.Time) {
+	for range t {
 		expireFiles(app)
 	}
 }
@@ -33,7 +37,7 @@ func expireFiles(app *config.App) {
 		reason := f.IsExpired()
 		if reason != "" {
 			app.Expire(f)
-			app.Log.Info("removed file",
+			app.Log.Info("removed expired file",
 				"reason", reason,
 				"id", f.ID,
 				"name", f.Name,

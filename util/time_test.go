@@ -31,6 +31,7 @@ func TestIsDaytimeAt(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			testTime := time.Date(
 				2026, tt.month, 1, tt.hour, 0, 0, 0, time.UTC)
+
 			got := IsDaytimeAt(testTime)
 			if got != tt.want {
 				t.Errorf("IsDaytimeAt(%v) = %v, want %v",

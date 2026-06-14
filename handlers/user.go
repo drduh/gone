@@ -11,10 +11,11 @@ import (
 // UserInfo handles requests for user request information.
 func UserInfo(app *config.App) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		req := authRequest(w, r, app)
+		req := AuthRequest(w, r, app)
 		if req == nil {
 			return
 		}
+
 		app.Log.Info("serving user request info",
 			"user", req)
 

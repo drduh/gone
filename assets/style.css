@@ -1,4 +1,4 @@
-/* style.css */
+/* https://github.com/drduh/gone/blob/main/assets/style.css */
 
 * {
   box-sizing: border-box;
@@ -8,7 +8,6 @@ html {
   animation: var(--bg-animation);
   background: var(--bg-gradient);
   background-size: var(--bg-size);
-  background-attachment: fixed;
   min-height: 100%;
 }
 
@@ -19,14 +18,14 @@ body {
   display: flex;
   flex-direction: column;
   font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
-  font-size: 1em;
+  font-size: var(--font-size);
   margin: 1em auto;
 }
 
 .box {
   background-color: var(--bg-norm-half);
   border: 1px solid var(--fg-dark);
-  border-radius: var(--box-radius);
+  border-radius: var(--radius-box);
   flex: 1;
   margin: 1em auto;
   padding: 1em;
@@ -62,7 +61,6 @@ select {
 
 button[disabled] {
   opacity: 0.5;
-  pointer-events: none;
 }
 
 button:focus,
@@ -85,7 +83,7 @@ select {
   appearance: none;
   background-color: var(--bg-dark);
   border: none;
-  border-radius: var(--box-radius);
+  border-radius: var(--radius-box);
   color: var(--fg-light);
   cursor: pointer;
   margin: 10px;
@@ -106,7 +104,7 @@ input[type="number"] {
 
 .message .owner {
   background-color: var(--bg-light);
-  border-radius: var(--box-radius);
+  border-radius: var(--radius-box);
   bottom: 2em;
   color: var(--fg-light);
   padding: 6px 0;
@@ -121,7 +119,7 @@ input[type="number"] {
 .message .owner::after {
   border-color: var(--fg-light) transparent transparent transparent;
   border-style: solid;
-  border-width: var(--box-radius);
+  border-width: var(--radius-box);
   content: "";
   left: 50%;
   margin-left: -5px;
@@ -183,12 +181,17 @@ input[type="file"]::file-selector-button:hover {
 }
 
 input[type="radio"] {
-  display: none;
+  height: 1px;
+  margin: 0;
+  opacity: 0;
+  pointer-events: none;
+  position: absolute;
+  width: 1px;
 }
 
 table {
   border-collapse: collapse;
-  border-radius: var(--box-radius);
+  border-radius: var(--radius-box);
   margin: 1em auto;
   overflow: hidden;
   width: 80%;
@@ -247,4 +250,110 @@ summary {
 summary::marker {
   content: "";
   display: none;
+}
+
+.themes {
+  display: grid;
+  gap: 1em;
+  grid-template-columns: repeat(5, 1fr);
+}
+
+.themes label {
+  display: block;
+  width: var(--width-theme);
+  height: var(--width-theme);
+  border-radius: var(--radius-theme);
+  cursor: pointer;
+  outline: 2px solid transparent;
+  outline-offset: 2px;
+}
+
+.themes label:hover,
+.themes label:has(input:checked) {
+  outline-color: var(--fg-dark);
+}
+
+.themes label:has(input:focus-visible) {
+  outline-color: var(--fg-light);
+}
+
+.theme {
+  clip: rect(0,0,0,0);
+  position: absolute;
+}
+
+.theme-light {
+  background: linear-gradient(var(--rotation),
+    rgba(238,232,213,1) 0%,
+    rgba(253,246,227,1) 100%);
+}
+.theme-dark {
+  background: linear-gradient(var(--rotation),
+    rgba(101,123,131,1) 0%,
+    rgba(  0, 43, 54,1) 100%);
+}
+.theme-navy {
+  background: linear-gradient(var(--rotation),
+    rgba(  0, 91,150,1) 0%,
+    rgba(  1, 31, 75,1) 100%);
+}
+.theme-rose {
+  background: linear-gradient(var(--rotation),
+    rgba(220,130,130,1) 0%,
+    rgba(145, 55, 55,1) 100%);
+}
+.theme-green {
+  background: linear-gradient(var(--rotation),
+    rgba(119,171, 89,1) 0%,
+    rgba( 35, 77, 32,1) 100%);
+}
+.theme-lime {
+  background: linear-gradient(var(--rotation),
+    rgba(170,220,130,1) 0%,
+    rgba( 80,130, 50,1) 100%);
+}
+.theme-pink {
+  background: linear-gradient(var(--rotation),
+    rgba(255,185,210,1) 0%,
+    rgba(210, 90,140,1) 100%);
+}
+.theme-gold {
+  background: linear-gradient(var(--rotation),
+    rgba(255,212, 71,1) 0%,
+    rgba(166,124,  0,1) 100%);
+}
+.theme-purple {
+  background: linear-gradient(var(--rotation),
+    rgba(170,145,230,1) 0%,
+    rgba( 80, 60,160,1) 100%);
+}
+.theme-lush {
+  background: linear-gradient(var(--rotation),
+    rgba(169,132,248,1) 0%,
+    rgba( 26,184,126,1) 100%);
+}
+.theme-beach {
+  background: linear-gradient(var(--rotation),
+    rgba(246, 97, 81,1) 0%,
+    rgba( 66,142,186,1) 100%);
+}
+.theme-dusk {
+  background: linear-gradient(var(--rotation),
+    rgba(255,190,111,1) 0%,
+    rgba( 38, 36, 48,1) 100%);
+}
+.theme-neon {
+  background: linear-gradient(var(--rotation),
+    rgba(146, 21,245,1) 0%,
+    rgba(  0,  0,  0,1) 100%);
+}
+.theme-night {
+  background: linear-gradient(var(--rotation),
+    rgba(128,  0,  0,1) 0%,
+    rgba(  0,  0,  0,1) 100%);
+}
+.theme-ember {
+  background: linear-gradient(var(--rotation),
+    rgba(240,130, 30,1) 0%,
+    rgba(120, 40,  0,1) 100%);
 }

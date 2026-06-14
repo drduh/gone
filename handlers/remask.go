@@ -9,7 +9,7 @@ import (
 // UserRemask assigns a new address mask to the user.
 func UserRemask(app *config.App) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		req := authRequest(w, r, app)
+		req := AuthRequest(w, r, app)
 		if req == nil {
 			return
 		}

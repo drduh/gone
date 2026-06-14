@@ -14,12 +14,13 @@ import (
 
 const (
 	testAddrAndPort = "127.0.0.1:12345"
+	testUserAgent   = "testGoneAgent"
 	formContentType = "application/x-www-form-urlencoded"
 	testContentMsgs = "hello, world!"
 	testContentWall = "hello,\r\nworld!\r\n"
 )
 
-// newTestApp sets up a configured App,
+// newTestApp sets up a configured App for tests,
 // ignoring logging and rate limiting.
 func newTestApp() *config.App {
 	app := config.Load()

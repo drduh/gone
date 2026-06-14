@@ -62,9 +62,9 @@ func RandomHex(length int) string {
 }
 
 // RandomName returns a random string from the names list,
-// like "Alice", "Zack"; or "Bob" on error.
+// like "ancientLilac", "zestyWillow"; or "blueBay" on error.
 func RandomName() string {
-	return pickRandom(loadedNames, "Bob")
+	return pickRandom(loadedNames, "blueBay")
 }
 
 // RandomNato returns a random string from the nato list,
