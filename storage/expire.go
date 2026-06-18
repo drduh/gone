@@ -40,10 +40,11 @@ func (s *Storage) Expire(f *File) {
 	delete(s.Files, f.ID)
 }
 
-// UpdateTimeRemaining updates the time remaining until
-// expiration of each File in Storage.
-func (s *Storage) UpdateTimeRemaining() {
+// UpdateRemainingFileLimits updates remaining limits
+// of each File in Storage.
+func (s *Storage) UpdateRemainingFileLimits() {
 	for _, file := range s.Files {
+		file.Downloads.Remain = file.NumRemaining()
 		file.Time.Remain = file.TimeRemaining().String()
 		s.Files[file.ID] = file
 	}

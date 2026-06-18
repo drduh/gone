@@ -37,7 +37,7 @@ func Index(app *config.App) http.HandlerFunc {
 			return
 		}
 
-		app.UpdateTimeRemaining()
+		app.UpdateRemainingFileLimits()
 
 		response := templates.Index{
 			Auth:            app.Auth,
