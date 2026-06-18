@@ -32,11 +32,11 @@ type Storage struct {
 // File represents a user-uploaded file.
 type File struct {
 
-	// Downloads information
-	Downloads `json:"downloads"`
-
 	// Uploader information
 	Owner `json:"owner"`
+
+	// Downloads information
+	Downloads `json:"downloads"`
 
 	// Timing information
 	Time `json:"time"`
@@ -62,7 +62,7 @@ type File struct {
 	// File size (formatted string)
 	Size string `json:"size,omitempty"`
 
-	// File type (based on name extension)
+	// File content type
 	Type string `json:"type,omitempty"`
 }
 

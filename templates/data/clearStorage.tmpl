@@ -1,0 +1,19 @@
+<!-- clearStorage.tmpl -->
+{{ define "clearStorage" }}
+      <div class="row">
+        <form action="{{ .Paths.Clear }}"
+               class="inline-form"
+              method="post">
+          {{- if .Auth.Require.Clear }} {{ template "auth" . }} {{ end }}
+          <button class="selectClearStorage"
+          {{- if not (or .Storage.Files
+                         .Storage.Messages
+                         .Storage.WallContent) }} disabled
+                  title="storage is empty"
+          {{- else }}
+                  title="clear all storage"
+          {{- end }}
+                   type="submit">clear storage</button>
+        </form>
+      </div>
+{{ end }}

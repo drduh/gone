@@ -4,30 +4,32 @@
     <form action="{{ .Paths.Upload }}"
          enctype="multipart/form-data"
           method="post">
-      <input type="file" multiple required
+      <input type="file" autofocus multiple required
             class="selectFile"
              name="file"
             title="file(s) to upload">
-      <br>
-      <input type="number"
-            class="selectAllowDownloads"
-              max="{{ .Limit.FileLimits.MaxDownloads }}"
-              min="1"
-             name="downloads"
-             step="1"
-            title="number of allowed downloads"
-      placeholder="{{ .Default.Downloads }}">
-      <input type="text"
-            class="selectAllowDuration"
-             name="duration"
-      placeholder="{{ .DefaultDuration }}"
-            title="expire file after duration">
-      {{ if .Auth.Require.Upload }} {{ template "auth" . }} {{ end }}
-      <br>
-      <input type="submit"
-            class="selectSubmit"
-            title="upload selected file"
-            value="upload">
+      <div class="row">
+        <input type="number"
+              class="selectAllowDownloads"
+                max="{{ .Limit.FileLimits.MaxDownloads }}"
+                min="1"
+               step="1"
+               name="downloads"
+              title="number of allowed downloads"
+        placeholder="{{ .Default.Downloads }}">
+        <input type="text"
+              class="selectAllowDuration"
+               name="duration"
+        placeholder="{{ .DefaultDuration }}"
+              title="time until expiration">
+      </div>
+      <div class="row">
+        {{- if .Auth.Require.Upload }} {{ template "auth" . }} {{ end }}
+        <input type="submit"
+              class="selectSubmit"
+              title="upload selected file(s)"
+              value="upload">
+      </div>
     </form>
   </div>
 {{ end }}

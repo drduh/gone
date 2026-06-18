@@ -1,0 +1,12 @@
+<!-- userRemask.tmpl -->
+{{ define "userRemask" }}
+      <div class="row">
+        <form action="{{ .Paths.UserRemask }}"
+               class="inline-form"
+              method="post">
+          <button class="selectRemask"
+                  title="remask user address"
+                   type="submit">remask user</button>
+        </form>
+      </div>
+{{ end }}

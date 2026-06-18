@@ -38,6 +38,7 @@ func Index(app *config.App) http.HandlerFunc {
 		}
 
 		app.UpdateTimeRemaining()
+
 		response := templates.Index{
 			Auth:            app.Auth,
 			Default:         app.Default,

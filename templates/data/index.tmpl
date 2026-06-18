@@ -1,9 +1,8 @@
 <!-- index.tmpl -->
 {{ define "index" }}
-{{- template "header" . -}}
-{{- template "files" . -}}
-{{- template "text" . -}}
-{{- template "selectTheme" . -}}
-{{- template "config" . -}}
-{{- template "footer" . -}}
+{{- template "header" . }}
+  <main>
+  {{- template "body" . }}
+  </main>
+{{- template "footer" . }}
 {{ end }}

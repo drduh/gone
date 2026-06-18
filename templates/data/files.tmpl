@@ -1,17 +1,15 @@
 <!-- files.tmpl -->
 {{ define "files" -}}
   {{ if .Paths.Upload }}
-  <details>
+  {{ if .Storage.Files -}} <details>
+  {{ else -}} <details open> {{ end }}
   <summary>upload</summary>
     {{ template "upload" . }}
   </details>
   {{ end }}
   {{ if .Paths.List -}}
-  {{ if .Storage.Files }}
-  <details open>
-  {{ else }}
-  <details>
-  {{ end }}
+  {{ if .Storage.Files -}} <details open>
+  {{ else -}} <details> {{ end }}
   <summary>download</summary>
     {{ template "list" . }}
   </details>
