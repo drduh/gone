@@ -151,3 +151,16 @@ type Sizes struct {
 	// Formatted total size of all Files
 	SizeFilesFmt string `json:"sizeFilesFmt,omitempty"`
 }
+
+// MessageParts represents extracted Message attributes.
+type MessageParts struct {
+
+	// Text content
+	Text string
+
+	// URL content
+	URL string
+
+	// Whether part contains URL
+	HasURL bool
+}

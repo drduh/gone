@@ -3,44 +3,64 @@
   <div class="box">
     <form action="{{ .Paths.Message }}"
           method="post">
-      <input class="selectMessage"
-              name="message"
-         maxlength="{{ .Limit.MessageLimits.LengthChars }}"
-       placeholder="{{ .Placeholder.Message }}"
-             title="message text content"
-              type="text" required>
-      {{ if .Auth.Require.Message }} {{ template "auth" . }} {{ end }}
-      <input class="selectPost"
-             title="post message"
-              type="submit"
-             value="post">
+      <div class="row">
+        <input class="selectMessage"
+                name="message"
+           maxlength="{{ .Limit.MessageLimits.LengthChars }}"
+         placeholder="{{ .Placeholder.Message }}"
+               title="message text content"
+                type="text" required>
+        {{- if .Auth.Require.Message }} {{ template "auth" . }} {{ end }}
+        <input class="selectPost"
+               title="post message"
+                type="submit"
+               value="post">
+      </div>
     </form>
-    {{ range .Storage.Messages }}
-    <div class="message">
-      <b>{{ .Count }}</b> {{ .Data }}
+    {{- if .Storage.Messages }}
+    <ul class="messages">
+    {{- range .Storage.Messages }}
+      <li class="message">
+      <b>{{ .Count }}</b>
+      {{- range .GetParts }}
+        {{ if .HasURL }}
+        <a href="{{ .URL }}"
+         target="_blank"
+            rel="noopener noreferrer">{{ .Text }}</a>
+        {{ else }} {{ .Text }} {{ end }}
+      {{- end }}
       <span class="owner">
         {{ .Owner.Mask }} at {{ .Time.Allow }}
       </span>
-    </div>
-    <br>
-    {{ end }}
+      </li>
+    {{- end }}
+    </ul>
+    {{- end }}
     <form action="{{ .Paths.Message }}"
-          method="post"
-           style="display:inline;">
+           class="inline-form"
+          method="post">
       <input name="clear"
              type="hidden"
             value="true">
-      <button class="selectClear" {{ if not .Storage.Messages -}} disabled {{ end }}
+      <button class="selectClearMessages"
+      {{- if not .Storage.Messages }} disabled
+              title="no messages to clear"
+      {{- else }}
               title="clear messages"
+      {{- end }}
                type="submit">clear</button>
     </form>
     <form action="{{ .Paths.Message }}"
-           style="display:inline;">
+           class="inline-form">
       <input name="download"
              type="hidden"
             value="all">
-      <button class="selectDownload" {{ if not .Storage.Messages -}} disabled {{ end }}
+      <button class="selectDownload"
+       {{- if not .Storage.Messages }} disabled
+              title="no messages to download"
+       {{- else }}
               title="download messages"
+       {{- end }}
                type="submit">download</button>
     </form>
   </div>
