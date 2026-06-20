@@ -15,6 +15,7 @@ OUT       = release
 GOCMD    ?= go
 GODOC    ?= ${HOME}/go/bin/godoc
 GOLINT   ?= golangci-lint
+GOLINTARG =
 GOSEC    ?= gosec
 GOSTATIC ?= staticcheck
 
@@ -69,18 +70,17 @@ DEST_SERV = /etc/systemd/system/$(SERVICE)
 MOD_EXEC  = 0755
 MOD_FILE  = 0644
 
+TESTARGS ?=
 TESTCOVER = testCoverage
+TIMEOUT  ?= 1m
 CMDTEST   = $(GOCMD) test -trimpath
 CMDCOVER  = $(CMDTEST) \
             -coverprofile=$(TESTCOVER) $(PKG)
 
-TIMEOUT  ?= 1m
-
-WARN      = tput setaf 3 ; \
-            printf "%s\n" "${1}" ; \
+WARN      = tput setaf 3 ; printf "%s\n" "${1}" ; \
             tput sgr0
 
-all: fmt build test lint
+all: fmt lint test build
 
 prep-build:
 	@mkdir -p $(OUT)
@@ -102,7 +102,7 @@ version: build
 
 release: build
 	@printf "built release: %s\n" \
-		"$$(file $(OUT)/$(BINNAME))"
+		"$$(file "$(OUT)/$(BINNAME)")"
 
 prep-container:
 	@$(CONTAIN) system start
@@ -171,41 +171,28 @@ uninstall:
 fmt:
 	@$(GOCMD) fmt $(PKG)
 
-test:
-	@$(CMDTEST) -timeout=$(TIMEOUT) $(PKG)
+test-race:    TESTARGS = -race
+test-short:   TESTARGS = -short
+test-verbose: TESTARGS = -v
 
-test-race:
-	@$(CMDTEST) -race -timeout=$(TIMEOUT) $(PKG)
+test test-race test-short test-verbose:
+	@$(CMDTEST) $(TESTARGS) -timeout=$(TIMEOUT) $(PKG)
 
-test-short:
-	@$(CMDTEST) -short -timeout=$(TIMEOUT) $(PKG)
+RUN_IF_FOUND = if command -v $(1) >/dev/null 2>&1 ; \
+		then $(1) $(2) ; else \
+		$(call WARN,skipping '$@': '$(1)' not found); fi
 
-test-verbose:
-	@$(CMDTEST) -v -timeout=$(TIMEOUT) $(PKG)
+lint-verbose: GOLINTARG = --verbose
 
-lint:
-	@if command -v $(GOLINT) >/dev/null 2>&1 ; then \
-		$(GOLINT) run $(PKG) ; else \
-		$(call WARN,skipping '$@': '$(GOLINT)' not found); \
-	fi
-
-lint-verbose:
-	@if command -v $(GOLINT) >/dev/null 2>&1 ; then \
-		$(GOLINT) run --verbose $(PKG) ; else \
-		$(call WARN,skipping '$@': '$(GOLINT)' not found); \
-	fi
+lint lint-verbose:
+	@printf "linting ... "
+	@$(call RUN_IF_FOUND,$(GOLINT),run $(GOLINTARG) $(PKG))
 
 sec:
-	@if command -v $(GOSEC) >/dev/null 2>&1 ; then \
-		$(GOSEC) run $(PKG) ; else \
-		$(call WARN,skipping '$@': '$(GOSEC)' not found); \
-	fi
+	@$(call RUN_IF_FOUND,$(GOSEC),$(PKG))
 
 static:
-	@if command -v $(GOSTATIC) >/dev/null 2>&1 ; then \
-		$(GOSTATIC) $(PKG) ; else \
-		$(call WARN,skipping '$@': '$(GOSTATIC)' not found); \
-	fi
+	@$(call RUN_IF_FOUND,$(GOSTATIC),$(PKG))
 
 build-race: prep-build
 	@$(GORACE)
@@ -225,10 +212,10 @@ clean-cache:
 
 cover: test-cover
 	@$(GOCMD) tool cover \
-		-html=$(TESTCOVER) -o $(TESTCOVER).html
+		-html="$(TESTCOVER)" -o "$(TESTCOVER).html"
 	@printf "total test coverage: %s" \
-		"$$($(GOCMD) tool cover -func=$(TESTCOVER) | \
-		grep total: | awk '{print $$3}')"
+		"$$($(GOCMD) tool cover -func="$(TESTCOVER)" | \
+		awk '/^total:/{print $$3}')"
 	@printf " - see %s\n" "$(TESTCOVER).html"
 
 test-cover:
@@ -247,6 +234,8 @@ coverage: cover
 d: debug
 devug: debug
 f: fmt
+format: fmt
+gosec: sec
 litn: lint
 prep: prep-build
 prod: release
