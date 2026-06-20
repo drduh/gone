@@ -242,6 +242,7 @@ prod: release
 t: test
 tset: test
 r: run
+un: run
 urn: run
 v: verbose
 verbose: debug
