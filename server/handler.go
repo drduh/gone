@@ -3,6 +3,7 @@ package server
 import (
 	"net/http"
 	"os"
+	"strings"
 
 	"github.com/drduh/gone/config"
 	"github.com/drduh/gone/handlers"
@@ -10,50 +11,45 @@ import (
 
 // getHandler configures paths to handle and serve.
 func getHandler(app *config.App) http.Handler {
-	const pathAssets = "assets"
-
 	mux := http.NewServeMux()
 
-	if app.Assets != "" {
-		if _, err := os.Stat(pathAssets); err == nil {
-			app.Log.Debug("assets present",
-				"path", pathAssets)
-			mux.Handle(
-				app.Assets,
-				wrapAssets(app, http.StripPrefix(
-					app.Assets,
-					http.FileServer(http.Dir(pathAssets))),
-				),
-			)
-		} else {
-			app.Log.Warn("missing assets",
-				"path", pathAssets)
-		}
-	}
+	registerAssets(mux, app)
 
-	handle := func(path string, h http.HandlerFunc) {
-		if path != "" {
-			mux.HandleFunc(path, h)
-		}
+	for pattern, h := range handlers.Routes(app) {
+		mux.HandleFunc(pattern, h)
 	}
-
-	handle(app.Root, handlers.Index(app))
-	handle(app.Clear, handlers.Clear(app))
-	handle(app.Download, handlers.Download(app))
-	handle(app.List, handlers.List(app))
-	handle(app.Message, handlers.Message(app))
-	handle(app.Random, handlers.Random(app))
-	handle(app.Static, handlers.Static(app))
-	handle(app.Status, handlers.Status(app))
-	handle(app.Upload, handlers.Upload(app))
-	handle(app.UserInfo, handlers.UserInfo(app))
-	handle(app.UserRemask, handlers.UserRemask(app))
-	handle(app.Wall, handlers.Wall(app))
 
 	return mux
 }
 
-// wrapAssets applies rate-limiting to asset handling.
+// registerAssets sets up HTML asset handling.
+func registerAssets(mux *http.ServeMux, app *config.App) {
+	const pathAssets = "assets"
+
+	if app.Assets == "" {
+		return
+	}
+
+	if _, err := os.Stat(pathAssets); err != nil {
+		app.Log.Warn("missing assets",
+			"path", pathAssets)
+		return
+	}
+
+	assetsPath := app.Assets
+	if !strings.HasSuffix(assetsPath, "/") {
+		assetsPath += "/"
+	}
+
+	mux.Handle(assetsPath, wrapAssets(
+		app,
+		http.StripPrefix(
+			assetsPath,
+			http.FileServer(http.Dir(pathAssets))),
+	))
+}
+
+// wrapAssets applies rate-limiting and caching to assets.
 func wrapAssets(app *config.App, h http.Handler) http.Handler {
 	return http.HandlerFunc(
 		func(w http.ResponseWriter, r *http.Request) {
@@ -61,6 +57,7 @@ func wrapAssets(app *config.App, h http.Handler) http.Handler {
 			if req == nil {
 				return
 			}
+			w.Header().Set("Cache-Control", "no-cache")
 			h.ServeHTTP(w, r)
 		})
 }

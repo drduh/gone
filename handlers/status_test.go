@@ -13,7 +13,7 @@ func TestStatusDeny(t *testing.T) {
 
 	req := httptest.NewRequestWithContext(t.Context(),
 		http.MethodGet, app.Status, nil)
-	rr := serveDeniedRequest(t, Status(app), req)
+	rr := serveDeniedRequest(t, app, req)
 
 	assertDenied(t, rr, app.Deny)
 }

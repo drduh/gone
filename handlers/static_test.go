@@ -12,16 +12,18 @@ import (
 // TestStatic tests serving embedded static content.
 func TestStatic(t *testing.T) {
 	app := newTestApp()
+	app.Require.Static = false
 
 	req := httptest.NewRequestWithContext(t.Context(),
 		http.MethodGet, app.Static, nil)
 	req.RemoteAddr = testAddrAndPort
 
 	rr := httptest.NewRecorder()
-	Static(app).ServeHTTP(rr, req)
+	mux := newTestMux(app)
+	mux.ServeHTTP(rr, req)
 
 	if rr.Code != http.StatusOK {
-		t.Fatalf("expected status %d, got %d",
+		t.Fatalf("expected %d, got %d",
 			http.StatusOK, rr.Code)
 	}
 
@@ -48,7 +50,7 @@ func TestStaticDeny(t *testing.T) {
 
 	req := httptest.NewRequestWithContext(t.Context(),
 		http.MethodGet, app.Static, nil)
-	rr := serveDeniedRequest(t, Static(app), req)
+	rr := serveDeniedRequest(t, app, req)
 
 	assertDenied(t, rr, app.Deny)
 }

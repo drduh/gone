@@ -36,10 +36,11 @@ func TestList(t *testing.T) {
 	req.RemoteAddr = testAddrAndPort
 
 	rr := httptest.NewRecorder()
-	List(app).ServeHTTP(rr, req)
+	mux := newTestMux(app)
+	mux.ServeHTTP(rr, req)
 
 	if rr.Code != http.StatusOK {
-		t.Fatalf("expected status %d, got %d",
+		t.Fatalf("expected %d, got %d",
 			http.StatusOK, rr.Code)
 	}
 	ct := rr.Header().Get("Content-Type")
@@ -92,7 +93,7 @@ func TestListDeny(t *testing.T) {
 
 	req := httptest.NewRequestWithContext(t.Context(),
 		http.MethodGet, app.List, nil)
-	rr := serveDeniedRequest(t, List(app), req)
+	rr := serveDeniedRequest(t, app, req)
 
 	assertDenied(t, rr, app.Deny)
 }

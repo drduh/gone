@@ -13,7 +13,7 @@ func TestDownloadDeny(t *testing.T) {
 
 	req := httptest.NewRequestWithContext(t.Context(),
 		http.MethodGet, app.Download, nil)
-	rr := serveDeniedRequest(t, Download(app), req)
+	rr := serveDeniedRequest(t, app, req)
 
 	assertDenied(t, rr, app.Deny)
 }

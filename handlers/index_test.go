@@ -16,7 +16,7 @@ func TestIndexDeny(t *testing.T) {
 
 	req := httptest.NewRequestWithContext(t.Context(),
 		http.MethodGet, app.Root, nil)
-	rr := serveDeniedRequest(t, Index(app), req)
+	rr := serveDeniedRequest(t, app, req)
 
 	assertDenied(t, rr, app.Deny)
 }
@@ -24,12 +24,13 @@ func TestIndexDeny(t *testing.T) {
 // TestIndexMessageEscape tests Message URL encoding.
 func TestIndexMessageEscape(t *testing.T) {
 	app := newTestApp()
+	app.Require.Root = false
 
 	app.Messages = append(app.Messages, &storage.Message{
 		Count: 1,
 		Data:  `<script>alert("xss")</script> https://example.com`,
 		Owner: storage.Owner{
-			Mask: "127.0.0.1",
+			Mask: testAddrAndPort,
 		},
 		Time: storage.Time{
 			Allow: "now",
@@ -41,11 +42,12 @@ func TestIndexMessageEscape(t *testing.T) {
 	req.Header.Set("Accept", "text/html")
 
 	rr := httptest.NewRecorder()
-
-	Index(app).ServeHTTP(rr, req)
+	mux := newTestMux(app)
+	mux.ServeHTTP(rr, req)
 
 	if rr.Code != http.StatusOK {
-		t.Fatalf("expected 200, got %d", rr.Code)
+		t.Fatalf("expected %d, got %d",
+			http.StatusOK, rr.Code)
 	}
 
 	body := rr.Body.String()

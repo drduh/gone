@@ -13,17 +13,19 @@
       "token":     "mySecret"
     },
     "require": {
-      "clear":     false,
+      "assets":    false,
+      "clear":     true,
       "download":  true,
       "list":      false,
-      "message":   false,
+      "msg":       false,
+      "msgClear":  true,
       "random":    false,
       "root":      false,
       "static":    false,
-      "status":    false,
+      "status":    true,
       "upload":    false,
       "userInfo":  false,
-      "wall":      false
+      "wall":      true
     },
     "tarpitDelay": "2s"
   },
@@ -95,7 +97,8 @@
     "clear":       "/clear",
     "download":    "/download/",
     "list":        "/list",
-    "message":     "/msg",
+    "msg":         "/msg",
+    "msgClear":    "/msg/clear",
     "random":      "/random/",
     "root":        "/",
     "static":      "/static",

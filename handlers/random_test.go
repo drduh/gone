@@ -14,7 +14,7 @@ func TestRandomDeny(t *testing.T) {
 
 	req := httptest.NewRequestWithContext(t.Context(),
 		http.MethodGet, app.Random+"test", nil)
-	rr := serveDeniedRequest(t, Random(app), req)
+	rr := serveDeniedRequest(t, app, req)
 
 	assertDenied(t, rr, app.Deny)
 }
@@ -22,16 +22,17 @@ func TestRandomDeny(t *testing.T) {
 // TestRandomCoin tests requests for random coin values.
 func TestRandomCoin(t *testing.T) {
 	app := newTestApp()
+	app.Require.Random = false
 	app.RandomLimits.StrCount = 3
 
 	req := httptest.NewRequestWithContext(t.Context(),
 		http.MethodGet, app.Random+"coin", nil)
 	rr := httptest.NewRecorder()
-
-	Random(app).ServeHTTP(rr, req)
+	mux := newTestMux(app)
+	mux.ServeHTTP(rr, req)
 
 	if rr.Code != http.StatusOK {
-		t.Fatalf("expected status %d, got %d",
+		t.Fatalf("expected %d, got %d",
 			http.StatusOK, rr.Code)
 	}
 

@@ -26,7 +26,17 @@ func newTestApp() *config.App {
 	app := config.Load()
 	app.Log = slog.New(slog.DiscardHandler)
 	app.ReqsPerMinute = 1000
+	auth.SetTarpit(0)
 	return app
+}
+
+// newTestMux sets up a route handlers for tests.
+func newTestMux(app *config.App) *http.ServeMux {
+	mux := http.NewServeMux()
+	for pattern, h := range Routes(app) {
+		mux.HandleFunc(pattern, h)
+	}
+	return mux
 }
 
 // newTestAppWithStorage sets up a configured
@@ -51,9 +61,8 @@ func newTestAppWithStorage() *config.App {
 // by setting tarpit duration to 0.
 func serveDeniedRequest(
 	t *testing.T,
-	handler http.HandlerFunc,
-	req *http.Request,
-) *httptest.ResponseRecorder {
+	app *config.App,
+	req *http.Request) *httptest.ResponseRecorder {
 	t.Helper()
 
 	auth.SetTarpit(0)
@@ -63,7 +72,9 @@ func serveDeniedRequest(
 	}
 
 	rr := httptest.NewRecorder()
-	handler.ServeHTTP(rr, req)
+	mux := newTestMux(app)
+	mux.ServeHTTP(rr, req)
+
 	return rr
 }
 
@@ -75,7 +86,7 @@ func assertDenied(
 	t.Helper()
 
 	if rr.Code != http.StatusForbidden {
-		t.Fatalf("expected status %d, got %d",
+		t.Fatalf("expected %d, got %d",
 			http.StatusForbidden, rr.Code)
 	}
 
@@ -94,6 +105,7 @@ func assertDenied(
 // assertStorageClear tests Storage is empty.
 func assertStorageClear(t *testing.T, app *config.App) {
 	t.Helper()
+
 	assertFilesClear(t, app)
 	assertMessagesClear(t, app)
 	assertWallClear(t, app)

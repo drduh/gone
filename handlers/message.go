@@ -19,32 +19,22 @@ func Message(app *config.App) http.HandlerFunc {
 
 		app.CountMessages()
 
-		if r.Method == http.MethodPost {
-			if r.FormValue(formFieldClear) != "" {
-				app.Log.Debug("clearing messages",
-					"count", app.NumMessages,
-					"user", req)
-				app.ClearMessages()
-				app.Log.Info("cleared messages",
-					"user", req)
-			}
-
-			if !addMessage(w, r, app, req) {
-				return
-			}
-
-			if req.IsBrowser {
-				toPath(w, r, app.Root)
-				return
-			}
+		if !addMessage(w, r, app, req) {
+			return
 		}
 
-		if r.URL.Query().Get("download") == "all" {
-			app.Log.Debug("downloading messages",
+		formContent := r.FormValue("download")
+		if formContent == "allMessages" {
+			app.Log.Debug("downloading all messages",
 				"count", app.NumMessages,
 				"user", req)
 			app.ServeMessages(w)
 
+			return
+		}
+
+		if req.IsBrowser {
+			toPath(w, r, app.Root)
 			return
 		}
 
@@ -112,4 +102,25 @@ func addMessage(
 		"user", req)
 
 	return true
+}
+
+// MessageClear handles requests to clear Messages.
+func MessageClear(app *config.App) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		req := AuthRequest(w, r, app)
+		if req == nil {
+			return
+		}
+
+		app.Log.Debug("clearing messages",
+			"count", app.NumMessages,
+			"user", req)
+		app.ClearMessages()
+		app.Log.Info("cleared messages",
+			"user", req)
+
+		if req.IsBrowser {
+			toPath(w, r, app.Root)
+		}
+	}
 }

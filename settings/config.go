@@ -66,6 +66,9 @@ type Auth struct {
 	// Require represents paths requiring authentication.
 	Require struct {
 
+		// HTML assets, such as stylesheet
+		Assets bool `json:"assets,omitempty"`
+
 		// Clear all Storage content
 		Clear bool `json:"clear,omitempty"`
 
@@ -76,7 +79,10 @@ type Auth struct {
 		List bool `json:"list,omitempty"`
 
 		// Read and write text messages
-		Message bool `json:"message,omitempty"`
+		Message bool `json:"msg,omitempty"`
+
+		// Clear text messages
+		MessageClear bool `json:"msgClear,omitempty"`
 
 		// Get random output
 		Random bool `json:"random,omitempty"`
@@ -275,7 +281,10 @@ type Paths struct {
 	List string `json:"list,omitempty"`
 
 	// Message read and write ("/msg")
-	Message string `json:"message,omitempty"`
+	Message string `json:"msg,omitempty"`
+
+	// Message clear ("/msg/clear")
+	MessageClear string `json:"msgClear,omitempty"`
 
 	// Random output ("/random/")
 	Random string `json:"random,omitempty"`
