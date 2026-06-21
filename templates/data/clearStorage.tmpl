@@ -9,9 +9,9 @@
           {{- if not (or .Storage.Files
                          .Storage.Messages
                          .Storage.WallContent) }} disabled
-                  title="storage is empty"
+                  title="no content in storage"
           {{- else }}
-                  title="clear all storage"
+                  title="clear storage content"
           {{- end }}
                    type="submit">clear storage</button>
         </form>

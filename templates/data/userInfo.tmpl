@@ -1,0 +1,13 @@
+<!-- userInfo.tmpl -->
+{{ define "userInfo" }}
+      <div class="row">
+        <form action="{{ .Paths.UserInfo }}"
+               class="inline-form"
+              method="post">
+          {{- if .Auth.Require.UserInfo }} {{ template "auth" . }} {{ end }}
+          <button class="selectUserInfo"
+                  title="get user request info"
+                   type="submit">user info</button>
+        </form>
+      </div>
+{{ end }}

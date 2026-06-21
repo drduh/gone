@@ -23,6 +23,7 @@ func TestInvalidAddr(t *testing.T) {
 		{name: "ipv6 with brackets",
 			in: []byte(`{"serverAddr":"[::1]"}`)},
 	}
+
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			var s Settings
@@ -52,6 +53,7 @@ func TestInvalidPort(t *testing.T) {
 		{name: "port out of valid range",
 			in: []byte(`{"serverPort":90001}`)},
 	}
+
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			var s Settings

@@ -20,6 +20,7 @@
       "msg":       false,
       "msgClear":  true,
       "random":    false,
+      "remask":    true,
       "root":      false,
       "static":    false,
       "status":    true,

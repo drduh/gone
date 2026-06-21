@@ -84,6 +84,7 @@ func isAuthenticated(app *config.App, r *http.Request) bool {
 		app.Status:       app.Require.Status,
 		app.Upload:       app.Require.Upload,
 		app.UserInfo:     app.Require.UserInfo,
+		app.UserRemask:   app.Require.UserRemask,
 		app.Wall:         app.Require.Wall,
 	}
 

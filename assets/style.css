@@ -199,8 +199,7 @@ ul.messages {
 }
 
 .selectAllowDownloads,
-.selectAllowDuration,
-.selectPost {
+.selectAllowDuration {
   text-align: center;
   width: var(--width-xsmall);
 }
@@ -208,6 +207,8 @@ ul.messages {
 .selectClearMessages,
 .selectClearWall,
 .selectDownload,
+.selectWallSave,
+.selectMessagePost,
 .selectSubmit {
   width: var(--width-small);
 }
@@ -215,7 +216,8 @@ ul.messages {
 .selectClearStorage,
 .selectRefresh,
 .selectRemask,
-.selectTheme {
+.selectTheme,
+.selectUserInfo {
   width: var(--width-medium);
 }
 
@@ -237,12 +239,14 @@ ul.messages {
 .selectDownload:hover,
 .selectFilename:hover,
 .selectMessage:hover,
-.selectPost:hover,
+.selectMessagePost:hover,
 .selectRefresh:hover,
 .selectRemask:hover,
 .selectSubmit:hover,
 .selectTheme:hover,
 .selectToken:hover,
+.selectUserInfo:hover,
+.selectWallSave:hover,
 .wallContent:hover,
 input[type="file"]:hover,
 input[type="file"]::file-selector-button:hover {

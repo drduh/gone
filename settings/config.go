@@ -102,6 +102,9 @@ type Auth struct {
 		// User request information
 		UserInfo bool `json:"userInfo,omitempty"`
 
+		// Refresh user request mask
+		UserRemask bool `json:"remask,omitempty"`
+
 		// Read and write wall content
 		Wall bool `json:"wall,omitempty"`
 	} `json:"require"`

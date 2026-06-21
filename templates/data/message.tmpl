@@ -3,6 +3,7 @@
   <div class="box">
     <form action="{{ .Paths.Message }}"
           method="post">
+      {{- if .Auth.Require.Message }}
       <div class="row">
         <input class="selectMessage"
                 name="message"
@@ -10,12 +11,28 @@
          placeholder="{{ .Placeholder.Message }}"
                title="message text content"
                 type="text" required>
-        {{- if .Auth.Require.Message }} {{ template "auth" . }} {{ end }}
-        <input class="selectPost"
+      </div>
+      <div class="row">
+        {{ template "auth" . }}
+        <input class="selectMessagePost"
                title="post message"
                 type="submit"
                value="post">
       </div>
+      {{ else }}
+      <div class="row">
+        <input class="selectMessage"
+                name="message"
+           maxlength="{{ .Limit.MessageLimits.LengthChars }}"
+         placeholder="{{ .Placeholder.Message }}"
+               title="message text content"
+                type="text" required>
+        <input class="selectMessagePost"
+               title="post message"
+                type="submit"
+               value="post">
+      </div>
+      {{ end }}
     </form>
     {{- if .Storage.Messages }}
     <ul class="messages">
@@ -36,12 +53,10 @@
     {{- end }}
     </ul>
     {{- end }}
-    <form action="{{ .Paths.Message }}"
+    <form action="{{ .Paths.MessageClear }}"
            class="inline-form"
           method="post">
-      <input name="clear"
-             type="hidden"
-            value="true">
+      {{- if .Auth.Require.MessageClear }}{{ template "auth" . }} {{ end }}
       <button class="selectClearMessages"
       {{- if not .Storage.Messages }} disabled
               title="no messages to clear"
@@ -51,10 +66,12 @@
                type="submit">clear</button>
     </form>
     <form action="{{ .Paths.Message }}"
-           class="inline-form">
+           class="inline-form"
+          method="post">
       <input name="download"
              type="hidden"
-            value="all">
+            value="allMessages">
+      {{- if .Auth.Require.Message }}{{ template "auth" . }} {{ end }}
       <button class="selectDownload"
        {{- if not .Storage.Messages }} disabled
               title="no messages to download"

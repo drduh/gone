@@ -4,6 +4,9 @@
   <summary>config</summary>
     <div class="box">
       {{- template "refreshPage" . }}
+      {{- if .Paths.UserInfo }}
+        {{- template "userInfo" . }}
+      {{- end }}
       {{- if .Paths.UserRemask }}
         {{- template "userRemask" . }}
       {{- end }}
