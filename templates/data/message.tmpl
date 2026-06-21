@@ -35,23 +35,23 @@
       {{ end }}
     </form>
     {{- if .Storage.Messages }}
-    <ul class="messages">
+    <div class="itemList">
     {{- range .Storage.Messages }}
-      <li class="message">
-      <b>{{ .Count }}</b>
-      {{- range .GetParts }}
-        {{ if .HasURL }}
-        <a href="{{ .URL }}"
-         target="_blank"
-            rel="noopener noreferrer">{{ .Text }}</a>
-        {{ else }} {{ .Text }} {{ end }}
-      {{- end }}
-      <span class="owner">
-        {{ .Owner.Mask }} at {{ .Time.Allow }}
-      </span>
-      </li>
+      <div class="itemCard">
+        <b>{{ .Count }}</b>
+        {{- range .GetParts }}
+          {{ if .HasURL }}
+          <a href="{{ .URL }}"
+           target="_blank"
+              rel="noopener noreferrer">{{ .Text }}</a>
+          {{ else }} {{ .Text }} {{ end }}
+        {{- end }}
+        <div class="itemMeta">
+          {{ .Owner.Mask }} at {{ .Time.Allow }}
+        </div>
+      </div>
     {{- end }}
-    </ul>
+    </div>
     {{- end }}
     <form action="{{ .Paths.MessageClear }}"
            class="inline-form"

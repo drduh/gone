@@ -1,14 +1,14 @@
 <!-- footer.tmpl -->
 {{ define "footer" }}
   {{- if .ShowBuild }}
-  <footer class="footer">
-    <div class="message">
-      {{ .Version.appID }}
-      <span class="owner">
-        {{- template "version" . }}
-      </span>
+  <input class="hide"
+            id="footerToggle"
+          type="checkbox">
+  <footer>
+    <label for="footerToggle">{{ .Version.appID }}</label>
+    <div class="footerExtra">
+      {{- template "version" . }}
     </div>
   </footer>
-  {{- end }}
-</html>
-{{ end }}
+  {{- end -}}
+{{- end -}}

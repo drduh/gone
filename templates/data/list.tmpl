@@ -16,19 +16,19 @@
     <form action="{{ .Paths.Download }}"
           method="post">
       {{ if not .Auth.Require.List }}
-      <div class="fileList">
+      <div class="itemList">
       {{ range .Storage.Files }}
-        <label class="fileCard">
+        <label class="itemCard">
           <input name="name"
                  type="radio"
                 value="{{ .ID }}" required>
           <div>{{ .Name }}</div>
-          <div class="fileMeta">
+          <div class="itemMeta">
             {{ .Size }} &middot;
             {{ .Type }} &middot;
             {{ .Owner.Mask }}
           </div>
-          <div class="fileMeta">
+          <div class="itemMeta">
             {{ .Time.Remain }} and
             {{ .Downloads.Remain }}/{{ .Downloads.Allow }} downloads remaining
           </div>
@@ -51,6 +51,6 @@
                value="download">
       </div>
     </form>
-    {{- end }}
+    {{ end }}
   </div>
-{{- end }}
+{{- end -}}

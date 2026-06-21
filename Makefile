@@ -239,9 +239,11 @@ gosec: sec
 litn: lint
 prep: prep-build
 prod: release
+r: run
+restart: reload-service
+restart-service: reload-service
 t: test
 tset: test
-r: run
 un: run
 urn: run
 v: verbose

@@ -9,7 +9,7 @@ html {
   background: var(--bg-gradient);
   background-attachment: fixed;
   background-size: var(--bg-size);
-  min-height: 100%;
+  height: 100%;
 }
 
 body {
@@ -20,7 +20,12 @@ body {
   flex-direction: column;
   font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
   font-size: var(--font-size);
-  margin: 1em auto;
+  margin: 0 auto;
+  min-height: 100vh;
+}
+
+main {
+  flex: 1 0 auto;
 }
 
 .box {
@@ -51,14 +56,13 @@ form {
   justify-content: center;
 }
 
-.fileList {
+.itemList {
   display: flex;
   flex-direction: column;
   gap: 0.5em;
-  width: 100;
 }
 
-.fileCard {
+.itemCard {
   border: 1px solid var(--fg-dark);
   border-radius: var(--radius-box);
   cursor: pointer;
@@ -66,20 +70,43 @@ form {
   text-align: left;
 }
 
-.fileCard:has(input[type="radio"]:checked) {
+.itemCard:Hover,
+.itemCard:has(input[type="radio"]:checked) {
   background-color: var(--bg-light);
 }
 
-.fileMeta {
+.itemMeta {
   color: var(--fg-dark);
   font-size: 0.8em;
 }
 
-.footer {
-  bottom: 1em;
-  position: fixed;
+footer {
+  flex-shrink: 0;
+  color: var(--fg-norm);
+  overflow: hidden;
+  max-height: 40px;
+  transition: max-height var(--animation) ease;
+}
+
+footer label {
+  display: block;
+  padding: 16px;
   text-align: center;
-  width: 100vw;
+  cursor: pointer;
+  margin: 0;
+}
+
+footer .footerExtra {
+  padding: 0 2em 2em;
+}
+
+#footerToggle:checked ~ footer {
+  max-height: 200px;
+}
+
+#footerToggle:focus-visible + footer label {
+  outline: 2px solid var(--fg-light);
+  outline-offset: 2px;
 }
 
 a {
@@ -140,6 +167,7 @@ input[type="number"] {
   width: 80vw;
 }
 
+#footerToggle,
 .hide {
   position: absolute;
   width: 1px;
@@ -153,49 +181,6 @@ input[type="number"] {
 
 .inline-form {
   display: inline;
-}
-
-ul.messages {
-  display: grid;
-  margin: 0 auto;
-  padding: 0;
-  width: fit-content;
-}
-
-.message {
-  color: var(--fg-light);
-  display: inline-block;
-  position: relative;
-}
-
-.message .owner {
-  background-color: var(--bg-light);
-  border-radius: var(--radius-box);
-  bottom: 2em;
-  color: var(--fg-light);
-  padding: 6px 0;
-  position: absolute;
-  text-align: center;
-  transform: translateX(-55%);
-  visibility: hidden;
-  width: 24em;
-  z-index: 10;
-}
-
-.message .owner::after {
-  border-color: var(--fg-light) transparent transparent transparent;
-  border-style: solid;
-  border-width: var(--radius-box);
-  content: "";
-  left: 50%;
-  margin-left: -5px;
-  position: absolute;
-  top: 100%;
-}
-
-.message:hover .owner {
-  opacity: 1;
-  visibility: visible;
 }
 
 .selectAllowDownloads,

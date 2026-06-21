@@ -23,8 +23,8 @@
         placeholder="{{ .DefaultDuration }}"
               title="time until expiration">
       </div>
+      {{- if .Auth.Require.Upload }} {{ template "auth" . }} {{ end }}
       <div class="row">
-        {{- if .Auth.Require.Upload }} {{ template "auth" . }} {{ end }}
         <input type="submit"
               class="selectSubmit"
               title="upload selected file(s)"

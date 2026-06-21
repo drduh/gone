@@ -13,7 +13,7 @@ func TestTarpitDelay(t *testing.T) {
 		t.Skip("short test: skip tarpit delay")
 	}
 
-	cases := []struct {
+	tests := []struct {
 		name    string
 		tarpit  time.Duration
 		wantMin time.Duration
@@ -27,7 +27,7 @@ func TestTarpitDelay(t *testing.T) {
 			base + 25*time.Millisecond},
 	}
 
-	for _, tc := range cases {
+	for _, tc := range tests {
 		t.Run(tc.name, func(t *testing.T) {
 			SetTarpit(tc.tarpit)
 			start := time.Now()
