@@ -69,7 +69,7 @@ func getToken(field string, r *http.Request) []byte {
 }
 
 // isAuthenticated returns true if authentication for a route
-// is required and allowed.
+// is configured and required.
 func isAuthenticated(app *config.App, r *http.Request) bool {
 	reqs := map[string]bool{
 		app.Assets:       app.Require.Assets,
@@ -98,7 +98,7 @@ func isAuthenticated(app *config.App, r *http.Request) bool {
 	}
 
 	if !required {
-		app.Log.Debug("pass - autn not required",
+		app.Log.Debug("pass - auth not required",
 			"path", path)
 		return true
 	}

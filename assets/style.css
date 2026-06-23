@@ -70,12 +70,22 @@ form {
   text-align: left;
 }
 
-.itemCard:Hover,
+.itemCard:hover,
 .itemCard:has(input[type="radio"]:checked) {
-  background-color: var(--bg-light);
+  background-color: var(--bg-dark);
+}
+
+.itemName {
+  display: block;
+  font-size: 1em;
+}
+
+.itemName:hover {
+  color: var(--fg-light);
 }
 
 .itemMeta {
+  display: block;
   color: var(--fg-dark);
   font-size: 0.8em;
 }
@@ -126,6 +136,7 @@ select {
 }
 
 button[disabled] {
+  cursor: not-allowed;
   opacity: 0.5;
 }
 
@@ -136,16 +147,24 @@ select:focus {
   outline-offset: 2px;
 }
 
+input[type="number"] {
+  appearance: textfield;
+}
+
+input[type="radio"] {
+  height: 1px;
+  margin: 0;
+  opacity: 0;
+  pointer-events: none;
+  position: absolute;
+  width: 1px;
+}
+
 button[type="submit"],
-input[type="checkbox"],
-input[type="file"],
-input[type="number"],
-input[type="password"],
-input[type="submit"],
-input[type="text"],
+input,
 input::file-selector-button,
 select,
-.wallContent {
+textarea {
   appearance: none;
   background-color: var(--bg-dark);
   border: none;
@@ -157,14 +176,18 @@ select,
   text-decoration: none;
 }
 
-input[type="number"] {
-  appearance: textfield;
-}
-
 .wallContent {
   height: 12em;
   max-width: 90%;
   width: 80vw;
+}
+
+input:not(:disabled):hover,
+input[type="file"]::file-selector-button:hover,
+button:not(:disabled):hover,
+.wallContent:hover {
+  background-color: var(--fg-light);
+  color: var(--bg-dark);
 }
 
 #footerToggle,
@@ -214,38 +237,6 @@ input[type="number"] {
 .selectFilename,
 .selectMessage {
   width: var(--width-xlarge);
-}
-
-.selectClearMessages:hover,
-.selectClearStorage:hover,
-.selectClearWall:hover,
-.selectAllowDownloads:hover,
-.selectAllowDuration:hover,
-.selectDownload:hover,
-.selectFilename:hover,
-.selectMessage:hover,
-.selectMessagePost:hover,
-.selectRefresh:hover,
-.selectRemask:hover,
-.selectSubmit:hover,
-.selectTheme:hover,
-.selectToken:hover,
-.selectUserInfo:hover,
-.selectWallSave:hover,
-.wallContent:hover,
-input[type="file"]:hover,
-input[type="file"]::file-selector-button:hover {
-  background-color: var(--fg-light);
-  color: var(--bg-dark);
-}
-
-input[type="radio"] {
-  height: 1px;
-  margin: 0;
-  opacity: 0;
-  pointer-events: none;
-  position: absolute;
-  width: 1px;
 }
 
 details {

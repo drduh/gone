@@ -24,15 +24,15 @@ func Load(path string) (Settings, error) {
 
 	if err := loadSettings(
 		defaultSettings, &settings); err != nil {
-		return Settings{}, fmt.Errorf(
-			"default settings: %w", err)
+		return Settings{}, fmt.Errorf("default settings: %w",
+			err)
 	}
 
 	if path != "" {
 		if err := loadSettingsFromFile(
 			path, &settings); err != nil {
-			return Settings{}, fmt.Errorf(
-				"settings file: %w", err)
+			return Settings{}, fmt.Errorf("settings file: %w",
+				err)
 		}
 	}
 
@@ -45,8 +45,8 @@ func loadSettings(data []byte, settings *Settings) error {
 	dec := json.NewDecoder(bytes.NewReader(data))
 	dec.DisallowUnknownFields()
 	if err := dec.Decode(settings); err != nil {
-		return fmt.Errorf(
-			"failed to decode settings: %w", err)
+		return fmt.Errorf("failed to decode settings: %w",
+			err)
 	}
 
 	if err := dec.Decode(&struct{}{}); err != io.EOF {
@@ -54,8 +54,8 @@ func loadSettings(data []byte, settings *Settings) error {
 	}
 
 	if err := settings.Validate(); err != nil {
-		return fmt.Errorf(
-			"failed to validate: %w", err)
+		return fmt.Errorf("failed to validate: %w",
+			err)
 	}
 
 	return nil
@@ -68,15 +68,15 @@ func loadSettingsFromFile(p string, s *Settings) error {
 
 	f, err := os.OpenInRoot(dir, file)
 	if err != nil {
-		return fmt.Errorf(
-			"failed to read '%s' from '%s': %w", file, dir, err)
+		return fmt.Errorf("failed to read '%s' from '%s': %w",
+			file, dir, err)
 	}
 	defer func() { _ = f.Close() }()
 
 	data, err := io.ReadAll(f)
 	if err != nil {
-		return fmt.Errorf(
-			"failed to read '%s' from '%s': %w", file, dir, err)
+		return fmt.Errorf("failed to read '%s' from '%s': %w",
+			file, dir, err)
 	}
 
 	return loadSettings(data, s)
