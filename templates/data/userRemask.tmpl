@@ -4,7 +4,7 @@
         <form action="{{ .Paths.UserRemask }}"
                class="inline-form"
               method="post">
-          {{- if .Auth.Require.UserRemask }}{{ template "auth" . }} {{ end }}
+          {{- if .Auth.Require.UserRemask }} {{ template "auth" . }} {{ end }}
           <button class="selectRemask"
                   title="remask user address"
                    type="submit">remask user</button>

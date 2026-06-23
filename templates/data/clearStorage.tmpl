@@ -8,7 +8,8 @@
           <button class="selectClearStorage"
           {{- if not (or .Storage.Files
                          .Storage.Messages
-                         .Storage.WallContent) }} disabled
+                         .Storage.WallContent) }}
+                  disabled
                   title="no content in storage"
           {{- else }}
                   title="clear storage content"

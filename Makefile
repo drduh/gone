@@ -221,6 +221,9 @@ cover: test-cover
 test-cover:
 	@$(CMDCOVER)
 
+view-cover: cover
+	@open "$(TESTCOVER).html"
+
 doc:
 	@$(GODOC) -http :8000
 
@@ -237,6 +240,7 @@ f: fmt
 format: fmt
 gosec: sec
 litn: lint
+open-cover: view-cover
 prep: prep-build
 prod: release
 r: run

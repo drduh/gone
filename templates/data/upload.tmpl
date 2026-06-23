@@ -25,10 +25,9 @@
       </div>
       {{- if .Auth.Require.Upload }} {{ template "auth" . }} {{ end }}
       <div class="row">
-        <input type="submit"
-              class="selectSubmit"
-              title="upload selected file(s)"
-              value="upload">
+        <button class="selectSubmit"
+                title="upload selected file(s)"
+                 type="submit">upload</button>
       </div>
     </form>
   </div>

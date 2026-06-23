@@ -27,18 +27,18 @@
          placeholder="{{ .Placeholder.Message }}"
                title="message text content"
                 type="text" required>
-        <input class="selectMessagePost"
-               title="post message"
-                type="submit"
-               value="post">
+        <button class="selectMessagePost"
+                title="post message"
+                 type="submit">post</button>
       </div>
       {{ end }}
     </form>
     {{- if .Storage.Messages }}
     <div class="itemList">
     {{- range .Storage.Messages }}
-      <div class="itemCard">
-        <b>{{ .Count }}</b>
+      <label class="itemCard">
+        <span class="itemName">
+          {{ .Count }}
         {{- range .GetParts }}
           {{ if .HasURL }}
           <a href="{{ .URL }}"
@@ -46,10 +46,11 @@
               rel="noopener noreferrer">{{ .Text }}</a>
           {{ else }} {{ .Text }} {{ end }}
         {{- end }}
-        <div class="itemMeta">
+        </span>
+        <span class="itemMeta">
           {{ .Owner.Mask }} at {{ .Time.Allow }}
-        </div>
-      </div>
+        </span>
+      </label>
     {{- end }}
     </div>
     {{- end }}
