@@ -11,8 +11,11 @@ type Index struct {
 	// Authentication configuration
 	settings.Auth
 
-	// Content sharing defaults
+	// Content sharing default limits
 	settings.Default
+
+	// Error messages
+	settings.Error
 
 	// Index page HTML properties
 	settings.Index
@@ -20,11 +23,14 @@ type Index struct {
 	// Content limits
 	settings.Limit
 
-	// Configured routable paths
+	// Server paths
 	settings.Paths
 
-	// Configured storage (Files, Messages, Wall)
+	// Content storage
 	storage.Storage
+
+	// Server name
+	Hostname string
 
 	// Display build details in footer
 	ShowBuild bool
@@ -32,17 +38,8 @@ type Index struct {
 	// Selected CSS theme
 	Theme string
 
-	// Server name
-	Hostname string
-
 	// Time since server start
 	Uptime string
-
-	// Placeholder text for duration form field
-	DefaultDuration string
-
-	// Message indicating no files available
-	NoFiles string
 
 	// Application version/build information
 	Version map[string]string

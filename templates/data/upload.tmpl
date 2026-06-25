@@ -20,7 +20,7 @@
         <input type="text"
               class="selectAllowDuration"
                name="duration"
-        placeholder="{{ .DefaultDuration }}"
+        placeholder="{{ .Default.Expiration.String }}"
               title="time until expiration">
       </div>
       {{- if .Auth.Require.Upload }} {{ template "auth" . }} {{ end }}

@@ -2,7 +2,7 @@
 {{- define "list" }}
   <div class="box">
     {{ if not .Storage.Files }}
-    <p>{{ .NoFiles }}</p>
+    <span class="itemName">{{ .Error.NoFiles }}</span>
     {{ else }}
     {{ if .Auth.Require.List }}
     <form action="{{ .Paths.List }}"
@@ -29,7 +29,7 @@
             {{ .Owner.Mask }}
           </span>
           <span class="itemMeta">
-            {{ .Time.Remain }} and
+            {{ .Time.DurationFmt }} and
             {{ .Downloads.Remain }}/{{ .Downloads.Allow }} downloads remaining
           </span>
         </label>

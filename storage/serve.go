@@ -34,7 +34,8 @@ func (s *Storage) ServeMessages(w http.ResponseWriter) {
 	w.Header().Set("Content-Type", "text/plain")
 
 	for _, msg := range s.Messages {
-		_, err := fmt.Fprintf(w, msgFmt, msg.Count, msg.Allow, msg.Data)
+		_, err := fmt.Fprintf(
+			w, msgFmt, msg.Count, msg.UploadFmt, msg.Data)
 		if err != nil {
 			return
 		}

@@ -58,9 +58,9 @@ func TestList(t *testing.T) {
 		t.Fatalf("expected 1 file, got %d", len(files))
 	}
 
-	if files[0].Downloads.Remain != 10 {
+	if files[0].Remain != 10 {
 		t.Errorf("expected %d downloads to remain, got %d",
-			10, files[0].Downloads.Remain)
+			10, files[0].Remain)
 	}
 
 	if files[0].ID != "1ABCDEF" {

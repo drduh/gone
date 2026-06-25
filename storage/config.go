@@ -29,7 +29,7 @@ type Storage struct {
 	WallContent string `json:"wallContent,omitempty"`
 }
 
-// File represents a user-uploaded file.
+// File represents an uploaded file.
 type File struct {
 
 	// Uploader information
@@ -82,6 +82,19 @@ type Message struct {
 	Data string `json:"data,omitempty"`
 }
 
+// MessageParts represents extracted Message attributes.
+type MessageParts struct {
+
+	// Text content
+	Text string
+
+	// URL content
+	URL string
+
+	// Whether part contains URL
+	HasURL bool
+}
+
 // Owner represents metadata about a user.
 type Owner struct {
 
@@ -98,20 +111,20 @@ type Owner struct {
 	Headers http.Header `json:"headers,omitempty"`
 }
 
-// Time represents user content time metadata.
+// Time represents content time information.
 type Time struct {
 
-	// Duration of file lifetime
+	// Duration until expiration
 	Duration time.Duration `json:"duration,omitempty"`
 
-	// Formatted duration of file lifetime
-	Allow string `json:"allow,omitempty"`
-
 	// Formatted duration until expiration
-	Remain string `json:"remain,omitempty"`
+	DurationFmt string `json:"durationFmt,omitempty"`
 
-	// Absolute upload datetime
+	// Upload date and time
 	Upload time.Time `json:"upload"`
+
+	// Formatted upload time
+	UploadFmt string `json:"uploadFmt,omitempty"`
 }
 
 // Downloads represents user content downloads metadata.
@@ -120,11 +133,11 @@ type Downloads struct {
 	// Number of allowed downloads
 	Allow int `json:"allow,omitempty"`
 
-	// Remaining number of downloads to expiration
-	Remain int `json:"remain,omitempty"`
-
-	// Number of downloads
+	// Number of download requests
 	Count int `json:"count,omitempty"`
+
+	// Number of downloads remaining until expiration
+	Remain int `json:"remain,omitempty"`
 }
 
 // Sizes represents Storage content sizes.
@@ -150,17 +163,4 @@ type Sizes struct {
 
 	// Formatted total size of all Files
 	SizeFilesFmt string `json:"sizeFilesFmt,omitempty"`
-}
-
-// MessageParts represents extracted Message attributes.
-type MessageParts struct {
-
-	// Text content
-	Text string
-
-	// URL content
-	URL string
-
-	// Whether part contains URL
-	HasURL bool
 }

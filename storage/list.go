@@ -23,15 +23,16 @@ func (s *Storage) ListFiles() []File {
 				Mask:  file.Mask,
 			},
 			Time: Time{
-				Remain: file.Time.Remain,
-				Upload: file.Upload,
+				DurationFmt: file.DurationFmt,
+				UploadFmt:   file.UploadFmt,
 			},
 			Downloads: Downloads{
-				Allow:  file.Downloads.Allow,
-				Remain: file.Downloads.Remain,
+				Allow:  file.Allow,
 				Count:  file.Count,
+				Remain: file.Remain,
 			},
 		}
+
 		files = append(files, f)
 	}
 
