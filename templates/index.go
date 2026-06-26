@@ -38,6 +38,12 @@ type Index struct {
 	// Selected CSS theme
 	Theme string
 
+	// Random strings output
+	RandomStrs []string
+
+	// Random type form element
+	RandomType string
+
 	// Time since server start
 	Uptime string
 

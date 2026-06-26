@@ -16,16 +16,16 @@ func AuthRequest(
 ) *Request {
 	req := parseRequest(r)
 
-	if !checkAuthenticated(w, r, app) {
-		app.Log.Error(app.Deny,
-			"field", app.Basic.Field,
+	if !checkAuthorized(w, app) {
+		app.Log.Error(app.RateLimit,
+			"limit", app.ReqsPerMinute,
 			"user", req)
 		return nil
 	}
 
-	if !checkAuthorized(w, app) {
-		app.Log.Error(app.RateLimit,
-			"limit", app.ReqsPerMinute,
+	if !checkAuthenticated(w, r, app) {
+		app.Log.Error(app.Deny,
+			"field", app.Basic.Field,
 			"user", req)
 		return nil
 	}

@@ -24,9 +24,9 @@
       "root":      false,
       "static":    false,
       "status":    true,
-      "upload":    false,
+      "upload":    true,
       "userInfo":  false,
-      "wall":      true
+      "wall":      false
     },
     "tarpitDelay": "2s"
   },
@@ -87,7 +87,7 @@
       "lengthChars":    128
     },
     "randomLimits": {
-      "strCount":       10
+      "strCount":       16
     },
     "wallLimits": {
       "lengthChars":    2560
@@ -105,7 +105,7 @@
     "static":      "/static",
     "status":      "/status",
     "upload":      "/upload",
-    "userInfo":    "/user",
+    "userInfo":    "/user/info",
     "userRemask":  "/user/remask",
     "wall":        "/wall"
   }

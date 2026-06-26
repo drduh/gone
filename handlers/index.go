@@ -19,7 +19,7 @@ func Index(app *config.App) http.HandlerFunc {
 		app.Log.Info("serving index",
 			"user", req)
 
-		renderIndex(w, r, app, req)
+		renderIndex(w, r, app, req, "", nil)
 	}
 }
 
@@ -28,7 +28,9 @@ func renderIndex(
 	w http.ResponseWriter,
 	r *http.Request,
 	app *config.App,
-	req *Request) {
+	req *Request,
+	randomPath string,
+	randomStrs []string) {
 	theme := getDefaultTheme(app.Style.Theme)
 	if app.Style.AllowPick {
 		theme = getTheme(w, r, theme, app.Cookie.ID,
@@ -49,18 +51,20 @@ func renderIndex(
 
 	app.UpdateRemainingFileLimits()
 	response := templates.Index{
-		Auth:      app.Auth,
-		Default:   app.Default,
-		Error:     app.Error,
-		Hostname:  app.Hostname,
-		Index:     app.Index,
-		Limit:     app.Limit,
-		Paths:     app.Paths,
-		ShowBuild: app.ShowBuild,
-		Storage:   app.Storage,
-		Theme:     theme,
-		Uptime:    app.Uptime(),
-		Version:   app.Version,
+		Auth:          app.Auth,
+		Default:       app.Default,
+		Error:         app.Error,
+		Hostname:      app.Hostname,
+		Index:         app.Index,
+		Limit:         app.Limit,
+		Paths:         app.Paths,
+		RandomStrs:    randomStrs,
+		RandomType:    randomPath,
+		ShowBuild:     app.ShowBuild,
+		Storage:       app.Storage,
+		Theme:         theme,
+		Uptime:        app.Uptime(),
+		Version:       app.Version,
 	}
 
 	if err = tmpl.Execute(w, response); err != nil {

@@ -90,6 +90,12 @@ form {
   font-size: 0.8em;
 }
 
+.itemMeta::selection,
+.itemName::selection {
+  background-color: var(--fg-light);
+  color: var(--bg-dark);
+}
+
 footer {
   flex-shrink: 0;
   color: var(--fg-norm);
@@ -190,6 +196,11 @@ button:not(:disabled):hover,
   color: var(--bg-dark);
 }
 
+input::placeholder {
+  color: var(--fg-light);
+  opacity: 0.8;
+}
+
 #footerToggle,
 .hide {
   position: absolute;
@@ -217,6 +228,7 @@ button:not(:disabled):hover,
 .selectDownload,
 .selectWallSave,
 .selectMessagePost,
+.selectRandom,
 .selectSubmit {
   width: var(--width-small);
 }
@@ -253,6 +265,14 @@ summary {
 
 summary::marker {
   content: "";
+}
+
+.randomStrs {
+  display: grid;
+  font-family: ui-monospace, monospace;
+  font-size: var(--font-size);
+  gap: 0.4em;
+  grid-template-columns: repeat(2, 1fr);
 }
 
 .themes {

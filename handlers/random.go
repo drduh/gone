@@ -7,7 +7,7 @@ import (
 	"github.com/drduh/gone/util"
 )
 
-// Random handles requests for a random string.
+// Random handles requests for random strings.
 func Random(app *config.App) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		req := AuthRequest(w, r, app)
@@ -15,13 +15,13 @@ func Random(app *config.App) http.HandlerFunc {
 			return
 		}
 
-		path := getRequestParameter(r,
-			len(app.Random), "random")
 		count := app.RandomLimits.StrCount
+		path := getRequestParameter(
+			r, len(app.Random), "random")
 
-		results := make([]string, count)
+		response := make([]string, count)
 		for i := range count {
-			results[i] = util.GetRandom(path)
+			response[i] = util.GetRandom(path)
 		}
 
 		app.Log.Info("serving random",
@@ -29,6 +29,10 @@ func Random(app *config.App) http.HandlerFunc {
 			"path", path,
 			"user", req)
 
-		writeJSON(w, http.StatusOK, results)
+		if req.IsBrowser {
+			renderIndex(w, r, app, req, path, response)
+		} else {
+			writeJSON(w, http.StatusOK, response)
+		}
 	}
 }

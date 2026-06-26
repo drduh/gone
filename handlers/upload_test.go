@@ -17,7 +17,7 @@ func TestUploadFileTooLarge(t *testing.T) {
 	app := newTestApp()
 	app.Require.Upload = false
 
-	reqBody := strings.NewReader("dummy")
+	reqBody := strings.NewReader("upload_test")
 	req := httptest.NewRequestWithContext(t.Context(),
 		http.MethodPost, app.Upload, reqBody)
 	req.ContentLength = (app.FileLimits.SizeEachMb << 20) + 1
@@ -146,9 +146,9 @@ func TestUploadDeny(t *testing.T) {
 	app := newTestApp()
 	app.Require.Upload = true
 
+	reqBody := strings.NewReader("upload_test")
 	req := httptest.NewRequestWithContext(t.Context(),
-		http.MethodPost,
-		app.Upload, strings.NewReader("dummy"))
+		http.MethodPost, app.Upload, reqBody)
 	rr := serveDeniedRequest(t, app, req)
 
 	assertDenied(t, rr, app.Deny)
