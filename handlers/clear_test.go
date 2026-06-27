@@ -64,17 +64,20 @@ func TestClearDeny(t *testing.T) {
 	app := newTestAppWithStorage()
 	app.Require.Clear = true
 
+	countFiles := len(app.Files)
+	countMessages := len(app.Messages)
+
 	req := httptest.NewRequestWithContext(t.Context(),
 		http.MethodPost, app.Clear, nil)
 	rr := serveDeniedRequest(t, app, req)
 
 	assertDenied(t, rr, app.Deny)
 
-	if len(app.Files) != 2 {
+	if len(app.Files) != countFiles {
 		t.Fatalf("expected Files unchanged, got %d",
 			len(app.Files))
 	}
-	if len(app.Messages) != 2 {
+	if len(app.Messages) != countMessages {
 		t.Fatalf("expected Messages unchanged, got %d",
 			len(app.Messages))
 	}

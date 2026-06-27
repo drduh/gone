@@ -114,17 +114,17 @@ type Owner struct {
 // Time represents content time information.
 type Time struct {
 
-	// Duration until expiration
+	// Duration expiration
 	Duration time.Duration `json:"duration,omitempty"`
 
-	// Formatted duration until expiration
-	DurationFmt string `json:"durationFmt,omitempty"`
+	// Remaining duration until expiration
+	DurationRemaining string `json:"durationRemaining,omitempty"`
 
-	// Upload date and time
-	Upload time.Time `json:"upload"`
+	// Upload date and time (precise)
+	UploadTime time.Time `json:"-"`
 
 	// Formatted upload time
-	UploadFmt string `json:"uploadFmt,omitempty"`
+	UploadTimeFmt string `json:"uploadTimeFmt,omitempty"`
 }
 
 // Downloads represents user content downloads metadata.

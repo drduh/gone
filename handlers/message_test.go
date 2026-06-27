@@ -16,11 +16,12 @@ import (
 func TestMessageAdd(t *testing.T) {
 	app := newTestApp()
 	app.Require.Message = false
+	app.Require.MessageAdd = false
 
 	form := url.Values{}
 	form.Set("message", testContentMsgs)
 	req := httptest.NewRequestWithContext(t.Context(),
-		http.MethodPost, app.Message,
+		http.MethodPost, app.MessageAdd,
 		strings.NewReader(form.Encode()))
 	req.Header.Set("Content-Type", formContentType)
 
@@ -53,12 +54,12 @@ func TestMessageAdd(t *testing.T) {
 // the configured length.
 func TestMessageExceedLength(t *testing.T) {
 	app := newTestApp()
-	app.Require.Message = false
+	app.Require.MessageAdd = false
 
 	form := url.Values{}
 	form.Set("message", strings.Repeat("a", 1000))
 	req := httptest.NewRequestWithContext(t.Context(),
-		http.MethodPost, app.Message,
+		http.MethodPost, app.MessageAdd,
 		strings.NewReader(form.Encode()))
 	req.Header.Set("Content-Type", formContentType)
 
@@ -82,14 +83,14 @@ func TestMessageExceedLength(t *testing.T) {
 // the configured count.
 func TestMessageExceedCount(t *testing.T) {
 	app := newTestApp()
-	app.Require.Message = false
+	app.Require.MessageAdd = false
 
 	form := url.Values{}
 
 	for i := range app.MessageLimits.MaxCount {
 		form.Set("message", fmt.Sprintf("msg %d", i+1))
 		req := httptest.NewRequestWithContext(t.Context(),
-			http.MethodPost, app.Message,
+			http.MethodPost, app.MessageAdd,
 			strings.NewReader(form.Encode()))
 		req.Header.Set("Content-Type", formContentType)
 
@@ -105,7 +106,7 @@ func TestMessageExceedCount(t *testing.T) {
 
 	form.Set("message", testContentMsgs)
 	req := httptest.NewRequestWithContext(t.Context(),
-		http.MethodPost, app.Message,
+		http.MethodPost, app.MessageAdd,
 		strings.NewReader(form.Encode()))
 	req.Header.Set("Content-Type", formContentType)
 
@@ -227,11 +228,12 @@ func TestMessageDownloadAll(t *testing.T) {
 func TestMessageBrowser(t *testing.T) {
 	app := newTestApp()
 	app.Require.Message = false
+	app.Require.MessageAdd = false
 
 	form := url.Values{}
 	form.Set("message", testContentMsgs)
 	req := httptest.NewRequestWithContext(t.Context(),
-		http.MethodPost, app.Message,
+		http.MethodPost, app.MessageAdd,
 		strings.NewReader(form.Encode()))
 	req.Header.Set("Content-Type", formContentType)
 	req.Header.Set("Accept", "text/html")
@@ -259,11 +261,12 @@ func TestMessageBrowser(t *testing.T) {
 func TestMessageSpaces(t *testing.T) {
 	app := newTestApp()
 	app.Require.Message = false
+	app.Require.MessageAdd = false
 
 	form := url.Values{}
 	form.Set("message", "  \n\t hello, world! \r\n ")
 	req := httptest.NewRequestWithContext(t.Context(),
-		http.MethodPost, app.Message,
+		http.MethodPost, app.MessageAdd,
 		strings.NewReader(form.Encode()))
 	req.Header.Set("Content-Type", formContentType)
 

@@ -25,22 +25,21 @@ func runExpiryLoop(app *config.App, t <-chan time.Time) {
 // expireFiles removes expired Files from Storage.
 func expireFiles(app *config.App) {
 	for _, f := range app.Files {
-		lifetime := f.GetLifetime()
+		lifetime := f.Lifetime()
 
 		app.Log.Debug("checking expiration",
 			"id", f.ID,
 			"name", f.Name,
 			"allowed", f.Duration.String(),
-			"available", lifetime.String(),
-			"remaining", f.TimeRemaining().String())
+			"available", lifetime.String())
 
 		reason := f.IsExpired()
 		if reason != "" {
 			app.Expire(f)
 			app.Log.Info("removed expired file",
-				"reason", reason,
 				"id", f.ID,
 				"name", f.Name,
+				"reason", reason,
 				"available", lifetime.String(),
 				"downloads", f.Count)
 		}

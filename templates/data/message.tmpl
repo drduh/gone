@@ -1,9 +1,9 @@
 <!-- message.tmpl -->
 {{ define "message" }}
   <div class="box">
-    <form action="{{ .Paths.Message }}"
+    <form action="{{ .Paths.MessageAdd }}"
           method="post">
-      {{- if .Auth.Require.Message }}
+      {{- if .Auth.Require.MessageAdd }}
       <div class="row">
         <input class="selectMessage"
                 name="message"
@@ -48,7 +48,7 @@
         {{- end }}
         </span>
         <span class="itemMeta">
-          {{ .Owner.Mask }} at {{ .Time.UploadFmt }}
+          {{ .Owner.Mask }} at {{ .Time.UploadTimeFmt }}
         </span>
       </label>
     {{- end }}

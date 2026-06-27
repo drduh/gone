@@ -22,8 +22,8 @@ func TestList(t *testing.T) {
 		Data:      data,
 		Downloads: storage.Downloads{Allow: 10},
 		Time: storage.Time{
-			Duration: 5 * time.Minute,
-			Upload:   time.Now(),
+			Duration:   5 * time.Minute,
+			UploadTime: time.Now(),
 		},
 	}
 

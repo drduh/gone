@@ -77,6 +77,7 @@ func isAuthenticated(app *config.App, r *http.Request) bool {
 		app.Download:     app.Require.Download,
 		app.List:         app.Require.List,
 		app.Message:      app.Require.Message,
+		app.MessageAdd:   app.Require.MessageAdd,
 		app.MessageClear: app.Require.MessageClear,
 		app.Random:       app.Require.Random,
 		app.Root:         app.Require.Root,

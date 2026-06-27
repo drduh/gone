@@ -51,27 +51,27 @@ func renderIndex(
 
 	app.UpdateRemainingFileLimits()
 	response := templates.Index{
-		Auth:          app.Auth,
-		Default:       app.Default,
-		Error:         app.Error,
-		Hostname:      app.Hostname,
-		Index:         app.Index,
-		Limit:         app.Limit,
-		Paths:         app.Paths,
-		RandomStrs:    randomStrs,
-		RandomType:    randomPath,
-		ShowBuild:     app.ShowBuild,
-		Storage:       app.Storage,
-		Theme:         theme,
-		Uptime:        app.Uptime(),
-		Version:       app.Version,
+		Auth:       app.Auth,
+		Default:    app.Default,
+		Error:      app.Error,
+		Hostname:   app.Hostname,
+		Index:      app.Index,
+		Limit:      app.Limit,
+		Paths:      app.Paths,
+		RandomStrs: randomStrs,
+		RandomType: randomPath,
+		ShowBuild:  app.ShowBuild,
+		Storage:    app.Storage,
+		Theme:      theme,
+		Uptime:     app.Uptime(),
+		Version:    app.Version,
 	}
 
 	if err = tmpl.Execute(w, response); err != nil {
-		writeJSON(w, http.StatusInternalServerError,
-			errorJSON(app.TmplExec))
 		app.Log.Error(app.TmplExec,
 			"error", err.Error(),
 			"user", req)
+		writeJSON(w, http.StatusInternalServerError,
+			errorJSON(app.TmplExec))
 	}
 }

@@ -78,8 +78,11 @@ type Auth struct {
 		// List files
 		List bool `json:"list,omitempty"`
 
-		// Read and write text messages
+		// Read text messages
 		Message bool `json:"msg,omitempty"`
+
+		// Add text messages
+		MessageAdd bool `json:"msgAdd,omitempty"`
 
 		// Clear text messages
 		MessageClear bool `json:"msgClear,omitempty"`
@@ -283,8 +286,11 @@ type Paths struct {
 	// File list ("/list")
 	List string `json:"list,omitempty"`
 
-	// Message read and write ("/msg")
+	// Message read ("/msg")
 	Message string `json:"msg,omitempty"`
+
+	// Message add ("/msg/add")
+	MessageAdd string `json:"msgAdd,omitempty"`
 
 	// Message clear ("/msg/clear")
 	MessageClear string `json:"msgClear,omitempty"`

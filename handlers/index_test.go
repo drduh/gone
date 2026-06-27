@@ -33,7 +33,7 @@ func TestIndexMessageEscape(t *testing.T) {
 			Mask: testAddrAndPort,
 		},
 		Time: storage.Time{
-			UploadFmt: "now",
+			UploadTimeFmt: "now",
 		},
 	})
 

@@ -17,7 +17,7 @@ func TestExpireFilesDownloads(t *testing.T) {
 			Count: 1,
 		},
 		Time: storage.Time{
-			Upload: time.Now(),
+			UploadTime: time.Now(),
 		},
 	}
 
@@ -36,8 +36,8 @@ func TestExpireFilesDuration(t *testing.T) {
 		ID:   "file2",
 		Name: "file2.txt",
 		Time: storage.Time{
-			Duration: 10 * time.Second,
-			Upload:   time.Now().Add(-30 * time.Second),
+			Duration:   10 * time.Second,
+			UploadTime: time.Now().Add(-30 * time.Second),
 		},
 	}
 
@@ -60,8 +60,8 @@ func TestExpireFilesValid(t *testing.T) {
 			Count: 1,
 		},
 		Time: storage.Time{
-			Duration: 5 * time.Minute,
-			Upload:   time.Now().Add(-30 * time.Second),
+			Duration:   5 * time.Minute,
+			UploadTime: time.Now().Add(-30 * time.Second),
 		},
 	}
 

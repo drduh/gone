@@ -13,11 +13,11 @@ import (
 )
 
 const (
-	testAddrAndPort = "127.0.0.1:12345"
-	testUserAgent   = "testGoneAgent"
 	formContentType = "application/x-www-form-urlencoded"
+	testAddrAndPort = "127.0.0.1:12345"
 	testContentMsgs = "hello, world!"
 	testContentWall = "hello,\r\nworld!\r\n"
+	testUserAgent   = "test goneAgent-1"
 )
 
 // newTestApp sets up a configured App for tests,
@@ -43,17 +43,29 @@ func newTestMux(app *config.App) *http.ServeMux {
 // App with Storage content.
 func newTestAppWithStorage() *config.App {
 	app := newTestApp()
+
 	app.Storage = storage.Storage{
 		Files: map[string]*storage.File{
-			"file1": {},
-			"file2": {},
+			"file1": {
+				Name: "file1",
+				ID:   "12345",
+			},
+			"file2": {
+				Name: "file2",
+				ID:   "67890",
+			},
 		},
 		Messages: []*storage.Message{
-			{Count: 1, Data: "hello"},
-			{Count: 2, Data: "world"},
+			{Count: 1,
+				Data: testContentMsgs + "1",
+			},
+			{Count: 2,
+				Data: testContentMsgs + "2",
+			},
 		},
-		WallContent: "test wall content",
+		WallContent: testContentWall,
 	}
+
 	return app
 }
 
