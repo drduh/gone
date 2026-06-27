@@ -1,0 +1,13 @@
+<!-- status.tmpl -->
+{{- define "status" }}
+      <div class="row">
+        <form action="{{ .Paths.Status }}"
+               class="inline-form"
+              method="post">
+          {{- if .Auth.Require.Status }} {{ template "auth" . }} {{ end }}
+          <button class="selectStatus"
+                  title="get server status"
+                   type="submit">server status</button>
+        </form>
+      </div>
+{{- end -}}

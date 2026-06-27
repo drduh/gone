@@ -15,11 +15,10 @@ import (
 // TestMessageAdd tests Message add.
 func TestMessageAdd(t *testing.T) {
 	app := newTestApp()
-	app.Require.Message = false
 	app.Require.MessageAdd = false
 
 	form := url.Values{}
-	form.Set("message", testContentMsgs)
+	form.Set(formFieldMessage, testContentMsgs)
 	req := httptest.NewRequestWithContext(t.Context(),
 		http.MethodPost, app.MessageAdd,
 		strings.NewReader(form.Encode()))
@@ -57,7 +56,7 @@ func TestMessageExceedLength(t *testing.T) {
 	app.Require.MessageAdd = false
 
 	form := url.Values{}
-	form.Set("message", strings.Repeat("a", 1000))
+	form.Set(formFieldMessage, strings.Repeat("a", 1000))
 	req := httptest.NewRequestWithContext(t.Context(),
 		http.MethodPost, app.MessageAdd,
 		strings.NewReader(form.Encode()))
@@ -88,7 +87,7 @@ func TestMessageExceedCount(t *testing.T) {
 	form := url.Values{}
 
 	for i := range app.MessageLimits.MaxCount {
-		form.Set("message", fmt.Sprintf("msg %d", i+1))
+		form.Set(formFieldMessage, fmt.Sprintf("msg %d", i+1))
 		req := httptest.NewRequestWithContext(t.Context(),
 			http.MethodPost, app.MessageAdd,
 			strings.NewReader(form.Encode()))
@@ -104,7 +103,7 @@ func TestMessageExceedCount(t *testing.T) {
 		}
 	}
 
-	form.Set("message", testContentMsgs)
+	form.Set(formFieldMessage, testContentMsgs)
 	req := httptest.NewRequestWithContext(t.Context(),
 		http.MethodPost, app.MessageAdd,
 		strings.NewReader(form.Encode()))
@@ -129,17 +128,17 @@ func TestMessageExceedCount(t *testing.T) {
 // TestMessageDeny tests Message add with no auth.
 func TestMessageDeny(t *testing.T) {
 	app := newTestApp()
-	app.Require.Message = true
+	app.Require.MessageAdd = true
 
 	app.Messages = append(
 		app.Messages, &storage.Message{
 			Count: 1, Data: "existing"})
 
 	form := url.Values{}
-	form.Set("message", testContentMsgs)
+	form.Set(formFieldMessage, testContentMsgs)
 
 	req := httptest.NewRequestWithContext(t.Context(),
-		http.MethodPost, app.Message,
+		http.MethodPost, app.MessageAdd,
 		strings.NewReader(form.Encode()))
 	req.Header.Set("Content-Type", formContentType)
 
@@ -183,18 +182,8 @@ func TestMessageClear(t *testing.T) {
 
 // TestMessageDownloadAll test Messages download all.
 func TestMessageDownloadAll(t *testing.T) {
-	app := newTestApp()
+	app := newTestAppWithStorage()
 	app.Require.Message = false
-
-	app.Messages = append(
-		app.Messages, &storage.Message{
-			Count: 1, Data: testContentMsgs + "1"})
-	app.Messages = append(
-		app.Messages, &storage.Message{
-			Count: 2, Data: testContentMsgs + "2"})
-	app.Messages = append(
-		app.Messages, &storage.Message{
-			Count: 3, Data: testContentMsgs + "3"})
 
 	req := httptest.NewRequestWithContext(t.Context(),
 		http.MethodPost, app.Message+"?download=allMessages", nil)
@@ -204,23 +193,22 @@ func TestMessageDownloadAll(t *testing.T) {
 	mux.ServeHTTP(rr, req)
 
 	if rr.Code != http.StatusOK {
-		t.Fatalf("expected %d, got %d",
+		t.Errorf("expected %d, got %d",
 			http.StatusOK, rr.Code)
-	}
-
-	body := rr.Body.String()
-
-	for i := 1; i <= 3; i++ {
-		want := testContentMsgs + strconv.Itoa(i)
-		if !strings.Contains(body, want) {
-			t.Fatalf("expected message %q, got %q",
-				want, body)
-		}
 	}
 
 	disp := rr.Header().Get("Content-Disposition")
 	if disp != `attachment; filename="messages.txt"` {
 		t.Errorf("invalid Content-Disposition: %q", disp)
+	}
+
+	body := rr.Body.String()
+	for i := 1; i <= len(app.Messages); i++ {
+		want := testContentMsgs + strconv.Itoa(i)
+		if !strings.Contains(body, want) {
+			t.Fatalf("expected message %q, got %q",
+				want, body)
+		}
 	}
 }
 
@@ -231,7 +219,7 @@ func TestMessageBrowser(t *testing.T) {
 	app.Require.MessageAdd = false
 
 	form := url.Values{}
-	form.Set("message", testContentMsgs)
+	form.Set(formFieldMessage, testContentMsgs)
 	req := httptest.NewRequestWithContext(t.Context(),
 		http.MethodPost, app.MessageAdd,
 		strings.NewReader(form.Encode()))
@@ -264,7 +252,7 @@ func TestMessageSpaces(t *testing.T) {
 	app.Require.MessageAdd = false
 
 	form := url.Values{}
-	form.Set("message", "  \n\t hello, world! \r\n ")
+	form.Set(formFieldMessage, "  \n\t hello, world! \r\n ")
 	req := httptest.NewRequestWithContext(t.Context(),
 		http.MethodPost, app.MessageAdd,
 		strings.NewReader(form.Encode()))
@@ -297,12 +285,12 @@ func TestMessageSpaces(t *testing.T) {
 // TestMessageSpacesOnly tests spaces-only Message add.
 func TestMessageSpacesOnly(t *testing.T) {
 	app := newTestApp()
-	app.Require.Message = false
+	app.Require.MessageAdd = false
 
 	form := url.Values{}
-	form.Set("message", "   \n\t  ")
+	form.Set(formFieldMessage, "   \n\t  ")
 	req := httptest.NewRequestWithContext(t.Context(),
-		http.MethodPost, app.Message,
+		http.MethodPost, app.MessageAdd,
 		strings.NewReader(form.Encode()))
 	req.Header.Set("Content-Type", formContentType)
 

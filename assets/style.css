@@ -85,8 +85,8 @@ form {
 }
 
 .itemMeta {
-  display: block;
   color: var(--fg-dark);
+  display: block;
   font-size: 0.8em;
 }
 
@@ -105,11 +105,11 @@ footer {
 }
 
 footer label {
+  cursor: pointer;
   display: block;
+  margin: 0;
   padding: 16px;
   text-align: center;
-  cursor: pointer;
-  margin: 0;
 }
 
 footer .footerExtra {
@@ -191,6 +191,7 @@ textarea {
 input:not(:disabled):hover,
 input[type="file"]::file-selector-button:hover,
 button:not(:disabled):hover,
+select:not(:disabled):hover,
 .wallContent:hover {
   background-color: var(--fg-light);
   color: var(--bg-dark);
@@ -236,6 +237,7 @@ input::placeholder {
 .selectClearStorage,
 .selectRefresh,
 .selectRemask,
+.selectStatus,
 .selectTheme,
 .selectUserInfo {
   width: var(--width-medium);
@@ -261,10 +263,19 @@ summary {
   color: var(--fg-light);
   cursor: pointer;
   display: inline;
+  user-select: none;
 }
 
 summary::marker {
   content: "";
+}
+
+summary:hover {
+  border-bottom-style: solid;
+}
+
+details[open] summary {
+  border-bottom-color: transparent;
 }
 
 .randomStrs {

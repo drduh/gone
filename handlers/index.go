@@ -18,7 +18,6 @@ func Index(app *config.App) http.HandlerFunc {
 
 		app.Log.Info("serving index",
 			"user", req)
-
 		renderIndex(w, r, app, req, "", nil)
 	}
 }
@@ -41,11 +40,11 @@ func renderIndex(
 	tmpl, err := template.New("index").ParseFS(
 		templates.TemplatesData, templatesData)
 	if err != nil {
-		writeJSON(w, http.StatusInternalServerError,
-			errorJSON(app.TmplParse))
 		app.Log.Error(app.TmplParse,
 			"error", err.Error(),
 			"user", req)
+		writeJSON(w, http.StatusInternalServerError,
+			errorJSON(app.TmplParse))
 		return
 	}
 
