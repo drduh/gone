@@ -18,8 +18,8 @@ func (f *File) Scan() {
 	f.setType()
 }
 
-// SetID sets a versioned File id using encoded
-// random bytes.
+// SetID sets a versioned unique File ID using
+// encoded random bytes.
 func (f *File) setID() {
 	f.ID = storageVersion + util.RandomID()
 }

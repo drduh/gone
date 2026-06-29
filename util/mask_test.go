@@ -4,7 +4,7 @@ import "testing"
 
 // TestMask tests assignment of unique address masks.
 func TestGetMask(t *testing.T) {
-	cases := []struct {
+	tests := []struct {
 		addr         string
 		addrWithPort string
 	}{
@@ -19,7 +19,7 @@ func TestGetMask(t *testing.T) {
 
 	seen := make(map[string]string)
 
-	for _, tc := range cases {
+	for _, tc := range tests {
 		mask1 := GetMask(tc.addr, false)
 		if mask1 != GetMask(tc.addr, false) {
 			t.Errorf("%q: expected same mask", tc.addr)
@@ -47,7 +47,7 @@ func TestGetMask(t *testing.T) {
 // TestGetMaskInvalid tests assignment of masks to
 // invalid input.
 func TestGetMaskInvalid(t *testing.T) {
-	cases := []string{
+	tests := []string{
 		"",
 		"notanaddress",
 		"127.o.O.1",
@@ -55,7 +55,7 @@ func TestGetMaskInvalid(t *testing.T) {
 
 	unknownMask := ""
 
-	for _, addr := range cases {
+	for _, addr := range tests {
 		mask := GetMaskAddr(addr, false)
 		if unknownMask == "" {
 			unknownMask = mask

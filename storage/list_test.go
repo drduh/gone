@@ -20,8 +20,8 @@ func TestListFiles(t *testing.T) {
 					Count: 0,
 				},
 				Time: Time{
-					Duration: time.Second,
-					Upload:   now.Add(-time.Minute),
+					Duration:   time.Second,
+					UploadTime: now.Add(-time.Minute),
 				},
 			},
 			"downloadExpired": {
@@ -32,8 +32,8 @@ func TestListFiles(t *testing.T) {
 					Count: 1,
 				},
 				Time: Time{
-					Duration: time.Hour,
-					Upload:   now,
+					Duration:   time.Hour,
+					UploadTime: now,
 				},
 			},
 			"active1": {
@@ -44,8 +44,8 @@ func TestListFiles(t *testing.T) {
 					Count: 0,
 				},
 				Time: Time{
-					Duration: time.Minute,
-					Upload:   now,
+					Duration:   time.Minute,
+					UploadTime: now,
 				},
 			},
 			"active2": {
@@ -56,8 +56,8 @@ func TestListFiles(t *testing.T) {
 					Count: 1,
 				},
 				Time: Time{
-					Duration: time.Hour,
-					Upload:   now,
+					Duration:   time.Hour,
+					UploadTime: now,
 				},
 			},
 		},

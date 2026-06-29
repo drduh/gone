@@ -30,7 +30,7 @@ func setupNames(t *testing.T, dir, filename, content string) {
 func TestLoadNames(t *testing.T) {
 	t.Parallel()
 
-	cases := []struct {
+	tests := []struct {
 		name     string
 		content  string
 		filename string
@@ -63,7 +63,7 @@ func TestLoadNames(t *testing.T) {
 		},
 	}
 
-	for _, tc := range cases {
+	for _, tc := range tests {
 		t.Run(tc.name, func(t *testing.T) {
 			t.Parallel()
 

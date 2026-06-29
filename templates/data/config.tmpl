@@ -1,14 +1,21 @@
 <!-- config.tmpl -->
-{{ define "config" }}
+{{- define "config" -}}
   <details>
   <summary>config</summary>
     <div class="box">
-      {{- template "selectRefresh" . }}
-      {{ if .Paths.UserRemask }}
-        {{- template "selectRemask" . }}
-      {{ end }}
-      <br>
-      {{- template "selectClear" . }}
+      {{- template "refreshPage" . }}
+      {{- if .Paths.Status }}
+        {{- template "status" . }}
+      {{- end }}
+      {{- if .Paths.UserInfo }}
+        {{- template "userInfo" . }}
+      {{- end }}
+      {{- if .Paths.UserRemask }}
+        {{- template "userRemask" . }}
+      {{- end }}
+      {{- if .Paths.Clear }}
+        {{- template "clearStorage" . }}
+      {{- end }}
     </div>
   </details>
-{{ end }}
+{{- end -}}

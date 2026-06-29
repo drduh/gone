@@ -1,69 +1,55 @@
 <!-- list.tmpl -->
-{{ define "list" }}
+{{- define "list" }}
   <div class="box">
     {{ if not .Storage.Files }}
-    <p>{{ .NoFiles }}</p>
+    <span class="itemName">{{ .Error.NoFiles }}</span>
     {{ else }}
     {{ if .Auth.Require.List }}
     <form action="{{ .Paths.List }}"
           method="post">
       {{ template "auth" . }}
-      <input class="selectSubmit"
-              type="submit"
-             value="list">
+      <button class="selectSubmit"
+              title="list files"
+               type="submit">list</button>
     </form>
     {{ end }}
     <form action="{{ .Paths.Download }}"
           method="post">
-      <br>
       {{ if not .Auth.Require.List }}
-      <table>
-        <thead>
-          <tr>
-            <th>File</th>
-            <th>Size</th>
-            <th>Type</th>
-            <th>User</th>
-            <th>Time</th>
-          </tr>
-        </thead>
-        <tbody>
-        {{ range .Storage.Files }}
-        {{ $id := printf "%.8s" .ID }}
-        <tr class="list-row">
-          <td>
-            <input id="{{ $id }}"
-                 name="name"
+      <div class="itemList">
+      {{ range .Storage.Files }}
+        <label class="itemCard">
+          <input name="name"
                  type="radio"
                 value="{{ .ID }}" required>
-            <label for="{{ $id }}">
-              {{ .Name }}<br>
-              ({{ printf "%.8s" .Sum }})
-            </label>
-          </td>
-          <td><label for="{{ $id }}">{{ .Size }}</label></td>
-          <td><label for="{{ $id }}">{{ .Type }}</label></td>
-          <td><label for="{{ $id }}">{{ .Owner.Mask }}</label></td>
-          <td><label for="{{ $id }}">{{ .Time.Remain }}</label></td>
-        </tr>
-        {{ end }}
-        </tbody>
-      </table>
-      <br>
-      {{ else }}
+          <span class="itemName">{{ .Name }}</span>
+          <span class="itemMeta">
+            {{ .Size }} &middot;
+            {{ .Type }} &middot;
+            {{ .Owner.Mask }}
+          </span>
+          <span class="itemMeta">
+            {{ .Time.DurationRemaining }} and
+            {{ .Downloads.Remain }}/{{ .Downloads.Allow }} downloads remaining
+          </span>
+        </label>
+      {{- end }}
+      </div>
+      {{- else }}
       <input class="selectFilename"
                 id="name"
               name="name"
        placeholder="{{ .Placeholder.File }}"
              title="download file by id or name"
               type="text" required>
-      {{ end }}
-      {{ if .Auth.Require.Download }} {{ template "auth" . }} {{ end }}
-      <input class="selectSubmit"
-             title="download selected file"
-              type="submit"
-             value="download">
+      {{- end }}
+      <div class="row">
+        {{- if .Auth.Require.Download }} {{ template "auth" . }} {{ end }}
+        <button class="selectSubmit"
+                title="download selected file"
+                 type="submit">download</button>
+      </div>
     </form>
     {{ end }}
   </div>
-{{ end }}
+{{- end -}}

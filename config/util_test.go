@@ -42,7 +42,7 @@ func TestSetStart(t *testing.T) {
 
 // TestUptime tests various uptime logging.
 func TestUptime(t *testing.T) {
-	cases := []struct {
+	tests := []struct {
 		name      string
 		startTime time.Time
 		now       time.Time
@@ -69,7 +69,7 @@ func TestUptime(t *testing.T) {
 		},
 	}
 
-	for _, tt := range cases {
+	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			stubNow(t, tt.now)
 

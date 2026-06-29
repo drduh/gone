@@ -5,39 +5,52 @@
               id="wall"
           method="post">
       <textarea class="wallContent"
-                 cols="32" rows="12"
                  form="wall"
             maxlength="{{ .Limit.WallLimits.LengthChars }}"
                  name="wall"
                 title="add or edit content">
       {{- .Storage.WallContent -}}
       </textarea>
-      <br>
-      {{ if .Auth.Require.Wall }} {{ template "auth" . }} {{ end }}
-      <input class="selectPost"
-             title="save contents"
-              type="submit"
-             value="save">
+      <div class="row">
+        {{- if .Auth.Require.Wall }} {{ template "auth" . }} {{ end }}
+        <button class="selectWallSave"
+                title="save contents"
+                 type="submit">save</button>
+      </div>
     </form>
     <form action="{{ .Paths.Wall }}"
-          method="post"
-           style="display:inline;">
+           class="inline-form"
+          method="post">
       <input name="clear"
              type="hidden"
             value="true">
-      <button class="selectClear" {{ if not .Storage.WallContent -}} disabled {{ end }}
-              title="clear wall"
-               type="submit">clear</button>
+      <div class="row">
+      {{- if .Auth.Require.Wall }}{{ template "auth" . }} {{ end }}
+        <button class="selectClearWall"
+        {{- if not .Storage.WallContent }} disabled
+                title="no wall content to clear"
+        {{- else }}
+                title="clear wall"
+        {{- end }}
+                 type="submit">clear</button>
+      </div>
     </form>
     <form action="{{ .Paths.Wall }}"
-          method="get"
-           style="display:inline;">
-      <input name="download"
-             type="hidden"
-            value="all">
-      <button class="selectDownload" {{ if not .Storage.WallContent -}} disabled {{ end }}
-              title="download wall"
-               type="submit">download</button>
+           class="inline-form"
+          method="post">
+      <div class="row">
+        {{- if .Auth.Require.Wall }}{{ template "auth" . }} {{ end }}
+        <input name="download"
+               type="hidden"
+              value="wall">
+        <button class="selectDownload"
+        {{- if not .Storage.WallContent }} disabled
+                title="no wall content to download"
+        {{- else }}
+                title="download wall"
+        {{- end }}
+                 type="submit">download</button>
+      </div>
     </form>
   </div>
 {{ end }}

@@ -16,9 +16,6 @@ func UserInfo(app *config.App) http.HandlerFunc {
 			return
 		}
 
-		app.Log.Info("serving user request info",
-			"user", req)
-
 		response := templates.User{
 			Owner: storage.Owner{
 				Address: req.Address,
@@ -27,6 +24,9 @@ func UserInfo(app *config.App) http.HandlerFunc {
 			},
 			IsBrowser: req.IsBrowser,
 		}
+
+		app.Log.Info("serving user request info",
+			"user", req)
 
 		writeJSON(w, http.StatusOK, response)
 	}

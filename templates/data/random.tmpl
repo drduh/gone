@@ -1,0 +1,42 @@
+<!-- random.tmpl -->
+{{ define "random" }}
+  {{ if .RandomStrs }}
+  <details open>
+  {{ else }}
+  <details>
+  {{ end }}
+  <summary>random</summary>
+    <div class="box">
+      <form action="{{ .Paths.Random }}"
+            method="get">
+        <div class="row">
+          <select class="selectRandom"
+                   name="random"
+                  title="random value type">
+            <option value="mask"
+            {{ if eq .RandomType "mask" }}selected{{ end }}>username
+            </option>
+            <option value="pass"
+            {{ if eq .RandomType "pass" }}selected{{ end }}>password
+            </option>
+            <option value="number"
+            {{ if eq .RandomType "number" }}selected{{ end }}>numbers
+            </option>
+            <option value="coin"
+            {{ if eq .RandomType "coin" }}selected{{ end }}>coinflip
+            </option>
+          </select>
+          {{ if .Auth.Require.Random }} {{ template "auth" . }} {{ end }}
+          <button class="selectSubmit"
+                  title="get random output"
+                   type="submit">random</button>
+        </div>
+      </form>
+      <div class="randomStrs ">
+        {{ range .RandomStrs }}
+        <div class="itemMeta">{{ . }}</div>
+        {{- end }}
+      </div>
+    </div>
+  </details>
+{{ end }}

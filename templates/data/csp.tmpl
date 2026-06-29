@@ -1,19 +1,19 @@
 <!-- csp.tmpl -->
 {{ define "csp" -}}
-    <meta http-equiv="Content-Security-Policy"
-             content="
-               style-src       'self' 'unsafe-inline';
-               form-action     'self';
-               base-uri        'none';
-               child-src       'none';
-               connect-src     'none';
-               default-src     'none';
-               font-src        'none';
-               frame-src       'none';
-               img-src         'none';
-               manifest-src    'none';
-               media-src       'none';
-               object-src      'none';
-               script-src      'none';
-               worker-src      'none';">
-{{ end }}
+  <meta http-equiv="Content-Security-Policy"
+           content="
+             style-src    'self' 'unsafe-inline';
+             form-action  'self';
+             base-uri     'none';
+             child-src    'none';
+             connect-src  'none';
+             default-src  'none';
+             font-src     'none';
+             frame-src    'none';
+             img-src      'none';
+             manifest-src 'none';
+             media-src    'none';
+             object-src   'none';
+             script-src   'none';
+             worker-src   'none';">
+{{- end }}

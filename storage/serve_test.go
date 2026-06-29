@@ -68,7 +68,7 @@ func TestServeMessages(t *testing.T) {
 			Count: i,
 			Data:  fmt.Sprintf("msg%03d", i),
 			Time: Time{
-				Allow: time.Date(
+				UploadTimeFmt: time.Date(
 					2026, 12, 31, 23, i%60, 0, 0, time.UTC,
 				).Format(timeFormat),
 			},

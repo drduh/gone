@@ -1,7 +1,6 @@
 package handlers
 
 import (
-	"encoding/json"
 	"math"
 	"net/http"
 	"net/http/httptest"
@@ -10,101 +9,136 @@ import (
 
 // TestWriteJSON tests valid and invalid encoding.
 func TestWriteJSON(t *testing.T) {
-	t.Run("validate status and body", func(t *testing.T) {
-		rr := httptest.NewRecorder()
-		payload := map[string]string{"hello": "world"}
+	type File struct {
+		ID   int    `json:"id"`
+		Name string `json:"name"`
+	}
 
-		writeJSON(rr, http.StatusOK, payload)
+	tests := []struct {
+		name     string
+		code     int
+		data     any
+		wantCode int
+		wantBody string
+		wantType string
+	}{
+		{
+			name:     "map encoding",
+			code:     http.StatusOK,
+			data:     map[string]string{"hello": "world"},
+			wantCode: http.StatusOK,
+			wantBody: `{"hello":"world"}` + "\n",
+			wantType: "application/json; charset=utf-8",
+		},
+		{
+			name:     "struct encoding",
+			code:     http.StatusOK,
+			data:     File{ID: 1, Name: "testFile"},
+			wantCode: http.StatusOK,
+			wantBody: `{"id":1,"name":"testFile"}` + "\n",
+			wantType: "application/json; charset=utf-8",
+		},
+		{
+			name:     "slice encoding",
+			code:     http.StatusOK,
+			data:     []int{1, 2, 3},
+			wantCode: http.StatusOK,
+			wantBody: `[1,2,3]` + "\n",
+			wantType: "application/json; charset=utf-8",
+		},
+		{
+			name:     "nil encoding",
+			code:     http.StatusOK,
+			data:     nil,
+			wantCode: http.StatusOK,
+			wantBody: "null\n",
+			wantType: "application/json; charset=utf-8",
+		},
+		{
+			name:     "non-200 status code",
+			code:     http.StatusCreated,
+			data:     File{ID: 1, Name: "testFile"},
+			wantCode: http.StatusCreated,
+			wantBody: `{"id":1,"name":"testFile"}` + "\n",
+			wantType: "application/json; charset=utf-8",
+		},
+		{
+			name:     "unicode content",
+			code:     http.StatusOK,
+			data:     map[string]string{"msg": "héllo wörld"},
+			wantCode: http.StatusOK,
+			wantBody: `{"msg":"héllo wörld"}` + "\n",
+			wantType: "application/json; charset=utf-8",
+		},
+		{
+			name:     "marshal failure",
+			code:     http.StatusOK,
+			data:     math.NaN(),
+			wantCode: http.StatusInternalServerError,
+			wantBody: `{"error":"failed to encode response"}` + "\n",
+			wantType: "application/json; charset=utf-8",
+		},
+		{
+			name:     "empty struct",
+			code:     http.StatusOK,
+			data:     File{},
+			wantCode: http.StatusOK,
+			wantBody: `{"id":0,"name":""}` + "\n",
+			wantType: "application/json; charset=utf-8",
+		},
+		{
+			name:     "empty slice",
+			code:     http.StatusOK,
+			data:     []int{},
+			wantCode: http.StatusOK,
+			wantBody: `[]` + "\n",
+			wantType: "application/json; charset=utf-8",
+		},
+		{
+			name:     "nil slice",
+			code:     http.StatusOK,
+			data:     []int(nil),
+			wantCode: http.StatusOK,
+			wantBody: "null\n",
+			wantType: "application/json; charset=utf-8",
+		},
+		{
+			name:     "html escaping",
+			code:     http.StatusOK,
+			data:     map[string]string{"msg": "<script>alert('xss')</script>"},
+			wantCode: http.StatusOK,
+			wantBody: `{"msg":"\u003cscript\u003ealert('xss')\u003c/script\u003e"}` + "\n",
+			wantType: "application/json; charset=utf-8",
+		},
+		{
+			name: "nested struct",
+			code: http.StatusOK,
+			data: struct {
+				File File `json:"file"`
+			}{File: File{ID: 1, Name: "testFile"}},
+			wantCode: http.StatusOK,
+			wantBody: `{"file":{"id":1,"name":"testFile"}}` + "\n",
+			wantType: "application/json; charset=utf-8",
+		},
+	}
 
-		if rr.Code != http.StatusOK {
-			t.Errorf("expected status %d, got %d",
-				http.StatusOK, rr.Code)
-		}
-		if ct := rr.Header().Get(
-			"Content-Type"); ct != "application/json; charset=utf-8" {
-			t.Errorf("unexpected Content-Type: %s", ct)
-		}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			rr := httptest.NewRecorder()
+			writeJSON(rr, tt.code, tt.data)
 
-		var got map[string]string
-		if err := json.NewDecoder(
-			rr.Body).Decode(&got); err != nil {
-			t.Fatalf("failed to decode response body: %v", err)
-		}
-		if got["hello"] != "world" {
-			t.Errorf("expected hello=world, got %v", got)
-		}
-	})
-
-	t.Run("validate 500 with invalid data", func(t *testing.T) {
-		rr := httptest.NewRecorder()
-
-		// force marshal error
-		writeJSON(rr, http.StatusOK, math.NaN())
-
-		if rr.Code != http.StatusInternalServerError {
-			t.Errorf("expected %d, got %d",
-				http.StatusInternalServerError, rr.Code)
-		}
-	})
-
-	t.Run("validate struct encoding", func(t *testing.T) {
-		rr := httptest.NewRecorder()
-
-		type User struct {
-			ID   int    `json:"id"`
-			Name string `json:"name"`
-		}
-
-		writeJSON(rr, http.StatusOK,
-			User{ID: 1, Name: "Bob"})
-
-		if rr.Code != http.StatusOK {
-			t.Fatalf("expected %d, got %d",
-				http.StatusOK, rr.Code)
-		}
-
-		var got User
-		if err := json.NewDecoder(
-			rr.Body).Decode(&got); err != nil {
-			t.Fatalf("failed to decode body: %v", err)
-		}
-		if got.ID != 1 || got.Name != "Bob" {
-			t.Errorf("unexpected body: %+v", got)
-		}
-	})
-
-	t.Run("validate slice encoding", func(t *testing.T) {
-		rr := httptest.NewRecorder()
-
-		writeJSON(rr, http.StatusOK, []int{1, 2, 3})
-
-		if rr.Code != http.StatusOK {
-			t.Errorf("expected %d, got %d",
-				http.StatusOK, rr.Code)
-		}
-
-		var got []int
-		if err := json.NewDecoder(
-			rr.Body).Decode(&got); err != nil {
-			t.Fatalf("failed to decode body: %v", err)
-		}
-		if len(got) != 3 ||
-			got[0] != 1 || got[1] != 2 || got[2] != 3 {
-			t.Errorf("got invalid slice: %v", got)
-		}
-	})
-
-	t.Run("validate nil encoding", func(t *testing.T) {
-		rr := httptest.NewRecorder()
-
-		writeJSON(rr, http.StatusOK, nil)
-
-		if rr.Code != http.StatusOK {
-			t.Errorf("expected %d, got %d",
-				http.StatusOK, rr.Code)
-		}
-		if body := rr.Body.String(); body != "null\n" {
-			t.Errorf("expected null, got %q", body)
-		}
-	})
+			if rr.Code != tt.wantCode {
+				t.Errorf("expected status %d, got %d",
+					tt.wantCode, rr.Code)
+			}
+			if ct := rr.Header().Get("Content-Type"); ct != tt.wantType {
+				t.Errorf("expected Content-Type %q, got %q",
+					tt.wantType, ct)
+			}
+			if body := rr.Body.String(); body != tt.wantBody {
+				t.Errorf("want - got: \n%q\n%q",
+					tt.wantBody, body)
+			}
+		})
+	}
 }

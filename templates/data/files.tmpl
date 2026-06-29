@@ -1,5 +1,5 @@
 <!-- files.tmpl -->
-{{ define "files" -}}
+{{- define "files" -}}
   {{ if .Paths.Upload }}
   <details>
   <summary>upload</summary>
@@ -7,13 +7,10 @@
   </details>
   {{ end }}
   {{ if .Paths.List -}}
-  {{ if .Storage.Files }}
-  <details open>
-  {{ else }}
-  <details>
-  {{ end }}
+  {{ if .Storage.Files -}} <details open>
+  {{ else -}} <details> {{ end }}
   <summary>download</summary>
     {{ template "list" . }}
   </details>
-  {{ end }}
-{{ end }}
+  {{- end -}}
+{{- end -}}

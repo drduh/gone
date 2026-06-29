@@ -13,11 +13,11 @@ import (
 )
 
 const (
-	testAddrAndPort = "127.0.0.1:12345"
-	testUserAgent   = "testGoneAgent"
 	formContentType = "application/x-www-form-urlencoded"
+	testAddrAndPort = "127.0.0.1:12345"
 	testContentMsgs = "hello, world!"
 	testContentWall = "hello,\r\nworld!\r\n"
+	testUserAgent   = "test goneAgent-1"
 )
 
 // newTestApp sets up a configured App for tests,
@@ -26,24 +26,46 @@ func newTestApp() *config.App {
 	app := config.Load()
 	app.Log = slog.New(slog.DiscardHandler)
 	app.ReqsPerMinute = 1000
+	auth.SetTarpit(0)
 	return app
+}
+
+// newTestMux sets up a route handlers for tests.
+func newTestMux(app *config.App) *http.ServeMux {
+	mux := http.NewServeMux()
+	for pattern, h := range Routes(app) {
+		mux.HandleFunc(pattern, h)
+	}
+	return mux
 }
 
 // newTestAppWithStorage sets up a configured
 // App with Storage content.
 func newTestAppWithStorage() *config.App {
 	app := newTestApp()
+
 	app.Storage = storage.Storage{
 		Files: map[string]*storage.File{
-			"file1": {},
-			"file2": {},
+			"file1": {
+				Name: "file1",
+				ID:   "12345",
+			},
+			"file2": {
+				Name: "file2",
+				ID:   "67890",
+			},
 		},
 		Messages: []*storage.Message{
-			{Count: 1, Data: "hello"},
-			{Count: 2, Data: "world"},
+			{Count: 1,
+				Data: testContentMsgs + "1",
+			},
+			{Count: 2,
+				Data: testContentMsgs + "2",
+			},
 		},
-		WallContent: "test wall content",
+		WallContent: testContentWall,
 	}
+
 	return app
 }
 
@@ -51,9 +73,8 @@ func newTestAppWithStorage() *config.App {
 // by setting tarpit duration to 0.
 func serveDeniedRequest(
 	t *testing.T,
-	handler http.HandlerFunc,
-	req *http.Request,
-) *httptest.ResponseRecorder {
+	app *config.App,
+	req *http.Request) *httptest.ResponseRecorder {
 	t.Helper()
 
 	auth.SetTarpit(0)
@@ -63,7 +84,9 @@ func serveDeniedRequest(
 	}
 
 	rr := httptest.NewRecorder()
-	handler.ServeHTTP(rr, req)
+	mux := newTestMux(app)
+	mux.ServeHTTP(rr, req)
+
 	return rr
 }
 
@@ -75,7 +98,7 @@ func assertDenied(
 	t.Helper()
 
 	if rr.Code != http.StatusForbidden {
-		t.Fatalf("expected status %d, got %d",
+		t.Fatalf("expected %d, got %d",
 			http.StatusForbidden, rr.Code)
 	}
 
@@ -94,6 +117,7 @@ func assertDenied(
 // assertStorageClear tests Storage is empty.
 func assertStorageClear(t *testing.T, app *config.App) {
 	t.Helper()
+
 	assertFilesClear(t, app)
 	assertMessagesClear(t, app)
 	assertWallClear(t, app)

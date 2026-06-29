@@ -2,49 +2,50 @@ package storage
 
 import "time"
 
-// GetLifetime returns the rounded duration since a
-// File was uploaded.
-func (f *File) GetLifetime() time.Duration {
-	return time.Since(f.Time.Upload).Round(time.Second)
+// Lifetime returns the duration since a File
+// was uploaded, rounded to the nearest second.
+func (f *File) Lifetime() time.Duration {
+	return time.Since(f.Time.UploadTime).Round(time.Second)
+}
+
+// SetRemainingDuration sets the remaining duration
+// until File expiration, or to "0s" when expired.
+func (f *File) SetRemainingDuration() {
+	if r := f.Duration - f.Lifetime(); r > 0 {
+		f.DurationRemaining = r.Round(time.Second).String()
+	} else {
+		f.DurationRemaining = "0s"
+	}
+}
+
+// SetRemainingDownloads sets the number of downloads
+// remaining for a File.
+func (f *File) SetRemainingDownloads() {
+	f.Remain = f.Allow - f.Count
 }
 
 // IsExpired returns a reason the File is expired,
 // or an empty string when the File isn't expired.
 func (f *File) IsExpired() string {
-	if f.Downloads.Allow > 0 &&
-		f.Count >= f.Downloads.Allow {
+	if f.Allow > 0 && f.Count >= f.Allow {
 		return "limit downloads"
 	}
-	if f.Duration > 0 &&
-		f.GetLifetime() > f.Duration {
+	if f.Duration > 0 && f.Lifetime() > f.Duration {
 		return "limit duration"
 	}
 	return ""
 }
 
-// NumRemaining returns the number of downloads remaining
-// until File expiration.
-func (f *File) NumRemaining() int {
-	return f.Downloads.Allow - f.Count
-}
-
-// TimeRemaining returns the relative duration remaining
-// until File expiration.
-func (f *File) TimeRemaining() time.Duration {
-	return time.Until(
-		f.Time.Upload.Add(f.Time.Duration)).Round(time.Second)
-}
-
-// Expire removes a File from Storage by id.
+// Expire removes a File from Storage by ID.
 func (s *Storage) Expire(f *File) {
 	delete(s.Files, f.ID)
 }
 
-// UpdateTimeRemaining updates the time remaining until
-// expiration of each File in Storage.
-func (s *Storage) UpdateTimeRemaining() {
+// UpdateRemainingFileLimits updates remaining limits
+// of each File in Storage.
+func (s *Storage) UpdateRemainingFileLimits() {
 	for _, file := range s.Files {
-		file.Time.Remain = file.TimeRemaining().String()
-		s.Files[file.ID] = file
+		file.SetRemainingDownloads()
+		file.SetRemainingDuration()
 	}
 }

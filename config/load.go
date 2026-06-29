@@ -10,11 +10,10 @@ import (
 	"github.com/drduh/gone/version"
 )
 
-// Load returns the application configuration.
+// Load returns the configured application.
 func Load() *App {
 	app := App{}
 
-	app.Start()
 	app.Debug = modeDebug
 	app.Modes.Version = modeVersion
 
@@ -36,9 +35,10 @@ func Load() *App {
 
 	app.Hostname = util.GetHostname()
 	app.Version = version.Get()
-	app.ClearStorage()
 
 	auth.SetTarpit(app.TarpitDelay.Duration)
+
+	app.Start()
 
 	return &app
 }

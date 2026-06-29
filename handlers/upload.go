@@ -83,7 +83,9 @@ func Upload(app *config.App) http.HandlerFunc {
 				"user", req)
 			return
 		}
-		wg.Add(len(formFileContent))
+
+		fileCount := len(formFileContent)
+		wg.Add(fileCount)
 
 		for _, fileHeader := range formFileContent {
 			go func(fileHeader *multipart.FileHeader) {
@@ -115,20 +117,24 @@ func Upload(app *config.App) http.HandlerFunc {
 					return
 				}
 
-				filename := storage.SanitizeName(fileHeader.Filename,
-					app.FileLimits.NameExtraChars, app.FileLimits.NameLength)
+				filename := storage.SanitizeName(
+					fileHeader.Filename,
+					app.FileLimits.NameExtraChars,
+					app.FileLimits.NameLength)
 
+				t := time.Now()
 				f := &storage.File{
 					Name: filename,
 					Data: buf.Bytes(),
 					Owner: storage.Owner{
 						Address: req.Address,
-						Mask:    req.Mask,
 						Agent:   req.Agent,
+						Mask:    req.Mask,
 					},
 					Time: storage.Time{
-						Duration: durationLimit,
-						Upload:   time.Now(),
+						Duration:      durationLimit,
+						UploadTime:    t,
+						UploadTimeFmt: t.Format(app.TimeFormat),
 					},
 					Downloads: storage.Downloads{
 						Allow: downloadLimit,
@@ -151,11 +157,11 @@ func Upload(app *config.App) http.HandlerFunc {
 						Agent:   f.Agent,
 					},
 					Time: storage.Time{
-						Upload: f.Upload,
-						Allow:  f.Duration.String(),
+						UploadTimeFmt:     f.UploadTimeFmt,
+						DurationRemaining: f.Duration.String(),
 					},
 					Downloads: storage.Downloads{
-						Allow: f.Downloads.Allow,
+						Allow: f.Allow,
 					},
 				}
 				uploads = append(uploads, upload)

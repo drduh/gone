@@ -1,17 +1,29 @@
 <!-- version.tmpl -->
 {{ define "version" }}
-        <a href="https://github.com/drduh/gone">
-          {{ .Version.appID }}-{{ .Version.appVersion }}
-        </a>
-        <br>
-        up {{ .Uptime }} on {{ .Hostname }}
-        <br>
-        built by {{ .Version.buildUser }}
-        from {{ .Version.buildPath }}
-        <br>
-        on {{ .Version.buildHostname }}
-        ({{ .Version.buildArch }}/{{ .Version.buildSystem }})
-        <br>
-        at {{ .Version.buildTime }} with
-        <a href="https://go.dev/">{{ .Version.buildGoVers }}</a>
+        <div class="row">
+          <a href="https://github.com/drduh/gone"
+           target="_blank">
+            {{ .Version.appID }}-{{ .Version.appVersion }}
+          </a>
+        </div>
+        <div class="row">
+          up {{ .Uptime }} on {{ .Hostname }}
+        </div>
+        <div class="row">
+          built by {{ .Version.buildUser }}
+          from {{ .Version.buildPath }}
+        </div>
+        <div class="row">
+          on {{ .Version.buildHostname }}
+          ({{ .Version.buildArch }}/{{ .Version.buildSystem }})
+        </div>
+        <div class="row">
+          <span>
+            at {{ .Version.buildTime }} with
+            <a href="https://go.dev/"
+             target="_blank">
+              {{ .Version.buildGoVers }}
+            </a>
+          </span>
+        </div>
 {{ end }}

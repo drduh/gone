@@ -13,15 +13,19 @@
       "token":     "mySecret"
     },
     "require": {
-      "clear":     false,
+      "assets":    false,
+      "clear":     true,
       "download":  true,
       "list":      false,
-      "message":   false,
+      "msg":       false,
+      "msgAdd":    false,
+      "msgClear":  true,
       "random":    false,
+      "remask":    true,
       "root":      false,
       "static":    false,
-      "status":    false,
-      "upload":    false,
+      "status":    true,
+      "upload":    true,
       "userInfo":  false,
       "wall":      false
     },
@@ -84,7 +88,7 @@
       "lengthChars":    128
     },
     "randomLimits": {
-      "strCount":       10
+      "strCount":       16
     },
     "wallLimits": {
       "lengthChars":    2560
@@ -95,13 +99,15 @@
     "clear":       "/clear",
     "download":    "/download/",
     "list":        "/list",
-    "message":     "/msg",
+    "msg":         "/msg",
+    "msgAdd":      "/msg/add",
+    "msgClear":    "/msg/clear",
     "random":      "/random/",
     "root":        "/",
     "static":      "/static",
     "status":      "/status",
     "upload":      "/upload",
-    "userInfo":    "/user",
+    "userInfo":    "/user/info",
     "userRemask":  "/user/remask",
     "wall":        "/wall"
   }

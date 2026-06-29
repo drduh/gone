@@ -21,7 +21,7 @@ var adjectives = []string{
 	"kind", "keen", "kissed",
 	"lucid", "lilting", "luminous",
 	"misty", "merry", "moonlit",
-	"noble", "night", "nimble",
+	"narrow", "nimble", "noble",
 	"opal", "open", "olden",
 	"pale", "peaceful", "petaled",
 	"quiet", "quick", "quivering",
@@ -37,7 +37,7 @@ var adjectives = []string{
 }
 
 var nouns = []string{
-	"acorn", "aurora", "arroyo",
+	"acorn", "aurora", "aspen",
 	"brook", "bloom", "briar",
 	"cloud", "cedar", "cove",
 	"dell", "dawn", "drift",

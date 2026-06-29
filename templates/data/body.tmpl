@@ -1,0 +1,13 @@
+<!-- body.tmpl -->
+{{- define "body" -}}
+<body>
+  <main>
+  {{ template "files"  . }}
+  {{ template "text"   . }}
+  {{ template "random" . }}
+  {{ template "theme"  . }}
+  {{ template "config" . }}
+  </main>
+  {{ template "footer" . }}
+</body>
+{{ end }}

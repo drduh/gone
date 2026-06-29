@@ -1,9 +1,9 @@
 <!-- auth.tmpl -->
 {{ define "auth" }}
-  <br>
-  <input class="selectToken"
-          name="{{ .Auth.Basic.Field }}"
-   placeholder="{{ .Placeholder.Auth }}"
-         title="auth token required"
-          type="password" required>
-{{ end }}
+      <input autocomplete="off"
+                    class="selectToken"
+                     name="{{ .Auth.Basic.Field }}"
+              placeholder="{{ .Placeholder.Auth }}"
+                    title="auth token required"
+                     type="password" required>
+{{- end -}}

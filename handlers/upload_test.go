@@ -15,24 +15,25 @@ import (
 // TestUploadFileTooLarge test file uploads exceeding size limit.
 func TestUploadFileTooLarge(t *testing.T) {
 	app := newTestApp()
+	app.Require.Upload = false
 
-	reqBody := strings.NewReader("dummy")
+	reqBody := strings.NewReader("upload_test")
 	req := httptest.NewRequestWithContext(t.Context(),
-		http.MethodPost, "/upload", reqBody)
+		http.MethodPost, app.Upload, reqBody)
 	req.ContentLength = (app.FileLimits.SizeEachMb << 20) + 1
 
-	w := httptest.NewRecorder()
-	handler := Upload(app)
-	handler.ServeHTTP(w, req)
+	rr := httptest.NewRecorder()
+	mux := newTestMux(app)
+	mux.ServeHTTP(rr, req)
 
-	if w.Code != http.StatusRequestEntityTooLarge {
-		t.Fatalf("expected status %d, got %d",
-			http.StatusRequestEntityTooLarge, w.Code)
+	if rr.Code != http.StatusRequestEntityTooLarge {
+		t.Fatalf("expected %d, got %d",
+			http.StatusRequestEntityTooLarge, rr.Code)
 	}
 
 	var resp map[string]string
 	if err := json.Unmarshal(
-		w.Body.Bytes(), &resp); err != nil {
+		rr.Body.Bytes(), &resp); err != nil {
 		t.Fatalf("failed to parse response: %v", err)
 	}
 
@@ -45,6 +46,7 @@ func TestUploadFileTooLarge(t *testing.T) {
 // TestUploadNoFile tests uploads without a file selected.
 func TestUploadNoFile(t *testing.T) {
 	app := newTestApp()
+	app.Require.Upload = false
 
 	var b bytes.Buffer
 	mw := multipart.NewWriter(&b)
@@ -53,22 +55,22 @@ func TestUploadNoFile(t *testing.T) {
 	}
 
 	req := httptest.NewRequestWithContext(t.Context(),
-		http.MethodPost, "/upload", &b)
+		http.MethodPost, app.Upload, &b)
 	req.Header.Set("Content-Type",
 		mw.FormDataContentType())
 
-	w := httptest.NewRecorder()
-	handler := Upload(app)
-	handler.ServeHTTP(w, req)
+	rr := httptest.NewRecorder()
+	mux := newTestMux(app)
+	mux.ServeHTTP(rr, req)
 
-	if w.Code != http.StatusBadRequest {
-		t.Fatalf("expected status %d, got %d",
-			http.StatusBadRequest, w.Code)
+	if rr.Code != http.StatusBadRequest {
+		t.Fatalf("expected %d, got %d",
+			http.StatusBadRequest, rr.Code)
 	}
 
 	var resp map[string]string
 	if err := json.Unmarshal(
-		w.Body.Bytes(), &resp); err != nil {
+		rr.Body.Bytes(), &resp); err != nil {
 		t.Fatalf("failed to parse response: %v", err)
 	}
 
@@ -81,6 +83,7 @@ func TestUploadNoFile(t *testing.T) {
 // TestUploadSuccess tests successful file uploads.
 func TestUploadSuccess(t *testing.T) {
 	app := newTestApp()
+	app.Require.Upload = false
 
 	var b bytes.Buffer
 	mw := multipart.NewWriter(&b)
@@ -96,22 +99,22 @@ func TestUploadSuccess(t *testing.T) {
 	}
 
 	req := httptest.NewRequestWithContext(t.Context(),
-		http.MethodPost, "/upload", &b)
+		http.MethodPost, app.Upload, &b)
 	req.Header.Set("Content-Type",
 		mw.FormDataContentType())
 
-	w := httptest.NewRecorder()
-	handler := Upload(app)
-	handler.ServeHTTP(w, req)
+	rr := httptest.NewRecorder()
+	mux := newTestMux(app)
+	mux.ServeHTTP(rr, req)
 
-	if w.Code != http.StatusOK {
-		t.Fatalf("expected status %d, got %d",
-			http.StatusOK, w.Code)
+	if rr.Code != http.StatusOK {
+		t.Fatalf("expected %d, got %d",
+			http.StatusOK, rr.Code)
 	}
 
 	var uploads []storage.File
 	if err := json.Unmarshal(
-		w.Body.Bytes(), &uploads); err != nil {
+		rr.Body.Bytes(), &uploads); err != nil {
 		t.Fatalf("failed to parse response: %v", err)
 	}
 
@@ -143,10 +146,10 @@ func TestUploadDeny(t *testing.T) {
 	app := newTestApp()
 	app.Require.Upload = true
 
+	reqBody := strings.NewReader("upload_test")
 	req := httptest.NewRequestWithContext(t.Context(),
-		http.MethodPost,
-		app.Upload, strings.NewReader("dummy"))
-	rr := serveDeniedRequest(t, Upload(app), req)
+		http.MethodPost, app.Upload, reqBody)
+	rr := serveDeniedRequest(t, app, req)
 
 	assertDenied(t, rr, app.Deny)
 

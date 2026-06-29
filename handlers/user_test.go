@@ -16,7 +16,7 @@ func TestUserInfoForbidden(t *testing.T) {
 
 	req := httptest.NewRequestWithContext(t.Context(),
 		http.MethodGet, app.UserInfo, nil)
-	rr := serveDeniedRequest(t, UserInfo(app), req)
+	rr := serveDeniedRequest(t, app, req)
 
 	assertDenied(t, rr, app.Deny)
 }
@@ -24,19 +24,21 @@ func TestUserInfoForbidden(t *testing.T) {
 // TestUserInfoJSON tests JSON-based UserInfo requests.
 func TestUserInfoJSON(t *testing.T) {
 	app := newTestApp()
+	app.Require.UserInfo = false
 
 	req := httptest.NewRequestWithContext(t.Context(),
 		http.MethodGet, app.UserInfo, nil)
 	req.RemoteAddr = testAddrAndPort
 	req.Header.Set("Accept", "application/json")
 	req.Header.Set("User-Agent", testUserAgent)
-	rr := httptest.NewRecorder()
 
-	UserInfo(app).ServeHTTP(rr, req)
+	rr := httptest.NewRecorder()
+	mux := newTestMux(app)
+	mux.ServeHTTP(rr, req)
 
 	if rr.Code != http.StatusOK {
-		t.Fatalf("status = %d; want %d",
-			rr.Code, http.StatusOK)
+		t.Fatalf("expected %d, got %d",
+			http.StatusOK, rr.Code)
 	}
 
 	var got templates.User

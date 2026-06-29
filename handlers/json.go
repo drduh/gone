@@ -17,17 +17,18 @@ func errorJSON(s string) map[string]string {
 
 // writeJSON serves a JSON response with data.
 func writeJSON(w http.ResponseWriter, code int, data any) {
-	w.Header().Set(
-		"Content-Type", "application/json; charset=utf-8")
-
 	buf, err := json.Marshal(data)
 	if err != nil {
-		http.Error(w, `{"error":"failed to encode response"}`,
-			http.StatusInternalServerError)
-
+		w.Header().Set("Content-Type",
+			"application/json; charset=utf-8")
+		w.WriteHeader(http.StatusInternalServerError)
+		_, _ = w.Write([]byte(
+			`{"error":"failed to encode response"}` + "\n"))
 		return
 	}
 
+	w.Header().Set("Content-Type",
+		"application/json; charset=utf-8")
 	w.WriteHeader(code)
 	_, _ = w.Write(append(buf, '\n'))
 }

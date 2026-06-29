@@ -7,40 +7,122 @@
 html {
   animation: var(--bg-animation);
   background: var(--bg-gradient);
+  background-attachment: fixed;
   background-size: var(--bg-size);
-  min-height: 100%;
+  height: 100%;
 }
 
 body {
-  align-items: center;
+  align-items: stretch;
   background: transparent;
   color: var(--fg-dark);
   display: flex;
   flex-direction: column;
   font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
   font-size: var(--font-size);
-  margin: 1em auto;
+  margin: 0 auto;
+  min-height: 100vh;
+}
+
+main {
+  flex: 1 0 auto;
 }
 
 .box {
   background-color: var(--bg-norm-half);
   border: 1px solid var(--fg-dark);
   border-radius: var(--radius-box);
-  flex: 1;
   margin: 1em auto;
+  max-width: 100%;
+  overflow-x: auto;
   padding: 1em;
   text-align: center;
+  width: fit-content;
 }
 
 .box:hover {
   background-color: var(--bg-norm);
 }
 
-.footer {
-  bottom: 1em;
-  position: fixed;
+form {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  gap: 0.2em;
+}
+
+.row {
+  display: flex;
+  justify-content: center;
+}
+
+.itemList {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5em;
+}
+
+.itemCard {
+  border: 1px solid var(--fg-dark);
+  border-radius: var(--radius-box);
+  cursor: pointer;
+  padding: 0.5em 1em;
+  text-align: left;
+}
+
+.itemCard:hover,
+.itemCard:has(input[type="radio"]:checked) {
+  background-color: var(--bg-dark);
+}
+
+.itemName {
+  display: block;
+  font-size: 1em;
+}
+
+.itemName:hover {
+  color: var(--fg-light);
+}
+
+.itemMeta {
+  color: var(--fg-dark);
+  display: block;
+  font-size: 0.8em;
+}
+
+.itemMeta::selection,
+.itemName::selection {
+  background-color: var(--fg-light);
+  color: var(--bg-dark);
+}
+
+footer {
+  flex-shrink: 0;
+  color: var(--fg-norm);
+  overflow: hidden;
+  max-height: 40px;
+  transition: max-height var(--animation) ease;
+}
+
+footer label {
+  cursor: pointer;
+  display: block;
+  margin: 0;
+  padding: 16px;
   text-align: center;
-  width: 100%;
+}
+
+footer .footerExtra {
+  padding: 0 2em 2em;
+}
+
+#footerToggle:checked ~ footer {
+  max-height: 200px;
+}
+
+#footerToggle:focus-visible + footer label {
+  outline: 2px solid var(--fg-light);
+  outline-offset: 2px;
 }
 
 a {
@@ -60,6 +142,7 @@ select {
 }
 
 button[disabled] {
+  cursor: not-allowed;
   opacity: 0.5;
 }
 
@@ -70,84 +153,93 @@ select:focus {
   outline-offset: 2px;
 }
 
+input[type="number"] {
+  appearance: textfield;
+}
+
+input[type="radio"] {
+  height: 1px;
+  margin: 0;
+  opacity: 0;
+  pointer-events: none;
+  position: absolute;
+  width: 1px;
+}
+
 button[type="submit"],
-input[type="checkbox"],
-input[type="file"],
-input[type="number"],
-input[type="password"],
-input[type="submit"],
-input[type="text"],
+input,
 input::file-selector-button,
-.wallContent,
-select {
+select,
+textarea {
   appearance: none;
   background-color: var(--bg-dark);
   border: none;
   border-radius: var(--radius-box);
   color: var(--fg-light);
   cursor: pointer;
-  margin: 10px;
-  padding: 10px;
+  margin: 0.6em;
+  padding: 0.6em;
   text-decoration: none;
 }
 
-input[type="number"] {
-  appearance: textfield;
+.wallContent {
+  height: 12em;
+  max-width: 90%;
+  width: 80vw;
 }
 
-.message {
-  border-bottom: 1px dotted var(--fg-light);
+input:not(:disabled):hover,
+input[type="file"]::file-selector-button:hover,
+button:not(:disabled):hover,
+select:not(:disabled):hover,
+.wallContent:hover {
+  background-color: var(--fg-light);
+  color: var(--bg-dark);
+}
+
+input::placeholder {
   color: var(--fg-light);
-  display: inline-block;
-  position: relative;
+  opacity: 0.8;
 }
 
-.message .owner {
-  background-color: var(--bg-light);
-  border-radius: var(--radius-box);
-  bottom: 2em;
-  color: var(--fg-light);
-  padding: 6px 0;
+#footerToggle,
+.hide {
   position: absolute;
-  text-align: center;
-  transform: translateX(-55%);
-  visibility: hidden;
-  width: 24em;
-  z-index: 10;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  white-space: nowrap;
+  border: 0;
 }
 
-.message .owner::after {
-  border-color: var(--fg-light) transparent transparent transparent;
-  border-style: solid;
-  border-width: var(--radius-box);
-  content: "";
-  left: 50%;
-  margin-left: -5px;
-  position: absolute;
-  top: 100%;
-}
-
-.message:hover .owner {
-  opacity: 1;
-  visibility: visible;
+.inline-form {
+  display: inline;
 }
 
 .selectAllowDownloads,
-.selectAllowDuration,
-.selectPost {
+.selectAllowDuration {
   text-align: center;
   width: var(--width-xsmall);
 }
 
-.selectClear,
+.selectClearMessages,
+.selectClearWall,
 .selectDownload,
-.selectRefresh,
-.selectRemask,
+.selectWallSave,
+.selectMessagePost,
+.selectRandom,
 .selectSubmit {
   width: var(--width-small);
 }
 
-.selectTheme {
+.selectClearStorage,
+.selectRefresh,
+.selectRemask,
+.selectStatus,
+.selectTheme,
+.selectUserInfo {
   width: var(--width-medium);
 }
 
@@ -161,80 +253,6 @@ input[type="number"] {
   width: var(--width-xlarge);
 }
 
-.selectClear:hover,
-.selectAllowDownloads:hover,
-.selectAllowDuration:hover,
-.selectDownload:hover,
-.selectFilename:hover,
-.selectMessage:hover,
-.selectPost:hover,
-.selectRefresh:hover,
-.selectRemask:hover,
-.selectSubmit:hover,
-.selectTheme:hover,
-.selectToken:hover,
-.wallContent:hover,
-input[type="file"]:hover,
-input[type="file"]::file-selector-button:hover {
-  background-color: var(--fg-light);
-  color: var(--bg-dark);
-}
-
-input[type="radio"] {
-  height: 1px;
-  margin: 0;
-  opacity: 0;
-  pointer-events: none;
-  position: absolute;
-  width: 1px;
-}
-
-table {
-  border-collapse: collapse;
-  border-radius: var(--radius-box);
-  margin: 1em auto;
-  overflow: hidden;
-  width: 80%;
-}
-
-td {
-  color: var(--fg-light);
-}
-
-td,
-th {
-  padding: var(--table-pad);
-  text-align: center;
-}
-
-th {
-  background-color: var(--bg-dark);
-  border-bottom: 2px solid var(--fg-dark);
-  color: var(--fg-light);
-  letter-spacing: 0.15em;
-  text-transform: uppercase;
-}
-
-tr:nth-child(even) {
-  background-color: var(--bg-norm);
-}
-
-tr:nth-child(odd) {
-  background-color: var(--bg-dark);
-}
-
-.list-row label {
-  display: block;
-  height: 100%;
-  width: 100%;
-}
-
-tr:hover,
-.list-row:has(input[type="radio"]:checked) {
-  background-color: var(--bg-light);
-  transition: background-color var(--animation) ease;
-}
-
 details {
   padding: 1em;
   text-align: center;
@@ -245,11 +263,27 @@ summary {
   color: var(--fg-light);
   cursor: pointer;
   display: inline;
+  user-select: none;
 }
 
 summary::marker {
   content: "";
-  display: none;
+}
+
+summary:hover {
+  border-bottom-style: solid;
+}
+
+details[open] summary {
+  border-bottom-color: transparent;
+}
+
+.randomStrs {
+  display: grid;
+  font-family: ui-monospace, monospace;
+  font-size: var(--font-size);
+  gap: 0.4em;
+  grid-template-columns: repeat(2, 1fr);
 }
 
 .themes {
@@ -275,11 +309,6 @@ summary::marker {
 
 .themes label:has(input:focus-visible) {
   outline-color: var(--fg-light);
-}
-
-.theme {
-  clip: rect(0,0,0,0);
-  position: absolute;
 }
 
 .theme-light {

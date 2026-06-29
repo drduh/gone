@@ -14,12 +14,12 @@ func List(app *config.App) http.HandlerFunc {
 			return
 		}
 
-		files := app.ListFiles()
+		response := app.ListFiles()
 
 		app.Log.Info("serving file list",
-			"files", len(files),
+			"files", len(response),
 			"user", req)
 
-		writeJSON(w, http.StatusOK, files)
+		writeJSON(w, http.StatusOK, response)
 	}
 }

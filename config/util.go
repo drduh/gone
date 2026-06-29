@@ -10,18 +10,22 @@ var (
 	funcNow  = time.Now
 )
 
-// Start records the application start time.
+// Start records the application start time and
+// initiates Storage.
 func (a *App) Start() {
 	a.StartTime = funcNow()
+	a.ClearStorage()
 }
 
-// Stop records uptime and exits the application.
+// Stop records uptime, clears storage and exits
+// the application.
 func (a *App) Stop(reason string) {
 	if a.Log != nil {
 		a.Log.Info("stopping application",
 			"reason", reason,
 			"uptime", a.Uptime())
 	}
+	a.ClearStorage()
 	funcExit(0)
 }
 

@@ -37,17 +37,18 @@ func Wall(app *config.App) http.HandlerFunc {
 					"user", req)
 			}
 
+			formContent = r.FormValue("download")
+			if formContent == "wall" {
+				app.ServeWall(w)
+				app.Log.Info("downloaded wall",
+					"user", req)
+				return
+			}
+
 			if req.IsBrowser {
 				toPath(w, r, app.Root)
 				return
 			}
-		}
-
-		if r.URL.Query().Get("download") == "all" {
-			app.ServeWall(w)
-			app.Log.Info("downloaded wall",
-				"user", req)
-			return
 		}
 
 		writeJSON(w, http.StatusOK, app.WallContent)

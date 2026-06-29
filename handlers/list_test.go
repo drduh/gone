@@ -22,8 +22,8 @@ func TestList(t *testing.T) {
 		Data:      data,
 		Downloads: storage.Downloads{Allow: 10},
 		Time: storage.Time{
-			Duration: 5 * time.Minute,
-			Upload:   time.Now(),
+			Duration:   5 * time.Minute,
+			UploadTime: time.Now(),
 		},
 	}
 
@@ -36,10 +36,11 @@ func TestList(t *testing.T) {
 	req.RemoteAddr = testAddrAndPort
 
 	rr := httptest.NewRecorder()
-	List(app).ServeHTTP(rr, req)
+	mux := newTestMux(app)
+	mux.ServeHTTP(rr, req)
 
 	if rr.Code != http.StatusOK {
-		t.Fatalf("expected status %d, got %d",
+		t.Fatalf("expected %d, got %d",
 			http.StatusOK, rr.Code)
 	}
 	ct := rr.Header().Get("Content-Type")
@@ -57,9 +58,9 @@ func TestList(t *testing.T) {
 		t.Fatalf("expected 1 file, got %d", len(files))
 	}
 
-	if files[0].Downloads.Remain != 10 {
+	if files[0].Remain != 10 {
 		t.Errorf("expected %d downloads to remain, got %d",
-			10, files[0].Downloads.Remain)
+			10, files[0].Remain)
 	}
 
 	if files[0].ID != "1ABCDEF" {
@@ -92,7 +93,7 @@ func TestListDeny(t *testing.T) {
 
 	req := httptest.NewRequestWithContext(t.Context(),
 		http.MethodGet, app.List, nil)
-	rr := serveDeniedRequest(t, List(app), req)
+	rr := serveDeniedRequest(t, app, req)
 
 	assertDenied(t, rr, app.Deny)
 }

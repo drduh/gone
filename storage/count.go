@@ -34,8 +34,8 @@ func (s *Storage) CountFiles() {
 // and total count of characters in all Messages.
 func (s *Storage) CountMessages() {
 	s.NumMessages = len(s.Messages)
-	total := 0
 
+	total := 0
 	for _, message := range s.Messages {
 		total += len(message.Data)
 	}
@@ -46,6 +46,7 @@ func (s *Storage) CountMessages() {
 // and lines in Wall content.
 func (s *Storage) CountWall() {
 	s.CharsWall = len(s.WallContent)
+
 	if s.WallContent == "" {
 		s.LinesWall = 0
 	} else {

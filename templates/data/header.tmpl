@@ -1,24 +1,21 @@
 <!-- header.tmpl -->
-{{ define "header" -}}
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8">
-    <meta name="viewport"
-       content="width=device-width, initial-scale=1.0">
-    <meta name="description"
-       content="{{ .Version.appID }}-{{ .Version.appVersion }}">
-    <title>{{ .Index.Title }}</title>
-    <link rel="icon" href="about:blank">
-    {{ if .Index.CSP }} {{- template "csp" . -}} {{ end }}
-    {{ if .Theme -}}
-    <link href="{{ .Paths.Assets }}style.css"
-           rel="stylesheet"
-          type="text/css">
-    <style>
-      {{ template "theme" . }}
-    </style>
-    {{ end }}
-  </head>
-  <body>
+{{ define "header" }}
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport"
+     content="width=device-width,initial-scale=1.0">
+  <meta name="description"
+     content="{{ .Version.appID }}-{{ .Version.appVersion }}">
+  {{ if .Index.CSP }} {{- template "csp" . -}} {{ end }}
+  <title>{{ .Index.Title }}</title>
+  {{ if .Theme -}}
+  <link href="data:,"
+         rel="icon">
+  <link href="{{ .Paths.Assets }}style.css"
+         rel="stylesheet">
+  <style>
+    {{ template "style" . }}
+  </style>
+  {{- end }}
+</head>
 {{ end }}

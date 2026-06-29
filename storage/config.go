@@ -29,14 +29,14 @@ type Storage struct {
 	WallContent string `json:"wallContent,omitempty"`
 }
 
-// File represents a user-uploaded file.
+// File represents an uploaded file.
 type File struct {
-
-	// Downloads information
-	Downloads `json:"downloads"`
 
 	// Uploader information
 	Owner `json:"owner"`
+
+	// Downloads information
+	Downloads `json:"downloads"`
 
 	// Timing information
 	Time `json:"time"`
@@ -62,7 +62,7 @@ type File struct {
 	// File size (formatted string)
 	Size string `json:"size,omitempty"`
 
-	// File type (based on name extension)
+	// File content type
 	Type string `json:"type,omitempty"`
 }
 
@@ -82,6 +82,19 @@ type Message struct {
 	Data string `json:"data,omitempty"`
 }
 
+// MessageParts represents extracted Message attributes.
+type MessageParts struct {
+
+	// Text content
+	Text string
+
+	// URL content
+	URL string
+
+	// Whether part contains URL
+	HasURL bool
+}
+
 // Owner represents metadata about a user.
 type Owner struct {
 
@@ -98,20 +111,20 @@ type Owner struct {
 	Headers http.Header `json:"headers,omitempty"`
 }
 
-// Time represents user content time metadata.
+// Time represents content time information.
 type Time struct {
 
-	// Duration of file lifetime
+	// Duration expiration
 	Duration time.Duration `json:"duration,omitempty"`
 
-	// Formatted duration of file lifetime
-	Allow string `json:"allow,omitempty"`
+	// Remaining duration until expiration
+	DurationRemaining string `json:"durationRemaining,omitempty"`
 
-	// Formatted duration until expiration
-	Remain string `json:"remain,omitempty"`
+	// Upload date and time (precise)
+	UploadTime time.Time `json:"-"`
 
-	// Absolute upload datetime
-	Upload time.Time `json:"upload"`
+	// Formatted upload time
+	UploadTimeFmt string `json:"uploadTimeFmt,omitempty"`
 }
 
 // Downloads represents user content downloads metadata.
@@ -120,11 +133,11 @@ type Downloads struct {
 	// Number of allowed downloads
 	Allow int `json:"allow,omitempty"`
 
-	// Remaining number of downloads to expiration
-	Remain int `json:"remain,omitempty"`
-
-	// Number of downloads
+	// Number of download requests
 	Count int `json:"count,omitempty"`
+
+	// Number of downloads remaining until expiration
+	Remain int `json:"remain,omitempty"`
 }
 
 // Sizes represents Storage content sizes.
