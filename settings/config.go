@@ -165,6 +165,9 @@ type Index struct {
 	// Enable Content Security Policy (CSP)
 	CSP bool `json:"csp,omitempty"`
 
+	// Include link to VirusTotal (using File sum)
+	LinkVT bool `json:"linkVT,omitempty"` //nolint:tagliatelle
+
 	// Page title ("gone")
 	Title string `json:"title,omitempty"`
 
@@ -178,7 +181,7 @@ type Index struct {
 		Time Duration `json:"time"`
 	} `json:"cookie"`
 
-	// Style represents theme options.
+	// Style represents theme selection and options.
 	Style struct {
 
 		// Allow theme selection

@@ -8,6 +8,7 @@
     "timeFormat":  "Monday Jan 2 15:04:05"
   },
   "auth": {
+    "tarpitDelay": "2s",
     "basic": {
       "field":     "X-Auth",
       "token":     "mySecret"
@@ -26,10 +27,9 @@
       "static":    false,
       "status":    true,
       "upload":    true,
-      "userInfo":  false,
+      "userInfo":  true,
       "wall":      false
-    },
-    "tarpitDelay": "2s"
+    }
   },
   "default": {
     "downloads":   1,
@@ -52,6 +52,7 @@
   },
   "indexPage": {
     "csp":         true,
+    "linkVT":      true,
     "title":       "gone",
     "cookie": {
       "id":        "goneTheme",
