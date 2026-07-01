@@ -34,13 +34,32 @@ func splitEmbeddedURLs(s string) []string {
 }
 
 func trimCutset(data string, start, end int) int {
-	for end > start &&
-		strings.IndexByte(cutSet, data[end-1]) >= 0 {
-		end--
+	for end > start {
+		c := data[end-1]
+		if c == ')' {
+			open := strings.Count(data[start:end], "(")
+			closeCount := strings.Count(data[start:end], ")")
+
+			if closeCount > open {
+				end--
+				continue
+			}
+
+			break
+		}
+
+		if strings.IndexByte(cutSet, c) >= 0 {
+			end--
+			continue
+		}
+
+		break
 	}
+
 	return end
 }
 
+// isValidURL returns true if a valid URL is parsed.
 func isValidURL(s string) bool {
 	u, err := url.ParseRequestURI(s)
 	if err != nil {

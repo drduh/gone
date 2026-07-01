@@ -116,6 +116,15 @@ func TestMessageParts(t *testing.T) {
 			},
 		},
 		{
+			name: "unbalanced parentheses",
+			data: "http://example.com)",
+			want: []MessageParts{
+				{Text: "http://example.com",
+					URL: "http://example.com", HasURL: true},
+				{Text: ")"},
+			},
+		},
+		{
 			name: "trailing period",
 			data: "see https://example.com.",
 			want: []MessageParts{
@@ -265,6 +274,24 @@ func TestMessageParts(t *testing.T) {
 				{Text: "https://example.com",
 					URL: "https://example.com", HasURL: true},
 				{Text: ">"},
+			},
+		},
+		{
+			name: "url with balanced parentheses",
+			data: "https://en.wikipedia.org/wiki/Go_(programming_language)",
+			want: []MessageParts{
+				{Text: "https://en.wikipedia.org/wiki/Go_(programming_language)",
+					URL: "https://en.wikipedia.org/wiki/Go_(programming_language)", HasURL: true},
+			},
+		},
+		{
+			name: "wrapped url with parentheses wrapped",
+			data: "(see https://en.wikipedia.org/wiki/Go_(programming_language))",
+			want: []MessageParts{
+				{Text: "(see "},
+				{Text: "https://en.wikipedia.org/wiki/Go_(programming_language)",
+					URL: "https://en.wikipedia.org/wiki/Go_(programming_language)", HasURL: true},
+				{Text: ")"},
 			},
 		},
 		{
