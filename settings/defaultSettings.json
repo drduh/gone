@@ -25,9 +25,9 @@
       "remask":    true,
       "root":      false,
       "static":    false,
-      "status":    true,
+      "status":    false,
       "upload":    true,
-      "userInfo":  true,
+      "userInfo":  false,
       "wall":      false
     }
   },

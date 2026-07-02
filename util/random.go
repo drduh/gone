@@ -6,7 +6,6 @@ import (
 	"encoding/hex"
 	"fmt"
 	"math/big"
-	"strings"
 )
 
 var nato = []string{
@@ -50,15 +49,11 @@ func FlipCoin() string {
 	return "tails"
 }
 
-// RandomHex returns a random string with hexadecimal
-// characters only; or "0" on error.
-func RandomHex(length int) string {
-	bytes := make([]byte, length)
-	if _, err := rand.Read(bytes); err != nil {
-		return strings.Repeat("0", length)
-	}
-	result := hex.EncodeToString(bytes)
-	return result[:length]
+// RandomHex returns a hexadecimal string of byte size.
+func RandomHex(numBytes int) string {
+	b := make([]byte, numBytes)
+	rand.Read(b)
+	return hex.EncodeToString(b)
 }
 
 // RandomName returns a random string from the names list,
@@ -84,15 +79,12 @@ func RandomNumber() string {
 	return fmt.Sprintf("%03d", n)
 }
 
-// RandomID returns a 32-byte URL-encoded random string;
-// or "unknown" on error.
+// RandomID returns a 32-byte URL-encoded random string.
 func RandomID() string {
 	const randomTokenBytes = 32
-	bytes := make([]byte, randomTokenBytes)
-	if _, err := rand.Read(bytes); err != nil {
-		return "unknown"
-	}
-	return base64.RawURLEncoding.EncodeToString(bytes)
+	b := make([]byte, randomTokenBytes)
+	rand.Read(b)
+	return base64.RawURLEncoding.EncodeToString(b)
 }
 
 // RandomMask returns a name and number combination.
@@ -104,21 +96,16 @@ func RandomMask() string {
 func Random(length int) string {
 	const charset = `ABCDEFGHJKLMNPQRTVWXYZ` +
 		`-_2346789` + `abcdefghijkmnpqrtvwxyz`
-	bytes := make([]byte, length)
-	for i := range bytes {
-		n := randomInt(int64(len(charset)))
-		if n < 0 {
-			bytes[i] = 'a'
-		} else {
-			bytes[i] = charset[n]
-		}
+	b := make([]byte, length)
+	for i := range b {
+		b[i] = charset[randomInt(int64(len(charset)))]
 	}
-	return string(bytes)
+	return string(b)
 }
 
 // GetRandom returns a random string by requested path.
 func GetRandom(path string) string {
-	const defaultLength = 20
+	const defaultLength = 32
 
 	var response string
 
@@ -142,5 +129,6 @@ func GetRandom(path string) string {
 	default:
 		response = RandomMask()
 	}
+
 	return response
 }
