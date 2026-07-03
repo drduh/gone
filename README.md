@@ -2,8 +2,8 @@ gone is an ephemeral content server written in [Go](https://go.dev/).
 
 The primary goal is to share files and text using an HTML interface and API.
 
-[![test](https://github.com/drduh/gone/actions/workflows/test.yml/badge.svg)](https://github.com/drduh/gone/actions/workflows/test.yml)
 [![lint](https://github.com/drduh/gone/actions/workflows/lint.yml/badge.svg)](https://github.com/drduh/gone/actions/workflows/lint.yml)
+[![test](https://github.com/drduh/gone/actions/workflows/test.yml/badge.svg)](https://github.com/drduh/gone/actions/workflows/test.yml)
 [![gosec](https://github.com/drduh/gone/actions/workflows/gosec.yml/badge.svg)](https://github.com/drduh/gone/actions/workflows/gosec.yml)
 
 ## Features
@@ -100,25 +100,25 @@ curl 127.0.0.1:8080/user
 Upload file:
 
 ```bash
-curl 127.0.0.1:8080/upload -F "file=@example.txt"
+curl -H "X-Auth: mySecret" 127.0.0.1:8080/upload -F "file=@example.txt"
 ```
 
 Upload multiple files:
 
 ```bash
-curl 127.0.0.1:8080/upload -F "file=@example1.txt" -F "file=@example2.txt"
+curl -H "X-Auth: mySecret" 127.0.0.1:8080/upload -F "file=@example1.txt" -F "file=@example2.txt"
 ```
 
 Upload file with 5 downloads allowed:
 
 ```bash
-curl 127.0.0.1:8080/upload -F "downloads=5" -F "file=@example.txt"
+curl -H "X-Auth: mySecret" 127.0.0.1:8080/upload -F "downloads=5" -F "file=@example.txt"
 ```
 
 Upload file with 5 minute expiration:
 
 ```bash
-curl 127.0.0.1:8080/upload -F "duration=5m" -F "file=@example.txt"
+curl -H "X-Auth: mySecret" 127.0.0.1:8080/upload -F "duration=5m" -F "file=@example.txt"
 ```
 
 ## List
@@ -131,10 +131,10 @@ curl 127.0.0.1:8080/list
 
 ## Download
 
-Download a file ([default settings](https://github.com/drduh/gone/blob/main/settings/defaultSettings.json) require token-based authentication):
+Download a file:
 
 ```bash
-curl 127.0.0.1:8080/download/example.txt -H "X-Auth: mySecret"
+curl -H "X-Auth: mySecret" 127.0.0.1:8080/download/example.txt
 ```
 
 Get static (never expires) content:
@@ -148,13 +148,19 @@ curl 127.0.0.1:8080/static
 Post a plain-text message (use single quotes to wrap special characters):
 
 ```bash
-curl 127.0.0.1:8080/msg -d 'message=hello, world!'
+curl 127.0.0.1:8080/msg/add -d 'message=hello, world!'
 ```
 
 Get message text only:
 
 ```bash
 curl 127.0.0.1:8080/msg | jq '.[].data'
+```
+
+Clear messages:
+
+```bash
+curl -H "X-Auth: mySecret" 127.0.0.1:8080/msg/clear
 ```
 
 ## Wall
