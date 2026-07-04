@@ -82,11 +82,11 @@ func TestRandomNumber(t *testing.T) {
 
 // TestRandomHex tests for a valid hex value.
 func TestRandomHex(t *testing.T) {
-	length := 16
+	length := 32
 	result := RandomHex(length)
-	if len(result) != length {
+	if len(result) != length*2 {
 		t.Errorf("expected length %d, got %d",
-			length, len(result))
+			length*2, len(result))
 	}
 
 	for _, c := range result {
