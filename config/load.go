@@ -34,7 +34,7 @@ func Load() *App {
 	app.Log = auditor.Log
 
 	app.Hostname = util.GetHostname()
-	app.Version = version.Get()
+	app.Version = version.Get(version.Full)
 
 	auth.SetTarpit(app.TarpitDelay.Duration)
 

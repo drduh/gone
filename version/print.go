@@ -7,7 +7,7 @@ import (
 
 // Print outputs version data in JSON format.
 func Print() {
-	vers := Get()
+	vers := Get(Full)
 
 	data, err := json.Marshal(vers)
 	if err != nil {

@@ -3,6 +3,7 @@ WORKDIR /src
 COPY . .
 RUN chmod -R 755 assets
 ARG APPNAME=gone
+ARG APPGEN=v1
 ARG AUTHOR=drduh
 ARG GITNAME=github.com
 RUN set -eu; \
@@ -15,7 +16,7 @@ RUN set -eu; \
   BUILDTIME="$(date -u +'%Y-%m-%dT%H:%M:%S')"; \
   BUILDUSER="$(id -un 2>/dev/null || true)"; \
   BUILDVERS="$(go env GOVERSION)"; \
-  VERSION="$(date +'%Y.%m.%d')"; \
+  VERSION="${APPGEN}.$(date +'%Y.%m.%d')"; \
   BUILDFLAG="-X ${VERSPKG}.Arch=${BUILDARCH} \
              -X ${VERSPKG}.Commit=${BUILDGIT} \
              -X ${VERSPKG}.Go=${BUILDVERS} \

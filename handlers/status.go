@@ -16,11 +16,9 @@ func Status(app *config.App) http.HandlerFunc {
 			return
 		}
 
-		versionInfo := version.Get()
+		versionInfo := version.Get(version.Full)
 		if !app.ShowBuild {
-			versionInfo = map[string]string{
-				"id": versionInfo["id"],
-			}
+			versionInfo = version.Get(version.Redacted)
 		}
 
 		app.CountStorage()
@@ -38,6 +36,7 @@ func Status(app *config.App) http.HandlerFunc {
 		}
 
 		app.Log.Info("serving status",
+			"sizes", app.Sizes,
 			"user", req)
 		writeJSON(w, http.StatusOK, response)
 	}
