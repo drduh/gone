@@ -84,20 +84,6 @@ func TestMissingTimeFormat(t *testing.T) {
 	}
 }
 
-// TestMissingAuthToken tests loading empty auth token.
-func TestMissingAuthToken(t *testing.T) {
-	var s Settings
-
-	if err := loadSettings(defaultSettings, &s); err != nil {
-		t.Fatalf("error loading default settings: %v", err)
-	}
-
-	in := []byte(`{"auth":{"basic":{"field":"X-Auth","token":""}}}`)
-	if err := loadSettings(in, &s); err == nil {
-		t.Fatal("expected missing auth token error")
-	}
-}
-
 // TestInvalidTarpitDelay tests loading invalid tarpit delay.
 func TestInvalidTarpitDelay(t *testing.T) {
 	tests := []struct {

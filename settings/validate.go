@@ -10,7 +10,6 @@ var (
 	errServerAddr      = errors.New("server address must be valid IP")
 	errServerPort      = errors.New("server port must be between 1 and 65535")
 	errTimeFormatEmpty = errors.New("timeFormat must not be an empty string")
-	errAuthToken       = errors.New("auth token must not be an empty string")
 	errTarpitDelay     = errors.New("tarpit delay must be 0 or more")
 	errDownloads       = errors.New("downloads must be 1 or more")
 	errDownloadsLimit  = errors.New("downloads limit must be 1 or more")
@@ -76,10 +75,6 @@ func (s *Settings) validateAuth() error {
 	if s.TarpitDelay.GetDuration() < 0 {
 		return fmt.Errorf("%w - not %s",
 			errTarpitDelay, s.TarpitDelay.String())
-	}
-
-	if s.Basic.Field != "" && s.Basic.Token == "" {
-		return errAuthToken
 	}
 
 	return nil

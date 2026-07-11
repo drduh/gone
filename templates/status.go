@@ -11,11 +11,11 @@ type Status struct {
 	// Defaults configuration
 	settings.Default `json:"defaultOptions"`
 
-	// Limits configuration
-	settings.Limit `json:"limits"`
-
 	// Index page configuration
 	settings.Index `json:"indexPage"`
+
+	// Limits configuration
+	settings.Limit `json:"limits"`
 
 	// Storage content total sizes
 	storage.Sizes `json:"storageSizes"`

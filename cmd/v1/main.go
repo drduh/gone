@@ -17,7 +17,7 @@ func Run() int {
 
 	app := config.Load()
 
-	if app.Modes.Version {
+	if app.ShowVersion {
 		version.Print()
 		return 0
 	}

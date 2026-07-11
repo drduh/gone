@@ -16,14 +16,14 @@ func AuthRequest(
 ) *Request {
 	req := parseRequest(r)
 
-	if !checkAuthorized(w, app) {
+	if !checkAuthorized(app, w) {
 		app.Log.Error(app.RateLimit,
 			"limit", app.ReqsPerMinute,
 			"user", req)
 		return nil
 	}
 
-	if !checkAuthenticated(w, r, app) {
+	if !checkAuthenticated(app, w, r) {
 		app.Log.Error(app.Deny,
 			"field", app.Basic.Field,
 			"user", req)
@@ -33,24 +33,24 @@ func AuthRequest(
 	return req
 }
 
-func checkAuthenticated(
-	w http.ResponseWriter,
-	r *http.Request,
-	app *config.App) bool {
-	if !isAuthenticated(app, r) {
+func checkAuthorized(
+	app *config.App,
+	w http.ResponseWriter) bool {
+	if !app.Authorize(app.ReqsPerMinute) {
 		auth.ApplyTarpit()
-		deny(w, http.StatusForbidden, app.Deny)
+		deny(w, http.StatusTooManyRequests, app.RateLimit)
 		return false
 	}
 	return true
 }
 
-func checkAuthorized(
+func checkAuthenticated(
+	app *config.App,
 	w http.ResponseWriter,
-	app *config.App) bool {
-	if !app.Authorize(app.ReqsPerMinute) {
+	r *http.Request) bool {
+	if !isAuthenticated(app, r) {
 		auth.ApplyTarpit()
-		deny(w, http.StatusTooManyRequests, app.RateLimit)
+		deny(w, http.StatusForbidden, app.Deny)
 		return false
 	}
 	return true
@@ -104,12 +104,12 @@ func isAuthenticated(app *config.App, r *http.Request) bool {
 		return true
 	}
 
-	field := getToken(app.Basic.Field, r)
+	token := getToken(app.Basic.Field, r)
 	secret := []byte(app.Basic.Token)
 
 	app.Log.Debug("checking basic auth",
 		"path", path,
 		"required", required,
 		"exists", exists)
-	return auth.Basic(secret, field)
+	return auth.Basic(secret, token)
 }
