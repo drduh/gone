@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"net/http/httptest"
 	"testing"
+	"time"
 
 	"github.com/drduh/gone/auth"
 	"github.com/drduh/gone/config"
@@ -15,27 +16,34 @@ import (
 const (
 	formContentType = "application/x-www-form-urlencoded"
 	testAddrAndPort = "127.0.0.1:12345"
-	testContentMsgs = "hello, world!"
-	testContentWall = "hello,\r\nworld!\r\n"
-	testUserAgent   = "test goneAgent-1"
+	testContentMsgs = "hello, world! (see http://example.com)"
+	testContentWall = "hello, world!\r\n(see http://example.com)\r\n"
+	testUserAgent   = "test goneAgent-v1.2026"
 )
 
 // newTestApp sets up a configured App for tests,
 // ignoring logging and rate limiting.
 func newTestApp() *config.App {
 	app := config.Load()
+
+	app.Hostname = "testRunHost"
 	app.Log = slog.New(slog.DiscardHandler)
-	app.ReqsPerMinute = 1000
+	app.ReqsPerMinute = 99
+	app.StartTime = time.Now().Add(-time.Second)
+
 	auth.SetTarpit(0)
+
 	return app
 }
 
 // newTestMux sets up a route handlers for tests.
 func newTestMux(app *config.App) *http.ServeMux {
 	mux := http.NewServeMux()
+
 	for pattern, h := range Routes(app) {
 		mux.HandleFunc(pattern, h)
 	}
+
 	return mux
 }
 
@@ -47,21 +55,19 @@ func newTestAppWithStorage() *config.App {
 	app.Storage = storage.Storage{
 		Files: map[string]*storage.File{
 			"file1": {
-				Name: "file1",
-				ID:   "12345",
+				Name:  "file1",
+				ID:    "12345",
+				Bytes: 10,
 			},
 			"file2": {
-				Name: "file2",
-				ID:   "67890",
+				Name:  "file2",
+				ID:    "67890",
+				Bytes: 20,
 			},
 		},
 		Messages: []*storage.Message{
-			{Count: 1,
-				Data: testContentMsgs + "1",
-			},
-			{Count: 2,
-				Data: testContentMsgs + "2",
-			},
+			{Count: 1, Data: testContentMsgs + "1"},
+			{Count: 2, Data: testContentMsgs + "2"},
 		},
 		WallContent: testContentWall,
 	}

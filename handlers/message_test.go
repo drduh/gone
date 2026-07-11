@@ -252,7 +252,8 @@ func TestMessageSpaces(t *testing.T) {
 	app.Require.MessageAdd = false
 
 	form := url.Values{}
-	form.Set(formFieldMessage, "  \n\t hello, world! \r\n ")
+	form.Set(formFieldMessage,
+		fmt.Sprintf("  \n\t %s \r\n ", testContentMsgs))
 	req := httptest.NewRequestWithContext(t.Context(),
 		http.MethodPost, app.MessageAdd,
 		strings.NewReader(form.Encode()))

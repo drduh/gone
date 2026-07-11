@@ -30,7 +30,7 @@ func Random(app *config.App) http.HandlerFunc {
 			"user", req)
 
 		if req.IsBrowser {
-			renderIndex(w, r, app, req, path, response)
+			renderIndex(app, w, r, req, path, response)
 		} else {
 			writeJSON(w, http.StatusOK, response)
 		}

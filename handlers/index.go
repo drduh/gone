@@ -3,10 +3,29 @@ package handlers
 import (
 	"html/template"
 	"net/http"
+	"strings"
 
 	"github.com/drduh/gone/config"
 	"github.com/drduh/gone/templates"
 )
+
+const contentSecurityPolicy = `
+	style-src       'self' 'unsafe-inline';
+	form-action     'self';
+	default-src     'none';
+	base-uri        'none';
+	child-src       'none';
+	connect-src     'none';
+	font-src        'none';
+	frame-ancestors 'none';
+	frame-src       'none';
+	img-src         'none';
+	manifest-src    'none';
+	media-src       'none';
+	object-src      'none';
+	script-src      'none';
+	worker-src      'none';
+`
 
 // Index handles requests to load and render the index page.
 func Index(app *config.App) http.HandlerFunc {
@@ -18,18 +37,24 @@ func Index(app *config.App) http.HandlerFunc {
 
 		app.Log.Info("serving index",
 			"user", req)
-		renderIndex(w, r, app, req, "", nil)
+		renderIndex(app, w, r, req, "", nil)
 	}
 }
 
 // renderIndex builds and executes the Index template.
 func renderIndex(
+	app *config.App,
 	w http.ResponseWriter,
 	r *http.Request,
-	app *config.App,
 	req *Request,
 	randomPath string,
 	randomStrs []string) {
+	if app.CSP {
+		w.Header().Set("Content-Security-Policy",
+			strings.Join(strings.Fields(contentSecurityPolicy), " "),
+		)
+	}
+
 	theme := getDefaultTheme(app.Style.Theme)
 	if app.Style.AllowPick {
 		theme = getTheme(w, r, theme, app.Cookie.ID,
@@ -49,6 +74,7 @@ func renderIndex(
 	}
 
 	app.UpdateRemainingFileLimits()
+
 	response := templates.Index{
 		Auth:       app.Auth,
 		Default:    app.Default,
