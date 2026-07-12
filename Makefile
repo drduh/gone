@@ -226,6 +226,7 @@ doc:
 	@$(GODOC) -http :8000
 
 c: clean
+cealn: clean
 celan: clean
 clena: clean
 coen: coverage
