@@ -13,20 +13,32 @@ const (
 
 // SanitizeName validates strings for use as filename.
 func SanitizeName(input, extraChars string, maxLength int) string {
-	if strings.TrimSpace(input) == "" {
-		return defaultName
-	}
 	input, err := url.QueryUnescape(input)
 	if err != nil {
 		return defaultName
 	}
+	input = strings.TrimSpace(input)
+
+	if input == "" ||
+		strings.Contains(strings.ToLower(input), "data:") {
+		return defaultName
+	}
+
+	input = strings.ReplaceAll(input, `\`, `/`)
 	f := filepath.Base(input)
+
+	if f == "." || f == ".." {
+		return defaultName
+	}
+
 	f = removeInvalidChars(f, extraChars)
+
 	ext := filepath.Ext(f)
 	base := strings.TrimSuffix(f, ext)
 	if strings.TrimSpace(base) == "" {
 		base = defaultName
 	}
+
 	return truncateName(base, ext, maxLength)
 }
 
@@ -42,6 +54,7 @@ func removeInvalidChars(filename string, allowed string) string {
 			result.WriteRune(char)
 		}
 	}
+
 	return result.String()
 }
 
@@ -52,15 +65,18 @@ func truncateName(base string, ext string, maxLength int) string {
 	if len(ext) > maxExtLength {
 		ext = ext[:maxExtLength]
 	}
+
 	base = strings.TrimSpace(base)
 	totalLength := len(base) + len(ext)
 	if totalLength <= maxLength {
 		return base + ext
 	}
+
 	allowedBaseLength := maxLength - len(ext)
 	if allowedBaseLength > 0 {
 		return base[:allowedBaseLength] + ext
 	}
+
 	return ext[:maxLength]
 }
 
