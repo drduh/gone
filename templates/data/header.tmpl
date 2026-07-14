@@ -6,7 +6,6 @@
      content="width=device-width,initial-scale=1.0">
   <meta name="description"
      content="{{ .Version.appID }}-{{ .Version.appVersion }}">
-  {{ if .Index.CSP }} {{- template "csp" . -}} {{ end }}
   <title>{{ .Index.Title }}</title>
   {{ if .Theme -}}
   <link href="data:,"

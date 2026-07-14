@@ -8,8 +8,8 @@ var (
 	ID = "gone"
 
 	// Version identifies the application version,
-	// by default using the build date ("2026.12.31").
-	Version = "2026"
+	// by default using the build date ("v1.2026.12.31").
+	Version = "v1.2026"
 
 	// Arch identifies the architecture of the Go
 	// toolchain binaries ("arm64", "x86_64", etc).

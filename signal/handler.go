@@ -20,6 +20,7 @@ func Setup(app *config.App) {
 		syscall.SIGTERM,
 		syscall.SIGQUIT,
 		syscall.SIGUSR1,
+		syscall.SIGUSR2,
 	}
 	signal.Notify(sigChan, signals...)
 
@@ -28,9 +29,18 @@ func Setup(app *config.App) {
 			s := <-sigChan
 			switch s {
 			case syscall.SIGUSR1:
+				app.CountStorage()
 				app.Log.Info("clearing storage",
-					"signal", s)
+					"signal", s,
+					"sizes", app.Sizes)
 				app.ClearStorage()
+
+			case syscall.SIGUSR2:
+				app.Log.Info("auth token",
+					"signal", s,
+					"field", app.Basic.Field,
+					"token", app.Basic.Token)
+
 			default:
 				app.Stop(s.String())
 				return

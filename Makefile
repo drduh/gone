@@ -2,17 +2,18 @@
 ROOT      = gone
 
 APPNAME  ?= $(ROOT)
-APPVERS  ?= $(shell date +"%Y.%m.%d")
+APPGEN   ?= v1
+APPVERS  ?= $(APPGEN).$(shell date +"%Y.%m.%d")
 AUTHOR   ?= drduh
 GITNAME  ?= github.com
 GITREPO  ?= $(GITNAME)/$(AUTHOR)
 
-PKG       = ./...
-CMD       = cmd
-SRC       = $(CMD)/main.go
+ARG       =
 OUT       = release
+PKG       = ./...
+SRC       = cmd/main.go
 
-GOCMD    ?= go
+CMD_GO   ?= go
 GODOC    ?= ${HOME}/go/bin/godoc
 GOLINT   ?= golangci-lint
 GOLINTARG =
@@ -22,15 +23,15 @@ GOSTATIC ?= staticcheck
 CONTAIN  ?= container
 DOCKER   ?= docker
 
-BUILDARCH = $(shell $(GOCMD) env GOHOSTARCH)
+BUILDARCH = $(shell $(CMD_GO) env GOHOSTARCH)
 BUILDGIT  = $(shell git log -1 --format=%H \
             2>/dev/null || printf "unknown")
 BUILDHOST = $(shell hostname -f)
-BUILDOS   = $(shell $(GOCMD) env GOHOSTOS)
+BUILDOS   = $(shell $(CMD_GO) env GOHOSTOS)
 BUILDPATH = $(shell pwd)
 BUILDTIME = $(shell date +"%Y-%m-%dT%H:%M:%S")
 BUILDUSER = $(shell whoami)
-BUILDVERS = $(shell $(GOCMD) env GOVERSION)
+BUILDVERS = $(shell $(CMD_GO) env GOVERSION)
 VERSPKG   = $(GITREPO)/$(APPNAME)/version
 BUILDFLAG = -X "$(VERSPKG).Arch=$(BUILDARCH)" \
             -X "$(VERSPKG).Commit=$(BUILDGIT)" \
@@ -43,22 +44,20 @@ BUILDFLAG = -X "$(VERSPKG).Arch=$(BUILDARCH)" \
             -X "$(VERSPKG).User=$(BUILDUSER)" \
             -X "$(VERSPKG).Version=$(APPVERS)"
 
-# example - gone-darwin-arm64-2026.12.31
+# example - gone-darwin-arm64-v1.2026.12.31
 BINNAME  ?= $(APPNAME)-$(BUILDOS)-$(BUILDARCH)-$(APPVERS)
-CMDBUILD  = $(GOCMD) build -trimpath \
-            -ldflags '-s -w $(BUILDFLAG)'
-GOBUILD   = GOOS=$(BUILDOS) GOARCH=$(BUILDARCH) \
-            $(CMDBUILD) \
-            -o "$(OUT)/$(BINNAME)" "$(SRC)"
-GORACE    = GOOS=$(BUILDOS) GOARCH=$(BUILDARCH) \
-            $(CMDBUILD) -race \
-            -o "$(OUT)/$(BINNAME)-race" "$(SRC)"
+BINRACE   = $(BINNAME)-race
+BUILDCMD  = $(CMD_GO) build -trimpath -ldflags '-s -w $(BUILDFLAG)'
+
+BUILDBASE = GOOS=$(BUILDOS) GOARCH=$(BUILDARCH) $(BUILDCMD)
+CMD_BUILD = $(BUILDBASE) -o "$(OUT)/$(BINNAME)" "$(SRC)"
+CMD_RACE  = $(BUILDBASE) -race -o "$(OUT)/$(BINRACE)" "$(SRC)"
 
 SERVICE   = $(APPNAME).service
 SYSTEMCTL = systemctl
 
-ASSETS    = assets
-ASSET_CSS = $(ASSETS)/style.css
+ASSET_DIR = assets
+ASSET_CSS = $(ASSET_DIR)/style.css
 SETTINGS  = settings/defaultSettings.json
 
 CONF_DIR ?= /etc/$(APPNAME)
@@ -70,15 +69,17 @@ DEST_SERV = /etc/systemd/system/$(SERVICE)
 MOD_EXEC  = 0755
 MOD_FILE  = 0644
 
-TESTARGS ?=
+ARG_TEST ?=
 TESTCOVER = testCoverage
-TIMEOUT  ?= 1m
-CMDTEST   = $(GOCMD) test -trimpath
-CMDCOVER  = $(CMDTEST) \
+TESTTIME ?= 1m
+
+CMD_TEST  = $(CMD_GO) test -trimpath
+CMD_COVER = $(CMD_TEST) \
             -coverprofile=$(TESTCOVER) $(PKG)
 
-WARN      = tput setaf 3 ; printf "%s\n" "${1}" ; \
-            tput sgr0
+AUTHCRED ?= mySecret
+
+WARN      = tput setaf 3 ; printf "%s\n" "${1}" ; tput sgr0
 
 all: fmt lint test build
 
@@ -86,19 +87,13 @@ prep-build:
 	@mkdir -p $(OUT)
 
 build: prep-build
-	@$(GOBUILD)
+	@$(CMD_BUILD)
 
-run: build
-	@$(OUT)/$(BINNAME)
+debug:   ARG += -debug
+version: ARG += -version
 
-run-container: build-container
-	@$(CONTAIN) run $(APPNAME)-$(APPVERS)
-
-debug: build
-	@$(OUT)/$(BINNAME) -debug
-
-version: build
-	@$(OUT)/$(BINNAME) -version
+run debug version: build
+	@$(OUT)/$(BINNAME) -auth $(AUTHCRED) $(ARG)
 
 release: build
 	@printf "built release: %s\n" \
@@ -109,6 +104,9 @@ prep-container:
 
 build-container: prep-container
 	@$(CONTAIN) build -t $(APPNAME)-$(APPVERS) .
+
+run-container: build-container
+	@$(CONTAIN) run $(APPNAME)-$(APPVERS)
 
 install: install-assets install-bin \
 	install-logdir \
@@ -161,7 +159,7 @@ check-service:
 	@printf "Checking service install ... \n"
 	@sleep 2
 	@$(SYSTEMCTL) status $(APPNAME) || \
-		$(DEST_BIN) -conf $(DEST_CONF)
+		$(DEST_BIN) -config $(DEST_CONF)
 
 uninstall:
 	@sudo $(SYSTEMCTL) stop $(APPNAME)
@@ -169,14 +167,14 @@ uninstall:
 	@sudo rm -f $(DEST_SERV)
 
 fmt:
-	@$(GOCMD) fmt $(PKG)
+	@$(CMD_GO) fmt $(PKG)
 
-test-race:    TESTARGS = -race
-test-short:   TESTARGS = -short
-test-verbose: TESTARGS = -v
+test-race:    ARG_TEST = -race
+test-short:   ARG_TEST = -short
+test-verbose: ARG_TEST = -v
 
 test test-race test-short test-verbose:
-	@$(CMDTEST) $(TESTARGS) -timeout=$(TIMEOUT) $(PKG)
+	@$(CMD_TEST) $(ARG_TEST) -timeout=$(TESTTIME) $(PKG)
 
 RUN_IF_FOUND = if command -v $(1) >/dev/null 2>&1 ; \
 		then $(1) $(2) ; else \
@@ -195,10 +193,10 @@ static:
 	@$(call RUN_IF_FOUND,$(GOSTATIC),$(PKG))
 
 build-race: prep-build
-	@$(GORACE)
+	@$(CMD_RACE)
 
 race: build-race
-	@$(OUT)/$(BINNAME)-race -debug
+	@$(OUT)/$(BINRACE) -debug
 
 clean: clean-coverage
 	@rm -rf $(OUT)
@@ -207,19 +205,19 @@ clean-coverage:
 	@rm -rf $(TESTCOVER) $(TESTCOVER).html
 
 clean-cache:
-	@$(GOCMD) clean -cache -testcache -modcache
+	@$(CMD_GO) clean -cache -testcache -modcache
 	@$(GOLINT) cache clean
 
 cover: test-cover
-	@$(GOCMD) tool cover \
+	@$(CMD_GO) tool cover \
 		-html="$(TESTCOVER)" -o "$(TESTCOVER).html"
 	@printf "total test coverage: %s" \
-		"$$($(GOCMD) tool cover -func="$(TESTCOVER)" | \
+		"$$($(CMD_GO) tool cover -func="$(TESTCOVER)" | \
 		awk '/^total:/{print $$3}')"
 	@printf " - see %s\n" "$(TESTCOVER).html"
 
 test-cover:
-	@$(CMDCOVER)
+	@$(CMD_COVER)
 
 view-cover: cover
 	@open "$(TESTCOVER).html"
@@ -228,6 +226,7 @@ doc:
 	@$(GODOC) -http :8000
 
 c: clean
+cealn: clean
 celan: clean
 clena: clean
 coen: coverage
@@ -247,8 +246,11 @@ r: run
 restart: reload-service
 restart-service: reload-service
 t: test
+tets: test
 tset: test
 un: run
 urn: run
 v: verbose
+vers: version
 verbose: debug
+verison: version

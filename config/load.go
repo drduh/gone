@@ -15,7 +15,7 @@ func Load() *App {
 	app := App{}
 
 	app.Debug = modeDebug
-	app.Modes.Version = modeVersion
+	app.ShowVersion = modeShowVersion
 
 	s, err := settings.Load(pathConfig)
 	if err != nil {
@@ -34,9 +34,16 @@ func Load() *App {
 	app.Log = auditor.Log
 
 	app.Hostname = util.GetHostname()
-	app.Version = version.Get()
+	app.Version = version.Get(version.Full)
 
 	auth.SetTarpit(app.TarpitDelay.Duration)
+
+	if authToken != "" {
+		app.Basic.Token = authToken
+	}
+	if app.Basic.Token == "" {
+		app.Basic.Token = util.GetRandom("mask")
+	}
 
 	app.Start()
 

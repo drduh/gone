@@ -4,43 +4,34 @@ package config
 
 import "flag"
 
-const (
-	defaultMode = false
-	defaultPath = ""
-)
+const defaultMode = false
 
 var (
-	modeDebug   bool
-	modeVersion bool
+	modeDebug       bool
+	modeShowVersion bool
 
 	pathConfig string
+	authToken  string
 )
 
 func init() {
-	flag.StringVar(&pathConfig, "config", defaultPath,
-		"Path to settings file")
-	flag.StringVar(&pathConfig, "conf", defaultPath,
-		"Shortcut for -config")
-	flag.StringVar(&pathConfig, "c", defaultPath,
-		"Shortcut for -config")
-	flag.StringVar(&pathConfig, "settings", defaultPath,
-		"Shortcut for -config")
-	flag.StringVar(&pathConfig, "set", defaultPath,
-		"Shortcut for -config")
-	flag.StringVar(&pathConfig, "s", defaultPath,
-		"Shortcut for -config")
+	flag.BoolVar(&modeShowVersion, "version", defaultMode,
+		"Show version and build information")
+	flag.BoolVar(&modeShowVersion, "v", defaultMode,
+		"Shortcut for -version")
 
 	flag.BoolVar(&modeDebug, "debug", defaultMode,
 		"Debug mode")
 	flag.BoolVar(&modeDebug, "d", defaultMode,
 		"Shortcut for -debug")
-	flag.BoolVar(&modeDebug, "verbose", defaultMode,
-		"Shortcut for -debug")
 
-	flag.BoolVar(&modeVersion, "version", defaultMode,
-		"Show application version")
-	flag.BoolVar(&modeVersion, "vers", defaultMode,
-		"Shortcut for -version")
-	flag.BoolVar(&modeVersion, "v", defaultMode,
-		"Shortcut for -version")
+	flag.StringVar(&pathConfig, "config", "",
+		"Path to settings file")
+	flag.StringVar(&pathConfig, "c", "",
+		"Shortcut for -config")
+
+	flag.StringVar(&authToken, "auth", "",
+		"Request authentication token")
+	flag.StringVar(&authToken, "a", "",
+		"Shortcut for -auth")
 }

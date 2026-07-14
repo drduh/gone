@@ -36,3 +36,13 @@ type App struct {
 	// Structured logger/output
 	Log *slog.Logger
 }
+
+// Modes represents application operation modes.
+type Modes struct {
+
+	// Enable debug/verbose audit log
+	Debug bool
+
+	// Display version and build detail
+	ShowVersion bool
+}
