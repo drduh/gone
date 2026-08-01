@@ -92,7 +92,7 @@
       "strCount":       16
     },
     "wallLimits": {
-      "lengthChars":    2560
+      "lengthChars":    4096
     }
   },
   "paths": {
@@ -111,5 +111,9 @@
     "userInfo":    "/user/info",
     "userRemask":  "/user/remask",
     "wall":        "/wall"
+  },
+  "tls": {
+    "fileCert":    "cert.pem",
+    "fileKey":     "key.pem"
   }
 }

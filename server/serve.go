@@ -33,13 +33,33 @@ func newServer(app *config.App) *http.Server {
 	}
 }
 
-// Serve starts the expiry worker and HTTP server.
+// Serve starts the expiry worker and HTTP/S server.
 func Serve(app *config.App) error {
 	go expiryWorker(app)
 
 	server := newServer(app)
-	if err := server.ListenAndServe(); err != nil {
-		return fmt.Errorf("server failed: %w", err)
+
+	if (app.CertFile == "") != (app.KeyFile == "") {
+		return fmt.Errorf(
+			"TLS requires both certFile and keyFile",
+		)
+	}
+
+	if app.CertFile != "" {
+		app.Log.Info("starting HTTPS server",
+			"addr", server.Addr,
+			"certFile", app.CertFile,
+			"keyFile", app.KeyFile)
+		if err := server.ListenAndServeTLS(
+			app.CertFile, app.KeyFile); err != nil {
+			return fmt.Errorf("HTTPS server failed: %w", err)
+		}
+	} else {
+		app.Log.Info("starting HTTP server",
+			"addr", server.Addr)
+		if err := server.ListenAndServe(); err != nil {
+			return fmt.Errorf("HTTP server failed: %w", err)
+		}
 	}
 
 	return nil

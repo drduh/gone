@@ -198,8 +198,11 @@ build-race: prep-build
 race: build-race
 	@$(OUT)/$(BINRACE) -debug
 
-clean: clean-coverage
+clean: clean-cert clean-coverage
 	@rm -rf $(OUT)
+
+clean-cert:
+	@rm -rf cert.pem key.pem
 
 clean-coverage:
 	@rm -rf $(TESTCOVER) $(TESTCOVER).html
@@ -225,9 +228,18 @@ view-cover: cover
 doc:
 	@$(GODOC) -http :8000
 
+key.pem:
+	@openssl ecparam -name prime256v1 -genkey -noout -out $@
+
+cert.pem: key.pem
+	@openssl req -new -x509 \
+		-key $< -out $@ \
+		-days 8 -subj "/CN=${APPNAME}.${APPVERS}"
+
 c: clean
 cealn: clean
 celan: clean
+cert: cert.pem
 clena: clean
 coen: coverage
 coveage: coverage
@@ -245,6 +257,7 @@ prod: release
 r: run
 restart: reload-service
 restart-service: reload-service
+rin: run
 t: test
 tets: test
 tset: test

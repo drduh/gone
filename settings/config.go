@@ -26,6 +26,9 @@ type Settings struct {
 	// Paths to route
 	Paths `json:"paths"`
 
+	// TLS configuration
+	TLS `json:"tls"`
+
 	// IP address to listen on ("127.0.0.1")
 	ServerAddr string `json:"serverAddr,omitempty"`
 
@@ -321,4 +324,14 @@ type Paths struct {
 
 	// Shared-edit content read and write ("/wall")
 	Wall string `json:"wall,omitempty"`
+}
+
+// TLS represents the HTTPS server configuration.
+type TLS struct {
+
+	// Path to PEM-encoded TLS certificate
+	CertFile string `json:"fileCert,omitempty"`
+
+	// Path to PEM-encoded TLS private key
+	KeyFile string `json:"fileKey,omitempty"`
 }

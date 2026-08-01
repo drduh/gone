@@ -1,5 +1,6 @@
 ._*
 *.log
+*.pem
 *.out
 *.sh
 *.test
