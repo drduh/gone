@@ -294,6 +294,10 @@ details[open] summary {
   border-bottom-color: transparent;
 }
 
+details[open] > summary:hover {
+  border-bottom: 1px solid var(--fg-light);
+}
+
 .randomStrs {
   display: grid;
   font-family: ui-monospace, monospace;
@@ -312,7 +316,7 @@ details[open] summary {
   display: block;
   width: var(--width-theme);
   height: var(--width-theme);
-  border-radius: var(--radius-theme);
+  border-radius: var(--radius-opt);
   cursor: pointer;
   outline: 2px solid transparent;
   outline-offset: 2px;

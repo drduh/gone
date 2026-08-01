@@ -38,17 +38,18 @@
     {{- range .Storage.Messages }}
       <label class="itemCard">
         <span class="itemName">
-          {{ .Count }}
-        {{- range .GetParts }}
+          {{- range .GetParts }}
           {{ if .HasURL }}
           <a href="{{ .URL }}"
            target="_blank"
               rel="noopener noreferrer">{{ .Text }}</a>
           {{ else }} {{ .Text }} {{ end }}
-        {{- end }}
+          {{- end }}
         </span>
         <span class="itemMeta">
-          {{ .Owner.Mask }} at {{ .Time.UploadTimeFmt }}
+          {{ .Count }} &middot;
+          {{ .Time.UploadTimeFmt }} &middot;
+          {{ .Owner.Mask }}
         </span>
       </label>
     {{- end }}
