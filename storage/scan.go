@@ -40,28 +40,51 @@ func (f *File) setSum() {
 // SetType sets File content type based on extension
 // override, contents, or filename extension.
 func (f *File) setType() {
-	const defaultType = "application/octet-stream"
+	ext := strings.ToLower(filepath.Ext(f.Name))
 
+	if !f.setTypeOverride(ext) {
+		if len(f.Data) > 0 {
+			f.Type = http.DetectContentType(f.Data)
+		} else if t := mime.TypeByExtension(ext); t != "" {
+			f.Type = t
+		} else {
+			f.Type = "application/octet-stream"
+		}
+	}
+
+	f.setTypeFmt()
+}
+
+// setTypeOverride sets Type when an extension-specific
+// override is available.
+func (f *File) setTypeOverride(ext string) bool {
 	overrides := map[string]string{
 		".apk": "application/vnd.android.package-archive",
 	}
 
-	ext := strings.ToLower(filepath.Ext(f.Name))
+	t, ok := overrides[ext]
+	if !ok {
+		return false
+	}
 
-	if t, ok := overrides[ext]; ok {
-		f.Type = t
+	f.Type = t
+	return true
+}
+
+// setTypeFmt sets TypeFmt to Type unless a type-specific
+// format override is available.
+func (f *File) setTypeFmt() {
+	overrides := map[string]string{
+		"application/vnd.android.package-archive": "android package",
+		"application/zip": "zip archive",
+		"text/html; charset=utf-8": "html document",
+		"text/plain; charset=utf-8": "text file",
+	}
+
+	if t, ok := overrides[f.Type]; ok {
+		f.TypeFmt = t
 		return
 	}
 
-	if len(f.Data) > 0 {
-		f.Type = http.DetectContentType(f.Data)
-		return
-	}
-
-	if t := mime.TypeByExtension(ext); t != "" {
-		f.Type = t
-		return
-	}
-
-	f.Type = defaultType
+	f.TypeFmt = f.Type
 }

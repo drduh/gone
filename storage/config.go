@@ -64,6 +64,9 @@ type File struct {
 
 	// File content type
 	Type string `json:"type,omitempty"`
+
+	// File content type display override
+	TypeFmt string `json:"typeFmt,omitempty"`
 }
 
 // Message represents a user-submitted text message.
