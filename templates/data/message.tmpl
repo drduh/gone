@@ -47,7 +47,7 @@
           {{- end }}
         </span>
         <span class="itemMeta">
-          {{ .Count }} &middot;
+          <a href="{{ $.Paths.Message }}/{{ .Count }}">{{ .Count }}</a> &middot;
           {{ .Time.UploadTimeFmt }} &middot;
           {{ .Owner.Mask }}
         </span>

@@ -90,6 +90,9 @@ type Auth struct {
 		// Clear text messages
 		MessageClear bool `json:"msgClear,omitempty"`
 
+		// Get text message with metadata
+		MessageGet bool `json:"msgGet,omitempty"`
+
 		// Get random output
 		Random bool `json:"random,omitempty"`
 
@@ -137,11 +140,14 @@ type Error struct {
 	// Upload form not valid
 	Form string `json:"form,omitempty"`
 
-	// Message count exceeded
+	// Message count exceeded configured limit
 	MsgCount string `json:"msgCount,omitempty"`
 
-	// Message length exceeded
+	// Message length exceeded configured limit
 	MsgLength string `json:"msgLength,omitempty"`
+
+	// Message not found in Storage
+	MsgNotFound string `json:"msgNotFound,omitempty"`
 
 	// Filename not provided
 	NoFilename string `json:"noFilename,omitempty"`
@@ -300,6 +306,9 @@ type Paths struct {
 
 	// Message clear ("/msg/clear")
 	MessageClear string `json:"msgClear,omitempty"`
+
+	// Message get by count ("/msg/{count}")
+	MessageGet string `json:"msgGet,omitempty"`
 
 	// Random output ("/random/")
 	Random string `json:"random,omitempty"`

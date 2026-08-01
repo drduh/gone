@@ -30,6 +30,9 @@ func AuthRequest(
 		return nil
 	}
 
+	app.Log.Debug("authenticated request",
+		"req", req)
+
 	return req
 }
 
@@ -41,6 +44,7 @@ func checkAuthorized(
 		deny(w, http.StatusTooManyRequests, app.RateLimit)
 		return false
 	}
+
 	return true
 }
 
@@ -53,6 +57,7 @@ func checkAuthenticated(
 		deny(w, http.StatusForbidden, app.Deny)
 		return false
 	}
+
 	return true
 }
 
@@ -79,6 +84,7 @@ func isAuthenticated(app *config.App, r *http.Request) bool {
 		app.Message:      app.Require.Message,
 		app.MessageAdd:   app.Require.MessageAdd,
 		app.MessageClear: app.Require.MessageClear,
+		app.MessageGet:   app.Require.MessageGet,
 		app.Random:       app.Require.Random,
 		app.Root:         app.Require.Root,
 		app.Static:       app.Require.Static,
@@ -111,5 +117,6 @@ func isAuthenticated(app *config.App, r *http.Request) bool {
 		"path", path,
 		"required", required,
 		"exists", exists)
+
 	return auth.Basic(secret, token)
 }
