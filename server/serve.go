@@ -1,6 +1,7 @@
 package server
 
 import (
+	"errors"
 	"fmt"
 	"net/http"
 	"time"
@@ -40,7 +41,7 @@ func Serve(app *config.App) error {
 	server := newServer(app)
 
 	if (app.CertFile == "") != (app.KeyFile == "") {
-		return fmt.Errorf(
+		return errors.New(
 			"TLS requires both certFile and keyFile",
 		)
 	}

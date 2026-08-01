@@ -76,9 +76,9 @@ func (f *File) setTypeOverride(ext string) bool {
 func (f *File) setTypeFmt() {
 	overrides := map[string]string{
 		"application/vnd.android.package-archive": "android package",
-		"application/zip": "zip archive",
-		"text/html; charset=utf-8": "html document",
-		"text/plain; charset=utf-8": "text file",
+		"application/zip":                         "zip archive",
+		"text/html; charset=utf-8":                "html document",
+		"text/plain; charset=utf-8":               "text file",
 	}
 
 	if t, ok := overrides[f.Type]; ok {

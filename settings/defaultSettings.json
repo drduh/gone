@@ -50,7 +50,8 @@
     "notFound":    "file not found",
     "rateLimit":   "req rate limit",
     "tmplExec":    "failed to exec",
-    "tmplParse":   "failed parsing"
+    "tmplParse":   "failed parsing",
+    "uploadCount": "too many files"
   },
   "indexPage": {
     "csp":         true,
@@ -81,6 +82,7 @@
       "expiryCheck":    "30s",
       "maxDownloads":   100,
       "maxDuration":    "192h",
+      "maxSelectFiles": 10,
       "nameExtraChars": "_.- ",
       "nameLength":     64,
       "sizeEachMb":     512,

@@ -47,7 +47,11 @@
           {{- end }}
         </span>
         <span class="itemMeta">
+          {{- if $.Auth.Require.MessageGet }}
+          {{ .Count }} &middot;
+          {{- else }}
           <a href="{{ $.Paths.Message }}/{{ .Count }}">{{ .Count }}</a> &middot;
+          {{- end }}
           {{ .Time.UploadTimeFmt }} &middot;
           {{ .Owner.Mask }}
         </span>

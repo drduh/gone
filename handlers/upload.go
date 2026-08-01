@@ -85,6 +85,16 @@ func Upload(app *config.App) http.HandlerFunc {
 		}
 
 		fileCount := len(formFileContent)
+		if fileCount > app.FileLimits.MaxSelectFiles {
+			writeJSON(w, http.StatusBadRequest,
+				errorJSON(app.UploadCount))
+			app.Log.Error(app.UploadCount,
+				"limit", app.FileLimits.MaxSelectFiles,
+				"received", fileCount,
+				"user", req)
+			return
+		}
+
 		wg.Add(fileCount)
 
 		for _, fileHeader := range formFileContent {

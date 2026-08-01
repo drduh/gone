@@ -28,6 +28,7 @@ func Routes(app *config.App) map[string]http.HandlerFunc {
 		app.Message:      Message(app),
 		app.MessageAdd:   MessageAdd(app),
 		app.MessageClear: MessageClear(app),
+		app.MessageGet:   MessageGet(app),
 
 		// Wall
 		app.Wall: Wall(app),

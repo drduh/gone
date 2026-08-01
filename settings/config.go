@@ -158,14 +158,17 @@ type Error struct {
 	// File not found in Storage
 	NotFound string `json:"notFound,omitempty"`
 
+	// Too many requests
+	RateLimit string `json:"rateLimit,omitempty"`
+
 	// Template could not be executed
 	TmplExec string `json:"tmplExec,omitempty"`
 
 	// Template could not be parsed
 	TmplParse string `json:"tmplParse,omitempty"`
 
-	// Too many requests
-	RateLimit string `json:"rateLimit,omitempty"`
+	// Too many files selected for upload
+	UploadCount string `json:"uploadCount,omitempty"`
 }
 
 // Index represents index HTML page properties.
@@ -241,6 +244,9 @@ type Limit struct {
 
 		// Maximum number of downloads until expiration
 		MaxDownloads int `json:"maxDownloads,omitempty"`
+
+		// Maximum number of selected files for upload
+		MaxSelectFiles int `json:"maxSelectFiles,omitempty"`
 
 		// Maximum duration until expiration
 		MaxDuration Duration `json:"maxDuration"`
