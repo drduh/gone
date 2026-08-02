@@ -47,6 +47,7 @@
     "msgNotFound": "msg not stored",
     "noFilename":  "need file name",
     "noFiles":     "no files found",
+    "noPath":      "path not found",
     "notFound":    "file not found",
     "rateLimit":   "req rate limit",
     "tmplExec":    "failed to exec",

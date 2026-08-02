@@ -236,6 +236,7 @@ cert.pem: key.pem
 		-key $< -out $@ \
 		-days 8 -subj "/CN=${APPNAME}.${APPVERS}"
 
+b: build
 c: clean
 cealn: clean
 celan: clean
@@ -252,6 +253,7 @@ format: fmt
 gosec: sec
 litn: lint
 open-cover: view-cover
+pem: cert
 prep: prep-build
 prod: release
 r: run

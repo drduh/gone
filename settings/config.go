@@ -155,6 +155,9 @@ type Error struct {
 	// No files available
 	NoFiles string `json:"noFiles,omitempty"`
 
+	// Path not found
+	NoPath string `json:"noPath,omitempty"`
+
 	// File not found in Storage
 	NotFound string `json:"notFound,omitempty"`
 
