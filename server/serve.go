@@ -9,6 +9,9 @@ import (
 	"github.com/drduh/gone/config"
 )
 
+var errTLSMissingFiles = errors.New(
+	"TLS requires both certificate and key files")
+
 // newServer sets up the HTTP server with
 // configured timeouts and routes to handle.
 func newServer(app *config.App) *http.Server {
@@ -41,9 +44,7 @@ func Serve(app *config.App) error {
 	server := newServer(app)
 
 	if (app.CertFile == "") != (app.KeyFile == "") {
-		return errors.New(
-			"TLS requires both certFile and keyFile",
-		)
+		return errTLSMissingFiles
 	}
 
 	if app.CertFile != "" {

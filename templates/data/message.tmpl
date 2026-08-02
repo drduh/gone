@@ -50,7 +50,11 @@
           {{- if $.Auth.Require.MessageGet }}
           {{ .Count }} &middot;
           {{- else }}
-          <a href="{{ $.Paths.Message }}/{{ .Count }}">{{ .Count }}</a> &middot;
+          <a class="link-bold"
+              href="{{ $.Paths.Message }}/{{ .Count }}"
+               rel="noopener noreferrer"
+          tabindex="-1"
+            target="_blank">{{ .Count }}</a> &middot;
           {{- end }}
           {{ .Time.UploadTimeFmt }} &middot;
           {{ .Owner.Mask }}

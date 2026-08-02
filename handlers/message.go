@@ -89,7 +89,7 @@ func MessageAdd(app *config.App) http.HandlerFunc {
 			Data:  formContent,
 			Owner: storage.Owner{
 				Agent: req.Agent,
-				Mask:  req.Mask,
+				Mask:  req.AddressMask,
 			},
 			Time: storage.Time{
 				UploadTime:    t,

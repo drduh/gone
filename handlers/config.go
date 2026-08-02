@@ -22,8 +22,8 @@ type Request struct {
 	// IP address including port ("127.0.0.1:12345")
 	Address string `json:"address"`
 
-	// Masked address ("User123")
-	Mask string `json:"mask"`
+	// Address mask ("User123")
+	AddressMask string `json:"addressMask"`
 
 	// User agent ("Mozilla/5.0 ...")
 	Agent string `json:"agent"`

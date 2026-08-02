@@ -139,7 +139,7 @@ func Upload(app *config.App) http.HandlerFunc {
 					Owner: storage.Owner{
 						Address: req.Address,
 						Agent:   req.Agent,
-						Mask:    req.Mask,
+						Mask:    req.AddressMask,
 					},
 					Time: storage.Time{
 						Duration:      durationLimit,

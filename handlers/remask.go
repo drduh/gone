@@ -17,14 +17,14 @@ func UserRemask(app *config.App) http.HandlerFunc {
 		refreshMask(req.Address)
 		reqNew := parseRequest(r)
 		app.Log.Info("remasked user",
-			"new", reqNew.Mask,
-			"old", req.Mask)
+			"new", reqNew.AddressMask,
+			"old", req.AddressMask)
 
 		if req.IsBrowser {
 			toPath(w, r, app.Root)
 		} else {
 			writeJSON(w, http.StatusOK,
-				req.Mask+" is now "+reqNew.Mask)
+				req.AddressMask+" is now "+reqNew.AddressMask)
 		}
 	}
 }
