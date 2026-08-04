@@ -10,8 +10,8 @@ import (
 func Routes(app *config.App) map[string]http.HandlerFunc {
 	return map[string]http.HandlerFunc{
 
-		// Index page
-		app.Root: Index(app),
+		// Index page (exact match)
+		app.Root + "{$}": Index(app),
 
 		// Service status
 		app.Status: Status(app),
@@ -28,6 +28,7 @@ func Routes(app *config.App) map[string]http.HandlerFunc {
 		app.Message:      Message(app),
 		app.MessageAdd:   MessageAdd(app),
 		app.MessageClear: MessageClear(app),
+		app.MessageGet:   MessageGet(app),
 
 		// Wall
 		app.Wall: Wall(app),
@@ -36,8 +37,13 @@ func Routes(app *config.App) map[string]http.HandlerFunc {
 		app.UserInfo:   UserInfo(app),
 		app.UserRemask: UserRemask(app),
 
-		// Misc
+		// Random string generator
 		app.Random: Random(app),
+
+		// Static embedded content
 		app.Static: Static(app),
+
+		// Remaining undefined routes
+		"/": Undefined(app),
 	}
 }

@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"net/http"
+	"strconv"
 	"strings"
 	"time"
 
@@ -88,7 +89,7 @@ func MessageAdd(app *config.App) http.HandlerFunc {
 			Data:  formContent,
 			Owner: storage.Owner{
 				Agent: req.Agent,
-				Mask:  req.Mask,
+				Mask:  req.AddressMask,
 			},
 			Time: storage.Time{
 				UploadTime:    t,
@@ -133,5 +134,38 @@ func MessageClear(app *config.App) http.HandlerFunc {
 		}
 
 		writeJSON(w, http.StatusOK, "message(s) cleared")
+	}
+}
+
+// MessageGet handles requests to read a Message by Count.
+func MessageGet(app *config.App) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		req := AuthRequest(w, r, app)
+		if req == nil {
+			return
+		}
+
+		countStr := r.PathValue("count")
+		count, err := strconv.Atoi(countStr)
+		if err != nil || count < 1 {
+			writeJSON(w, http.StatusBadRequest,
+				errorJSON(app.MsgNotFound))
+			return
+		}
+
+		app.CountMessages()
+
+		for _, msg := range app.Messages {
+			if msg.Count == count {
+				app.Log.Info("serving message",
+					"count", count,
+					"user", req)
+				writeJSON(w, http.StatusOK, msg)
+				return
+			}
+		}
+
+		writeJSON(w, http.StatusNotFound,
+			errorJSON(app.MsgNotFound))
 	}
 }

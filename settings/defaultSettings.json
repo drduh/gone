@@ -21,6 +21,7 @@
       "msg":       false,
       "msgAdd":    false,
       "msgClear":  true,
+      "msgGet":    false,
       "random":    false,
       "remask":    true,
       "root":      false,
@@ -43,12 +44,15 @@
     "form":        "file form fail",
     "msgCount":    "msgs count met",
     "msgLength":   "msg length met",
+    "msgNotFound": "msg not stored",
     "noFilename":  "need file name",
     "noFiles":     "no files found",
+    "noPath":      "path not found",
     "notFound":    "file not found",
     "rateLimit":   "req rate limit",
     "tmplExec":    "failed to exec",
-    "tmplParse":   "failed parsing"
+    "tmplParse":   "failed parsing",
+    "uploadCount": "too many files"
   },
   "indexPage": {
     "csp":         true,
@@ -79,6 +83,7 @@
       "expiryCheck":    "30s",
       "maxDownloads":   100,
       "maxDuration":    "192h",
+      "maxSelectFiles": 10,
       "nameExtraChars": "_.- ",
       "nameLength":     64,
       "sizeEachMb":     512,
@@ -92,7 +97,7 @@
       "strCount":       16
     },
     "wallLimits": {
-      "lengthChars":    2560
+      "lengthChars":    4096
     }
   },
   "paths": {
@@ -103,6 +108,7 @@
     "msg":         "/msg",
     "msgAdd":      "/msg/add",
     "msgClear":    "/msg/clear",
+    "msgGet":      "/msg/{count}",
     "random":      "/random/",
     "root":        "/",
     "static":      "/static",
@@ -111,5 +117,9 @@
     "userInfo":    "/user/info",
     "userRemask":  "/user/remask",
     "wall":        "/wall"
+  },
+  "tls": {
+    "fileCert":    "",
+    "fileKey":     ""
   }
 }

@@ -19,7 +19,7 @@ func UserInfo(app *config.App) http.HandlerFunc {
 		response := templates.User{
 			Owner: storage.Owner{
 				Address: req.Address,
-				Mask:    req.Mask,
+				Mask:    req.AddressMask,
 				Headers: r.Header,
 			},
 			IsBrowser: req.IsBrowser,

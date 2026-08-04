@@ -26,6 +26,9 @@ type Settings struct {
 	// Paths to route
 	Paths `json:"paths"`
 
+	// TLS configuration
+	TLS `json:"tls"`
+
 	// IP address to listen on ("127.0.0.1")
 	ServerAddr string `json:"serverAddr,omitempty"`
 
@@ -87,6 +90,9 @@ type Auth struct {
 		// Clear text messages
 		MessageClear bool `json:"msgClear,omitempty"`
 
+		// Get text message with metadata
+		MessageGet bool `json:"msgGet,omitempty"`
+
 		// Get random output
 		Random bool `json:"random,omitempty"`
 
@@ -134,11 +140,14 @@ type Error struct {
 	// Upload form not valid
 	Form string `json:"form,omitempty"`
 
-	// Message count exceeded
+	// Message count exceeded configured limit
 	MsgCount string `json:"msgCount,omitempty"`
 
-	// Message length exceeded
+	// Message length exceeded configured limit
 	MsgLength string `json:"msgLength,omitempty"`
+
+	// Message not found in Storage
+	MsgNotFound string `json:"msgNotFound,omitempty"`
 
 	// Filename not provided
 	NoFilename string `json:"noFilename,omitempty"`
@@ -146,8 +155,14 @@ type Error struct {
 	// No files available
 	NoFiles string `json:"noFiles,omitempty"`
 
+	// Path not found
+	NoPath string `json:"noPath,omitempty"`
+
 	// File not found in Storage
 	NotFound string `json:"notFound,omitempty"`
+
+	// Too many requests
+	RateLimit string `json:"rateLimit,omitempty"`
 
 	// Template could not be executed
 	TmplExec string `json:"tmplExec,omitempty"`
@@ -155,8 +170,8 @@ type Error struct {
 	// Template could not be parsed
 	TmplParse string `json:"tmplParse,omitempty"`
 
-	// Too many requests
-	RateLimit string `json:"rateLimit,omitempty"`
+	// Too many files selected for upload
+	UploadCount string `json:"uploadCount,omitempty"`
 }
 
 // Index represents index HTML page properties.
@@ -233,6 +248,9 @@ type Limit struct {
 		// Maximum number of downloads until expiration
 		MaxDownloads int `json:"maxDownloads,omitempty"`
 
+		// Maximum number of selected files for upload
+		MaxSelectFiles int `json:"maxSelectFiles,omitempty"`
+
 		// Maximum duration until expiration
 		MaxDuration Duration `json:"maxDuration"`
 
@@ -298,6 +316,9 @@ type Paths struct {
 	// Message clear ("/msg/clear")
 	MessageClear string `json:"msgClear,omitempty"`
 
+	// Message get by count ("/msg/{count}")
+	MessageGet string `json:"msgGet,omitempty"`
+
 	// Random output ("/random/")
 	Random string `json:"random,omitempty"`
 
@@ -321,4 +342,14 @@ type Paths struct {
 
 	// Shared-edit content read and write ("/wall")
 	Wall string `json:"wall,omitempty"`
+}
+
+// TLS represents the HTTPS server configuration.
+type TLS struct {
+
+	// Path to PEM-encoded TLS certificate
+	CertFile string `json:"fileCert,omitempty"`
+
+	// Path to PEM-encoded TLS private key
+	KeyFile string `json:"fileKey,omitempty"`
 }
