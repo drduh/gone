@@ -119,7 +119,7 @@
     "wall":        "/wall"
   },
   "tls": {
-    "fileCert":    "cert.pem",
-    "fileKey":     "key.pem"
+    "fileCert":    "",
+    "fileKey":     ""
   }
 }
