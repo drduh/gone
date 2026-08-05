@@ -3,6 +3,7 @@ package storage
 import (
 	"net/url"
 	"regexp"
+	"strconv"
 	"strings"
 )
 
@@ -65,10 +66,23 @@ func isValidURL(s string) bool {
 	if err != nil {
 		return false
 	}
+
 	if u.Scheme != "http" && u.Scheme != "https" {
 		return false
 	}
-	return u.Host != ""
+
+	if u.Hostname() == "" {
+		return false
+	}
+
+	if port := u.Port(); port != "" {
+		portNumber, err := strconv.ParseUint(port, 10, 16)
+		if err != nil || portNumber == 0 {
+			return false
+		}
+	}
+
+	return true
 }
 
 // GetParts extracts Message plain-text and URL parts.
