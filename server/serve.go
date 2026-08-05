@@ -48,6 +48,8 @@ func Serve(app *config.App) error {
 	}
 
 	if app.CertFile != "" {
+		server.TLSConfig = newTLSConfig()
+
 		app.Log.Info("starting HTTPS server",
 			"addr", server.Addr,
 			"certFile", app.CertFile,
