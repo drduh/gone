@@ -12,8 +12,9 @@
       {{- .Storage.WallContent -}}
       </textarea>
       {{- if .Storage.WallContent }}
-      <p class="modifiedTime">
-        Modified {{ .Storage.WallModifiedFmt }}
+      <p class="wallMeta">
+        {{ .Storage.WallModifiedTimeFmt }} &middot;
+        {{ .Storage.WallModifiedUser }}
       </p>
       {{ end }}
       <div class="row">

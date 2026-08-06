@@ -34,8 +34,9 @@ func Wall(app *config.App) http.HandlerFunc {
 					"user", req)
 
 				now := time.Now()
-				app.WallModified = now
-				app.WallModifiedFmt = now.Format(app.TimeFormat)
+				app.WallModifiedTime = now
+				app.WallModifiedTimeFmt = now.Format(app.TimeFormat)
+				app.WallModifiedUser = req.AddressMask
 				app.WallContent = formContent
 
 				app.Log.Info("updated wall",

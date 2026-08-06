@@ -29,19 +29,6 @@ type Storage struct {
 	Messages []*Message `json:"messages,omitempty"`
 }
 
-// Wall represents an editable text area.
-type Wall struct {
-
-	// Wall content
-	WallContent string `json:"wallContent,omitempty"`
-
-	// Time of last modification
-	WallModified time.Time `json:"-"`
-
-	// Formatted time of last modification
-	WallModifiedFmt string `json:"wallModifiedFmt,omitempty"`
-}
-
 // File represents an uploaded file.
 type File struct {
 
@@ -179,4 +166,20 @@ type Sizes struct {
 
 	// Formatted total size of all Files
 	SizeFilesFmt string `json:"sizeFilesFmt,omitempty"`
+}
+
+// Wall represents an editable text area.
+type Wall struct {
+
+	// Wall content
+	WallContent string `json:"wallContent,omitempty"`
+
+	// Time of last modification
+	WallModifiedTime time.Time `json:"-"`
+
+	// Formatted time of last modification
+	WallModifiedTimeFmt string `json:"wallModifiedTimeFmt,omitempty"`
+
+	// Last modification user
+	WallModifiedUser string `json:"wallModifiedUser,omitempty"`
 }
