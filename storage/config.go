@@ -19,14 +19,27 @@ type Storage struct {
 	// Storage content total sizes
 	Sizes `json:"storageSizes"`
 
+	// Wall editable text area
+	Wall `json:"wall"`
+
 	// Uploaded files
 	Files map[string]*File `json:"files,omitempty"`
 
 	// Text messages
 	Messages []*Message `json:"messages,omitempty"`
+}
 
-	// Shared wall content
+// Wall represents an editable text area.
+type Wall struct {
+
+	// Wall content
 	WallContent string `json:"wallContent,omitempty"`
+
+	// Time of last modification
+	WallModified time.Time `json:"-"`
+
+	// Formatted time of last modification
+	WallModifiedFmt string `json:"wallModifiedFmt,omitempty"`
 }
 
 // File represents an uploaded file.

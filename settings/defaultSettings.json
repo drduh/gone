@@ -116,7 +116,7 @@
     "upload":      "/upload",
     "userInfo":    "/user/info",
     "userRemask":  "/user/remask",
-    "wall":        "/wall"
+    "wallModify":  "/wall"
   },
   "tls": {
     "fileCert":    "",

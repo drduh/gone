@@ -334,14 +334,14 @@ type Paths struct {
 	// File upload ("/upload")
 	Upload string `json:"upload,omitempty"`
 
-	// User request info ("/user")
+	// User request info ("/user/info")
 	UserInfo string `json:"userInfo,omitempty"`
 
 	// Refresh user request mask ("/user/remask")
 	UserRemask string `json:"userRemask,omitempty"`
 
-	// Shared-edit content read and write ("/wall")
-	Wall string `json:"wall,omitempty"`
+	// Editable text-area read and write ("/wall")
+	WallModify string `json:"wallModify,omitempty"`
 }
 
 // TLS represents the HTTPS server configuration.

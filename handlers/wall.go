@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"net/http"
+	"time"
 
 	"github.com/drduh/gone/config"
 )
@@ -31,9 +32,14 @@ func Wall(app *config.App) http.HandlerFunc {
 				app.Log.Debug("updating wall",
 					"length", len(formContent),
 					"user", req)
+
+				now := time.Now()
+				app.WallModified = now
+				app.WallModifiedFmt = now.Format(app.TimeFormat)
 				app.WallContent = formContent
+
 				app.Log.Info("updated wall",
-					"length", len(formContent),
+					"length", len(app.WallContent),
 					"user", req)
 			}
 

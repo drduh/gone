@@ -103,8 +103,12 @@ func TestServeMessages(t *testing.T) {
 
 // TestServeWall tests writing Wall content to response.
 func TestServeWall(t *testing.T) {
-	const wallContent = "test wall content\n"
-	s := &Storage{WallContent: wallContent}
+	const wallContent = "hello, world!\r\n(see http://example.com)\r\n"
+	s := &Storage{
+		Wall: Wall{
+			WallContent: wallContent,
+		},
+	}
 
 	rr := httptest.NewRecorder()
 	s.ServeWall(rr)

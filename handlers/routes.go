@@ -31,7 +31,7 @@ func Routes(app *config.App) map[string]http.HandlerFunc {
 		app.MessageGet:   MessageGet(app),
 
 		// Wall
-		app.Wall: Wall(app),
+		app.WallModify: Wall(app),
 
 		// User request information
 		app.UserInfo:   UserInfo(app),

@@ -1,7 +1,7 @@
 <!-- wall.tmpl -->
 {{ define "wall" }}
   <div class="box">
-    <form action="{{ .Paths.Wall }}"
+    <form action="{{ .Paths.WallModify }}"
               id="wall"
           method="post">
       <textarea class="wallContent"
@@ -11,6 +11,11 @@
                 title="add or edit content">
       {{- .Storage.WallContent -}}
       </textarea>
+      {{- if .Storage.WallContent }}
+      <p class="modifiedTime">
+        Modified {{ .Storage.WallModifiedFmt }}
+      </p>
+      {{ end }}
       <div class="row">
         {{- if .Auth.Require.Wall }} {{ template "auth" . }} {{ end }}
         <button class="selectWallSave"
@@ -18,7 +23,7 @@
                  type="submit">save</button>
       </div>
     </form>
-    <form action="{{ .Paths.Wall }}"
+    <form action="{{ .Paths.WallModify }}"
            class="inline-form"
           method="post">
       <input name="clear"
@@ -35,7 +40,7 @@
                  type="submit">clear</button>
       </div>
     </form>
-    <form action="{{ .Paths.Wall }}"
+    <form action="{{ .Paths.WallModify }}"
            class="inline-form"
           method="post">
       <div class="row">

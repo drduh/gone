@@ -15,7 +15,7 @@ func TestWallGet(t *testing.T) {
 	app.WallContent = testContentWall
 
 	req := httptest.NewRequestWithContext(t.Context(),
-		http.MethodGet, app.Wall, nil)
+		http.MethodGet, app.WallModify, nil)
 	req.RemoteAddr = testAddrAndPort
 
 	rr := httptest.NewRecorder()
@@ -46,7 +46,8 @@ func TestWallPostUpdate(t *testing.T) {
 	values := "wall=new content"
 
 	req := httptest.NewRequestWithContext(t.Context(),
-		http.MethodPost, app.Wall, strings.NewReader(values))
+		http.MethodPost, app.WallModify,
+		strings.NewReader(values))
 	req.Header.Set("Content-Type", formContentType)
 	req.RemoteAddr = testAddrAndPort
 
@@ -78,7 +79,8 @@ func TestWallPostClear(t *testing.T) {
 
 	values := formFieldClear + "=1"
 	req := httptest.NewRequestWithContext(t.Context(),
-		http.MethodPost, app.Wall, strings.NewReader(values))
+		http.MethodPost, app.WallModify,
+		strings.NewReader(values))
 	req.Header.Set("Content-Type", formContentType)
 	req.RemoteAddr = testAddrAndPort
 
@@ -110,7 +112,8 @@ func TestWallGetDownloadAll(t *testing.T) {
 	app.WallContent = testContentWall
 
 	req := httptest.NewRequestWithContext(t.Context(),
-		http.MethodPost, app.Wall+"?download=wall", nil)
+		http.MethodPost,
+		app.WallModify+"?download=wall", nil)
 	req.RemoteAddr = testAddrAndPort
 
 	rr := httptest.NewRecorder()
@@ -141,8 +144,8 @@ func TestWallDeny(t *testing.T) {
 	app.WallContent = testContentWall
 
 	req := httptest.NewRequestWithContext(t.Context(),
-		http.MethodPost,
-		app.Wall, strings.NewReader("wall=new content"))
+		http.MethodPost, app.WallModify,
+		strings.NewReader("wall=new content"))
 	req.Header.Set("Content-Type", formContentType)
 	rr := serveDeniedRequest(t, app, req)
 
