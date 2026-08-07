@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"net/http"
 	"net/http/httptest"
+	"net/url"
 	"strings"
 	"testing"
 )
@@ -19,8 +20,7 @@ func TestWallGet(t *testing.T) {
 	req.RemoteAddr = testAddrAndPort
 
 	rr := httptest.NewRecorder()
-	mux := newTestMux(app)
-	mux.ServeHTTP(rr, req)
+	newTestMux(app).ServeHTTP(rr, req)
 
 	if rr.Code != http.StatusOK {
 		t.Fatalf("expected %d, got %d",
@@ -52,8 +52,7 @@ func TestWallPostUpdate(t *testing.T) {
 	req.RemoteAddr = testAddrAndPort
 
 	rr := httptest.NewRecorder()
-	mux := newTestMux(app)
-	mux.ServeHTTP(rr, req)
+	newTestMux(app).ServeHTTP(rr, req)
 
 	if rr.Code != http.StatusOK {
 		t.Fatalf("expected %d, got %d",
@@ -63,7 +62,7 @@ func TestWallPostUpdate(t *testing.T) {
 	var got string
 	if err := json.NewDecoder(
 		rr.Body).Decode(&got); err != nil {
-		t.Fatalf("failed to decode wall response: %v", err)
+		t.Errorf("failed to decode wall response: %v", err)
 	}
 	if got != "new content" {
 		t.Errorf("expected wall content %q, got %q",
@@ -85,8 +84,7 @@ func TestWallPostClear(t *testing.T) {
 	req.RemoteAddr = testAddrAndPort
 
 	rr := httptest.NewRecorder()
-	mux := newTestMux(app)
-	mux.ServeHTTP(rr, req)
+	newTestMux(app).ServeHTTP(rr, req)
 
 	if rr.Code != http.StatusOK {
 		t.Fatalf("expected %d, got %d",
@@ -105,35 +103,42 @@ func TestWallPostClear(t *testing.T) {
 	assertWallClear(t, app)
 }
 
-// TestWallGetDownloadAll tests downloading wall content.
-func TestWallGetDownloadAll(t *testing.T) {
+// TestWallPostDownload tests downloading wall content.
+func TestWallPostDownload(t *testing.T) {
 	app := newTestApp()
 	app.Require.Wall = false
 	app.WallContent = testContentWall
 
-	req := httptest.NewRequestWithContext(t.Context(),
+	form := url.Values{}
+	form.Set(formFieldDownload, formFieldWall)
+
+	req := httptest.NewRequestWithContext(
+		t.Context(),
 		http.MethodPost,
-		app.WallModify+"?download=wall", nil)
+		app.WallModify,
+		strings.NewReader(form.Encode()),
+	)
+	req.Header.Set("Content-Type", formContentType)
 	req.RemoteAddr = testAddrAndPort
 
 	rr := httptest.NewRecorder()
-	mux := newTestMux(app)
-	mux.ServeHTTP(rr, req)
+	newTestMux(app).ServeHTTP(rr, req)
 
 	if rr.Code != http.StatusOK {
 		t.Fatalf("expected %d, got %d",
 			http.StatusOK, rr.Code)
 	}
 
-	disp := rr.Header().Get("Content-Disposition")
-	if disp != `attachment; filename="wall.txt"` {
-		t.Fatalf("invalid Content-Disposition: %q", disp)
+	got := rr.Header().Get("Content-Disposition")
+	want := `attachment; filename="wall.txt"`
+	if got != want {
+		t.Fatalf("invalid Content-Disposition: got %q, want %q",
+			got, want)
 	}
 
-	body := rr.Body.String()
-	if body != testContentWall {
+	if got := rr.Body.String(); got != testContentWall {
 		t.Fatalf("expected wall content %q, got %q",
-			"downloaded wall content", body)
+			testContentWall, got)
 	}
 }
 

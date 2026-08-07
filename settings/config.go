@@ -172,6 +172,9 @@ type Error struct {
 
 	// Too many files selected for upload
 	UploadCount string `json:"uploadCount,omitempty"`
+
+	// Too many characters in wall content
+	WallLimit string `json:"wallLimit,omitempty"`
 }
 
 // Index represents index HTML page properties.

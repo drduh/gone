@@ -60,7 +60,7 @@ func MessageAdd(app *config.App) http.HandlerFunc {
 
 		app.CountMessages()
 
-		msgLength := len(formContent)
+		msgLength := charCount(formContent)
 		if msgLength > app.MessageLimits.LengthChars {
 			writeJSON(w, http.StatusBadRequest,
 				errorJSON(app.MsgLength))
