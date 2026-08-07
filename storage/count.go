@@ -45,12 +45,12 @@ func (s *Storage) CountMessages() {
 // CountWall counts the number of characters
 // and lines in Wall content.
 func (s *Storage) CountWall() {
-	s.CharsWall = len(s.WallContent)
+	s.WallChars = len(s.WallContent)
 
 	if s.WallContent == "" {
-		s.LinesWall = 0
+		s.WallLines = 0
 	} else {
-		s.LinesWall = len(strings.Split(
+		s.WallLines = len(strings.Split(
 			s.WallContent, "\n"))
 	}
 }

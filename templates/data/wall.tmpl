@@ -13,6 +13,7 @@
       </textarea>
       {{- if .Storage.WallContent }}
       <p class="wallMeta">
+        {{ .Storage.WallChars }}/{{ .Limit.WallLimits.LengthChars }} &middot;
         {{ .Storage.WallModifiedTimeFmt }} &middot;
         {{ .Storage.WallModifiedUser }}
       </p>

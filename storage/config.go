@@ -11,7 +11,14 @@ const (
 
 	filenameMsgs = "messages.txt"
 	filenameWall = "wall.txt"
+
+	expiryNone          ExpiryReason = ""
+	expiryDownloadLimit ExpiryReason = "limit downloads"
+	expiryDurationLimit ExpiryReason = "limit duration"
 )
+
+// ExpiryReason identifies the reason for File expired.
+type ExpiryReason string
 
 // Storage represents content uploaded by users.
 type Storage struct {
@@ -19,8 +26,11 @@ type Storage struct {
 	// Storage content total sizes
 	Sizes `json:"storageSizes"`
 
+	// Wall metadata
+	WallMeta `json:"wallMeta"`
+
 	// Wall editable text area
-	Wall `json:"wall"`
+	WallContent string `json:"wallContent"`
 
 	// Uploaded files
 	Files map[string]*File `json:"files,omitempty"`
@@ -149,12 +159,6 @@ type Sizes struct {
 	// Number of characters in all Messages
 	CharsMessages int `json:"charsMessages,omitempty"`
 
-	// Number of characters in Wall content
-	CharsWall int `json:"charsWall,omitempty"`
-
-	// Number of lines in Wall content
-	LinesWall int `json:"linesWall,omitempty"`
-
 	// Number of Files
 	NumFiles int `json:"numFiles,omitempty"`
 
@@ -168,11 +172,14 @@ type Sizes struct {
 	SizeFilesFmt string `json:"sizeFilesFmt,omitempty"`
 }
 
-// Wall represents an editable text area.
-type Wall struct {
+// WallMeta represents Wall metadata.
+type WallMeta struct {
 
-	// Wall content
-	WallContent string `json:"wallContent,omitempty"`
+	// Number of characters in Wall content
+	WallChars int `json:"wallChars,omitempty"`
+
+	// Number of lines in Wall content
+	WallLines int `json:"wallLines,omitempty"`
 
 	// Time of last modification
 	WallModifiedTime time.Time `json:"-"`

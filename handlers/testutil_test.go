@@ -69,9 +69,7 @@ func newTestAppWithStorage() *config.App {
 			{Count: 1, Data: testContentMsgs + "1"},
 			{Count: 2, Data: testContentMsgs + "2"},
 		},
-		Wall: storage.Wall{
-			WallContent: testContentWall,
-		},
+		WallContent: testContentWall,
 	}
 
 	return app

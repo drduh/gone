@@ -20,7 +20,7 @@ func Wall(app *config.App) http.HandlerFunc {
 		if r.Method == http.MethodPost {
 			if r.FormValue(formFieldClear) != "" {
 				app.Log.Debug("clearing wall",
-					"length", app.CharsWall,
+					"length", app.WallChars,
 					"user", req)
 				app.ClearWall()
 				app.Log.Info("cleared wall",

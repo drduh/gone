@@ -71,8 +71,8 @@ func TestStatus(t *testing.T) {
 
 			var gotAddr string
 			if err := json.Unmarshal(
-				response["addr"], &gotAddr); err != nil {
-				t.Fatalf("decode addr: %v", err)
+				response["serverAddr"], &gotAddr); err != nil {
+				t.Fatalf("addr unavailable: %v", err)
 			}
 			if gotAddr != app.ServerAddr {
 				t.Errorf("addr = %q; want %q",
@@ -81,8 +81,8 @@ func TestStatus(t *testing.T) {
 
 			var gotPort int
 			if err := json.Unmarshal(
-				response["port"], &gotPort); err != nil {
-				t.Fatalf("decode port: %v", err)
+				response["serverPort"], &gotPort); err != nil {
+				t.Fatalf("port unavailable: %v", err)
 			}
 			if gotPort != app.ServerPort {
 				t.Errorf("port = %d; want %d",
@@ -127,9 +127,16 @@ func TestStatus(t *testing.T) {
 				t.Errorf("numMessages = %d; want 2",
 					gotSizes.NumMessages)
 			}
-			if gotSizes.CharsWall != len(app.WallContent) {
-				t.Errorf("charsWall = %d; want %d",
-					gotSizes.CharsWall, len(app.WallContent))
+
+			var gotWall storage.WallMeta
+			if err := json.Unmarshal(
+				response["wallMeta"], &gotWall); err != nil {
+				t.Fatalf("decode wall meta: %v", err)
+			}
+
+			if gotWall.WallChars != len(app.WallContent) {
+				t.Errorf("wallChars = %d; want %d",
+					gotWall.WallChars, len(app.WallContent))
 			}
 		})
 	}

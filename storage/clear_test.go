@@ -39,9 +39,7 @@ func TestClearMessages(t *testing.T) {
 // TestClearWall tests clearing Wall content in Storage.
 func TestClearWall(t *testing.T) {
 	s := &Storage{
-		Wall: Wall{
-			WallContent: "test wall content",
-		},
+		WallContent: "test wall content",
 	}
 	s.ClearWall()
 	if s.WallContent != "" {
@@ -61,11 +59,11 @@ func TestClearStorage(t *testing.T) {
 			{Count: 1, Data: "hello"},
 			{Count: 2, Data: "world"},
 		},
-		Wall: Wall{
-			WallContent: "test wall content",
-		},
+		WallContent: "test wall content",
 	}
+
 	s.ClearStorage()
+
 	if s.Files == nil {
 		t.Fatalf("Files is nil; want empty map")
 	}
