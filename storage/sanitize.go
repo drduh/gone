@@ -61,6 +61,10 @@ func removeInvalidChars(filename string, allowed string) string {
 // truncateName trims a filename string to max size,
 // preserving reasonably-sized original file extensions.
 func truncateName(base string, ext string, maxLength int) string {
+	if maxLength <= 0 {
+		return defaultName
+	}
+
 	ext = strings.ReplaceAll(ext, " ", "")
 	if len(ext) > maxExtLength {
 		ext = ext[:maxExtLength]
