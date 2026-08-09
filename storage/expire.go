@@ -26,14 +26,14 @@ func (f *File) SetRemainingDownloads() {
 
 // IsExpired returns a reason the File is expired,
 // or an empty string when the File isn't expired.
-func (f *File) IsExpired() string {
+func (f *File) IsExpired() ExpiryReason {
 	if f.Allow > 0 && f.Count >= f.Allow {
-		return "limit downloads"
+		return expiryDownloadLimit
 	}
 	if f.Duration > 0 && f.Lifetime() > f.Duration {
-		return "limit duration"
+		return expiryDurationLimit
 	}
-	return ""
+	return expiryNone
 }
 
 // Expire removes a File from Storage by ID.

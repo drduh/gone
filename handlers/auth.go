@@ -93,7 +93,7 @@ func isAuthenticated(app *config.App, r *http.Request) bool {
 		app.Upload:       app.Require.Upload,
 		app.UserInfo:     app.Require.UserInfo,
 		app.UserRemask:   app.Require.UserRemask,
-		app.Wall:         app.Require.Wall,
+		app.WallModify:   app.Require.Wall,
 	}
 
 	path := strings.TrimSuffix(r.Pattern, "{$}")

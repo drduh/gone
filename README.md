@@ -183,21 +183,13 @@ Get [random values](https://github.com/drduh/gone/blob/main/util/random.go) of c
 
 ```bash
 curl 127.0.0.1:8080/random/
-
 curl 127.0.0.1:8080/random/coin
-
 curl 127.0.0.1:8080/random/hex
-
 curl 127.0.0.1:8080/random/id
-
 curl 127.0.0.1:8080/random/mask
-
 curl 127.0.0.1:8080/random/name
-
 curl 127.0.0.1:8080/random/nato
-
 curl 127.0.0.1:8080/random/number
-
 curl 127.0.0.1:8080/random/pass
 ```
 
@@ -244,11 +236,8 @@ Tests and lint are validated with a [workflow](https://github.com/drduh/gone/blo
 
 ```bash
 make lint
-
 make test
-
 make test-verbose
-
 make test-race
 ```
 
@@ -266,7 +255,6 @@ On macOS, using [apple/container](https://github.com/apple/container):
 
 ```bash
 make build-container
-
 make run-container
 ```
 
@@ -274,6 +262,5 @@ Get the server IP address:
 
 ```bash
 container ls | grep gone | grep --color --text -Eo "([0-9]{1,3}\.){3}[0-9]{1,3}"
-
 curl 192.168.64.3:8080
 ```

@@ -52,7 +52,8 @@
     "rateLimit":   "req rate limit",
     "tmplExec":    "failed to exec",
     "tmplParse":   "failed parsing",
-    "uploadCount": "too many files"
+    "uploadCount": "too many files",
+    "wallLimit":   "too many chars"
   },
   "indexPage": {
     "csp":         true,
@@ -116,7 +117,7 @@
     "upload":      "/upload",
     "userInfo":    "/user/info",
     "userRemask":  "/user/remask",
-    "wall":        "/wall"
+    "wallModify":  "/wall"
   },
   "tls": {
     "fileCert":    "",

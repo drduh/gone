@@ -22,7 +22,16 @@
           <input name="name"
                  type="radio"
                 value="{{ .ID }}" required>
-          <span class="itemName">{{ .Name }}</span>
+          <span class="itemName">
+          {{ if not $.Auth.Require.Download }}
+            <a href="{{ $.Paths.Download }}{{ .ID }}"
+                rel="noopener noreferrer"
+           tabindex="-1"
+             target="_blank">{{ .Name }}</a>
+          {{ else }}
+            {{ .Name }}
+          {{ end }}
+          </span>
           <span class="itemMeta">
             {{ .Size }} &middot;
             {{ .TypeFmt }} &middot;

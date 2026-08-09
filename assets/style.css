@@ -91,9 +91,18 @@ form {
 }
 
 .itemMeta::selection,
-.itemName::selection {
+.itemName::selection,
+.wallMeta::selection {
   background-color: var(--fg-light);
   color: var(--bg-dark);
+}
+
+.wallMeta {
+  color: var(--fg-norm);
+  cursor: pointer;
+  font-family: ui-monospace, monospace;
+  font-size: 0.6em;
+  margin: 0;
 }
 
 footer {

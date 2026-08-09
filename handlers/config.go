@@ -4,6 +4,7 @@ package handlers
 
 const (
 	formFieldClear     = "clear"
+	formFieldDownload  = "download"
 	formFieldDownloads = "downloads"
 	formFieldDuration  = "duration"
 	formFieldMessage   = "message"

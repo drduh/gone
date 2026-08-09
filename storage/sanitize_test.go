@@ -21,12 +21,12 @@ func TestRemoveInvalidChars(t *testing.T) {
 		{"123-abc_ABC.txt", extraChars, "123-abc_ABC.txt"},
 		{"chars@#$name.txt", extraChars, "charsname.txt"},
 		{".golangci.yml", extraChars, ".golangci.yml"},
+		{`foo"bar.txt`, extraChars + `"`, `foo"bar.txt`},
+		{`foo"bar.txt`, extraChars, "foobar.txt"},
 		{"afile", extraChars, "afile"},
 		{".....", extraChars, "....."},
 		{"!@#$%^&()", extraChars, ""},
 		{"", extraChars, ""},
-		{`foo"bar.txt`, extraChars, "foobar.txt"},
-		{`foo"bar.txt`, extraChars + `"`, `foo"bar.txt`},
 	}
 	for _, test := range tests {
 		result := removeInvalidChars(test.input, test.allow)
@@ -57,7 +57,7 @@ func TestTruncateName(t *testing.T) {
 		{"short", ".dat", 9, "short.dat"},
 		{"example", "", 5, "examp"},
 		{"", ".zip", 5, ".zip"},
-		{"", "", 0, ""},
+		{"", "", 0, defaultName},
 	}
 	for _, test := range tests {
 		result := truncateName(test.base, test.ext, test.length)
@@ -166,6 +166,16 @@ func TestSanitizeName(t *testing.T) {
 		{`\\server\share\secret.txt`, extraChars, 20, "secret.txt"},
 		{"..%5C..%5Cetc%5Cpasswd", extraChars, 20, "passwd"},
 		{"..%255C..%255Cetc%255Cpasswd", extraChars, 20, "..5C..5Cet"},
+		{"file.txt\r\nSet-Cookie: sess=evil", extraChars, 40, "file.txtS"},
+		{"file.txt\r\nX-Injected: true", extraChars, 40, "file.txtX"},
+		{"file.txt\nLocation: https://evil.com", extraChars, 50, "evil.com"},
+		{"café-menu_2026.pdf", extraChars, 50, "caf-menu_2026.pdf"},
+		{"cafe\u0301.pdf", extraChars, 50, "cafe.pdf"},
+		{"file\xff\xfe.txt", extraChars, 50, "file.txt"},
+		{"sales_data:2024.csv", extraChars, 40, defaultName},
+		{"\u202Erun.exe", extraChars, 40, "run.exe"},
+		{"da%74a:xxx", extraChars, 40, defaultName},
+		{"DaTa:xxx", extraChars, 40, defaultName},
 		{"dir∕subdir∕file.txt", extraChars, 20, "dirsubdirfile.txt"},
 		{"dir／subdir／file.txt", extraChars, 20, "dirsubdirfile.txt"},
 		{"archive.tar.gz", extraChars, 30, "archive.tar.gz"},
@@ -186,7 +196,8 @@ func TestSanitizeName(t *testing.T) {
 		{"file%0D%0Ainjected.txt", extraChars, 30, "fileinjected.txt"},
 		{"file%09tab.txt", extraChars, 30, "filetab.txt"},
 		{"file%FF.txt", extraChars, 30, "file.txt"},
-		{"file.txt", extraChars, 0, ""},
+		{"file.txt", extraChars, -1, defaultName},
+		{"file.txt", extraChars, 0, defaultName},
 		{"file.txt", extraChars, 1, "."},
 		{"file.txt", extraChars, 4, ".txt"},
 		{"file.txt", extraChars, 5, "f.txt"},

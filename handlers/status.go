@@ -33,6 +33,7 @@ func Status(app *config.App) http.HandlerFunc {
 			Default:    app.Default,
 			Limit:      app.Limit,
 			Sizes:      app.Sizes,
+			WallMeta:   app.WallMeta,
 		}
 
 		app.Log.Info("serving status",

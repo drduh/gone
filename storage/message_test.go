@@ -6,7 +6,7 @@ import (
 )
 
 // TestMessageParts tests Message data is split into
-// plain-text and URL parts.
+// plain-text and valid URL parts.
 func TestMessageParts(t *testing.T) {
 	tests := []struct {
 		name string
@@ -233,6 +233,18 @@ func TestMessageParts(t *testing.T) {
 			},
 		},
 		{
+			name: "mixed case scheme and hostname",
+			data: "visit htTp://exAmple.Com/Some/Path?Key=Value",
+			want: []MessageParts{
+				{Text: "visit "},
+				{
+					Text:   "htTp://exAmple.Com/Some/Path?Key=Value",
+					URL:    "htTp://exAmple.Com/Some/Path?Key=Value",
+					HasURL: true,
+				},
+			},
+		},
+		{
 			name: "with port number",
 			data: "https://example.com:8080/path",
 			want: []MessageParts{
@@ -281,7 +293,8 @@ func TestMessageParts(t *testing.T) {
 			data: "https://en.wikipedia.org/wiki/Go_(programming_language)",
 			want: []MessageParts{
 				{Text: "https://en.wikipedia.org/wiki/Go_(programming_language)",
-					URL: "https://en.wikipedia.org/wiki/Go_(programming_language)", HasURL: true},
+					URL:    "https://en.wikipedia.org/wiki/Go_(programming_language)",
+					HasURL: true},
 			},
 		},
 		{
@@ -290,7 +303,8 @@ func TestMessageParts(t *testing.T) {
 			want: []MessageParts{
 				{Text: "(see "},
 				{Text: "https://en.wikipedia.org/wiki/Go_(programming_language)",
-					URL: "https://en.wikipedia.org/wiki/Go_(programming_language)", HasURL: true},
+					URL:    "https://en.wikipedia.org/wiki/Go_(programming_language)",
+					HasURL: true},
 				{Text: ")"},
 			},
 		},
@@ -306,6 +320,54 @@ func TestMessageParts(t *testing.T) {
 			data: "",
 			want: []MessageParts{
 				{Text: ""},
+			},
+		},
+		{
+			name: "unicode hostname separator",
+			data: "visit https://example。com/docs",
+			want: []MessageParts{
+				{Text: "visit "},
+				{
+					Text: "https://example",
+					URL:  "https://example", HasURL: true,
+				},
+				{Text: "。com/docs"},
+			},
+		},
+		{
+			name: "backslash in url",
+			data: "visit https://example.com\\docs\\getting-started",
+			want: []MessageParts{
+				{Text: "visit "},
+				{
+					Text: "https://example.com",
+					URL:  "https://example.com", HasURL: true,
+				},
+				{Text: "\\docs\\getting-started"},
+			},
+		},
+		{
+			name: "numeric hostname",
+			data: "http://2130706433/admin",
+			want: []MessageParts{
+				{
+					Text: "http://2130706433/admin",
+					URL:  "http://2130706433/admin", HasURL: true,
+				},
+			},
+		},
+		{
+			name: "out of range port",
+			data: "broken https://example.com:99999/path link",
+			want: []MessageParts{
+				{Text: "broken https://example.com:99999/path link"},
+			},
+		},
+		{
+			name: "invalid port",
+			data: "broken http://example.com:0/ link",
+			want: []MessageParts{
+				{Text: "broken http://example.com:0/ link"},
 			},
 		},
 	}

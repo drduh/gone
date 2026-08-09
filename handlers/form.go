@@ -11,6 +11,16 @@ import (
 
 // parseFormInt reads an integer form value or returns the default.
 func parseFormInt(r *http.Request, field string, def, maximum int) int {
+	if maximum <= 0 {
+		return 0
+	}
+	if def < 0 {
+		def = 0
+	}
+	if def > maximum {
+		def = maximum
+	}
+
 	input := strings.TrimSpace(r.FormValue(field))
 	if input == "" {
 		return def

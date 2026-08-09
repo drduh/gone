@@ -84,40 +84,40 @@ func TestCountWall(t *testing.T) {
 	var s Storage
 
 	s.CountWall()
-	if s.CharsWall != 0 {
-		t.Fatalf("CharsWall = %d; want 0", s.CharsWall)
+	if s.WallChars != 0 {
+		t.Fatalf("WallChars = %d; want 0", s.WallChars)
 	}
-	if s.LinesWall != 0 {
-		t.Fatalf("LinesWall = %d; want 0", s.LinesWall)
+	if s.WallLines != 0 {
+		t.Fatalf("WallLines = %d; want 0", s.WallLines)
 	}
 
 	s.WallContent = "test"
 
 	s.CountWall()
-	if s.CharsWall != 4 {
-		t.Fatalf("CharsWall = %d; want 4", s.CharsWall)
+	if s.WallChars != 4 {
+		t.Fatalf("WallChars = %d; want 4", s.WallChars)
 	}
-	if s.LinesWall != 1 {
-		t.Fatalf("LinesWall = %d; want 1", s.LinesWall)
+	if s.WallLines != 1 {
+		t.Fatalf("WallLines = %d; want 1", s.WallLines)
 	}
 
 	s.WallContent = "test\r\nwall"
 
 	s.CountWall()
-	if s.CharsWall != 10 {
-		t.Fatalf("CharsWall = %d; want 10", s.CharsWall)
+	if s.WallChars != 10 {
+		t.Fatalf("WallChars = %d; want 10", s.WallChars)
 	}
-	if s.LinesWall != 2 {
-		t.Fatalf("LinesWall = %d; want 2", s.LinesWall)
+	if s.WallLines != 2 {
+		t.Fatalf("WallLines = %d; want 2", s.WallLines)
 	}
 
 	s.WallContent = ""
 
 	s.CountWall()
-	if s.CharsWall != 0 {
-		t.Fatalf("CharsWall = %d; want 0", s.CharsWall)
+	if s.WallChars != 0 {
+		t.Fatalf("WallChars = %d; want 0", s.WallChars)
 	}
-	if s.LinesWall != 0 {
-		t.Fatalf("LinesWall = %d; want 0", s.LinesWall)
+	if s.WallLines != 0 {
+		t.Fatalf("WallLines = %d; want 0", s.WallLines)
 	}
 }

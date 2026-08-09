@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"net/http"
+	"time"
 
 	"github.com/drduh/gone/config"
 )
@@ -16,39 +17,58 @@ func Wall(app *config.App) http.HandlerFunc {
 
 		app.CountWall()
 
-		if r.Method == http.MethodPost {
-			if r.FormValue(formFieldClear) != "" {
-				app.Log.Debug("clearing wall",
-					"length", app.CharsWall,
-					"user", req)
-				app.ClearWall()
-				app.Log.Info("cleared wall",
-					"user", req)
-			}
+		if r.Method != http.MethodPost {
+			writeJSON(w, http.StatusOK, app.WallContent)
+			return
+		}
 
-			formContent := r.FormValue(formFieldWall)
-			if formContent != "" {
-				app.Log.Debug("updating wall",
-					"length", len(formContent),
-					"user", req)
-				app.WallContent = formContent
-				app.Log.Info("updated wall",
-					"length", len(formContent),
-					"user", req)
-			}
+		if r.PostFormValue(formFieldClear) != "" {
+			app.Log.Debug("clearing wall",
+				"length", app.WallChars,
+				"user", req)
+			app.ClearWall()
+			app.Log.Info("cleared wall",
+				"user", req)
+		}
 
-			formContent = r.FormValue("download")
-			if formContent == "wall" {
-				app.ServeWall(w)
-				app.Log.Info("downloaded wall",
+		formContent := r.PostFormValue(formFieldWall)
+		if formContent != "" {
+			length := charCount(formContent)
+			if length > app.WallLimits.LengthChars {
+				writeJSON(w, http.StatusBadRequest,
+					errorJSON(app.WallLimit))
+				app.Log.Error(app.WallLimit,
+					"limit", app.WallLimits.LengthChars,
+					"length", length,
 					"user", req)
 				return
 			}
 
-			if req.IsBrowser {
-				toPath(w, r, app.Root)
-				return
-			}
+			now := time.Now()
+			app.WallModifiedTime = now
+			app.WallModifiedTimeFmt = now.Format(app.TimeFormat)
+			app.WallModifiedUser = req.AddressMask
+
+			app.Log.Debug("updating wall",
+				"length", length,
+				"user", req)
+			app.WallContent = formContent
+			app.CountWall()
+			app.Log.Info("updated wall",
+				"length", length,
+				"user", req)
+		}
+
+		if r.PostFormValue(formFieldDownload) == formFieldWall {
+			app.ServeWall(w)
+			app.Log.Info("downloaded wall",
+				"user", req)
+			return
+		}
+
+		if req.IsBrowser {
+			toPath(w, r, app.Root)
+			return
 		}
 
 		writeJSON(w, http.StatusOK, app.WallContent)
