@@ -13,16 +13,8 @@ func TestDownloadServe(t *testing.T) {
 
 	req := httptest.NewRequestWithContext(t.Context(),
 		http.MethodGet, app.Download+"?name=file1", nil)
-	req.RemoteAddr = testAddrAndPort
-
-	rr := httptest.NewRecorder()
-	mux := newTestMux(app)
-	mux.ServeHTTP(rr, req)
-
-	if rr.Code != http.StatusOK {
-		t.Fatalf("expected %d, got %d",
-			http.StatusOK, rr.Code)
-	}
+	rr := serveRequest(t, app, req)
+	assertStatus(t, rr, http.StatusOK)
 }
 
 // TestDownloadMissingFilename tests requests
@@ -33,16 +25,8 @@ func TestDownloadMissingFilename(t *testing.T) {
 
 	req := httptest.NewRequestWithContext(t.Context(),
 		http.MethodGet, app.Download, nil)
-	req.RemoteAddr = testAddrAndPort
-
-	rr := httptest.NewRecorder()
-	mux := newTestMux(app)
-	mux.ServeHTTP(rr, req)
-
-	if rr.Code != http.StatusNotFound {
-		t.Fatalf("expected %d, got %d",
-			http.StatusNotFound, rr.Code)
-	}
+	rr := serveRequest(t, app, req)
+	assertStatus(t, rr, http.StatusNotFound)
 }
 
 // TestDownloadFileNotFound tests requests to
@@ -53,16 +37,8 @@ func TestDownloadFileNotFound(t *testing.T) {
 
 	req := httptest.NewRequestWithContext(t.Context(),
 		http.MethodGet, app.Download+"?name=none.txt", nil)
-	req.RemoteAddr = testAddrAndPort
-
-	rr := httptest.NewRecorder()
-	mux := newTestMux(app)
-	mux.ServeHTTP(rr, req)
-
-	if rr.Code != http.StatusNotFound {
-		t.Fatalf("expected %d, got %d",
-			http.StatusNotFound, rr.Code)
-	}
+	rr := serveRequest(t, app, req)
+	assertStatus(t, rr, http.StatusNotFound)
 }
 
 // TestDownloadDeny tests denied requests to
@@ -74,6 +50,5 @@ func TestDownloadDeny(t *testing.T) {
 	req := httptest.NewRequestWithContext(t.Context(),
 		http.MethodGet, app.Download, nil)
 	rr := serveDeniedRequest(t, app, req)
-
 	assertDenied(t, rr, app.Deny)
 }

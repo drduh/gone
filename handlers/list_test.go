@@ -33,16 +33,9 @@ func TestList(t *testing.T) {
 
 	req := httptest.NewRequestWithContext(t.Context(),
 		http.MethodGet, app.List, nil)
-	req.RemoteAddr = testAddrAndPort
+	rr := serveRequest(t, app, req)
+	assertStatus(t, rr, http.StatusOK)
 
-	rr := httptest.NewRecorder()
-	mux := newTestMux(app)
-	mux.ServeHTTP(rr, req)
-
-	if rr.Code != http.StatusOK {
-		t.Fatalf("expected %d, got %d",
-			http.StatusOK, rr.Code)
-	}
 	ct := rr.Header().Get("Content-Type")
 	if ct != "application/json; charset=utf-8" {
 		t.Fatalf("unexpected Content-Type: %q", ct)
@@ -94,6 +87,5 @@ func TestListDeny(t *testing.T) {
 	req := httptest.NewRequestWithContext(t.Context(),
 		http.MethodGet, app.List, nil)
 	rr := serveDeniedRequest(t, app, req)
-
 	assertDenied(t, rr, app.Deny)
 }

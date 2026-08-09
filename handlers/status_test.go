@@ -37,15 +37,8 @@ func TestStatus(t *testing.T) {
 
 			req := httptest.NewRequestWithContext(
 				t.Context(), http.MethodGet, app.Status, nil)
-			req.RemoteAddr = testAddrAndPort
-
-			rr := httptest.NewRecorder()
-			newTestMux(app).ServeHTTP(rr, req)
-
-			if rr.Code != http.StatusOK {
-				t.Fatalf("status = %d; want %d",
-					rr.Code, http.StatusOK)
-			}
+			rr := serveRequest(t, app, req)
+			assertStatus(t, rr, http.StatusOK)
 
 			if got := rr.Header().Get("Content-Type"); got !=
 				"application/json; charset=utf-8" {
@@ -150,6 +143,5 @@ func TestStatusDeny(t *testing.T) {
 	req := httptest.NewRequestWithContext(t.Context(),
 		http.MethodGet, app.Status, nil)
 	rr := serveDeniedRequest(t, app, req)
-
 	assertDenied(t, rr, app.Deny)
 }

@@ -19,19 +19,13 @@ func TestMessageAdd(t *testing.T) {
 
 	form := url.Values{}
 	form.Set(formFieldMessage, testContentMsgs)
+
 	req := httptest.NewRequestWithContext(t.Context(),
 		http.MethodPost, app.MessageAdd,
 		strings.NewReader(form.Encode()))
 	req.Header.Set("Content-Type", formContentType)
-
-	rr := httptest.NewRecorder()
-	mux := newTestMux(app)
-	mux.ServeHTTP(rr, req)
-
-	if rr.Code != http.StatusOK {
-		t.Fatalf("expected %d, got %d",
-			http.StatusOK, rr.Code)
-	}
+	rr := serveRequest(t, app, req)
+	assertStatus(t, rr, http.StatusOK)
 
 	if len(app.Messages) != 1 {
 		t.Fatalf("expected 1 message, got %d",
@@ -57,19 +51,13 @@ func TestMessageExceedLength(t *testing.T) {
 
 	form := url.Values{}
 	form.Set(formFieldMessage, strings.Repeat("a", 1000))
+
 	req := httptest.NewRequestWithContext(t.Context(),
 		http.MethodPost, app.MessageAdd,
 		strings.NewReader(form.Encode()))
 	req.Header.Set("Content-Type", formContentType)
-
-	rr := httptest.NewRecorder()
-	mux := newTestMux(app)
-	mux.ServeHTTP(rr, req)
-
-	if rr.Code != http.StatusBadRequest {
-		t.Fatalf("expected %d, got %d",
-			http.StatusBadRequest, rr.Code)
-	}
+	rr := serveRequest(t, app, req)
+	assertStatus(t, rr, http.StatusBadRequest)
 
 	want := `{"error":"` + app.MsgLength + `"}` + "\n"
 	if rr.Body.String() != want {
@@ -88,35 +76,23 @@ func TestMessageExceedCount(t *testing.T) {
 
 	for i := range app.MessageLimits.MaxCount {
 		form.Set(formFieldMessage, fmt.Sprintf("msg %d", i+1))
+
 		req := httptest.NewRequestWithContext(t.Context(),
 			http.MethodPost, app.MessageAdd,
 			strings.NewReader(form.Encode()))
 		req.Header.Set("Content-Type", formContentType)
-
-		rr := httptest.NewRecorder()
-		mux := newTestMux(app)
-		mux.ServeHTTP(rr, req)
-
-		if rr.Code != http.StatusOK {
-			t.Fatalf("expected %d, got %d",
-				http.StatusOK, rr.Code)
-		}
+		rr := serveRequest(t, app, req)
+		assertStatus(t, rr, http.StatusOK)
 	}
 
 	form.Set(formFieldMessage, testContentMsgs)
+
 	req := httptest.NewRequestWithContext(t.Context(),
 		http.MethodPost, app.MessageAdd,
 		strings.NewReader(form.Encode()))
 	req.Header.Set("Content-Type", formContentType)
-
-	rr := httptest.NewRecorder()
-	mux := newTestMux(app)
-	mux.ServeHTTP(rr, req)
-
-	if rr.Code != http.StatusBadRequest {
-		t.Fatalf("expected %d, got %d",
-			http.StatusBadRequest, rr.Code)
-	}
+	rr := serveRequest(t, app, req)
+	assertStatus(t, rr, http.StatusBadRequest)
 
 	want := `{"error":"` + app.MsgCount + `"}` + "\n"
 	if rr.Body.String() != want {
@@ -141,9 +117,7 @@ func TestMessageDeny(t *testing.T) {
 		http.MethodPost, app.MessageAdd,
 		strings.NewReader(form.Encode()))
 	req.Header.Set("Content-Type", formContentType)
-
 	rr := serveDeniedRequest(t, app, req)
-
 	assertDenied(t, rr, app.Deny)
 
 	if got := len(app.Messages); got != 1 {
@@ -167,16 +141,8 @@ func TestMessageClear(t *testing.T) {
 
 	req := httptest.NewRequestWithContext(t.Context(),
 		http.MethodPost, app.MessageClear, nil)
-
-	rr := httptest.NewRecorder()
-	mux := newTestMux(app)
-	mux.ServeHTTP(rr, req)
-
-	if rr.Code != http.StatusOK {
-		t.Fatalf("expected %d, got %d",
-			http.StatusOK, rr.Code)
-	}
-
+	rr := serveRequest(t, app, req)
+	assertStatus(t, rr, http.StatusOK)
 	assertMessagesClear(t, app)
 }
 
@@ -186,16 +152,10 @@ func TestMessageDownloadAll(t *testing.T) {
 	app.Require.Message = false
 
 	req := httptest.NewRequestWithContext(t.Context(),
-		http.MethodPost, app.Message+"?download=allMessages", nil)
-
-	rr := httptest.NewRecorder()
-	mux := newTestMux(app)
-	mux.ServeHTTP(rr, req)
-
-	if rr.Code != http.StatusOK {
-		t.Errorf("expected %d, got %d",
-			http.StatusOK, rr.Code)
-	}
+		http.MethodPost,
+		app.Message+"?download=allMessages", nil)
+	rr := serveRequest(t, app, req)
+	assertStatus(t, rr, http.StatusOK)
 
 	disp := rr.Header().Get("Content-Disposition")
 	if disp != `attachment; filename="messages.txt"` {
@@ -225,15 +185,8 @@ func TestMessageBrowser(t *testing.T) {
 		strings.NewReader(form.Encode()))
 	req.Header.Set("Content-Type", formContentType)
 	req.Header.Set("Accept", "text/html")
-
-	rr := httptest.NewRecorder()
-	mux := newTestMux(app)
-	mux.ServeHTTP(rr, req)
-
-	if rr.Code != http.StatusSeeOther {
-		t.Fatalf("expected %d, got %d",
-			http.StatusSeeOther, rr.Code)
-	}
+	rr := serveRequest(t, app, req)
+	assertStatus(t, rr, http.StatusSeeOther)
 
 	if got := rr.Header().Get("Location"); got != app.Root {
 		t.Fatalf("expected redirect to %q, got %q",
@@ -254,19 +207,13 @@ func TestMessageSpaces(t *testing.T) {
 	form := url.Values{}
 	form.Set(formFieldMessage,
 		fmt.Sprintf("  \n\t %s \r\n ", testContentMsgs))
+
 	req := httptest.NewRequestWithContext(t.Context(),
 		http.MethodPost, app.MessageAdd,
 		strings.NewReader(form.Encode()))
 	req.Header.Set("Content-Type", formContentType)
-
-	rr := httptest.NewRecorder()
-	mux := newTestMux(app)
-	mux.ServeHTTP(rr, req)
-
-	if rr.Code != http.StatusOK {
-		t.Fatalf("expected %d, got %d",
-			http.StatusOK, rr.Code)
-	}
+	rr := serveRequest(t, app, req)
+	assertStatus(t, rr, http.StatusOK)
 
 	if got := len(app.Messages); got != 1 {
 		t.Fatalf("expected 1 message, got %d", got)
@@ -290,19 +237,13 @@ func TestMessageSpacesOnly(t *testing.T) {
 
 	form := url.Values{}
 	form.Set(formFieldMessage, "   \n\t  ")
+
 	req := httptest.NewRequestWithContext(t.Context(),
 		http.MethodPost, app.MessageAdd,
 		strings.NewReader(form.Encode()))
 	req.Header.Set("Content-Type", formContentType)
-
-	rr := httptest.NewRecorder()
-	mux := newTestMux(app)
-	mux.ServeHTTP(rr, req)
-
-	if rr.Code != http.StatusOK {
-		t.Fatalf("expected %d, got %d",
-			http.StatusOK, rr.Code)
-	}
+	rr := serveRequest(t, app, req)
+	assertStatus(t, rr, http.StatusOK)
 
 	if got := len(app.Messages); got != 0 {
 		t.Fatalf("expected 0 messages, got %d", got)

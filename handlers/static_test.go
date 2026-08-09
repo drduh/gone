@@ -16,16 +16,8 @@ func TestStatic(t *testing.T) {
 
 	req := httptest.NewRequestWithContext(t.Context(),
 		http.MethodGet, app.Static, nil)
-	req.RemoteAddr = testAddrAndPort
-
-	rr := httptest.NewRecorder()
-	mux := newTestMux(app)
-	mux.ServeHTTP(rr, req)
-
-	if rr.Code != http.StatusOK {
-		t.Fatalf("expected %d, got %d",
-			http.StatusOK, rr.Code)
-	}
+	rr := serveRequest(t, app, req)
+	assertStatus(t, rr, http.StatusOK)
 
 	if got := rr.Header().Get("Content-Type"); got !=
 		"application/json; charset=utf-8" {
@@ -51,6 +43,5 @@ func TestStaticDeny(t *testing.T) {
 	req := httptest.NewRequestWithContext(t.Context(),
 		http.MethodGet, app.Static, nil)
 	rr := serveDeniedRequest(t, app, req)
-
 	assertDenied(t, rr, app.Deny)
 }

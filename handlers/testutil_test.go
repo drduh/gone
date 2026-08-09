@@ -75,12 +75,27 @@ func newTestAppWithStorage() *config.App {
 	return app
 }
 
-// serveDeniedRequest helps serve requests to deny,
-// by setting tarpit duration to 0.
+// serveRequest serves req through the app handler mux.
+func serveRequest(
+	t *testing.T,
+	app *config.App,
+	req *http.Request,
+) *httptest.ResponseRecorder {
+	t.Helper()
+
+	rr := httptest.NewRecorder()
+	newTestMux(app).ServeHTTP(rr, req)
+
+	return rr
+}
+
+
+// serveDeniedRequest serves a request expected to be denied.
 func serveDeniedRequest(
 	t *testing.T,
 	app *config.App,
-	req *http.Request) *httptest.ResponseRecorder {
+	req *http.Request,
+) *httptest.ResponseRecorder {
 	t.Helper()
 
 	auth.SetTarpit(0)
@@ -89,11 +104,7 @@ func serveDeniedRequest(
 		req.RemoteAddr = testAddrAndPort
 	}
 
-	rr := httptest.NewRecorder()
-	mux := newTestMux(app)
-	mux.ServeHTTP(rr, req)
-
-	return rr
+	return serveRequest(t, app, req)
 }
 
 // assertDenied tests request denial.
@@ -117,6 +128,19 @@ func assertDenied(
 	if got := body["error"]; got != want {
 		t.Fatalf("expected error %q, got %q",
 			want, got)
+	}
+}
+
+// assertStatus checks the response status code.
+func assertStatus(
+	t *testing.T,
+	rr *httptest.ResponseRecorder,
+	want int,
+) {
+	t.Helper()
+
+	if got := rr.Code; got != want {
+		t.Fatalf("status = %d; want %d",got, want)
 	}
 }
 

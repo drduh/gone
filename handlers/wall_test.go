@@ -17,15 +17,8 @@ func TestWallGet(t *testing.T) {
 
 	req := httptest.NewRequestWithContext(t.Context(),
 		http.MethodGet, app.WallModify, nil)
-	req.RemoteAddr = testAddrAndPort
-
-	rr := httptest.NewRecorder()
-	newTestMux(app).ServeHTTP(rr, req)
-
-	if rr.Code != http.StatusOK {
-		t.Fatalf("expected %d, got %d",
-			http.StatusOK, rr.Code)
-	}
+	rr := serveRequest(t, app, req)
+	assertStatus(t, rr, http.StatusOK)
 
 	var got string
 	if err := json.NewDecoder(
@@ -49,15 +42,8 @@ func TestWallPostUpdate(t *testing.T) {
 		http.MethodPost, app.WallModify,
 		strings.NewReader(values))
 	req.Header.Set("Content-Type", formContentType)
-	req.RemoteAddr = testAddrAndPort
-
-	rr := httptest.NewRecorder()
-	newTestMux(app).ServeHTTP(rr, req)
-
-	if rr.Code != http.StatusOK {
-		t.Fatalf("expected %d, got %d",
-			http.StatusOK, rr.Code)
-	}
+	rr := serveRequest(t, app, req)
+	assertStatus(t, rr, http.StatusOK)
 
 	var got string
 	if err := json.NewDecoder(
@@ -81,15 +67,8 @@ func TestWallPostClear(t *testing.T) {
 		http.MethodPost, app.WallModify,
 		strings.NewReader(values))
 	req.Header.Set("Content-Type", formContentType)
-	req.RemoteAddr = testAddrAndPort
-
-	rr := httptest.NewRecorder()
-	newTestMux(app).ServeHTTP(rr, req)
-
-	if rr.Code != http.StatusOK {
-		t.Fatalf("expected %d, got %d",
-			http.StatusOK, rr.Code)
-	}
+	rr := serveRequest(t, app, req)
+	assertStatus(t, rr, http.StatusOK)
 
 	var got string
 	if err := json.NewDecoder(
@@ -112,22 +91,13 @@ func TestWallPostDownload(t *testing.T) {
 	form := url.Values{}
 	form.Set(formFieldDownload, formFieldWall)
 
-	req := httptest.NewRequestWithContext(
-		t.Context(),
-		http.MethodPost,
-		app.WallModify,
+	req := httptest.NewRequestWithContext(t.Context(),
+		http.MethodPost, app.WallModify,
 		strings.NewReader(form.Encode()),
 	)
 	req.Header.Set("Content-Type", formContentType)
-	req.RemoteAddr = testAddrAndPort
-
-	rr := httptest.NewRecorder()
-	newTestMux(app).ServeHTTP(rr, req)
-
-	if rr.Code != http.StatusOK {
-		t.Fatalf("expected %d, got %d",
-			http.StatusOK, rr.Code)
-	}
+	rr := serveRequest(t, app, req)
+	assertStatus(t, rr, http.StatusOK)
 
 	got := rr.Header().Get("Content-Disposition")
 	want := `attachment; filename="wall.txt"`
@@ -153,7 +123,6 @@ func TestWallDeny(t *testing.T) {
 		strings.NewReader("wall=new content"))
 	req.Header.Set("Content-Type", formContentType)
 	rr := serveDeniedRequest(t, app, req)
-
 	assertDenied(t, rr, app.Deny)
 
 	if app.WallContent != testContentWall {
