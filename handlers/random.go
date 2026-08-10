@@ -24,10 +24,7 @@ func Random(app *config.App) http.HandlerFunc {
 			response[i] = util.GetRandom(path)
 		}
 
-		app.Log.Info("serving random",
-			"count", count,
-			"path", path,
-			"user", req)
+		app.Log.Info("serving random", "user", req)
 
 		if req.IsBrowser {
 			renderIndex(app, w, r, req, path, response)
