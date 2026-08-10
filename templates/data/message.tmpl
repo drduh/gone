@@ -58,6 +58,11 @@
           {{- end }}
           {{ .Time.UploadTimeFmt }} &middot;
           {{ .Owner.Mask }}
+          {{- if not $.Auth.Require.MessageDelete }}
+          &middot;
+          <a class="link-bold"
+              href="{{ $.Paths.Message }}/delete/{{ .Count }}">&#10006;</a>
+          {{ end }}
         </span>
       </label>
     {{- end }}

@@ -89,7 +89,6 @@ func serveRequest(
 	return rr
 }
 
-
 // serveDeniedRequest serves a request expected to be denied.
 func serveDeniedRequest(
 	t *testing.T,
@@ -140,7 +139,7 @@ func assertStatus(
 	t.Helper()
 
 	if got := rr.Code; got != want {
-		t.Fatalf("status = %d; want %d",got, want)
+		t.Fatalf("status = %d; want %d", got, want)
 	}
 }
 
