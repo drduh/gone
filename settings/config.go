@@ -90,6 +90,9 @@ type Auth struct {
 		// Clear text messages
 		MessageClear bool `json:"msgClear,omitempty"`
 
+		// Delete a text message
+		MessageDelete bool `json:"msgDelete,omitempty"`
+
 		// Get text message with metadata
 		MessageGet bool `json:"msgGet,omitempty"`
 
@@ -318,6 +321,9 @@ type Paths struct {
 
 	// Message clear ("/msg/clear")
 	MessageClear string `json:"msgClear,omitempty"`
+
+	// Message delete ("/msg/delete/{count}")
+	MessageDelete string `json:"msgDelete,omitempty"`
 
 	// Message get by count ("/msg/{count}")
 	MessageGet string `json:"msgGet,omitempty"`

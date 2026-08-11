@@ -36,7 +36,7 @@ func Message(app *config.App) http.HandlerFunc {
 		}
 
 		response := app.Messages
-		app.Log.Info("serving message(s)",
+		app.Log.Info("serving messages",
 			"count", len(response),
 			"user", req)
 
@@ -133,7 +133,7 @@ func MessageClear(app *config.App) http.HandlerFunc {
 			return
 		}
 
-		writeJSON(w, http.StatusOK, "message(s) cleared")
+		writeJSON(w, http.StatusOK, "messages cleared")
 	}
 }
 
@@ -163,6 +163,56 @@ func MessageGet(app *config.App) http.HandlerFunc {
 				writeJSON(w, http.StatusOK, msg)
 				return
 			}
+		}
+
+		writeJSON(w, http.StatusNotFound,
+			errorJSON(app.MsgNotFound))
+	}
+}
+
+// MessageDelete handles requests to delete a Message by Count.
+func MessageDelete(app *config.App) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		req := AuthRequest(w, r, app)
+		if req == nil {
+			return
+		}
+
+		countStr := r.PathValue("count")
+		count, err := strconv.Atoi(countStr)
+		if err != nil || count < 1 {
+			writeJSON(w, http.StatusBadRequest,
+				errorJSON(app.MsgNotFound))
+			return
+		}
+
+		app.CountMessages()
+
+		for i, msg := range app.Messages {
+			if msg.Count != count {
+				continue
+			}
+
+			app.Messages = append(
+				app.Messages[:i], app.Messages[i+1:]...)
+
+			for i, remaining := range app.Messages {
+				remaining.Count = i + 1
+			}
+
+			app.CountMessages()
+
+			app.Log.Info("deleted message",
+				"count", count,
+				"user", req)
+
+			if req.IsBrowser {
+				toPath(w, r, app.Root)
+				return
+			}
+
+			writeJSON(w, http.StatusOK, "message deleted")
+			return
 		}
 
 		writeJSON(w, http.StatusNotFound,

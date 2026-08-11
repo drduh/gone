@@ -13,17 +13,9 @@ func TestClearBrowser(t *testing.T) {
 
 	req := httptest.NewRequestWithContext(t.Context(),
 		http.MethodPost, app.Clear, nil)
-	req.RemoteAddr = testAddrAndPort
 	req.Header.Set("Accept", "text/html")
-
-	rr := httptest.NewRecorder()
-	mux := newTestMux(app)
-	mux.ServeHTTP(rr, req)
-
-	if rr.Code != http.StatusSeeOther {
-		t.Fatalf("expected %d, got %d",
-			http.StatusSeeOther, rr.Code)
-	}
+	rr := serveRequest(t, app, req)
+	assertStatus(t, rr, http.StatusSeeOther)
 
 	if got := rr.Header().Get("Location"); got != app.Root {
 		t.Fatalf("Location = %q; want %q", got, app.Root)
@@ -39,17 +31,9 @@ func TestClearJSON(t *testing.T) {
 
 	req := httptest.NewRequestWithContext(t.Context(),
 		http.MethodPost, app.Clear, nil)
-	req.RemoteAddr = testAddrAndPort
 	req.Header.Set("Accept", "application/json")
-
-	rr := httptest.NewRecorder()
-	mux := newTestMux(app)
-	mux.ServeHTTP(rr, req)
-
-	if rr.Code != http.StatusOK {
-		t.Fatalf("expected %d, got %d",
-			http.StatusSeeOther, rr.Code)
-	}
+	rr := serveRequest(t, app, req)
+	assertStatus(t, rr, http.StatusOK)
 
 	want := "\"storage cleared\"\n"
 	if got := rr.Body.String(); got != want {
@@ -70,7 +54,6 @@ func TestClearDeny(t *testing.T) {
 	req := httptest.NewRequestWithContext(t.Context(),
 		http.MethodPost, app.Clear, nil)
 	rr := serveDeniedRequest(t, app, req)
-
 	assertDenied(t, rr, app.Deny)
 
 	if len(app.Files) != countFiles {

@@ -21,15 +21,8 @@ func TestUploadFileTooLarge(t *testing.T) {
 	req := httptest.NewRequestWithContext(t.Context(),
 		http.MethodPost, app.Upload, reqBody)
 	req.ContentLength = (app.FileLimits.SizeEachMb << 20) + 1
-
-	rr := httptest.NewRecorder()
-	mux := newTestMux(app)
-	mux.ServeHTTP(rr, req)
-
-	if rr.Code != http.StatusRequestEntityTooLarge {
-		t.Fatalf("expected %d, got %d",
-			http.StatusRequestEntityTooLarge, rr.Code)
-	}
+	rr := serveRequest(t, app, req)
+	assertStatus(t, rr, http.StatusRequestEntityTooLarge)
 
 	var resp map[string]string
 	if err := json.Unmarshal(
@@ -58,15 +51,8 @@ func TestUploadNoFile(t *testing.T) {
 		http.MethodPost, app.Upload, &b)
 	req.Header.Set("Content-Type",
 		mw.FormDataContentType())
-
-	rr := httptest.NewRecorder()
-	mux := newTestMux(app)
-	mux.ServeHTTP(rr, req)
-
-	if rr.Code != http.StatusBadRequest {
-		t.Fatalf("expected %d, got %d",
-			http.StatusBadRequest, rr.Code)
-	}
+	rr := serveRequest(t, app, req)
+	assertStatus(t, rr, http.StatusBadRequest)
 
 	var resp map[string]string
 	if err := json.Unmarshal(
@@ -102,15 +88,8 @@ func TestUploadSuccess(t *testing.T) {
 		http.MethodPost, app.Upload, &b)
 	req.Header.Set("Content-Type",
 		mw.FormDataContentType())
-
-	rr := httptest.NewRecorder()
-	mux := newTestMux(app)
-	mux.ServeHTTP(rr, req)
-
-	if rr.Code != http.StatusOK {
-		t.Fatalf("expected %d, got %d",
-			http.StatusOK, rr.Code)
-	}
+	rr := serveRequest(t, app, req)
+	assertStatus(t, rr, http.StatusOK)
 
 	var uploads []storage.File
 	if err := json.Unmarshal(
@@ -150,7 +129,6 @@ func TestUploadDeny(t *testing.T) {
 	req := httptest.NewRequestWithContext(t.Context(),
 		http.MethodPost, app.Upload, reqBody)
 	rr := serveDeniedRequest(t, app, req)
-
 	assertDenied(t, rr, app.Deny)
 
 	if len(app.Files) != 0 {

@@ -17,7 +17,6 @@ func TestUserInfoForbidden(t *testing.T) {
 	req := httptest.NewRequestWithContext(t.Context(),
 		http.MethodGet, app.UserInfo, nil)
 	rr := serveDeniedRequest(t, app, req)
-
 	assertDenied(t, rr, app.Deny)
 }
 
@@ -31,15 +30,8 @@ func TestUserInfoJSON(t *testing.T) {
 	req.RemoteAddr = testAddrAndPort
 	req.Header.Set("Accept", "application/json")
 	req.Header.Set("User-Agent", testUserAgent)
-
-	rr := httptest.NewRecorder()
-	mux := newTestMux(app)
-	mux.ServeHTTP(rr, req)
-
-	if rr.Code != http.StatusOK {
-		t.Fatalf("expected %d, got %d",
-			http.StatusOK, rr.Code)
-	}
+	rr := serveRequest(t, app, req)
+	assertStatus(t, rr, http.StatusOK)
 
 	var got templates.User
 	if err := json.NewDecoder(

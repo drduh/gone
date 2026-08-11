@@ -17,7 +17,6 @@ func TestIndexDeny(t *testing.T) {
 	req := httptest.NewRequestWithContext(t.Context(),
 		http.MethodGet, app.Root, nil)
 	rr := serveDeniedRequest(t, app, req)
-
 	assertDenied(t, rr, app.Deny)
 }
 
@@ -29,29 +28,15 @@ func TestIndexMessageEscape(t *testing.T) {
 	app.Messages = append(app.Messages, &storage.Message{
 		Count: 1,
 		Data:  `<script>alert("xss")</script> https://example.com`,
-		Owner: storage.Owner{
-			Mask: testAddrAndPort,
-		},
-		Time: storage.Time{
-			UploadTimeFmt: "now",
-		},
 	})
 
 	req := httptest.NewRequestWithContext(t.Context(),
 		http.MethodGet, app.Root, nil)
 	req.Header.Set("Accept", "text/html")
-
-	rr := httptest.NewRecorder()
-	mux := newTestMux(app)
-	mux.ServeHTTP(rr, req)
-
-	if rr.Code != http.StatusOK {
-		t.Fatalf("expected %d, got %d",
-			http.StatusOK, rr.Code)
-	}
+	rr := serveRequest(t, app, req)
+	assertStatus(t, rr, http.StatusOK)
 
 	body := rr.Body.String()
-
 	if strings.Contains(body,
 		`<script>alert("xss")</script>`) {
 		t.Fatalf("expected escaped script tag, got: %q", body)
