@@ -60,8 +60,13 @@
           {{ .Owner.Mask }}
           {{- if not $.Auth.Require.MessageDelete }}
           &middot;
-          <a class="link-bold"
-              href="{{ $.Paths.Message }}/delete/{{ .Count }}">&#10006;</a>
+          <form action="{{ $.Paths.Message }}/delete/{{ .Count }}"
+                 class="inline-form"
+                method="post">
+            <button class="selectDelete"
+                    title="delete message"
+                     type="submit">&#10006;</button>
+          </form>
           {{ end }}
         </span>
       </label>
