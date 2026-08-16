@@ -8,11 +8,9 @@ import (
 
 // TestListFiles tests active and expired Files.
 func TestListFiles(t *testing.T) {
-	now := time.Now()
-
 	s := &Storage{
 		Files: map[string]*File{
-			"durationExpired": {
+			"durationExpire": {
 				ID:   "durationExpire",
 				Name: "durationExpire.txt",
 				Downloads: Downloads{
@@ -20,20 +18,18 @@ func TestListFiles(t *testing.T) {
 					Count: 0,
 				},
 				Time: Time{
-					Duration:   time.Second,
-					UploadTime: now.Add(-time.Minute),
+					Duration: time.Second,
+					UploadTime: time.Date(
+						2006, 1, 1, 0, 0, 0, 0, time.UTC,
+					),
 				},
 			},
-			"downloadExpired": {
+			"downloadExpire": {
 				ID:   "downloadExpire",
 				Name: "downloadExpire.txt",
 				Downloads: Downloads{
 					Allow: 1,
 					Count: 1,
-				},
-				Time: Time{
-					Duration:   time.Hour,
-					UploadTime: now,
 				},
 			},
 			"active1": {
@@ -43,10 +39,6 @@ func TestListFiles(t *testing.T) {
 					Allow: 2,
 					Count: 0,
 				},
-				Time: Time{
-					Duration:   time.Minute,
-					UploadTime: now,
-				},
 			},
 			"active2": {
 				ID:   "active2",
@@ -54,10 +46,6 @@ func TestListFiles(t *testing.T) {
 				Downloads: Downloads{
 					Allow: 3,
 					Count: 1,
-				},
-				Time: Time{
-					Duration:   time.Hour,
-					UploadTime: now,
 				},
 			},
 		},
@@ -69,28 +57,46 @@ func TestListFiles(t *testing.T) {
 		t.Fatalf("listed %d files; want 2", len(got))
 	}
 
-	gotIDs := make([]string, 0, len(got))
+	gotByID := make(map[string]File, len(got))
 	for _, f := range got {
-		gotIDs = append(gotIDs, f.ID)
+		gotByID[f.ID] = f
 	}
 
+	gotIDs := make([]string, 0, len(gotByID))
+	for id := range gotByID {
+		gotIDs = append(gotIDs, id)
+	}
 	slices.Sort(gotIDs)
 
 	wantIDs := []string{"active1", "active2"}
 	if !slices.Equal(gotIDs, wantIDs) {
-		t.Fatalf("got files %v; want %v",
-			gotIDs, wantIDs)
+		t.Fatalf("got files %v; want %v", gotIDs, wantIDs)
 	}
 
-	if _, ok := s.Files["expired"]; ok {
-		t.Fatalf("expired files still present")
+	for _, id := range []string{
+		"durationExpire", "downloadExpire"} {
+		if _, ok := s.Files[id]; ok {
+			t.Fatalf("expired file %q present", id)
+		}
+	}
+	if got := len(s.Files); got != 2 {
+		t.Fatalf("%d files stored; want 2", got)
+	}
+
+	if got := gotByID["active1"].Remain; got != 2 {
+		t.Errorf("active1 downloads = %d; want 2", got)
+	}
+	if got := gotByID["active2"].Remain; got != 2 {
+		t.Errorf("active2 downloads = %d; want 2", got)
 	}
 }
 
 // TestListFilesEmpty tests no Files to list.
 func TestListFilesEmpty(t *testing.T) {
 	s := &Storage{Files: nil}
+
 	got := s.ListFiles()
+
 	if len(got) != 0 {
 		t.Fatalf("got %d files; want 0", len(got))
 	}
