@@ -39,6 +39,10 @@ func TestListFiles(t *testing.T) {
 					Allow: 2,
 					Count: 0,
 				},
+				Time: Time{
+					Duration:   time.Minute,
+					UploadTime: time.Now(),
+				},
 			},
 			"active2": {
 				ID:   "active2",
@@ -46,6 +50,10 @@ func TestListFiles(t *testing.T) {
 				Downloads: Downloads{
 					Allow: 3,
 					Count: 1,
+				},
+				Time: Time{
+					Duration:   time.Hour,
+					UploadTime: time.Now(),
 				},
 			},
 		},

@@ -76,7 +76,7 @@
     <form action="{{ .Paths.MessageClear }}"
            class="inline-form"
           method="post">
-      {{- if .Auth.Require.MessageClear }}{{ template "auth" . }} {{ end }}
+      {{- if .Auth.Require.MessageClear }} {{ template "auth" . }} {{ end }}
       <button class="selectClearMessages"
       {{- if not .Storage.Messages }} disabled
               title="no messages to clear"
@@ -91,7 +91,7 @@
       <input name="download"
              type="hidden"
             value="allMessages">
-      {{- if .Auth.Require.Message }}{{ template "auth" . }} {{ end }}
+      {{- if .Auth.Require.Message }} {{ template "auth" . }} {{ end }}
       <button class="selectDownload"
        {{- if not .Storage.Messages }} disabled
               title="no messages to download"

@@ -15,6 +15,7 @@ const (
 	expiryNone          ExpiryReason = ""
 	expiryDownloadLimit ExpiryReason = "limit downloads"
 	expiryDurationLimit ExpiryReason = "limit duration"
+	invalidUploadTime   ExpiryReason = "invalid upload time"
 )
 
 // ExpiryReason identifies the reason for File expired.
