@@ -92,7 +92,7 @@ curl 127.0.0.1:8080/status
 Get user request information:
 
 ```bash
-curl 127.0.0.1:8080/user
+curl 127.0.0.1:8080/user/info
 ```
 
 ## Upload
@@ -232,7 +232,7 @@ make doc
 
 # Testing
 
-Tests and lint are validated with a [workflow](https://github.com/drduh/gone/blob/main/.github/workflows/test-and-lint.yml) on changes, or manually:
+Tests and lint are validated with [workflows](https://github.com/drduh/gone/blob/main/.github/workflows/) on changes, or manually:
 
 ```bash
 make lint

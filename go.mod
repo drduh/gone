@@ -1,3 +1,3 @@
 module github.com/drduh/gone
 
-go 1.26.5
+go 1.26.6

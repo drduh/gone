@@ -243,6 +243,19 @@ input::placeholder {
   display: inline;
 }
 
+button.selectDelete {
+  background: transparent;
+  background-color: var(--bg-light);
+  color: var(--fg-dark);
+  height: 0;
+  margin: 0;
+  padding: 0;
+}
+
+button.selectDelete:hover {
+  color: var(--fg-light);
+}
+
 .selectAllowDownloads,
 .selectAllowDuration {
   text-align: center;
