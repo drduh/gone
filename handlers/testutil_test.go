@@ -31,6 +31,11 @@ func newTestApp() *config.App {
 	app.ReqsPerMinute = 99
 	app.StartTime = time.Now().Add(-time.Second)
 
+	app.MessageLimits.MaxCount = 32
+	app.MessageLimits.LengthChars = 128
+	app.WallLimits.LengthChars = 1024
+	app.FileLimits.NameLength = 64
+
 	auth.SetTarpit(0)
 
 	return app

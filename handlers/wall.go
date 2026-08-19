@@ -7,7 +7,7 @@ import (
 	"github.com/drduh/gone/config"
 )
 
-// Wall handles requests to read and modify Wall content in Storage.
+// Wall handles requests to read and modify Wall content.
 func Wall(app *config.App) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		req := AuthRequest(w, r, app)
@@ -22,6 +22,14 @@ func Wall(app *config.App) http.HandlerFunc {
 			return
 		}
 
+		if r.PostFormValue(formFieldDownload) == formFieldWall {
+			app.ServeWall(w)
+			app.Log.Info("downloaded wall",
+				"length", app.WallChars,
+				"user", req)
+			return
+		}
+
 		if r.PostFormValue(formFieldClear) != "" {
 			app.Log.Debug("clearing wall",
 				"length", app.WallChars,
@@ -32,39 +40,37 @@ func Wall(app *config.App) http.HandlerFunc {
 		}
 
 		formContent := r.PostFormValue(formFieldWall)
-		if formContent != "" {
-			length := charCount(formContent)
-			if length > app.WallLimits.LengthChars {
-				writeJSON(w, http.StatusBadRequest,
-					errorJSON(app.WallLimit))
-				app.Log.Error(app.WallLimit,
-					"limit", app.WallLimits.LengthChars,
-					"length", length,
-					"user", req)
-				return
-			}
+		length := charCount(formContent)
 
-			now := time.Now()
-			app.WallModifiedTime = now
-			app.WallModifiedTimeFmt = now.Format(app.TimeFormat)
-			app.WallModifiedUser = req.AddressMask
-
-			app.Log.Debug("updating wall",
+		if length > app.WallLimits.LengthChars {
+			writeJSON(w, http.StatusBadRequest,
+				errorJSON(app.WallLimit))
+			app.Log.Error(app.WallLimit,
+				"excess", length-app.WallLimits.LengthChars,
 				"length", length,
-				"user", req)
-			app.WallContent = formContent
-			app.CountWall()
-			app.Log.Info("updated wall",
-				"length", length,
-				"user", req)
-		}
-
-		if r.PostFormValue(formFieldDownload) == formFieldWall {
-			app.ServeWall(w)
-			app.Log.Info("downloaded wall",
+				"limit", app.WallLimits.LengthChars,
 				"user", req)
 			return
 		}
+
+		now := time.Now()
+		app.WallModifiedTime = now
+		app.WallModifiedTimeFmt = now.Format(app.TimeFormat)
+		app.WallModifiedUser = req.AddressMask
+
+		app.Log.Debug("updating wall",
+			"length", length,
+			"user", req)
+		app.WallContent = formContent
+
+		app.CountWall()
+
+		app.GetWallCap(app.WallLimits.LengthChars)
+
+		app.Log.Info("updated wall",
+			"capacity", app.WallCap,
+			"length", length,
+			"user", req)
 
 		if req.IsBrowser {
 			toPath(w, r, app.Root)
