@@ -3,35 +3,25 @@
   <div class="box">
     <form action="{{ .Paths.MessageAdd }}"
           method="post">
-      {{- if .Auth.Require.MessageAdd }}
       <div class="row">
-        <input class="selectMessage"
-                name="message"
-           maxlength="{{ .Limit.MessageLimits.LengthChars }}"
-         placeholder="{{ .Placeholder.Message }}"
-               title="message text content"
-                type="text" required>
+        <div class="errorNotice"
+        data-error="message must be <{{ .Limit.MessageLimits.LengthChars }} characters">
+          <input class="selectMessage"
+                  name="message"
+               pattern="^.{0,{{ .Limit.MessageLimits.LengthChars }}}$"
+           placeholder="{{ .Placeholder.Message }}"
+                 title="must be <{{ .Limit.MessageLimits.LengthChars }} characters"
+                  type="text" required>
+        </div>
+      {{- if .Auth.Require.MessageAdd }}
       </div>
       <div class="row">
         {{ template "auth" . }}
-        <input class="selectMessagePost"
-               title="post message"
-                type="submit"
-               value="post">
-      </div>
-      {{ else }}
-      <div class="row">
-        <input class="selectMessage"
-                name="message"
-           maxlength="{{ .Limit.MessageLimits.LengthChars }}"
-         placeholder="{{ .Placeholder.Message }}"
-               title="message text content"
-                type="text" required>
+      {{ end }}
         <button class="selectMessagePost"
                 title="post message"
                  type="submit">post</button>
       </div>
-      {{ end }}
     </form>
     {{- if .Storage.Messages }}
     <div class="itemList">
@@ -50,11 +40,10 @@
           {{- if $.Auth.Require.MessageGet }}
           {{ .Count }} &middot;
           {{- else }}
-          <a class="link-bold"
-              href="{{ $.Paths.Message }}/{{ .Count }}"
-               rel="noopener noreferrer"
-          tabindex="-1"
-            target="_blank">{{ .Count }}</a> &middot;
+          <a class="linkBold"
+              href="{{ $.Paths.Message }}/{{ .Count }}">
+            {{ .Count }}
+          </a> &middot;
           {{- end }}
           {{ .Time.UploadTimeFmt }} &middot;
           {{ .Owner.Mask }}
