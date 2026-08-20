@@ -97,12 +97,18 @@ form {
   color: var(--bg-dark);
 }
 
-.wallMeta {
-  color: var(--fg-norm);
-  cursor: pointer;
+.wallMeta,
+.errorNotice:has(.selectMessage:not(:placeholder-shown):invalid)::after {
+  background: var(--bg-light);
+  border-radius: var(--radius-box);
+  color: var(--fg-light);
+  content: attr(data-error);
+  display: block;
   font-family: ui-monospace, monospace;
-  font-size: 0.6em;
-  margin: 0;
+  font-size: 0.8em;
+  margin: var(--radius-box);
+  padding: var(--radius-box);
+  white-space: nowrap;
 }
 
 footer {
@@ -144,7 +150,7 @@ a:hover {
   text-decoration: underline;
 }
 
-a.link-bold {
+a.linkBold {
   color: var(--fg-dark);
   font-size: 0.8em;
   font-weight: 600;
@@ -154,7 +160,7 @@ a.link-bold {
   transition: color var(--animation) ease;
 }
 
-a.link-bold:hover {
+a.linkBold:hover {
   color: var(--fg-light);
   background-color: var(--bg-dark);
   text-decoration: underline;
@@ -229,14 +235,14 @@ input::placeholder {
 
 #footerToggle,
 .hide {
-  position: absolute;
-  width: 1px;
+  border: 0;
   height: 1px;
-  padding: 0;
   margin: -1px;
   overflow: hidden;
+  padding: 0;
+  position: absolute;
   white-space: nowrap;
-  border: 0;
+  width: 1px;
 }
 
 .inline-form {
@@ -289,6 +295,10 @@ button.selectDelete:hover {
 .selectFilename,
 .selectMessage {
   width: var(--width-xlarge);
+}
+
+.selectMessage:not(:placeholder-shown):invalid {
+  box-shadow: 0 0 0 var(--radius-box) var(--bg-light);
 }
 
 details {

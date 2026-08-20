@@ -27,12 +27,21 @@ func (f *File) SetRemainingDownloads() {
 // IsExpired returns a reason the File is expired,
 // or an empty string when the File isn't expired.
 func (f *File) IsExpired() ExpiryReason {
+	now := time.Now()
+
+	if f.UploadTime.IsZero() || f.UploadTime.After(now) {
+		return invalidUploadTime
+	}
+
 	if f.Allow > 0 && f.Count >= f.Allow {
 		return expiryDownloadLimit
 	}
-	if f.Duration > 0 && f.Lifetime() > f.Duration {
+
+	if f.Duration > 0 && !now.Before(
+		f.UploadTime.Add(f.Duration)) {
 		return expiryDurationLimit
 	}
+
 	return expiryNone
 }
 

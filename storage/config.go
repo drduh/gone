@@ -15,6 +15,7 @@ const (
 	expiryNone          ExpiryReason = ""
 	expiryDownloadLimit ExpiryReason = "limit downloads"
 	expiryDurationLimit ExpiryReason = "limit duration"
+	invalidUploadTime   ExpiryReason = "invalid upload time"
 )
 
 // ExpiryReason identifies the reason for File expired.
@@ -174,6 +175,9 @@ type Sizes struct {
 
 // WallMeta represents Wall metadata.
 type WallMeta struct {
+
+	// Wall content capacity percentage (rounded)
+	WallCap int `json:"wallCap,omitempty"`
 
 	// Number of characters in Wall content
 	WallChars int `json:"wallChars,omitempty"`

@@ -54,3 +54,9 @@ func (s *Storage) CountWall() {
 			s.WallContent, "\n"))
 	}
 }
+
+// GetWallCap determines the wall capacity
+// percentage, rounded to the nearest int.
+func (s *Storage) GetWallCap(limit int) {
+	s.WallCap = s.WallChars * 100 / limit
+}

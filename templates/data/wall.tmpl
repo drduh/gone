@@ -8,12 +8,13 @@
                  form="wall"
             maxlength="{{ .Limit.WallLimits.LengthChars }}"
                  name="wall"
-                title="add or edit content">
+                title="edit wall content">
       {{- .Storage.WallContent -}}
       </textarea>
       {{- if .Storage.WallContent }}
       <p class="wallMeta">
-        {{ .Storage.WallChars }}/{{ .Limit.WallLimits.LengthChars }} &middot;
+        {{ .Storage.WallChars }}/{{ .Limit.WallLimits.LengthChars }}
+        ({{ .Storage.WallCap }}%) &middot;
         {{ .Storage.WallModifiedTimeFmt }} &middot;
         {{ .Storage.WallModifiedUser }}
       </p>
@@ -21,7 +22,7 @@
       <div class="row">
         {{- if .Auth.Require.Wall }} {{ template "auth" . }} {{ end }}
         <button class="selectWallSave"
-                title="save contents"
+                title="save wall content"
                  type="submit">save</button>
       </div>
     </form>
@@ -32,12 +33,12 @@
              type="hidden"
             value="true">
       <div class="row">
-      {{- if .Auth.Require.Wall }}{{ template "auth" . }} {{ end }}
+      {{- if .Auth.Require.Wall }} {{ template "auth" . }} {{ end }}
         <button class="selectClearWall"
         {{- if not .Storage.WallContent }} disabled
                 title="no wall content to clear"
         {{- else }}
-                title="clear wall"
+                title="clear wall content"
         {{- end }}
                  type="submit">clear</button>
       </div>
@@ -46,7 +47,7 @@
            class="inline-form"
           method="post">
       <div class="row">
-        {{- if .Auth.Require.Wall }}{{ template "auth" . }} {{ end }}
+        {{- if .Auth.Require.Wall }} {{ template "auth" . }} {{ end }}
         <input name="download"
                type="hidden"
               value="wall">
@@ -54,7 +55,7 @@
         {{- if not .Storage.WallContent }} disabled
                 title="no wall content to download"
         {{- else }}
-                title="download wall"
+                title="download wall content"
         {{- end }}
                  type="submit">download</button>
       </div>
