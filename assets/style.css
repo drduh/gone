@@ -297,6 +297,7 @@ button.selectDelete:hover {
   width: var(--width-xlarge);
 }
 
+input:out-of-range,
 .selectMessage:not(:placeholder-shown):invalid {
   box-shadow: 0 0 0 var(--radius-box) var(--bg-light);
 }
