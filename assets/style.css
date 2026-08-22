@@ -99,29 +99,36 @@ form {
 
 .wallMeta,
 .errorNotice:has(.selectMessage:not(:placeholder-shown):invalid)::after {
-  background: var(--bg-light);
+  --pct: calc(var(--v) / var(--m) * 100%);
+  background: linear-gradient(to right, var(--bg-light) var(--pct), var(--bg-dark) var(--pct));
   border-radius: var(--radius-box);
   color: var(--fg-light);
   content: attr(data-error);
   display: block;
   font-family: ui-monospace, monospace;
   font-size: 0.8em;
-  margin: var(--radius-box);
+  margin: 0;
   padding: var(--radius-box);
-  white-space: nowrap;
+}
+
+.errorNotice:has(.selectMessage:not(:placeholder-shown):invalid)::after {
+  background: var(--bg-light);
 }
 
 footer {
   flex-shrink: 0;
   color: var(--fg-norm);
-  overflow: hidden;
+  font-family: ui-monospace, monospace;
+  font-size: 0.8em;
   max-height: 40px;
+  overflow: hidden;
   transition: max-height var(--animation) ease;
 }
 
 footer label {
   cursor: pointer;
   display: block;
+  font-size: var(--font-size);
   margin: 0;
   padding: 16px;
   text-align: center;
@@ -298,6 +305,7 @@ button.selectDelete:hover {
 }
 
 input:out-of-range,
+.selectAllowDuration:invalid,
 .selectMessage:not(:placeholder-shown):invalid {
   box-shadow: 0 0 0 var(--radius-box) var(--bg-light);
 }
