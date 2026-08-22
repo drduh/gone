@@ -370,6 +370,17 @@ func TestMessageParts(t *testing.T) {
 				{Text: "broken http://example.com:0/ link"},
 			},
 		},
+		{
+			name: "empty string",
+			data: "https://www.café.com/./path/../path2/",
+			want: []MessageParts{
+				{Text: "https://www.caf",
+					URL:    "https://www.caf",
+					HasURL: true},
+				{Text: "é.com/./path/../path2/",
+					HasURL: false},
+			},
+		},
 	}
 
 	for _, tt := range tests {

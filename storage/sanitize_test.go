@@ -12,27 +12,28 @@ const extraChars = "_.- "
 func TestRemoveInvalidChars(t *testing.T) {
 	tests := []struct {
 		input string
-		allow string
 		want  string
 	}{
-		{"filename.txt", extraChars, "filename.txt"},
-		{"file@name!.txt", extraChars, "filename.txt"},
-		{"_file-name.txt", extraChars, "_file-name.txt"},
-		{"123-abc_ABC.txt", extraChars, "123-abc_ABC.txt"},
-		{"chars@#$name.txt", extraChars, "charsname.txt"},
-		{".golangci.yml", extraChars, ".golangci.yml"},
-		{`foo"bar.txt`, extraChars + `"`, `foo"bar.txt`},
-		{`foo"bar.txt`, extraChars, "foobar.txt"},
-		{"afile", extraChars, "afile"},
-		{".....", extraChars, "....."},
-		{"!@#$%^&()", extraChars, ""},
-		{"", extraChars, ""},
+		{"filename.txt", "filename.txt"},
+		{"file@name!.txt", "filename.txt"},
+		{"_file-name.txt", "_file-name.txt"},
+		{"123-abc_ABC.txt", "123-abc_ABC.txt"},
+		{"chars@#$name.txt", "charsname.txt"},
+		{".golangci.yml", ".golangci.yml"},
+		{`foo"bar.txt`, "foobar.txt"},
+		{"afile", "afile"},
+		{".....", "....."},
+		{"!@#$%^&()", ""},
+		{"~/home/", "home"},
+		{"invalid-\xe2'", "invalid-"},
+		{"nonprint-\x0b\x1b", "nonprint-"},
+		{"", ""},
 	}
 	for _, test := range tests {
-		result := removeInvalidChars(test.input, test.allow)
+		result := removeInvalidChars(test.input, extraChars)
 		if result != test.want {
 			t.Fatalf("name: '%s' ('%s' allowed): '%s'; want: '%s'",
-				test.input, test.allow, result, test.want)
+				test.input, extraChars, result, test.want)
 		}
 	}
 }
@@ -120,6 +121,7 @@ func TestSanitizeName(t *testing.T) {
 			`Ⓜ ㊗ ㊙ 󠁧󠁢󠁥 ♨ ♟ ⌨`, extraChars, 20, defaultName},
 		{"j%61vascript:alert(1)", extraChars, 25, "javascriptalert1"},
 		{"<script>alert('xss')</script>", extraChars, 25, "script"},
+		{"<svg onload=alert(1)>", extraChars, 25, "svg onloadalert1"},
 		{"<img src=x onerror=alert(1)>", extraChars + "(" + ")", 25,
 			"img srcx onerroralert(1)"},
 		{"'; DROP TABLE all;--", extraChars, 20, "DROP TABLE all--"},
@@ -169,7 +171,8 @@ func TestSanitizeName(t *testing.T) {
 		{"file.txt\r\nSet-Cookie: sess=evil", extraChars, 40, "file.txtS"},
 		{"file.txt\r\nX-Injected: true", extraChars, 40, "file.txtX"},
 		{"file.txt\nLocation: https://evil.com", extraChars, 50, "evil.com"},
-		{"café-menu_2026.pdf", extraChars, 50, "caf-menu_2026.pdf"},
+		{"Invoice #123.pdf", extraChars, 20, "Invoice 123.pdf"},
+		{"café-menu_2026.pdf", extraChars, 20, "caf-menu_2026.pdf"},
 		{"cafe\u0301.pdf", extraChars, 50, "cafe.pdf"},
 		{"file\xff\xfe.txt", extraChars, 50, "file.txt"},
 		{"sales_data:2024.csv", extraChars, 40, defaultName},

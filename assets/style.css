@@ -19,7 +19,7 @@ body {
   display: flex;
   flex-direction: column;
   font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
-  font-size: var(--font-size);
+  font-size: var(--font-size-norm);
   margin: 0 auto;
   min-height: 100vh;
 }
@@ -37,6 +37,7 @@ main {
   overflow-x: auto;
   padding: 1em;
   text-align: center;
+  transition: background-color var(--animation-slow) ease;
   width: fit-content;
 }
 
@@ -77,7 +78,7 @@ form {
 
 .itemName {
   display: block;
-  font-size: 1em;
+  font-size: var(--font-size-norm);
 }
 
 .itemName:hover {
@@ -87,7 +88,7 @@ form {
 .itemMeta {
   color: var(--fg-dark);
   display: block;
-  font-size: 0.8em;
+  font-size: var(--font-size-small);
 }
 
 .itemMeta::selection,
@@ -99,29 +100,36 @@ form {
 
 .wallMeta,
 .errorNotice:has(.selectMessage:not(:placeholder-shown):invalid)::after {
-  background: var(--bg-light);
+  --pct: calc(var(--v) / var(--m) * 100%);
+  background: linear-gradient(to right, var(--bg-light) var(--pct), var(--bg-dark) var(--pct));
   border-radius: var(--radius-box);
   color: var(--fg-light);
   content: attr(data-error);
   display: block;
   font-family: ui-monospace, monospace;
-  font-size: 0.8em;
-  margin: var(--radius-box);
+  font-size: var(--font-size-small);
+  margin: 0;
   padding: var(--radius-box);
-  white-space: nowrap;
+}
+
+.errorNotice:has(.selectMessage:not(:placeholder-shown):invalid)::after {
+  background: var(--bg-light);
 }
 
 footer {
   flex-shrink: 0;
   color: var(--fg-norm);
-  overflow: hidden;
+  font-family: ui-monospace, monospace;
+  font-size: var(--font-size-small);
   max-height: 40px;
-  transition: max-height var(--animation) ease;
+  overflow: hidden;
+  transition: max-height var(--animation-fast) ease;
 }
 
 footer label {
   cursor: pointer;
   display: block;
+  font-size: var(--font-size-norm);
   margin: 0;
   padding: 16px;
   text-align: center;
@@ -152,12 +160,12 @@ a:hover {
 
 a.linkBold {
   color: var(--fg-dark);
-  font-size: 0.8em;
+  font-size: var(--font-size-small);
   font-weight: 600;
   letter-spacing: 0.05em;
   text-decoration: none;
   text-transform: uppercase;
-  transition: color var(--animation) ease;
+  transition: color var(--animation-fast) ease;
 }
 
 a.linkBold:hover {
@@ -169,7 +177,7 @@ a.linkBold:hover {
 button,
 input,
 select {
-  transition: all var(--animation) ease;
+  transition: all var(--animation-fast) ease;
 }
 
 button[disabled] {
@@ -211,6 +219,7 @@ textarea {
   margin: 0.6em;
   padding: 0.6em;
   text-decoration: none;
+  transition: background-color var(--animation-slow) ease;
 }
 
 .wallContent {
@@ -297,6 +306,8 @@ button.selectDelete:hover {
   width: var(--width-xlarge);
 }
 
+input:out-of-range,
+.selectAllowDuration:invalid,
 .selectMessage:not(:placeholder-shown):invalid {
   box-shadow: 0 0 0 var(--radius-box) var(--bg-light);
 }
@@ -333,7 +344,7 @@ details[open] > summary:hover {
 .randomStrs {
   display: grid;
   font-family: ui-monospace, monospace;
-  font-size: var(--font-size);
+  font-size: var(--font-size-norm);
   gap: 0.4em;
   grid-template-columns: repeat(2, 1fr);
 }

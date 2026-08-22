@@ -12,12 +12,15 @@
       {{- .Storage.WallContent -}}
       </textarea>
       {{- if .Storage.WallContent }}
-      <p class="wallMeta">
+      <div class="wallMeta"
+           style="--v:{{ .Storage.WallChars }}; --m:{{ .Limit.WallLimits.LengthChars }}">
         {{ .Storage.WallChars }}/{{ .Limit.WallLimits.LengthChars }}
-        ({{ .Storage.WallCap }}%) &middot;
+        ({{ .Storage.WallCap }}%) characters
+      </div>
+      <div class="wallMeta">
         {{ .Storage.WallModifiedTimeFmt }} &middot;
         {{ .Storage.WallModifiedUser }}
-      </p>
+      </div>
       {{ end }}
       <div class="row">
         {{- if .Auth.Require.Wall }} {{ template "auth" . }} {{ end }}

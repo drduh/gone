@@ -24,10 +24,9 @@
                 value="{{ .ID }}" required>
           <span class="itemName">
           {{ if not $.Auth.Require.Download }}
-            <a href="{{ $.Paths.Download }}{{ .ID }}"
-                rel="noopener noreferrer"
-           tabindex="-1"
-             target="_blank">{{ .Name }}</a>
+            <a href="{{ $.Paths.Download }}{{ .ID }}">
+              {{ .Name }}
+            </a>
           {{ else }}
             {{ .Name }}
           {{ end }}

@@ -26,7 +26,7 @@
     {{- if .Storage.Messages }}
     <div class="itemList">
     {{- range .Storage.Messages }}
-      <label class="itemCard">
+      <div class="itemCard">
         <span class="itemName">
           {{- range .GetParts }}
           {{ if .HasURL }}
@@ -58,7 +58,7 @@
           </form>
           {{ end }}
         </span>
-      </label>
+      </div>
     {{- end }}
     </div>
     {{- end }}
