@@ -240,6 +240,7 @@ b: build
 c: clean
 cealn: clean
 celan: clean
+cer: cert
 cert: cert.pem
 clena: clean
 coen: coverage

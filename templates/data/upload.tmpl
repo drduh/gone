@@ -20,8 +20,9 @@
         <input type="text"
               class="selectAllowDuration"
                name="duration"
+            pattern="\d+|(\d+h)?(\d+m)?(\d+s)?"
         placeholder="{{ .Default.Expiration.String }}"
-              title="time until expiration">
+              title="expiration duration: 3600, 15m, 1h, 2h15m10s, etc">
       </div>
       {{- if .Auth.Require.Upload }} {{ template "auth" . }} {{ end }}
       <div class="row">

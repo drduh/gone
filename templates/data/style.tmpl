@@ -2,23 +2,25 @@
 {{ define "style" -}}
   <style>
     :root {
-        --animation:    250ms;
-        --bg-animation: none;
-        --bg-gradient:  linear-gradient(
+        --animation-fast:  250ms;
+        --animation-slow:  500ms;
+        --bg-animation:    none;
+        --bg-gradient:     linear-gradient(
             var(--rotation),
             var(--bg-light) 0%,
             var(--bg-dark)  100%);
-        --bg-size:      100%;
-        --font-size:    1em;
-        --radius-box:   0.4em;
-        --radius-opt:   1em;
-        --rotation:     0deg;
-        --width-theme:  2em;
-        --width-xsmall: 4.4em;
-        --width-small:  6em;
-        --width-medium: 8em;
-        --width-large:  10em;
-        --width-xlarge: 18em;
+        --bg-size:         100%;
+        --font-size-norm:  1em;
+        --font-size-small: 1em;
+        --radius-box:      0.4em;
+        --radius-opt:      1em;
+        --rotation:        0deg;
+        --width-theme:     2em;
+        --width-xsmall:    4.4em;
+        --width-small:     6em;
+        --width-medium:    8em;
+        --width-large:     10em;
+        --width-xlarge:    18em;
 {{ if eq .Theme "dark" }}
         --bg-dark:      rgba(  0,  43,  54,   1);
         --bg-norm:      rgba(  7,  54,  66,   1);
