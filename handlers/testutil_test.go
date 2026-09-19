@@ -144,7 +144,7 @@ func assertStatus(
 	t.Helper()
 
 	if got := rr.Code; got != want {
-		t.Fatalf("status = %d; want %d", got, want)
+		t.Errorf("status = %d; want %d", got, want)
 	}
 }
 
