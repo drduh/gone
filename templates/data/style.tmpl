@@ -8,10 +8,10 @@
         --bg-gradient:     linear-gradient(
             var(--rotation),
             var(--bg-light) 0%,
-            var(--bg-dark)  100%);
+            var(--bg-dark) 100%);
         --bg-size:         100%;
         --font-size-norm:  1em;
-        --font-size-small: 1em;
+        --font-size-small: 0.8em;
         --radius-box:      0.4em;
         --radius-opt:      1em;
         --rotation:        0deg;
@@ -126,6 +126,69 @@
         --bg-light:     rgba(240, 130,  30,   1);
         --fg-dark:      rgba(255, 200,  80,   1);
         --fg-light:     rgba(255, 240, 180,   1);
+{{ else if eq .Theme "teal" }}
+        --bg-dark:      rgba(  0,  45,  50,   1);
+        --bg-norm:      rgba( 10, 100, 110,   1);
+        --bg-norm-half: rgba( 10, 100, 110, 0.5);
+        --bg-light:     rgba( 30, 165, 175,   1);
+        --fg-dark:      rgba( 90, 230, 210,   1);
+        --fg-light:     rgba(190, 250, 235,   1);
+{{ else if eq .Theme "gray" }}
+        --bg-dark:      rgba( 30,  30,  35,   1);
+        --bg-norm:      rgba( 70,  70,  80,   1);
+        --bg-norm-half: rgba( 70,  70,  80, 0.5);
+        --bg-light:     rgba(120, 120, 135,   1);
+        --fg-dark:      rgba(210, 210, 220,   1);
+        --fg-light:     rgba(240, 240, 245,   1);
+{{ else if eq .Theme "tidal" }}
+        --bg-dark:      rgba( 31,  44,  61,   1);
+        --bg-norm:      rgba(127, 169, 174,   1);
+        --bg-norm-half: rgba(127, 169, 174, 0.5);
+        --bg-light:     rgba(242, 169,  80,   1);
+        --fg-dark:      rgba(255, 221, 173,   1);
+        --fg-light:     rgba(255, 245, 225,   1);
+{{ else if eq .Theme "lagoon" }}
+        --bg-dark:      rgba( 19,  70,  78,   1);
+        --bg-norm:      rgba( 42, 157, 143,   1);
+        --bg-norm-half: rgba( 42, 157, 143, 0.5);
+        --bg-light:     rgba(233, 196, 106,   1);
+        --fg-dark:      rgba(244, 162,  97,   1);
+        --fg-light:     rgba(255, 236, 179,   1);
+{{ else if eq .Theme "plum" }}
+        --bg-dark:      rgba( 88,  28,  60,   1);
+        --bg-norm:      rgba(181,  61, 111,   1);
+        --bg-norm-half: rgba(181,  61, 111, 0.5);
+        --bg-light:     rgba(255, 146, 139,   1);
+        --fg-dark:      rgba(255, 201, 167,   1);
+        --fg-light:     rgba(255, 232, 214,   1);
+{{ else if eq .Theme "mango" }}
+        --bg-dark:      rgba(114,  52,  18,   1);
+        --bg-norm:      rgba(230, 126,  34,   1);
+        --bg-norm-half: rgba(230, 126,  34, 0.5);
+        --bg-light:     rgba(255, 195,   0,   1);
+        --fg-dark:      rgba(255, 224, 138,   1);
+        --fg-light:     rgba(255, 245, 204,   1);
+{{ else if eq .Theme "reef" }}
+        --bg-dark:      rgba( 38,  70,  83,   1);
+        --bg-norm:      rgba( 42, 157, 143,   1);
+        --bg-norm-half: rgba( 42, 157, 143, 0.5);
+        --bg-light:     rgba(231, 111,  81,   1);
+        --fg-dark:      rgba(244, 162,  97,   1);
+        --fg-light:     rgba(255, 230, 204,   1);
+{{ else if eq .Theme "canopy" }}
+        --bg-dark:      rgba( 30,  61,  44,   1);
+        --bg-norm:      rgba( 88, 129,  87,   1);
+        --bg-norm-half: rgba( 88, 129,  87, 0.5);
+        --bg-light:     rgba(167, 201,  87,   1);
+        --fg-dark:      rgba(244, 213, 141,   1);
+        --fg-light:     rgba(255, 241, 214,   1);
+{{ else if eq .Theme "cabana" }}
+        --bg-dark:      rgba(116, 104,  87,   1);
+        --bg-norm:      rgba(183, 168, 139,   1);
+        --bg-norm-half: rgba(183, 168, 139, 0.5);
+        --bg-light:     rgba(214, 185, 128,   1);
+        --fg-dark:      rgba(232, 205, 170,   1);
+        --fg-light:     rgba(250, 240, 220,   1);
 {{- end }}
       }
   </style>
