@@ -23,13 +23,9 @@
                  type="radio"
                 value="{{ .ID }}" required>
           <span class="itemName">
-          {{ if not $.Auth.Require.Download }}
-            <a href="{{ $.Paths.Download }}{{ .ID }}">
-              {{ .Name }}
-            </a>
-          {{ else }}
-            {{ .Name }}
-          {{ end }}
+            {{ if not $.Auth.Require.Download }}
+            <a href="{{ $.Paths.Download }}{{ .ID }}">{{- .Name -}}</a>
+            {{ else }} {{ .Name }} {{ end }}
           </span>
           <span class="itemMeta">
             {{ .Size }} &middot;

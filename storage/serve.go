@@ -42,7 +42,7 @@ func (s *Storage) ServeMessages(w http.ResponseWriter) {
 	}
 }
 
-// ServeWall writes all Wall content as a text file.
+// ServeWall writes Wall content as a text file.
 func (s *Storage) ServeWall(w http.ResponseWriter) {
 	w.Header().Set("Content-Disposition",
 		`attachment; filename="`+filenameWall+`"`)
