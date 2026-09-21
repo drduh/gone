@@ -249,6 +249,8 @@ coverae: coverage
 coverage: cover
 d: debug
 devug: debug
+eun: run
+erun: run
 f: fmt
 format: fmt
 gosec: sec

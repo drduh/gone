@@ -20,13 +20,10 @@ body {
   flex-direction: column;
   font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
   font-size: var(--font-size-norm);
-  margin: 0 auto;
   min-height: 100vh;
 }
 
-main {
-  flex: 1 0 auto;
-}
+main { flex: 1 0 auto; }
 
 .box {
   background-color: var(--bg-norm-half);
@@ -40,10 +37,7 @@ main {
   transition: background-color var(--animation-slow) ease;
   width: fit-content;
 }
-
-.box:hover {
-  background-color: var(--bg-norm);
-}
+.box:hover { background-color: var(--bg-norm); }
 
 form {
   align-items: center;
@@ -53,6 +47,7 @@ form {
 }
 
 .row {
+  align-items: center;
   display: flex;
   justify-content: center;
 }
@@ -70,20 +65,14 @@ form {
   padding: 0.5em 1em;
   text-align: left;
 }
-
 .itemCard:hover,
-.itemCard:has(input[type="radio"]:checked) {
-  background-color: var(--bg-dark);
-}
+.itemCard:has(input[type="radio"]:checked) { background-color: var(--bg-dark); }
 
 .itemName {
   display: block;
   font-size: var(--font-size-norm);
 }
-
-.itemName:hover {
-  color: var(--fg-light);
-}
+.itemName:hover { color: var(--fg-light); }
 
 .itemMeta {
   color: var(--fg-dark);
@@ -101,14 +90,18 @@ form {
 .wallMeta,
 .errorNotice:has(.selectMessage:not(:placeholder-shown):invalid)::after {
   --pct: calc(var(--v) / var(--m) * 100%);
-  background: linear-gradient(to right, var(--bg-light) var(--pct), var(--bg-dark) var(--pct));
+  background:
+    linear-gradient(
+      to right,
+      var(--bg-light) var(--pct),
+      var(--bg-dark) var(--pct)
+    );
   border-radius: var(--radius-box);
   color: var(--fg-light);
   content: attr(data-error);
   display: block;
   font-family: ui-monospace, monospace;
   font-size: var(--font-size-small);
-  margin: 0;
   padding: var(--radius-box);
 }
 
@@ -135,9 +128,7 @@ footer label {
   text-align: center;
 }
 
-footer .footerExtra {
-  padding: 0 2em 2em;
-}
+footer .footerExtra { padding: 0 2em 2em; }
 
 #footerToggle:checked ~ footer {
   max-height: 200px;
@@ -174,9 +165,7 @@ a.linkBold:hover {
   text-decoration: underline;
 }
 
-button,
-input,
-select {
+button, input, select {
   transition: all var(--animation-fast) ease;
 }
 
@@ -220,6 +209,19 @@ textarea {
   padding: 0.6em;
   text-decoration: none;
   transition: background-color var(--animation-slow) ease;
+}
+
+textarea {
+  box-sizing: border-box;
+  padding: 1rem;
+  font-family: ui-monospace, monospace;
+  font-size: var(--font-size-norm);
+  color: var(--fg-light);
+  background: var(--bg-light);
+  border: 1px solid var(--bg-dark);
+  border-radius: var(--radius-box);
+  resize: vertical;
+  tab-size: 4;
 }
 
 .wallContent {
@@ -291,7 +293,6 @@ button.selectDelete:hover {
 .selectRefresh,
 .selectRemask,
 .selectStatus,
-.selectTheme,
 .selectUserInfo {
   width: var(--width-medium);
 }
@@ -355,22 +356,25 @@ details[open] > summary:hover {
   grid-template-columns: repeat(5, 1fr);
 }
 
-.themes label {
+.themes button {
+  cursor: pointer;
   display: block;
   width: var(--width-theme);
   height: var(--width-theme);
   border-radius: var(--radius-opt);
-  cursor: pointer;
+  margin: 0;
   outline: 2px solid transparent;
   outline-offset: 2px;
+  font-size: var(--font-size-norm);
+  padding: 16px;
 }
 
-.themes label:hover,
-.themes label:has(input:checked) {
+.themes button:hover,
+.themes button:has(input:checked) {
   outline-color: var(--fg-dark);
 }
 
-.themes label:has(input:focus-visible) {
+.themes button:has(input:focus-visible) {
   outline-color: var(--fg-light);
 }
 
@@ -388,7 +392,16 @@ details[open] > summary:hover {
 .theme-dusk,
 .theme-neon,
 .theme-night,
-.theme-ember {
+.theme-ember,
+.theme-gray,
+.theme-teal,
+.theme-tidal,
+.theme-lagoon,
+.theme-plum,
+.theme-mango,
+.theme-reef,
+.theme-canopy,
+.theme-cabana {
   background: linear-gradient(
     var(--rotation), var(--grad-start) 0%, var(--grad-end) 100%);
 }
@@ -408,3 +421,12 @@ details[open] > summary:hover {
 .theme-neon   { --grad-start: rgb(146, 21,245); --grad-end: rgb(  0,  0,  0); }
 .theme-night  { --grad-start: rgb(128,  0,  0); --grad-end: rgb(  0,  0,  0); }
 .theme-ember  { --grad-start: rgb(240,130, 30); --grad-end: rgb(120, 40,  0); }
+.theme-teal   { --grad-start: rgb( 30,165,175); --grad-end: rgb(  0, 45, 50); }
+.theme-gray   { --grad-start: rgb(120,120, 13); --grad-end: rgb( 30, 30, 35); }
+.theme-tidal  { --grad-start: rgb(242,169, 80); --grad-end: rgb( 31, 44, 61); }
+.theme-lagoon { --grad-start: rgb(233,196, 10); --grad-end: rgb( 19, 70, 78); }
+.theme-plum   { --grad-start: rgb(255,146,139); --grad-end: rgb( 88, 28, 60); }
+.theme-mango  { --grad-start: rgb(255,195,  0); --grad-end: rgb(114, 52, 18); }
+.theme-reef   { --grad-start: rgb(231,111, 81); --grad-end: rgb( 38, 70, 83); }
+.theme-canopy { --grad-start: rgb(167,201, 87); --grad-end: rgb( 30, 61, 44); }
+.theme-cabana { --grad-start: rgb(214,185,128); --grad-end: rgb(116,104, 87); }

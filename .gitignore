@@ -1,10 +1,9 @@
-._*
+.*
 *.log
 *.pem
 *.out
 *.sh
 *.test
-.DS_Store
 main
 release
 testCoverage*

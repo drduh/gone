@@ -101,13 +101,15 @@ func isAuthenticated(app *config.App, r *http.Request) bool {
 	required, exists := reqs[path]
 
 	if !exists {
-		app.Log.Debug("deny - no auth policy",
+		app.Log.Debug("auth deny",
+			"reason", "no policy",
 			"path", path)
 		return false
 	}
 
 	if !required {
-		app.Log.Debug("pass - auth not required",
+		app.Log.Debug("auth pass",
+			"reason", "not required",
 			"path", path)
 		return true
 	}

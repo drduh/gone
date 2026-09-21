@@ -11,7 +11,7 @@
     "tarpitDelay": "2s",
     "basic": {
       "field":     "X-Auth",
-      "token":     "mySecret"
+      "token":     ""
     },
     "require": {
       "assets":    false,
@@ -73,9 +73,11 @@
       "allowPick": true,
       "theme":     "auto",
       "available": [
-        "light", "dark", "navy", "rose", "green",
-        "lime", "pink", "gold", "purple", "lush",
-        "beach", "dusk", "neon", "night", "ember"
+        "light", "lime", "gold", "pink", "lush",
+        "dark", "green", "mango", "rose", "purple",
+        "navy", "canopy", "ember", "beach", "neon",
+        "teal", "lagoon", "cabana", "plum", "night",
+        "tidal", "gray", "dusk", "reef"
       ]
     }
   },

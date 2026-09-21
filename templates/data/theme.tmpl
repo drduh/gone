@@ -7,19 +7,13 @@
       <form class="inline-form">
         <div class="themes">
         {{- range .Style.Available }}
-          <label class="theme-{{ . }}"
-                 title="{{ . }}">
-            <input name="theme"
-                   type="radio"
-                  value="{{ . }}">
-            <span class="hide">{{ . }}</span>
-          </label>
+          <button aria-label="{{ . }}"
+                       class="theme-{{ . }}"
+                        name="theme"
+                       title="{{ . }}"
+                        type="submit"
+                       value="{{ . }}"></button>
         {{- end }}
-        </div>
-        <div class="row">
-          <button class="selectTheme"
-                  title="apply selected theme"
-                   type="submit">apply theme</button>
         </div>
       </form>
     </div>
