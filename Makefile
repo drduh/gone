@@ -9,7 +9,7 @@ GITNAME  ?= github.com
 GITREPO  ?= $(GITNAME)/$(AUTHOR)
 
 ARG       =
-OUT       = release
+RELEASE   = release
 PKG       = ./...
 SRC       = cmd/main.go
 
@@ -50,8 +50,8 @@ BINRACE   = $(BINNAME)-race
 BUILDCMD  = $(CMD_GO) build -trimpath -ldflags '-s -w $(BUILDFLAG)'
 
 BUILDBASE = GOOS=$(BUILDOS) GOARCH=$(BUILDARCH) $(BUILDCMD)
-CMD_BUILD = $(BUILDBASE) -o "$(OUT)/$(BINNAME)" "$(SRC)"
-CMD_RACE  = $(BUILDBASE) -race -o "$(OUT)/$(BINRACE)" "$(SRC)"
+CMD_BUILD = $(BUILDBASE) -o "$(RELEASE)/$(BINNAME)" "$(SRC)"
+CMD_RACE  = $(BUILDBASE) -race -o "$(RELEASE)/$(BINRACE)" "$(SRC)"
 
 SERVICE   = $(APPNAME).service
 SYSTEMCTL = systemctl
@@ -84,7 +84,7 @@ WARN      = tput setaf 3 ; printf "%s\n" "${1}" ; tput sgr0
 all: fmt lint test build
 
 prep-build:
-	@mkdir -p $(OUT)
+	@mkdir -p $(RELEASE)
 
 build: prep-build
 	@$(CMD_BUILD)
@@ -93,11 +93,11 @@ debug:   ARG += -debug
 version: ARG += -version
 
 run debug version: build
-	@$(OUT)/$(BINNAME) -auth $(AUTHCRED) $(ARG)
+	@$(RELEASE)/$(BINNAME) -auth $(AUTHCRED) $(ARG)
 
 release: build
 	@printf "built release: %s\n" \
-		"$$(file "$(OUT)/$(BINNAME)")"
+		"$$(file "$(RELEASE)/$(BINNAME)")"
 
 prep-container:
 	@$(CONTAIN) system start
@@ -122,7 +122,7 @@ install-assets:
 install-bin: build
 	@printf "Installing $(BINNAME) to $(DEST_BIN) ... "
 	@sudo install -Dm $(MOD_EXEC) \
-		-o root -g $(APPNAME) $(OUT)/$(BINNAME) $(DEST_BIN)
+		-o root -g $(APPNAME) $(RELEASE)/$(BINNAME) $(DEST_BIN)
 	@printf "done\n"
 
 install-logdir:
@@ -196,16 +196,16 @@ build-race: prep-build
 	@$(CMD_RACE)
 
 race: build-race
-	@$(OUT)/$(BINRACE) -debug
+	@$(RELEASE)/$(BINRACE) -debug
 
 clean: clean-cert clean-coverage
-	@rm -rf $(OUT)
+	@rm -rf -- "$(RELEASE)"
 
 clean-cert:
 	@rm -rf cert.pem key.pem
 
 clean-coverage:
-	@rm -rf $(TESTCOVER) $(TESTCOVER).html
+	@rm -rf -- "$(TESTCOVER)" "$(TESTCOVER).html"
 
 clean-cache:
 	@$(CMD_GO) clean -cache -testcache -modcache
