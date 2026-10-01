@@ -4,7 +4,6 @@ import (
 	"net/http"
 
 	"github.com/drduh/gone/config"
-	"github.com/drduh/gone/storage"
 	"github.com/drduh/gone/templates"
 )
 
@@ -17,11 +16,9 @@ func UserInfo(app *config.App) http.HandlerFunc {
 		}
 
 		response := templates.User{
-			Owner: storage.Owner{
-				Address: req.Address,
-				Mask:    req.AddressMask,
-				Headers: r.Header,
-			},
+			Address:   req.Address,
+			Mask:      req.AddressMask,
+			Headers:   r.Header,
 			IsBrowser: req.IsBrowser,
 		}
 

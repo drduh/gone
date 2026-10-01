@@ -14,24 +14,18 @@ func (s *Storage) ListFiles() []File {
 		}
 
 		f := File{
-			ID:   file.ID,
-			Name: file.Name,
-			Size: file.Size,
-			Sum:  file.Sum,
-			Type: file.Type,
-			Owner: Owner{
-				Agent: file.Agent,
-				Mask:  file.Mask,
-			},
-			Time: Time{
-				DurationRemaining: file.DurationRemaining,
-				UploadTimeFmt:     file.UploadTimeFmt,
-			},
-			Downloads: Downloads{
-				Allow:  file.Allow,
-				Count:  file.Count,
-				Remain: file.Remain,
-			},
+			ID:                file.ID,
+			Name:              file.Name,
+			Size:              file.Size,
+			Sum:               file.Sum,
+			Type:              file.Type,
+			Agent:             file.Agent,
+			Mask:              file.Mask,
+			DurationRemaining: file.DurationRemaining,
+			UploadTimeFmt:     file.UploadTimeFmt,
+			Allow:             file.Allow,
+			Count:             file.Count,
+			Remain:            file.Remain,
 		}
 
 		files = append(files, f)

@@ -28,11 +28,9 @@ func (h testHandler) WithGroup(string) slog.Handler {
 // newTestAuditor creates a new Auditor writing to buf.
 func newTestAuditor(buf *bytes.Buffer) *Auditor {
 	a := &Auditor{
-		Config: Config{
-			TimeFormat: "2006-01-02 15:04:05",
-		},
-		Handler: testHandler{},
-		Logger:  log.New(buf, "", 0),
+		Handler:    testHandler{},
+		Logger:     log.New(buf, "", 0),
+		TimeFormat: "2006-01-02 15:04:05",
 	}
 	a.Log = slog.New(a)
 	return a

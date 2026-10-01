@@ -119,24 +119,24 @@ func (s *Settings) validateContentLimits() error {
 }
 
 func (s *Settings) validateTimeouts() error {
-	if s.Timeout.Idle.GetDuration() < 1 {
+	if s.Idle.GetDuration() < 1 {
 		return fmt.Errorf("%w - not %s",
-			errTimeoutIdle, s.Timeout.Idle.String())
+			errTimeoutIdle, s.Idle.String())
 	}
 
-	if s.Timeout.Read.GetDuration() < 0 {
+	if s.Read.GetDuration() < 0 {
 		return fmt.Errorf("%w - not %s",
-			errTimeoutRead, s.Timeout.Read.String())
+			errTimeoutRead, s.Read.String())
 	}
 
-	if s.Timeout.ReadHeader.GetDuration() < 1 {
+	if s.ReadHeader.GetDuration() < 1 {
 		return fmt.Errorf("%w - not %s",
-			errTimeoutHeader, s.Timeout.ReadHeader.String())
+			errTimeoutHeader, s.ReadHeader.String())
 	}
 
-	if s.Timeout.Write.GetDuration() < 0 {
+	if s.Write.GetDuration() < 0 {
 		return fmt.Errorf("%w - not %s",
-			errTimeoutWrite, s.Timeout.Write.String())
+			errTimeoutWrite, s.Write.String())
 	}
 
 	return nil

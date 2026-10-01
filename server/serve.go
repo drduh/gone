@@ -16,10 +16,10 @@ var errTLSMissingFiles = errors.New(
 func newServer(app *config.App) *http.Server {
 	handler := getHandler(app)
 
-	timeoutIdle := app.Timeout.Idle.Duration
-	timeoutRead := app.Timeout.Read.Duration
-	timeoutHeader := app.Timeout.ReadHeader.Duration
-	timeoutWrite := app.Timeout.Write.Duration
+	timeoutIdle := app.Idle.Duration
+	timeoutRead := app.Read.Duration
+	timeoutHeader := app.ReadHeader.Duration
+	timeoutWrite := app.Write.Duration
 	app.Log.Debug("server timeouts",
 		"idle", timeoutIdle.String(),
 		"read", timeoutRead.String(),
