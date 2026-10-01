@@ -42,7 +42,7 @@
           {{- else }}
           <a class="linkBold"
               href="{{ $.Paths.Message }}/{{ .Count }}">
-            {{ .Count }}
+            {{- .Count -}}
           </a> &middot;
           {{- end }}
           {{ .Time.UploadTimeFmt }} &middot;

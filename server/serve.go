@@ -4,7 +4,6 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
-	"time"
 
 	"github.com/drduh/gone/config"
 )
@@ -17,10 +16,10 @@ var errTLSMissingFiles = errors.New(
 func newServer(app *config.App) *http.Server {
 	handler := getHandler(app)
 
-	timeoutIdle := 90 * time.Second
-	timeoutRead := 20 * time.Second
-	timeoutHeader := 20 * time.Second
-	timeoutWrite := 20 * time.Second
+	timeoutIdle := app.Timeout.Idle.Duration
+	timeoutRead := app.Timeout.Read.Duration
+	timeoutHeader := app.Timeout.ReadHeader.Duration
+	timeoutWrite := app.Timeout.Write.Duration
 	app.Log.Debug("server timeouts",
 		"idle", timeoutIdle.String(),
 		"read", timeoutRead.String(),

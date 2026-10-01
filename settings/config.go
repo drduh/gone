@@ -26,6 +26,9 @@ type Settings struct {
 	// Paths to route
 	Paths `json:"paths"`
 
+	// HTTP server timeout configuration
+	Timeout `json:"timeouts"`
+
 	// TLS configuration
 	TLS `json:"tls"`
 
@@ -237,6 +240,23 @@ type Default struct {
 
 	// Period of time before removing Files
 	Expiration Duration `json:"duration"`
+}
+
+// Timeout represents HTTP server timeout durations.
+type Timeout struct {
+
+	// Time to keep idle keep-alive connections open ("90s")
+	Idle Duration `json:"idle"`
+
+	// Time to wait for a full request, including body ("20s")
+	// Set to "0" to disable and rely on MaxBytesReader limits
+	Read Duration `json:"read"`
+
+	// Time to wait for request headers ("20s")
+	ReadHeader Duration `json:"readHeader"`
+
+	// Time to wait for a full response write ("20s")
+	Write Duration `json:"write"`
 }
 
 // Limit represents limits on content.
