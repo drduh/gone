@@ -18,13 +18,11 @@ func TestList(t *testing.T) {
 
 	data := []byte("hello, world!\n")
 	f := &storage.File{
-		Name:      "test.txt",
-		Data:      data,
-		Downloads: storage.Downloads{Allow: 10},
-		Time: storage.Time{
-			Duration:   5 * time.Minute,
-			UploadTime: time.Now(),
-		},
+		Name:       "test.txt",
+		Data:       data,
+		Allow:      10,
+		Duration:   5 * time.Minute,
+		UploadTime: time.Now(),
 	}
 
 	f.Scan()

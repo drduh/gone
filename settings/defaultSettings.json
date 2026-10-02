@@ -123,6 +123,12 @@
     "userRemask":  "/user/remask",
     "wallModify":  "/wall"
   },
+  "timeouts": {
+    "idle":        "90s",
+    "read":        "20s",
+    "readHeader":  "20s",
+    "write":       "20s"
+  },
   "tls": {
     "fileCert":    "",
     "fileKey":     ""

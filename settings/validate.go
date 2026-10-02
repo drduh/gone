@@ -19,6 +19,10 @@ var (
 	errReqsPerMinute   = errors.New("reqsPerMinute must be 1 or more")
 	errExpiration      = errors.New("expiration duration must be 1 or more")
 	errDurationLimit   = errors.New("duration limit must be 1 or more")
+	errTimeoutIdle     = errors.New("idle timeout must be 1 or more")
+	errTimeoutRead     = errors.New("read timeout must be 0 or more")
+	errTimeoutHeader   = errors.New("readHeader timeout must be 1 or more")
+	errTimeoutWrite    = errors.New("write timeout must be 0 or more")
 )
 
 // Validate returns an error if a setting is invalid.
@@ -32,6 +36,10 @@ func (s *Settings) Validate() error {
 	}
 
 	if err := s.validateContentLimits(); err != nil {
+		return err
+	}
+
+	if err := s.validateTimeouts(); err != nil {
 		return err
 	}
 
@@ -105,6 +113,30 @@ func (s *Settings) validateContentLimits() error {
 	if s.FileLimits.SizeTotalMb < 1 {
 		return fmt.Errorf("%w - not %d",
 			errTotalSizeLimit, s.FileLimits.SizeTotalMb)
+	}
+
+	return nil
+}
+
+func (s *Settings) validateTimeouts() error {
+	if s.Idle.GetDuration() < 1 {
+		return fmt.Errorf("%w - not %s",
+			errTimeoutIdle, s.Idle.String())
+	}
+
+	if s.Read.GetDuration() < 0 {
+		return fmt.Errorf("%w - not %s",
+			errTimeoutRead, s.Read.String())
+	}
+
+	if s.ReadHeader.GetDuration() < 1 {
+		return fmt.Errorf("%w - not %s",
+			errTimeoutHeader, s.ReadHeader.String())
+	}
+
+	if s.Write.GetDuration() < 0 {
+		return fmt.Errorf("%w - not %s",
+			errTimeoutWrite, s.Write.String())
 	}
 
 	return nil

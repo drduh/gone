@@ -134,21 +134,15 @@ func Upload(app *config.App) http.HandlerFunc {
 
 				t := time.Now()
 				f := &storage.File{
-					Name: filename,
-					Data: buf.Bytes(),
-					Owner: storage.Owner{
-						Address: req.Address,
-						Agent:   req.Agent,
-						Mask:    req.AddressMask,
-					},
-					Time: storage.Time{
-						Duration:      durationLimit,
-						UploadTime:    t,
-						UploadTimeFmt: t.Format(app.TimeFormat),
-					},
-					Downloads: storage.Downloads{
-						Allow: downloadLimit,
-					},
+					Name:          filename,
+					Data:          buf.Bytes(),
+					Address:       req.Address,
+					Agent:         req.Agent,
+					Mask:          req.AddressMask,
+					Duration:      durationLimit,
+					UploadTime:    t,
+					UploadTimeFmt: t.Format(app.TimeFormat),
+					Allow:         downloadLimit,
 				}
 
 				f.Scan()
@@ -156,23 +150,17 @@ func Upload(app *config.App) http.HandlerFunc {
 				app.Files[f.ID] = f
 
 				upload = storage.File{
-					ID:   f.ID,
-					Name: f.Name,
-					Size: f.Size,
-					Sum:  f.Sum,
-					Type: f.Type,
-					Owner: storage.Owner{
-						Address: f.Address,
-						Mask:    f.Mask,
-						Agent:   f.Agent,
-					},
-					Time: storage.Time{
-						UploadTimeFmt:     f.UploadTimeFmt,
-						DurationRemaining: f.Duration.String(),
-					},
-					Downloads: storage.Downloads{
-						Allow: f.Allow,
-					},
+					ID:                f.ID,
+					Name:              f.Name,
+					Size:              f.Size,
+					Sum:               f.Sum,
+					Type:              f.Type,
+					Address:           f.Address,
+					Mask:              f.Mask,
+					Agent:             f.Agent,
+					UploadTimeFmt:     f.UploadTimeFmt,
+					DurationRemaining: f.Duration.String(),
+					Allow:             f.Allow,
 				}
 				uploads = append(uploads, upload)
 			}(fileHeader)

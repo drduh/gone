@@ -85,16 +85,12 @@ func MessageAdd(app *config.App) http.HandlerFunc {
 
 		t := time.Now()
 		message := storage.Message{
-			Count: app.NumMessages + 1,
-			Data:  formContent,
-			Owner: storage.Owner{
-				Agent: req.Agent,
-				Mask:  req.AddressMask,
-			},
-			Time: storage.Time{
-				UploadTime:    t,
-				UploadTimeFmt: t.Format(app.TimeFormat),
-			},
+			Count:         app.NumMessages + 1,
+			Data:          formContent,
+			Agent:         req.Agent,
+			Mask:          req.AddressMask,
+			UploadTime:    t,
+			UploadTimeFmt: t.Format(app.TimeFormat),
 		}
 
 		app.Messages = append(app.Messages, &message)

@@ -12,10 +12,10 @@ import (
 
 // Load returns the configured application.
 func Load() *App {
-	app := App{}
-
-	app.Debug = modeDebug
-	app.ShowVersion = modeShowVersion
+	app := App{
+		Debug:       modeDebug,
+		ShowVersion: modeShowVersion,
+	}
 
 	s, err := settings.Load(pathConfig)
 	if err != nil {
