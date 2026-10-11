@@ -10,8 +10,6 @@ const (
 	formFieldMessage   = "message"
 	formFieldTheme     = "theme"
 	formFieldWall      = "wall"
-
-	templatesData = "data/*.tmpl"
 )
 
 // Request represents user request metadata.
