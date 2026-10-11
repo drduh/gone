@@ -61,7 +61,7 @@ gone | jq '.message'
 
 # Configuration
 
-[Default settings](https://github.com/drduh/gone/blob/main/settings/defaultSettings.json) are embedded into the application. To configure, pass a modified settings file using `-config` or `-settings`:
+[Default settings](https://github.com/drduh/gone/blob/main/settings/defaultSettings.json) are embedded into the application. To configure, pass a modified settings file using `-config` (or `-c`):
 
 ```bash
 gone -config mySettings.json
@@ -71,8 +71,16 @@ Set an empty handler path to disable it; for example, to turn off text features:
 
 ```json
 "paths": {
-  "message": "",
-  "wall": ""
+  "msg": "",
+  "wallModify": ""
+```
+
+## Authentication
+
+The token is read from `auth.basic.token` in settings, or `-auth` which takes precedence. If neither is set, a random token is generated at startup; send `SIGUSR1` to clear storage, or `SIGUSR2` to log the current token:
+
+```bash
+pkill -USR2 gone
 ```
 
 # Clients
