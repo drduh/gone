@@ -36,7 +36,7 @@ func getTheme(w http.ResponseWriter, r *http.Request,
 			theme = getDefaultTheme(autoTheme)
 		}
 
-		http.SetCookie(w, auth.NewCookie(theme, id, t))
+		http.SetCookie(w, auth.NewCookie(theme, id, t, auth.IsTLS(r)))
 
 		return theme
 	}
