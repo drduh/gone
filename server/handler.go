@@ -16,7 +16,22 @@ func getHandler(app *config.App) http.Handler {
 	registerAssets(mux, app)
 	handlers.Register(mux, app)
 
-	return mux
+	return withCSRF(app, mux)
+}
+
+// withCSRF rejects cross-origin browser form posts
+func withCSRF(app *config.App, h http.Handler) http.Handler {
+	csrf := http.NewCrossOriginProtection()
+	csrf.SetDenyHandler(http.HandlerFunc(
+		func(w http.ResponseWriter, r *http.Request) {
+			app.Log.Error(app.Deny,
+				"reason", "cross-origin",
+				"origin", r.Header.Get("Origin"),
+				"path", r.URL.Path)
+			handlers.Deny(w, http.StatusForbidden, app.Deny)
+		}))
+
+	return csrf.Handler(h)
 }
 
 // registerAssets sets up HTML asset handling.

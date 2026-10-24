@@ -17,6 +17,6 @@ func Undefined(app *config.App) http.HandlerFunc {
 		app.Log.Info(app.NoPath,
 			"method", r.Method,
 			"user", req)
-		deny(w, http.StatusNotFound, app.NoPath)
+		Deny(w, http.StatusNotFound, app.NoPath)
 	}
 }

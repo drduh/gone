@@ -42,7 +42,7 @@ func checkAuthorized(
 	w http.ResponseWriter) bool {
 	if !app.Authorize(app.ReqsPerMinute) {
 		auth.ApplyTarpit()
-		deny(w, http.StatusTooManyRequests, app.RateLimit)
+		Deny(w, http.StatusTooManyRequests, app.RateLimit)
 		return false
 	}
 
@@ -55,7 +55,7 @@ func checkAuthenticated(
 	r *http.Request) bool {
 	if !isAuthenticated(app, r) {
 		auth.ApplyTarpit()
-		deny(w, http.StatusForbidden, app.Deny)
+		Deny(w, http.StatusForbidden, app.Deny)
 		return false
 	}
 
