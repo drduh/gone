@@ -18,6 +18,6 @@ jobs:
 
     - uses: ./.github/actions/setup-go
 
-    - run: go install github.com/securego/gosec/v2/cmd/gosec@deb54465fea23d19a77f037e11e6589021f8501d # v2.29.0
+    - run: go install github.com/securego/gosec/v2/cmd/gosec@5eb1d104ef85ff2c905c877eb600e8c1dee33a22 # v2.30.0
 
     - run: gosec ./...
