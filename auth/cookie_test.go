@@ -59,14 +59,28 @@ func TestCookieNotExists(t *testing.T) {
 	if cookies[0].SameSite != cookieMode {
 		t.Errorf("Expected SameSite=%d, got %d", cookieMode, cookies[0].SameSite)
 	}
-	if !cookies[0].Secure {
-		t.Errorf("Expected Secure=true, got false")
+	if cookies[0].Secure {
+		t.Errorf("Expected Secure=false over HTTP, got true")
+	}
+}
+
+// TestCookieSecureTLS tests GetCookie sets Secure over TLS.
+func TestCookieSecureTLS(t *testing.T) {
+	req := httptest.NewRequestWithContext(t.Context(),
+		http.MethodGet, "https://localhost/", nil)
+
+	rr := httptest.NewRecorder()
+	GetCookie(rr, req, cookieValue, cookieID, time.Hour)
+
+	cookies := rr.Result().Cookies()
+	if len(cookies) != 1 || !cookies[0].Secure {
+		t.Errorf("Expected Secure=true over TLS")
 	}
 }
 
 // TestNewCookie tests NewCookie correctly sets a cookie.
 func TestNewCookie(t *testing.T) {
-	cookie := NewCookie(cookieValue, cookieID, cookieTime)
+	cookie := NewCookie(cookieValue, cookieID, cookieTime, true)
 	if cookie.Path != "/" {
 		t.Errorf("Expected Path=%q, got %q", "/",
 			cookie.Path)

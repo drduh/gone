@@ -1,7 +1,6 @@
 package handlers
 
 import (
-	"html/template"
 	"net/http"
 	"strings"
 
@@ -62,17 +61,6 @@ func renderIndex(
 			app.Style.Available)
 	}
 
-	tmpl, err := template.New("index").ParseFS(
-		templates.TemplatesData, templatesData)
-	if err != nil {
-		app.Log.Error(app.TmplParse,
-			"error", err.Error(),
-			"user", req)
-		writeJSON(w, http.StatusInternalServerError,
-			errorJSON(app.TmplParse))
-		return
-	}
-
 	app.UpdateRemainingFileLimits()
 
 	response := templates.Index{
@@ -92,7 +80,8 @@ func renderIndex(
 		Version:    app.Version,
 	}
 
-	if err = tmpl.Execute(w, response); err != nil {
+	err := templates.IndexTemplate.Execute(w, response)
+	if err != nil {
 		app.Log.Error(app.TmplExec,
 			"error", err.Error(),
 			"user", req)

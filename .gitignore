@@ -1,4 +1,5 @@
 .*
+!.gitignore
 *.log
 *.pem
 *.out

@@ -16,6 +16,9 @@ func getHandler(app *config.App) http.Handler {
 	registerAssets(mux, app)
 
 	for pattern, h := range handlers.Routes(app) {
+		if pattern == "" {
+			continue // path disabled
+		}
 		mux.HandleFunc(pattern, h)
 	}
 
