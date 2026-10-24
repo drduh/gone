@@ -29,7 +29,7 @@ func IsTLS(r *http.Request) bool {
 // Secure is only set over TLS.
 func NewCookie(value, id string, t time.Duration,
 	secure bool) *http.Cookie {
-	return &http.Cookie{
+	return &http.Cookie{ // #nosec G124
 		Name:     id,
 		Value:    value,
 		Path:     "/",
