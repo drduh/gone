@@ -14,13 +14,7 @@ func getHandler(app *config.App) http.Handler {
 	mux := http.NewServeMux()
 
 	registerAssets(mux, app)
-
-	for pattern, h := range handlers.Routes(app) {
-		if pattern == "" {
-			continue // path disabled
-		}
-		mux.HandleFunc(pattern, h)
-	}
+	handlers.Register(mux, app)
 
 	return mux
 }
@@ -60,6 +54,7 @@ func wrapAssets(app *config.App, h http.Handler) http.Handler {
 			if req == nil {
 				return
 			}
+
 			w.Header().Set("Cache-Control", "no-cache")
 			h.ServeHTTP(w, r)
 		})

@@ -6,6 +6,16 @@ import (
 	"github.com/drduh/gone/config"
 )
 
+// Register adds enabled routes to mux.
+func Register(mux *http.ServeMux, app *config.App) {
+	for pattern, h := range Routes(app) {
+		if pattern == "" {
+			continue
+		}
+		mux.HandleFunc(pattern, h)
+	}
+}
+
 // Routes returns the route table to register mux handlers.
 func Routes(app *config.App) map[string]http.HandlerFunc {
 	return map[string]http.HandlerFunc{

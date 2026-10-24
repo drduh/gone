@@ -44,11 +44,7 @@ func newTestApp() *config.App {
 // newTestMux sets up a route handlers for tests.
 func newTestMux(app *config.App) *http.ServeMux {
 	mux := http.NewServeMux()
-
-	for pattern, h := range Routes(app) {
-		mux.HandleFunc(pattern, h)
-	}
-
+	Register(mux, app)
 	return mux
 }
 
