@@ -262,7 +262,7 @@ type Timeout struct {
 // Limit represents limits on content.
 type Limit struct {
 
-	// Global requests per minute to rate limit
+	// Requests per minute per client address to rate limit
 	ReqsPerMinute int `json:"reqsPerMinute,omitempty"`
 
 	// FileLimits represents file upload limits.

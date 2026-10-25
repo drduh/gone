@@ -45,14 +45,62 @@ func (f *File) IsExpired() ExpiryReason {
 	return expiryNone
 }
 
+// meta returns a copy of the File without content.
+func (f *File) meta() File {
+	c := *f
+	c.Data = nil
+
+	return c
+}
+
 // Expire removes a File from Storage by ID.
 func (s *Storage) Expire(f *File) {
-	delete(s.Files, f.ID)
+	s.Lease.Lock()
+	defer s.Lease.Unlock()
+
+	s.expire(f)
+}
+
+// ExpireFiles removes all expired Files from Storage,
+// returning a copy of each with the reason.
+func (s *Storage) ExpireFiles() []Expired {
+	s.Lease.Lock()
+	defer s.Lease.Unlock()
+
+	var expired []Expired
+	for _, f := range s.Files {
+		f.SetRemainingDownloads()
+		f.SetRemainingDuration()
+
+		reason := f.IsExpired()
+		if reason == "" {
+			continue
+		}
+
+		s.expire(f)
+		expired = append(expired, Expired{
+			File:   f.meta(),
+			Reason: reason,
+		})
+	}
+
+	return expired
 }
 
 // UpdateRemainingFileLimits updates remaining limits
 // of each File in Storage.
 func (s *Storage) UpdateRemainingFileLimits() {
+	s.Lease.Lock()
+	defer s.Lease.Unlock()
+
+	s.updateRemaining()
+}
+
+func (s *Storage) expire(f *File) {
+	delete(s.Files, f.ID)
+}
+
+func (s *Storage) updateRemaining() {
 	for _, file := range s.Files {
 		file.SetRemainingDownloads()
 		file.SetRemainingDuration()

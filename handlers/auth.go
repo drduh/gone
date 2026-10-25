@@ -17,10 +17,14 @@ func AuthRequest(
 ) *Request {
 	req := parseRequest(r)
 
-	if !checkAuthorized(app, w) {
+	if !checkAuthorized(app, w, r) {
 		app.Log.Error(app.RateLimit,
 			"limit", app.ReqsPerMinute,
 			"user", req)
+		return nil
+	}
+
+	if !parseBody(w, r, app, req) {
 		return nil
 	}
 
@@ -39,10 +43,11 @@ func AuthRequest(
 
 func checkAuthorized(
 	app *config.App,
-	w http.ResponseWriter) bool {
-	if !app.Authorize(app.ReqsPerMinute) {
+	w http.ResponseWriter,
+	r *http.Request) bool {
+	if !app.Authorize(clientAddr(r), app.ReqsPerMinute) {
 		auth.ApplyTarpit()
-		deny(w, http.StatusTooManyRequests, app.RateLimit)
+		Deny(w, http.StatusTooManyRequests, app.RateLimit)
 		return false
 	}
 
@@ -55,15 +60,15 @@ func checkAuthenticated(
 	r *http.Request) bool {
 	if !isAuthenticated(app, r) {
 		auth.ApplyTarpit()
-		deny(w, http.StatusForbidden, app.Deny)
+		Deny(w, http.StatusForbidden, app.Deny)
 		return false
 	}
 
 	return true
 }
 
-// getToken reads the token from the request header,
-// or posted form value.
+// getToken reads the token from the request header, or
+// posted form value (body already parsed by parseBody).
 func getToken(field string, r *http.Request) []byte {
 	value := r.Header.Get(field)
 

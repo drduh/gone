@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"net"
 	"net/http"
 	"strings"
 )
@@ -16,6 +17,17 @@ func parseRequest(r *http.Request) *Request {
 			r.Header.Get("Accept"), "text/html",
 		),
 	}
+}
+
+// clientAddr returns the request host without port,
+// or the raw RemoteAddr if it has no port.
+func clientAddr(r *http.Request) string {
+	host, _, err := net.SplitHostPort(r.RemoteAddr)
+	if err != nil {
+		return r.RemoteAddr
+	}
+
+	return host
 }
 
 // toPath redirects an HTTP request to a path.

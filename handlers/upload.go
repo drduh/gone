@@ -1,15 +1,13 @@
 package handlers
 
 import (
-	"bytes"
+	"fmt"
 	"io"
 	"mime/multipart"
 	"net/http"
-	"sync"
 	"time"
 
 	"github.com/drduh/gone/config"
-	"github.com/drduh/gone/settings"
 	"github.com/drduh/gone/storage"
 )
 
@@ -21,39 +19,22 @@ func Upload(app *config.App) http.HandlerFunc {
 			return
 		}
 
-		maxFileBytes := app.GetMaxFileBytes()
-		contentLength := r.ContentLength
-
-		if contentLength > maxFileBytes {
-			writeJSON(w, http.StatusRequestEntityTooLarge,
-				errorJSON(app.FileSize))
-			app.Log.Error(app.FileSize,
-				"fileSizeMB", settings.BytesToMegabytes(
-					contentLength),
+		if r.MultipartForm == nil {
+			writeJSON(w, http.StatusBadRequest,
+				errorJSON(app.Form))
+			app.Log.Error(app.Form,
 				"user", req)
 			return
 		}
 
-		app.CountFiles()
 		maxTotalBytes := app.GetMaxTotalFilesBytes()
-		totalBytes := int64(app.SizeFiles) + contentLength
+		stored := int64(app.FilesBytes())
 
-		if maxTotalBytes > 0 && totalBytes > maxTotalBytes {
+		if maxTotalBytes > 0 && stored+partsSize(r) > maxTotalBytes {
 			writeJSON(w, http.StatusRequestEntityTooLarge,
 				errorJSON(app.FileSizeAll))
 			app.Log.Error(app.FileSizeAll,
-				"totalSize", app.SizeFiles,
-				"user", req)
-			return
-		}
-
-		r.Body = http.MaxBytesReader(w, r.Body, maxFileBytes)
-		//gosec:disable G120: memory bounded by MaxBytesReader
-		if err := r.ParseMultipartForm(maxFileBytes); err != nil {
-			writeJSON(w, http.StatusInternalServerError,
-				errorJSON(app.Copy))
-			app.Log.Error("upload failed",
-				"error", err.Error(),
+				"totalSize", stored,
 				"user", req)
 			return
 		}
@@ -69,11 +50,6 @@ func Upload(app *config.App) http.HandlerFunc {
 		app.Log.Debug("got duration form value",
 			formFieldDuration, durationLimit,
 			"user", req)
-
-		var upload storage.File
-		var uploads []storage.File
-		var mu sync.Mutex
-		var wg sync.WaitGroup
 
 		formFileContent := r.MultipartForm.File["file"]
 		if formFileContent == nil {
@@ -95,77 +71,57 @@ func Upload(app *config.App) http.HandlerFunc {
 			return
 		}
 
-		wg.Add(fileCount)
-
+		files := make([]*storage.File, 0, fileCount)
+		uploads := make([]storage.File, 0, fileCount)
 		for _, fileHeader := range formFileContent {
-			go func(fileHeader *multipart.FileHeader) {
-				defer wg.Done()
-				mu.Lock()
-				defer mu.Unlock()
-				file, err := fileHeader.Open()
-				if err != nil {
-					app.Log.Error(app.Copy,
-						"error", err.Error(),
-						"user", req)
-				}
-				defer func() {
-					if err := file.Close(); err != nil {
-						app.Log.Error(app.Form,
-							"error", err.Error(),
-							"user", req)
-						return
-					}
-				}()
+			f, err := readUpload(fileHeader)
+			if err != nil {
+				writeJSON(w, http.StatusInternalServerError,
+					errorJSON(app.Copy))
+				app.Log.Error(app.Copy,
+					"error", err.Error(),
+					"user", req)
+				return
+			}
 
-				var buf bytes.Buffer
-				if _, err := io.Copy(&buf, file); err != nil {
-					writeJSON(w, http.StatusInternalServerError,
-						errorJSON(app.Copy))
-					app.Log.Error(app.Copy,
-						"error", err.Error(),
-						"user", req)
-					return
-				}
+			f.Name = storage.SanitizeName(
+				fileHeader.Filename,
+				app.FileLimits.NameExtraChars,
+				app.FileLimits.NameLength)
 
-				filename := storage.SanitizeName(
-					fileHeader.Filename,
-					app.FileLimits.NameExtraChars,
-					app.FileLimits.NameLength)
+			t := time.Now()
+			f.Address = req.Address
+			f.Agent = req.Agent
+			f.Mask = req.AddressMask
+			f.Duration = durationLimit
+			f.UploadTime = t
+			f.UploadTimeFmt = t.Format(app.TimeFormat)
+			f.Allow = downloadLimit
+			f.Scan()
 
-				t := time.Now()
-				f := &storage.File{
-					Name:          filename,
-					Data:          buf.Bytes(),
-					Address:       req.Address,
-					Agent:         req.Agent,
-					Mask:          req.AddressMask,
-					Duration:      durationLimit,
-					UploadTime:    t,
-					UploadTimeFmt: t.Format(app.TimeFormat),
-					Allow:         downloadLimit,
-				}
-
-				f.Scan()
-
-				app.Files[f.ID] = f
-
-				upload = storage.File{
-					ID:                f.ID,
-					Name:              f.Name,
-					Size:              f.Size,
-					Sum:               f.Sum,
-					Type:              f.Type,
-					Address:           f.Address,
-					Mask:              f.Mask,
-					Agent:             f.Agent,
-					UploadTimeFmt:     f.UploadTimeFmt,
-					DurationRemaining: f.Duration.String(),
-					Allow:             f.Allow,
-				}
-				uploads = append(uploads, upload)
-			}(fileHeader)
+			files = append(files, f)
+			uploads = append(uploads, storage.File{
+				ID:                f.ID,
+				Name:              f.Name,
+				Size:              f.Size,
+				Sum:               f.Sum,
+				Type:              f.Type,
+				Address:           f.Address,
+				Mask:              f.Mask,
+				Agent:             f.Agent,
+				UploadTimeFmt:     f.UploadTimeFmt,
+				DurationRemaining: f.Duration.String(),
+				Allow:             f.Allow,
+			})
 		}
-		wg.Wait()
+
+		if !app.AddFiles(files, maxTotalBytes) {
+			writeJSON(w, http.StatusRequestEntityTooLarge,
+				errorJSON(app.FileSizeAll))
+			app.Log.Error(app.FileSizeAll,
+				"user", req)
+			return
+		}
 
 		app.Log.Info("files uploaded",
 			"files", uploads,
@@ -177,4 +133,32 @@ func Upload(app *config.App) http.HandlerFunc {
 			writeJSON(w, http.StatusOK, uploads)
 		}
 	}
+}
+
+// partsSize returns the byte total of parsed file parts.
+func partsSize(r *http.Request) int64 {
+	var n int64
+	for _, parts := range r.MultipartForm.File {
+		for _, p := range parts {
+			n += p.Size
+		}
+	}
+
+	return n
+}
+
+// readUpload reads one multipart file part into a File.
+func readUpload(fh *multipart.FileHeader) (*storage.File, error) {
+	part, err := fh.Open()
+	if err != nil {
+		return nil, fmt.Errorf("open part: %w", err)
+	}
+	defer func() { _ = part.Close() }()
+
+	data, err := io.ReadAll(part)
+	if err != nil {
+		return nil, fmt.Errorf("read part: %w", err)
+	}
+
+	return &storage.File{Data: data}, nil
 }

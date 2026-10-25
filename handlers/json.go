@@ -5,8 +5,8 @@ import (
 	"net/http"
 )
 
-// deny serves a JSON response for disallowed requests.
-func deny(w http.ResponseWriter, code int, reason string) {
+// Deny serves a JSON response for disallowed requests.
+func Deny(w http.ResponseWriter, code int, reason string) {
 	writeJSON(w, code, errorJSON(reason))
 }
 

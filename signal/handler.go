@@ -29,10 +29,9 @@ func Setup(app *config.App) {
 			s := <-sigChan
 			switch s {
 			case syscall.SIGUSR1:
-				app.CountStorage()
 				app.Log.Info("clearing storage",
 					"signal", s,
-					"sizes", app.Sizes)
+					"sizes", app.Snapshot().Sizes)
 				app.ClearStorage()
 
 			case syscall.SIGUSR2:

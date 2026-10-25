@@ -26,8 +26,8 @@ type Index struct {
 	// Server paths
 	settings.Paths
 
-	// Content storage
-	storage.Storage
+	// Content storage copy
+	Storage storage.Snapshot
 
 	// Server name
 	Hostname string

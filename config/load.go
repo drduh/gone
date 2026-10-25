@@ -1,8 +1,6 @@
 package config
 
 import (
-	"log"
-
 	"github.com/drduh/gone/audit"
 	"github.com/drduh/gone/auth"
 	"github.com/drduh/gone/settings"
@@ -19,7 +17,8 @@ func Load() *App {
 
 	s, err := settings.Load(pathConfig)
 	if err != nil {
-		log.Fatalf("failed loading settings: %v", err)
+		funcFatal("failed loading settings: %v", err)
+		return nil
 	}
 	app.Settings = s
 
@@ -29,7 +28,8 @@ func Load() *App {
 		TimeFormat: app.TimeFormat,
 	})
 	if err != nil {
-		log.Fatalf("failed starting auditor: %v", err)
+		funcFatal("failed starting auditor: %v", err)
+		return nil
 	}
 	app.Log = auditor.Log
 

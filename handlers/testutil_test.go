@@ -44,11 +44,7 @@ func newTestApp() *config.App {
 // newTestMux sets up a route handlers for tests.
 func newTestMux(app *config.App) *http.ServeMux {
 	mux := http.NewServeMux()
-
-	for pattern, h := range Routes(app) {
-		mux.HandleFunc(pattern, h)
-	}
-
+	Register(mux, app)
 	return mux
 }
 
@@ -59,15 +55,17 @@ func newTestAppWithStorage() *config.App {
 
 	app.Storage = storage.Storage{
 		Files: map[string]*storage.File{
-			"file1": {
+			"12345": {
 				Name:  "file1",
 				ID:    "12345",
 				Bytes: 10,
+				Time:  storage.Time{UploadTime: time.Now()},
 			},
-			"file2": {
+			"67890": {
 				Name:  "file2",
 				ID:    "67890",
 				Bytes: 20,
+				Time:  storage.Time{UploadTime: time.Now()},
 			},
 		},
 		Messages: []*storage.Message{

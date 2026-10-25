@@ -21,15 +21,23 @@ func Download(app *config.App) http.HandlerFunc {
 			return
 		}
 
-		file := app.FindFile(filename)
+		file, reason := app.ReserveDownload(filename)
 		if file == nil {
-			app.Log.Error(app.NotFound, "user", req)
+			app.Log.Error(app.NotFound,
+				"reason", reason,
+				"user", req)
 			writeJSON(w, http.StatusNotFound, errorJSON(app.NotFound))
 			return
 		}
 		app.Log.Debug("file found",
 			"file", file.Name,
 			"user", req)
+
+		if app.Write.Duration > 0 {
+			_ = http.NewResponseController(w).SetWriteDeadline(
+				transferDeadline(app.Write.Duration,
+					int64(file.Bytes)))
+		}
 
 		file.Serve(w)
 		app.Log.Info("served file",
@@ -39,9 +47,7 @@ func Download(app *config.App) http.HandlerFunc {
 			"downloads", file.Count,
 			"user", req)
 
-		reason := file.IsExpired()
 		if reason != "" {
-			app.Expire(file)
 			app.Log.Info("removed file",
 				"reason", reason,
 				"id", file.ID,

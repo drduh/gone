@@ -14,15 +14,21 @@ func getHandler(app *config.App) http.Handler {
 	mux := http.NewServeMux()
 
 	registerAssets(mux, app)
+	handlers.Register(mux, app)
 
-	for pattern, h := range handlers.Routes(app) {
-		if pattern == "" {
-			continue // path disabled
-		}
-		mux.HandleFunc(pattern, h)
-	}
+	return withCSRF(app, mux)
+}
 
-	return mux
+// withCSRF rejects cross-origin browser form posts.
+func withCSRF(app *config.App, h http.Handler) http.Handler {
+	csrf := http.NewCrossOriginProtection()
+	csrf.SetDenyHandler(http.HandlerFunc(
+		func(w http.ResponseWriter, _ *http.Request) {
+			app.Log.Error(app.Deny, "reason", "cross-origin")
+			handlers.Deny(w, http.StatusForbidden, app.Deny)
+		}))
+
+	return csrf.Handler(h)
 }
 
 // registerAssets sets up HTML asset handling.
@@ -60,6 +66,7 @@ func wrapAssets(app *config.App, h http.Handler) http.Handler {
 			if req == nil {
 				return
 			}
+
 			w.Header().Set("Cache-Control", "no-cache")
 			h.ServeHTTP(w, r)
 		})
