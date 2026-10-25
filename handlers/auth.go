@@ -17,7 +17,7 @@ func AuthRequest(
 ) *Request {
 	req := parseRequest(r)
 
-	if !checkAuthorized(app, w) {
+	if !checkAuthorized(app, w, r) {
 		app.Log.Error(app.RateLimit,
 			"limit", app.ReqsPerMinute,
 			"user", req)
@@ -39,8 +39,9 @@ func AuthRequest(
 
 func checkAuthorized(
 	app *config.App,
-	w http.ResponseWriter) bool {
-	if !app.Authorize(app.ReqsPerMinute) {
+	w http.ResponseWriter,
+	r *http.Request) bool {
+	if !app.Authorize(clientAddr(r), app.ReqsPerMinute) {
 		auth.ApplyTarpit()
 		Deny(w, http.StatusTooManyRequests, app.RateLimit)
 		return false

@@ -20,7 +20,7 @@ func TestGetHandlerDisabledPaths(t *testing.T) {
 	h := getHandler(app)
 
 	rec := httptest.NewRecorder()
-	h.ServeHTTP(rec, httptest.NewRequest(
+	h.ServeHTTP(rec, httptest.NewRequestWithContext(t.Context(),
 		http.MethodGet, "/wall", nil))
 	if rec.Code != http.StatusNotFound {
 		t.Fatalf("disabled path status = %d, want %d",
@@ -48,8 +48,8 @@ func TestCrossOriginDenied(t *testing.T) {
 
 	for _, tc := range cases {
 		t.Run(tc.name, func(t *testing.T) {
-			req := httptest.NewRequest(http.MethodPost,
-				"/msg/add", strings.NewReader("message=hi"))
+			req := httptest.NewRequestWithContext(t.Context(),
+				http.MethodPost, "/msg/add", strings.NewReader("message=hi"))
 			req.Header.Set("Content-Type",
 				"application/x-www-form-urlencoded")
 			if tc.site != "" {

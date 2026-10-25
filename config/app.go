@@ -21,7 +21,7 @@ type App struct {
 	// Uploaded content storage
 	storage.Storage
 
-	// Global requests rate limiter
+	// Per-client requests rate limiter
 	auth.RequestThrottle
 
 	// Application version and build info
