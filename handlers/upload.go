@@ -1,11 +1,10 @@
 package handlers
 
 import (
-	"bytes"
+	"fmt"
 	"io"
 	"mime/multipart"
 	"net/http"
-	"sync"
 	"time"
 
 	"github.com/drduh/gone/config"
@@ -70,11 +69,6 @@ func Upload(app *config.App) http.HandlerFunc {
 			formFieldDuration, durationLimit,
 			"user", req)
 
-		var upload storage.File
-		var uploads []storage.File
-		var mu sync.Mutex
-		var wg sync.WaitGroup
-
 		formFileContent := r.MultipartForm.File["file"]
 		if formFileContent == nil {
 			writeJSON(w, http.StatusBadRequest,
@@ -95,77 +89,49 @@ func Upload(app *config.App) http.HandlerFunc {
 			return
 		}
 
-		wg.Add(fileCount)
-
+		uploads := make([]storage.File, 0, fileCount)
 		for _, fileHeader := range formFileContent {
-			go func(fileHeader *multipart.FileHeader) {
-				defer wg.Done()
-				mu.Lock()
-				defer mu.Unlock()
-				file, err := fileHeader.Open()
-				if err != nil {
-					app.Log.Error(app.Copy,
-						"error", err.Error(),
-						"user", req)
-				}
-				defer func() {
-					if err := file.Close(); err != nil {
-						app.Log.Error(app.Form,
-							"error", err.Error(),
-							"user", req)
-						return
-					}
-				}()
+			f, err := readUpload(fileHeader)
+			if err != nil {
+				writeJSON(w, http.StatusInternalServerError,
+					errorJSON(app.Copy))
+				app.Log.Error(app.Copy,
+					"error", err.Error(),
+					"user", req)
+				return
+			}
 
-				var buf bytes.Buffer
-				if _, err := io.Copy(&buf, file); err != nil {
-					writeJSON(w, http.StatusInternalServerError,
-						errorJSON(app.Copy))
-					app.Log.Error(app.Copy,
-						"error", err.Error(),
-						"user", req)
-					return
-				}
+			f.Name = storage.SanitizeName(
+				fileHeader.Filename,
+				app.FileLimits.NameExtraChars,
+				app.FileLimits.NameLength)
 
-				filename := storage.SanitizeName(
-					fileHeader.Filename,
-					app.FileLimits.NameExtraChars,
-					app.FileLimits.NameLength)
+			t := time.Now()
+			f.Address = req.Address
+			f.Agent = req.Agent
+			f.Mask = req.AddressMask
+			f.Duration = durationLimit
+			f.UploadTime = t
+			f.UploadTimeFmt = t.Format(app.TimeFormat)
+			f.Allow = downloadLimit
+			f.Scan()
 
-				t := time.Now()
-				f := &storage.File{
-					Name:          filename,
-					Data:          buf.Bytes(),
-					Address:       req.Address,
-					Agent:         req.Agent,
-					Mask:          req.AddressMask,
-					Duration:      durationLimit,
-					UploadTime:    t,
-					UploadTimeFmt: t.Format(app.TimeFormat),
-					Allow:         downloadLimit,
-				}
+			app.Files[f.ID] = f
 
-				f.Scan()
-
-				app.Files[f.ID] = f
-
-				upload = storage.File{
-					ID:                f.ID,
-					Name:              f.Name,
-					Size:              f.Size,
-					Sum:               f.Sum,
-					Type:              f.Type,
-					Address:           f.Address,
-					Mask:              f.Mask,
-					Agent:             f.Agent,
-					UploadTimeFmt:     f.UploadTimeFmt,
-					DurationRemaining: f.Duration.String(),
-					Allow:             f.Allow,
-				}
-				uploads = append(uploads, upload)
-			}(fileHeader)
+			uploads = append(uploads, storage.File{
+				ID:                f.ID,
+				Name:              f.Name,
+				Size:              f.Size,
+				Sum:               f.Sum,
+				Type:              f.Type,
+				Address:           f.Address,
+				Mask:              f.Mask,
+				Agent:             f.Agent,
+				UploadTimeFmt:     f.UploadTimeFmt,
+				DurationRemaining: f.Duration.String(),
+				Allow:             f.Allow,
+			})
 		}
-		wg.Wait()
 
 		app.Log.Info("files uploaded",
 			"files", uploads,
@@ -177,4 +143,20 @@ func Upload(app *config.App) http.HandlerFunc {
 			writeJSON(w, http.StatusOK, uploads)
 		}
 	}
+}
+
+// readUpload reads one multipart file part into a File.
+func readUpload(fh *multipart.FileHeader) (*storage.File, error) {
+	part, err := fh.Open()
+	if err != nil {
+		return nil, fmt.Errorf("open part: %w", err)
+	}
+	defer func() { _ = part.Close() }()
+
+	data, err := io.ReadAll(part)
+	if err != nil {
+		return nil, fmt.Errorf("read part: %w", err)
+	}
+
+	return &storage.File{Data: data}, nil
 }
