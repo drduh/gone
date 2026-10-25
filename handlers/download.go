@@ -31,6 +31,12 @@ func Download(app *config.App) http.HandlerFunc {
 			"file", file.Name,
 			"user", req)
 
+		if app.Write.Duration > 0 {
+			_ = http.NewResponseController(w).SetWriteDeadline(
+				transferDeadline(app.Write.Duration,
+					int64(file.Bytes)))
+		}
+
 		file.Serve(w)
 		app.Log.Info("served file",
 			"id", file.ID,

@@ -24,6 +24,10 @@ func AuthRequest(
 		return nil
 	}
 
+	if !parseBody(w, r, app, req) {
+		return nil
+	}
+
 	if !checkAuthenticated(app, w, r) {
 		app.Log.Error(app.Deny,
 			"field", app.Basic.Field,
@@ -63,8 +67,8 @@ func checkAuthenticated(
 	return true
 }
 
-// getToken reads the token from the request header,
-// or posted form value.
+// getToken reads the token from the request header, or
+// posted form value (body already parsed by parseBody).
 func getToken(field string, r *http.Request) []byte {
 	value := r.Header.Get(field)
 

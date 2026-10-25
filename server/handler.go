@@ -23,7 +23,7 @@ func getHandler(app *config.App) http.Handler {
 func withCSRF(app *config.App, h http.Handler) http.Handler {
 	csrf := http.NewCrossOriginProtection()
 	csrf.SetDenyHandler(http.HandlerFunc(
-		func(w http.ResponseWriter, r *http.Request) {
+		func(w http.ResponseWriter, _ *http.Request) {
 			app.Log.Error(app.Deny, "reason", "cross-origin")
 			handlers.Deny(w, http.StatusForbidden, app.Deny)
 		}))

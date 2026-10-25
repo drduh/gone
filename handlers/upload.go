@@ -8,7 +8,6 @@ import (
 	"time"
 
 	"github.com/drduh/gone/config"
-	"github.com/drduh/gone/settings"
 	"github.com/drduh/gone/storage"
 )
 
@@ -20,39 +19,23 @@ func Upload(app *config.App) http.HandlerFunc {
 			return
 		}
 
-		maxFileBytes := app.GetMaxFileBytes()
-		contentLength := r.ContentLength
-
-		if contentLength > maxFileBytes {
-			writeJSON(w, http.StatusRequestEntityTooLarge,
-				errorJSON(app.FileSize))
-			app.Log.Error(app.FileSize,
-				"fileSizeMB", settings.BytesToMegabytes(
-					contentLength),
+		if r.MultipartForm == nil {
+			writeJSON(w, http.StatusBadRequest,
+				errorJSON(app.Form))
+			app.Log.Error(app.Form,
 				"user", req)
 			return
 		}
 
 		app.CountFiles()
 		maxTotalBytes := app.GetMaxTotalFilesBytes()
-		totalBytes := int64(app.SizeFiles) + contentLength
+		totalBytes := int64(app.SizeFiles) + partsSize(r)
 
 		if maxTotalBytes > 0 && totalBytes > maxTotalBytes {
 			writeJSON(w, http.StatusRequestEntityTooLarge,
 				errorJSON(app.FileSizeAll))
 			app.Log.Error(app.FileSizeAll,
 				"totalSize", app.SizeFiles,
-				"user", req)
-			return
-		}
-
-		r.Body = http.MaxBytesReader(w, r.Body, maxFileBytes)
-		//gosec:disable G120: memory bounded by MaxBytesReader
-		if err := r.ParseMultipartForm(maxFileBytes); err != nil {
-			writeJSON(w, http.StatusInternalServerError,
-				errorJSON(app.Copy))
-			app.Log.Error("upload failed",
-				"error", err.Error(),
 				"user", req)
 			return
 		}
@@ -143,6 +126,18 @@ func Upload(app *config.App) http.HandlerFunc {
 			writeJSON(w, http.StatusOK, uploads)
 		}
 	}
+}
+
+// partsSize returns the byte total of parsed file parts.
+func partsSize(r *http.Request) int64 {
+	var n int64
+	for _, parts := range r.MultipartForm.File {
+		for _, p := range parts {
+			n += p.Size
+		}
+	}
+
+	return n
 }
 
 // readUpload reads one multipart file part into a File.
