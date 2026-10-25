@@ -1,13 +1,15 @@
 package config
 
 import (
+	"log"
 	"os"
 	"time"
 )
 
 var (
-	funcExit = os.Exit
-	funcNow  = time.Now
+	funcExit  = os.Exit
+	funcFatal = log.Fatalf
+	funcNow   = time.Now
 )
 
 // Start records the application start time and
