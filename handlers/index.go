@@ -61,8 +61,6 @@ func renderIndex(
 			app.Style.Available)
 	}
 
-	app.UpdateRemainingFileLimits()
-
 	response := templates.Index{
 		Auth:       app.Auth,
 		Default:    app.Default,
@@ -74,7 +72,7 @@ func renderIndex(
 		RandomStrs: randomStrs,
 		RandomType: randomPath,
 		ShowBuild:  app.ShowBuild,
-		Storage:    app.Storage,
+		Storage:    app.Snapshot(),
 		Theme:      theme,
 		Uptime:     app.Uptime(),
 		Version:    app.Version,

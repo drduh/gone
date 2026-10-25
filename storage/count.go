@@ -8,21 +8,74 @@ import (
 
 // CountStorage counts all Storage content.
 func (s *Storage) CountStorage() {
-	s.CountFiles()
-	s.CountMessages()
-	s.CountWall()
+	s.Lease.Lock()
+	defer s.Lease.Unlock()
+
+	s.countStorage()
 }
 
 // CountFiles counts the number of Files and
 // their total combined size in bytes.
 func (s *Storage) CountFiles() {
-	s.NumFiles = len(s.Files)
-	total := 0
+	s.Lease.Lock()
+	defer s.Lease.Unlock()
 
+	s.countFiles()
+}
+
+// CountMessages counts the number of Messages
+// and total count of characters in all Messages.
+func (s *Storage) CountMessages() {
+	s.Lease.Lock()
+	defer s.Lease.Unlock()
+
+	s.countMessages()
+}
+
+// CountWall counts the number of characters
+// and lines in Wall content.
+func (s *Storage) CountWall() {
+	s.Lease.Lock()
+	defer s.Lease.Unlock()
+
+	s.countWall()
+}
+
+// GetWallCap determines the wall capacity
+// percentage, rounded to the nearest int.
+func (s *Storage) GetWallCap(limit int) {
+	s.Lease.Lock()
+	defer s.Lease.Unlock()
+
+	s.wallCap(limit)
+}
+
+// FilesBytes returns the total size of stored Files.
+func (s *Storage) FilesBytes() int {
+	s.Lease.RLock()
+	defer s.Lease.RUnlock()
+
+	return s.filesBytes()
+}
+
+func (s *Storage) countStorage() {
+	s.countFiles()
+	s.countMessages()
+	s.countWall()
+}
+
+func (s *Storage) filesBytes() int {
+	total := 0
 	for _, file := range s.Files {
 		total += file.Bytes
 	}
-	s.SizeFiles = total
+
+	return total
+}
+
+func (s *Storage) countFiles() {
+	s.NumFiles = len(s.Files)
+	s.SizeFiles = s.filesBytes()
 	if s.SizeFiles > 0 {
 		s.SizeFilesFmt = util.FormatSize(s.SizeFiles)
 	} else {
@@ -30,9 +83,7 @@ func (s *Storage) CountFiles() {
 	}
 }
 
-// CountMessages counts the number of Messages
-// and total count of characters in all Messages.
-func (s *Storage) CountMessages() {
+func (s *Storage) countMessages() {
 	s.NumMessages = len(s.Messages)
 
 	total := 0
@@ -42,9 +93,7 @@ func (s *Storage) CountMessages() {
 	s.CharsMessages = total
 }
 
-// CountWall counts the number of characters
-// and lines in Wall content.
-func (s *Storage) CountWall() {
+func (s *Storage) countWall() {
 	s.WallChars = len(s.WallContent)
 
 	if s.WallContent == "" {
@@ -55,8 +104,10 @@ func (s *Storage) CountWall() {
 	}
 }
 
-// GetWallCap determines the wall capacity
-// percentage, rounded to the nearest int.
-func (s *Storage) GetWallCap(limit int) {
+func (s *Storage) wallCap(limit int) {
+	if limit <= 0 {
+		s.WallCap = 0
+		return
+	}
 	s.WallCap = s.WallChars * 100 / limit
 }

@@ -18,12 +18,12 @@ func Message(app *config.App) http.HandlerFunc {
 			return
 		}
 
-		app.CountMessages()
+		response := app.ListMessages()
 
 		formContent := r.FormValue("download")
 		if formContent == "allMessages" {
 			app.Log.Debug("downloading all messages",
-				"count", app.NumMessages,
+				"count", len(response),
 				"user", req)
 			app.ServeMessages(w)
 
@@ -35,7 +35,6 @@ func Message(app *config.App) http.HandlerFunc {
 			return
 		}
 
-		response := app.Messages
 		app.Log.Info("serving messages",
 			"count", len(response),
 			"user", req)
@@ -58,8 +57,6 @@ func MessageAdd(app *config.App) http.HandlerFunc {
 			return
 		}
 
-		app.CountMessages()
-
 		msgLength := charCount(formContent)
 		if msgLength > app.MessageLimits.LengthChars {
 			writeJSON(w, http.StatusBadRequest,
@@ -72,20 +69,8 @@ func MessageAdd(app *config.App) http.HandlerFunc {
 			return
 		}
 
-		if app.NumMessages >= app.MessageLimits.MaxCount {
-			writeJSON(w, http.StatusBadRequest,
-				errorJSON(app.MsgCount))
-			app.Log.Error(app.MsgCount,
-				"limit", app.MessageLimits.MaxCount,
-				"count", app.NumMessages,
-				"user", req)
-
-			return
-		}
-
 		t := time.Now()
 		message := storage.Message{
-			Count:         app.NumMessages + 1,
 			Data:          formContent,
 			Agent:         req.Agent,
 			Mask:          req.AddressMask,
@@ -93,7 +78,16 @@ func MessageAdd(app *config.App) http.HandlerFunc {
 			UploadTimeFmt: t.Format(app.TimeFormat),
 		}
 
-		app.Messages = append(app.Messages, &message)
+		if !app.AddMessage(&message, app.MessageLimits.MaxCount) {
+			writeJSON(w, http.StatusBadRequest,
+				errorJSON(app.MsgCount))
+			app.Log.Error(app.MsgCount,
+				"limit", app.MessageLimits.MaxCount,
+				"user", req)
+
+			return
+		}
+
 		app.Log.Info("added message",
 			"count", message.Count,
 			"length", msgLength,
@@ -116,10 +110,6 @@ func MessageClear(app *config.App) http.HandlerFunc {
 			return
 		}
 
-		app.Log.Debug("clearing messages",
-			"count", app.NumMessages,
-			"user", req)
-
 		app.ClearMessages()
 		app.Log.Info("cleared messages",
 			"user", req)
@@ -133,6 +123,16 @@ func MessageClear(app *config.App) http.HandlerFunc {
 	}
 }
 
+// parseCount reads the Message count path value.
+func parseCount(r *http.Request) (int, bool) {
+	count, err := strconv.Atoi(r.PathValue("count"))
+	if err != nil || count < 1 {
+		return 0, false
+	}
+
+	return count, true
+}
+
 // MessageGet handles requests to read a Message by Count.
 func MessageGet(app *config.App) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
@@ -141,28 +141,24 @@ func MessageGet(app *config.App) http.HandlerFunc {
 			return
 		}
 
-		countStr := r.PathValue("count")
-		count, err := strconv.Atoi(countStr)
-		if err != nil || count < 1 {
+		count, ok := parseCount(r)
+		if !ok {
 			writeJSON(w, http.StatusBadRequest,
 				errorJSON(app.MsgNotFound))
 			return
 		}
 
-		app.CountMessages()
-
-		for _, msg := range app.Messages {
-			if msg.Count == count {
-				app.Log.Info("serving message",
-					"count", count,
-					"user", req)
-				writeJSON(w, http.StatusOK, msg)
-				return
-			}
+		msg, found := app.GetMessage(count)
+		if !found {
+			writeJSON(w, http.StatusNotFound,
+				errorJSON(app.MsgNotFound))
+			return
 		}
 
-		writeJSON(w, http.StatusNotFound,
-			errorJSON(app.MsgNotFound))
+		app.Log.Info("serving message",
+			"count", count,
+			"user", req)
+		writeJSON(w, http.StatusOK, msg)
 	}
 }
 
@@ -174,44 +170,28 @@ func MessageDelete(app *config.App) http.HandlerFunc {
 			return
 		}
 
-		countStr := r.PathValue("count")
-		count, err := strconv.Atoi(countStr)
-		if err != nil || count < 1 {
+		count, ok := parseCount(r)
+		if !ok {
 			writeJSON(w, http.StatusBadRequest,
 				errorJSON(app.MsgNotFound))
 			return
 		}
 
-		app.CountMessages()
-
-		for i, msg := range app.Messages {
-			if msg.Count != count {
-				continue
-			}
-
-			app.Messages = append(
-				app.Messages[:i], app.Messages[i+1:]...)
-
-			for i, remaining := range app.Messages {
-				remaining.Count = i + 1
-			}
-
-			app.CountMessages()
-
-			app.Log.Info("deleted message",
-				"count", count,
-				"user", req)
-
-			if req.IsBrowser {
-				toPath(w, r, app.Root)
-				return
-			}
-
-			writeJSON(w, http.StatusOK, "message deleted")
+		if !app.DeleteMessage(count) {
+			writeJSON(w, http.StatusNotFound,
+				errorJSON(app.MsgNotFound))
 			return
 		}
 
-		writeJSON(w, http.StatusNotFound,
-			errorJSON(app.MsgNotFound))
+		app.Log.Info("deleted message",
+			"count", count,
+			"user", req)
+
+		if req.IsBrowser {
+			toPath(w, r, app.Root)
+			return
+		}
+
+		writeJSON(w, http.StatusOK, "message deleted")
 	}
 }

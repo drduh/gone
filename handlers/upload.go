@@ -27,15 +27,14 @@ func Upload(app *config.App) http.HandlerFunc {
 			return
 		}
 
-		app.CountFiles()
 		maxTotalBytes := app.GetMaxTotalFilesBytes()
-		totalBytes := int64(app.SizeFiles) + partsSize(r)
+		stored := int64(app.FilesBytes())
 
-		if maxTotalBytes > 0 && totalBytes > maxTotalBytes {
+		if maxTotalBytes > 0 && stored+partsSize(r) > maxTotalBytes {
 			writeJSON(w, http.StatusRequestEntityTooLarge,
 				errorJSON(app.FileSizeAll))
 			app.Log.Error(app.FileSizeAll,
-				"totalSize", app.SizeFiles,
+				"totalSize", stored,
 				"user", req)
 			return
 		}
@@ -72,6 +71,7 @@ func Upload(app *config.App) http.HandlerFunc {
 			return
 		}
 
+		files := make([]*storage.File, 0, fileCount)
 		uploads := make([]storage.File, 0, fileCount)
 		for _, fileHeader := range formFileContent {
 			f, err := readUpload(fileHeader)
@@ -99,8 +99,7 @@ func Upload(app *config.App) http.HandlerFunc {
 			f.Allow = downloadLimit
 			f.Scan()
 
-			app.Files[f.ID] = f
-
+			files = append(files, f)
 			uploads = append(uploads, storage.File{
 				ID:                f.ID,
 				Name:              f.Name,
@@ -114,6 +113,14 @@ func Upload(app *config.App) http.HandlerFunc {
 				DurationRemaining: f.Duration.String(),
 				Allow:             f.Allow,
 			})
+		}
+
+		if !app.AddFiles(files, maxTotalBytes) {
+			writeJSON(w, http.StatusRequestEntityTooLarge,
+				errorJSON(app.FileSizeAll))
+			app.Log.Error(app.FileSizeAll,
+				"user", req)
+			return
 		}
 
 		app.Log.Info("files uploaded",

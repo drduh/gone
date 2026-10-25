@@ -21,7 +21,7 @@ func Status(app *config.App) http.HandlerFunc {
 			versionInfo = version.Get(version.Redacted)
 		}
 
-		app.CountStorage()
+		snap := app.Snapshot()
 
 		response := templates.Status{
 			Version:    versionInfo,
@@ -32,12 +32,12 @@ func Status(app *config.App) http.HandlerFunc {
 			Index:      app.Index,
 			Default:    app.Default,
 			Limit:      app.Limit,
-			Sizes:      app.Sizes,
-			WallMeta:   app.WallMeta,
+			Sizes:      snap.Sizes,
+			WallMeta:   snap.WallMeta,
 		}
 
 		app.Log.Info("serving status",
-			"sizes", app.Sizes,
+			"sizes", snap.Sizes,
 			"user", req)
 		writeJSON(w, http.StatusOK, response)
 	}

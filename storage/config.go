@@ -3,6 +3,7 @@ package storage
 
 import (
 	"net/http"
+	"sync"
 	"time"
 )
 
@@ -30,6 +31,9 @@ type Storage struct {
 	// Wall metadata
 	WallMeta `json:"wallMeta"`
 
+	// Guards all fields below
+	Lease sync.RWMutex `json:"-"`
+
 	// Wall editable text area
 	WallContent string `json:"wallContent"`
 
@@ -38,6 +42,33 @@ type Storage struct {
 
 	// Text messages
 	Messages []*Message `json:"messages,omitempty"`
+}
+
+// Snapshot is a detached copy of Storage for rendering.
+type Snapshot struct {
+
+	// Storage content total sizes
+	Sizes `json:"storageSizes"`
+
+	// Wall metadata
+	WallMeta `json:"wallMeta"`
+
+	// Wall editable text area
+	WallContent string `json:"wallContent"`
+
+	// Uploaded files metadata
+	Files []File `json:"files,omitempty"`
+
+	// Text messages
+	Messages []Message `json:"messages,omitempty"`
+}
+
+// Expired is a removed File copy with the reason.
+type Expired struct {
+	File
+
+	// Why the File was removed
+	Reason ExpiryReason `json:"reason,omitempty"`
 }
 
 // File represents an uploaded file.
