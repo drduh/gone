@@ -100,3 +100,11 @@ func TestAuthorizeSweep(t *testing.T) {
 		t.Fatalf("len(Clients) = %d, want 1", got)
 	}
 }
+
+// TestAuthorize tests the wall-clock wrapper.
+func TestAuthorize(t *testing.T) {
+	var r RequestThrottle
+	if !r.Authorize(testAddr, 1) || r.Authorize(testAddr, 1) {
+		t.Fatal("expected first allow, second deny")
+	}
+}
