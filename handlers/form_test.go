@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"net/http"
+	"net/http/httptest"
 	"testing"
 	"time"
 
@@ -146,5 +147,28 @@ func TestParseFormDuration(t *testing.T) {
 					tc.query, got, tc.want)
 			}
 		})
+	}
+}
+
+// TestParseFormIntBounds tests default clamping and
+// a disabled maximum.
+func TestParseFormIntBounds(t *testing.T) {
+	req := httptest.NewRequestWithContext(t.Context(),
+		http.MethodGet, "/?downloads=5", nil)
+
+	if got := parseFormInt(req, formFieldDownloads, 1, 0); got != 0 {
+		t.Fatalf("no maximum = %d; want 0", got)
+	}
+	if got := parseFormInt(req, formFieldDownloads, -1, 3); got != 3 {
+		t.Fatalf("over maximum = %d; want 3", got)
+	}
+
+	req = httptest.NewRequestWithContext(t.Context(),
+		http.MethodGet, "/", nil)
+	if got := parseFormInt(req, formFieldDownloads, -1, 3); got != 0 {
+		t.Fatalf("negative default = %d; want 0", got)
+	}
+	if got := parseFormInt(req, formFieldDownloads, 9, 3); got != 3 {
+		t.Fatalf("default over maximum = %d; want 3", got)
 	}
 }
