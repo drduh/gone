@@ -1,11 +1,34 @@
 package util
 
 import (
+	"errors"
 	"os"
 	"path/filepath"
 	"slices"
 	"testing"
 )
+
+// errReader fails after the first read.
+type errReader struct{ n int }
+
+func (r *errReader) Read(p []byte) (int, error) {
+	if r.n > 0 {
+		return 0, errors.New("read fail")
+	}
+
+	r.n++
+
+	return copy(p, "one\n"), nil
+}
+
+// TestLoadNamesReadError tests a failing reader falls
+// back to default names.
+func TestLoadNamesReadError(t *testing.T) {
+	got := loadNamesFromReader(&errReader{})
+	if len(got) != len(adjectives)*len(nouns) {
+		t.Fatalf("len = %d; want defaults", len(got))
+	}
+}
 
 func setupNames(t *testing.T, dir, filename, content string) {
 	t.Helper()
