@@ -28,9 +28,14 @@ func maxFormBytes(app *config.App) int64 {
 	return int64(chars)*formBytesPerChar + formBytesExtra
 }
 
+// isUpload returns true for requests routed to Upload.
+func isUpload(app *config.App, r *http.Request) bool {
+	return patternPath(r.Pattern) == app.Upload
+}
+
 // bodyLimit returns the byte limit for a request body.
 func bodyLimit(app *config.App, r *http.Request) int64 {
-	if r.Pattern == app.Upload {
+	if isUpload(app, r) {
 		return app.GetMaxFileBytes()
 	}
 
@@ -54,7 +59,7 @@ func parseBody(
 	limit := bodyLimit(app, r)
 
 	reason := app.WallLimit
-	if r.Pattern == app.Upload {
+	if isUpload(app, r) {
 		reason = app.FileSize
 	}
 

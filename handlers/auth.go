@@ -2,7 +2,6 @@ package handlers
 
 import (
 	"net/http"
-	"strings"
 
 	"github.com/drduh/gone/auth"
 	"github.com/drduh/gone/config"
@@ -102,7 +101,7 @@ func isAuthenticated(app *config.App, r *http.Request) bool {
 		app.WallModify:    app.Require.Wall,
 	}
 
-	path := strings.TrimSuffix(r.Pattern, "{$}")
+	path := patternPath(r.Pattern)
 	required, exists := reqs[path]
 
 	if !exists {
