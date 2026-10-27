@@ -130,3 +130,39 @@ func TestWallDeny(t *testing.T) {
 			app.WallContent)
 	}
 }
+
+// TestWallPostTooLong tests content over the limit.
+func TestWallPostTooLong(t *testing.T) {
+	app := newTestAppWithStorage()
+	app.Require.Wall = false
+	app.WallLimits.LengthChars = 4
+
+	req := httptest.NewRequestWithContext(t.Context(),
+		http.MethodPost, app.WallModify,
+		strings.NewReader("wall=hello"))
+	req.Header.Set("Content-Type", formContentType)
+	rr := serveRequest(t, app, req)
+	assertStatus(t, rr, http.StatusBadRequest)
+
+	if app.WallContent != testContentWall {
+		t.Fatal("expected wall unchanged")
+	}
+}
+
+// TestWallPostBrowser tests browser updates redirect.
+func TestWallPostBrowser(t *testing.T) {
+	app := newTestApp()
+	app.Require.Wall = false
+
+	req := httptest.NewRequestWithContext(t.Context(),
+		http.MethodPost, app.WallModify,
+		strings.NewReader("wall=hi"))
+	req.Header.Set("Content-Type", formContentType)
+	req.Header.Set("Accept", "text/html")
+	rr := serveRequest(t, app, req)
+	assertStatus(t, rr, http.StatusSeeOther)
+
+	if app.WallContent != "hi" {
+		t.Fatalf("wall = %q; want hi", app.WallContent)
+	}
+}

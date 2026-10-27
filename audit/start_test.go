@@ -64,6 +64,9 @@ func TestStartInvalidFilenames(t *testing.T) {
 
 	for _, tc := range cases {
 		t.Run(tc.name, func(t *testing.T) {
+			if tc.name == "forbidden path" && os.Geteuid() == 0 {
+				t.Skip("root can write anywhere")
+			}
 			cfg := &Config{
 				Filename: tc.filename,
 				Debug:    false,
