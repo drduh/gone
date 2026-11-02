@@ -9,23 +9,22 @@ import (
 
 // post prefixes a pattern with the POST method.
 func post(pattern string) string {
- if pattern == "" {
-   return ""
- }
+	if pattern == "" {
+		return ""
+	}
 
- return http.MethodPost + " " + pattern
+	return http.MethodPost + " " + pattern
 }
 
 // patternPath returns the path of a mux pattern, without
 // method prefix or "{$}" suffix.
 func patternPath(pattern string) string {
- if _, path, ok := strings.Cut(pattern, " "); ok {
-   pattern = path
- }
+	if _, path, ok := strings.Cut(pattern, " "); ok {
+		pattern = path
+	}
 
- return strings.TrimSuffix(pattern, "{$}")
+	return strings.TrimSuffix(pattern, "{$}")
 }
-
 
 // Register adds enabled routes to mux.
 func Register(mux *http.ServeMux, app *config.App) {
