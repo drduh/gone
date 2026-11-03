@@ -127,7 +127,7 @@ func TestBodyLimit(t *testing.T) {
 
 	req := httptest.NewRequestWithContext(t.Context(),
 		http.MethodPost, app.Upload, nil)
-	req.Pattern = app.Upload
+	req.Pattern = post(app.Upload)
 	if got := bodyLimit(app, req); got != app.GetMaxFileBytes() {
 		t.Fatalf("upload limit = %d, want %d",
 			got, app.GetMaxFileBytes())

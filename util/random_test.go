@@ -2,6 +2,7 @@ package util
 
 import (
 	"slices"
+	"strings"
 	"testing"
 )
 
@@ -92,6 +93,39 @@ func TestRandomHex(t *testing.T) {
 	for _, c := range result {
 		if (c < '0' || c > '9') && (c < 'a' || c > 'f') {
 			t.Errorf("unexpected '%c' in result", c)
+		}
+	}
+}
+
+// TestGetRandom tests each random type produces output.
+func TestGetRandom(t *testing.T) {
+	for _, p := range []string{"coin", "hex", "id", "mask",
+		"name", "nato", "number", "pass", "", "unknown"} {
+		if got := GetRandom(p); got == "" {
+			t.Fatalf("GetRandom(%q) empty", p)
+		}
+	}
+
+	if got := GetRandom("hex"); len(got) != 64 {
+		t.Fatalf("hex len = %d; want 64", len(got))
+	}
+
+	if got := GetRandom("pass"); len(got) != 32 {
+		t.Fatalf("pass len = %d; want 32", len(got))
+	}
+}
+
+// TestRandomID tests id length and URL-safe alphabet.
+func TestRandomID(t *testing.T) {
+	id := RandomID()
+	if len(id) != 43 {
+		t.Fatalf("len = %d; want 43", len(id))
+	}
+
+	for _, c := range id {
+		if !strings.ContainsRune(
+			"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_", c) {
+			t.Fatalf("unexpected char %q in %q", c, id)
 		}
 	}
 }

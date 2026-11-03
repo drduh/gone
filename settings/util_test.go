@@ -53,3 +53,23 @@ func TestGetAddr(t *testing.T) {
 		})
 	}
 }
+
+// TestMegabytes tests MB and byte conversions.
+func TestMegabytes(t *testing.T) {
+	if got := MegabytesToBytes(3); got != 3_000_000 {
+		t.Fatalf("MegabytesToBytes(3) = %d", got)
+	}
+	if got := BytesToMegabytes(3_999_999); got != 3 {
+		t.Fatalf("BytesToMegabytes = %d; want 3", got)
+	}
+
+	var l Limit
+	l.FileLimits.SizeEachMb = 2
+	l.FileLimits.SizeTotalMb = 5
+	if got := l.GetMaxFileBytes(); got != 2_000_000 {
+		t.Fatalf("GetMaxFileBytes = %d", got)
+	}
+	if got := l.GetMaxTotalFilesBytes(); got != 5_000_000 {
+		t.Fatalf("GetMaxTotalFilesBytes = %d", got)
+	}
+}

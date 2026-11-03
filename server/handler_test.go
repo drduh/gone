@@ -3,6 +3,8 @@ package server
 import (
 	"net/http"
 	"net/http/httptest"
+	"os"
+	"path/filepath"
 	"strings"
 	"testing"
 
@@ -63,5 +65,50 @@ func TestCrossOriginDenied(t *testing.T) {
 					rec.Code, tc.want)
 			}
 		})
+	}
+}
+
+// TestRegisterAssets tests assets are served or skipped.
+func TestRegisterAssets(t *testing.T) {
+	dir := t.TempDir()
+	if err := os.MkdirAll(filepath.Join(dir, "assets"),
+		0o755); err != nil {
+		t.Fatalf("mkdir: %v", err)
+	}
+	if err := os.WriteFile(filepath.Join(dir, "assets",
+		"style.css"), []byte("body{}"), 0o600); err != nil {
+		t.Fatalf("write: %v", err)
+	}
+	t.Chdir(dir)
+
+	app := newTestApp(nil)
+	auth.SetTarpit(0)
+	app.ReqsPerMinute = 99
+	h := getHandler(app)
+
+	rec := httptest.NewRecorder()
+	h.ServeHTTP(rec, httptest.NewRequest(
+		http.MethodGet, "/assets/style.css", nil))
+	if rec.Code != http.StatusOK || rec.Body.String() != "body{}" {
+		t.Fatalf("assets: %d %q", rec.Code, rec.Body.String())
+	}
+	if got := rec.Header().Get("Cache-Control"); got != "no-cache" {
+		t.Fatalf("Cache-Control = %q", got)
+	}
+
+	app.Require.Assets = true
+	rec = httptest.NewRecorder()
+	h.ServeHTTP(rec, httptest.NewRequest(
+		http.MethodGet, "/assets/style.css", nil))
+	if rec.Code != http.StatusForbidden {
+		t.Fatalf("assets denied status = %d", rec.Code)
+	}
+
+	app.Assets = ""
+	rec = httptest.NewRecorder()
+	getHandler(app).ServeHTTP(rec, httptest.NewRequest(
+		http.MethodGet, "/assets/style.css", nil))
+	if rec.Code != http.StatusNotFound {
+		t.Fatalf("assets disabled status = %d", rec.Code)
 	}
 }

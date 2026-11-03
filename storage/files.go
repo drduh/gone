@@ -24,6 +24,7 @@ func (s *Storage) AddFiles(files []*File, maxTotal int64) bool {
 	for _, f := range files {
 		s.Files[f.ID] = f
 	}
+
 	s.countFiles()
 
 	return true
@@ -58,8 +59,10 @@ func (s *Storage) ReserveDownload(query string) (*File, ExpiryReason) {
 	if reason != "" {
 		s.expire(f)
 	}
+
 	s.countFiles()
 
 	c := *f
+
 	return &c, reason
 }

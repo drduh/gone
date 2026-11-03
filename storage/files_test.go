@@ -36,6 +36,7 @@ func TestAddFilesLimit(t *testing.T) {
 		t.Fatalf("files = %d size = %d; want 1, 60",
 			len(s.Files), s.SizeFiles)
 	}
+
 	if !s.AddFiles([]*File{newFile("b", 20, 1)}, 0) {
 		t.Fatal("expected add with no limit")
 	}
@@ -178,5 +179,43 @@ func TestSnapshot(t *testing.T) {
 	snap.Messages[0].Data = "changed"
 	if s.Messages[0].Data != "hi" {
 		t.Fatal("expected snapshot detached from storage")
+	}
+}
+
+// TestLockedWrappers tests wrappers update Storage under lock.
+func TestLockedWrappers(t *testing.T) {
+	var s Storage
+	f := newFile("a", 7, 2)
+	s.AddFiles([]*File{f}, 0)
+	s.AddMessage(&Message{Data: "hey"}, 0)
+	s.SetWall("abcd", WallMeta{}, 0)
+
+	s.CountStorage()
+	if s.NumFiles != 1 || s.NumMessages != 1 || s.WallChars != 4 {
+		t.Fatalf("counts = %+v %+v", s.Sizes, s.WallMeta)
+	}
+
+	if got := s.FilesBytes(); got != 7 {
+		t.Fatalf("FilesBytes = %d; want 7", got)
+	}
+
+	s.GetWallCap(0)
+	if s.WallCap != 0 {
+		t.Fatalf("cap with no limit = %d", s.WallCap)
+	}
+
+	s.GetWallCap(8)
+	if s.WallCap != 50 {
+		t.Fatalf("cap = %d; want 50", s.WallCap)
+	}
+
+	s.UpdateRemainingFileLimits()
+	if f.Remain != 2 || f.DurationRemaining == "" {
+		t.Fatalf("remaining = %d %q", f.Remain, f.DurationRemaining)
+	}
+
+	s.Expire(f)
+	if len(s.Files) != 0 {
+		t.Fatal("expected file expired")
 	}
 }

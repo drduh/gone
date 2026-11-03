@@ -3,6 +3,7 @@ package server
 import (
 	"errors"
 	"fmt"
+	"net"
 	"net/http"
 
 	"github.com/drduh/gone/config"
@@ -38,31 +39,42 @@ func newServer(app *config.App) *http.Server {
 
 // Serve starts the expiry worker and HTTP/S server.
 func Serve(app *config.App) error {
+	if (app.CertFile == "") != (app.KeyFile == "") {
+		return errTLSMissingFiles
+	}
+
 	go expiryWorker(app)
 
 	server := newServer(app)
 
-	if (app.CertFile == "") != (app.KeyFile == "") {
-		return errTLSMissingFiles
+	ln, err := net.Listen("tcp", server.Addr)
+	if err != nil {
+		return fmt.Errorf("listen failed: %w", err)
 	}
+
+	return serve(app, server, ln)
+}
+
+// serve runs server on listener until closed.
+func serve(app *config.App, server *http.Server, ln net.Listener) error {
+	var err error
 
 	if app.CertFile != "" {
 		server.TLSConfig = newTLSConfig()
 
 		app.Log.Info("starting HTTPS server",
-			"addr", server.Addr,
+			"addr", ln.Addr().String(),
 			"certFile", app.CertFile,
 			"keyFile", app.KeyFile)
-		if err := server.ListenAndServeTLS(
-			app.CertFile, app.KeyFile); err != nil {
-			return fmt.Errorf("HTTPS server failed: %w", err)
-		}
+		err = server.ServeTLS(ln, app.CertFile, app.KeyFile)
 	} else {
 		app.Log.Info("starting HTTP server",
-			"addr", server.Addr)
-		if err := server.ListenAndServe(); err != nil {
-			return fmt.Errorf("HTTP server failed: %w", err)
-		}
+			"addr", ln.Addr().String())
+		err = server.Serve(ln)
+	}
+
+	if err != nil && !errors.Is(err, http.ErrServerClosed) {
+		return fmt.Errorf("server failed: %w", err)
 	}
 
 	return nil

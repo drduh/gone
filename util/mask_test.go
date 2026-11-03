@@ -65,3 +65,13 @@ func TestGetMaskInvalid(t *testing.T) {
 		}
 	}
 }
+
+// TestGetMaskBadType tests a corrupt map entry is reported.
+func TestGetMaskBadType(t *testing.T) {
+	masks.Store("bad", 42)
+	if got := GetMask("bad", false); got != "maskError" {
+		t.Fatalf("got %q; want maskError", got)
+	}
+
+	masks.Delete("bad")
+}
