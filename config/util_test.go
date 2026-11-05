@@ -2,6 +2,8 @@ package config
 
 import (
 	"bytes"
+	"context"
+	"errors"
 	"log/slog"
 	"strings"
 	"testing"
@@ -107,6 +109,36 @@ func TestStop(t *testing.T) {
 			t.Fatalf("output should have %q, got %q",
 				want, out)
 		}
+	}
+}
+
+// TestStopServer tests Stop drains the server with the
+// configured timeout and logs an incomplete drain.
+func TestStopServer(t *testing.T) {
+	stubNow(t, testTime)
+	exitCode := stubExit(t)
+
+	var buf bytes.Buffer
+	logger := slog.New(slog.NewTextHandler(&buf, nil))
+
+	a := &App{StartTime: testTime, Log: logger}
+	a.Shutdown.Duration = 3 * time.Second
+
+	var gotDeadline bool
+	a.StopServer = func(ctx context.Context) error {
+		_, gotDeadline = ctx.Deadline()
+		return errors.New("drain timeout")
+	}
+
+	a.Stop("test")
+	if *exitCode != 0 {
+		t.Fatalf("expected exit 0, got %d", *exitCode)
+	}
+	if !gotDeadline {
+		t.Fatal("expected deadline on stop context")
+	}
+	if !strings.Contains(buf.String(), "server stop incomplete") {
+		t.Fatalf("expected drain warning, got %q", buf.String())
 	}
 }
 

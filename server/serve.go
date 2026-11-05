@@ -1,10 +1,12 @@
 package server
 
 import (
+	"context"
 	"errors"
 	"fmt"
 	"net"
 	"net/http"
+	"sync"
 
 	"github.com/drduh/gone/config"
 )
@@ -55,8 +57,15 @@ func Serve(app *config.App) error {
 	return serve(app, server, ln)
 }
 
-// serve runs server on listener until closed.
+// serve runs server on ln until stopped via StopServer
 func serve(app *config.App, server *http.Server, ln net.Listener) error {
+	var draining sync.WaitGroup
+	app.StopServer = func(ctx context.Context) error {
+		draining.Add(1)
+		defer draining.Done()
+		return server.Shutdown(ctx)
+	}
+
 	var err error
 
 	if app.CertFile != "" {
@@ -76,6 +85,8 @@ func serve(app *config.App, server *http.Server, ln net.Listener) error {
 	if err != nil && !errors.Is(err, http.ErrServerClosed) {
 		return fmt.Errorf("server failed: %w", err)
 	}
+
+	draining.Wait()
 
 	return nil
 }

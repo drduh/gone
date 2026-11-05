@@ -23,6 +23,7 @@ var (
 	errTimeoutRead     = errors.New("read timeout must be 0 or more")
 	errTimeoutHeader   = errors.New("readHeader timeout must be 1 or more")
 	errTimeoutWrite    = errors.New("write timeout must be 0 or more")
+	errTimeoutShutdown = errors.New("shutdown timeout must be 0 or more")
 )
 
 // Validate returns an error if a setting is invalid.
@@ -137,6 +138,11 @@ func (s *Settings) validateTimeouts() error {
 	if s.Write.GetDuration() < 0 {
 		return fmt.Errorf("%w - not %s",
 			errTimeoutWrite, s.Write.String())
+	}
+
+	if s.Shutdown.GetDuration() < 0 {
+		return fmt.Errorf("%w - not %s",
+			errTimeoutShutdown, s.Shutdown.String())
 	}
 
 	return nil

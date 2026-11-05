@@ -127,7 +127,8 @@
     "idle":        "90s",
     "read":        "20s",
     "readHeader":  "20s",
-    "write":       "20s"
+    "write":       "20s",
+    "shutdown":    "10s"
   },
   "tls": {
     "fileCert":    "",

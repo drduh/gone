@@ -1,6 +1,7 @@
 package config
 
 import (
+	"context"
 	"log"
 	"os"
 	"time"
@@ -19,14 +20,27 @@ func (a *App) Start() {
 	a.ClearStorage()
 }
 
-// Stop records uptime, clears storage and exits
-// the application.
+// Stop records uptime, drains the server within the
+// shutdown timeout, clears storage and exits.
 func (a *App) Stop(reason string) {
 	if a.Log != nil {
 		a.Log.Info("stopping application",
 			"reason", reason,
 			"uptime", a.Uptime())
 	}
+
+	if a.StopServer != nil {
+		ctx, cancel := context.WithTimeout(
+			context.Background(), a.Shutdown.Duration)
+		defer cancel()
+
+		if err := a.StopServer(ctx); err != nil &&
+			a.Log != nil {
+			a.Log.Warn("server stop incomplete",
+				"error", err.Error())
+		}
+	}
+
 	a.ClearStorage()
 	funcExit(0)
 }
