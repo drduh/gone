@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"log/slog"
 	"net"
 	"net/http"
 	"sync"
@@ -36,6 +37,9 @@ func newServer(app *config.App) *http.Server {
 		ReadHeaderTimeout: timeoutHeader,
 		ReadTimeout:       timeoutRead,
 		WriteTimeout:      timeoutWrite,
+
+		ErrorLog: slog.NewLogLogger(
+			app.Log.Handler(), slog.LevelError),
 	}
 }
 
