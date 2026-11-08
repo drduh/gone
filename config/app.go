@@ -1,6 +1,7 @@
 package config
 
 import (
+	"context"
 	"log/slog"
 	"time"
 
@@ -35,6 +36,9 @@ type App struct {
 
 	// Structured logger/output
 	Log *slog.Logger
+
+	// Stops server, waiting until ctx expires
+	StopServer func(ctx context.Context) error `json:"-"`
 }
 
 // Modes represents application operation modes.

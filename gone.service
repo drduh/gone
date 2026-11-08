@@ -8,11 +8,58 @@ Group=gone
 WorkingDirectory=/etc/gone
 ExecStart=/usr/local/bin/gone -config /etc/gone/config
 Restart=on-failure
+
+# /var/log/gone, created and owned by service
+# Default: logs to the journal
+LogsDirectory=gone
+UMask=0077
+
+# Keep content only in memory, never swap/core dump
+MemorySwapMax=0
+LimitCORE=0
+
+# For a port below 1024, set
+# AmbientCapabilities=CAP_NET_BIND_SERVICE,
+# CapabilityBoundingSet=CAP_NET_BIND_SERVICE and
+# PrivateUsers=false (no capabilities on the host)
 NoNewPrivileges=true
+CapabilityBoundingSet=
+PrivateUsers=true
+
+# Filesystem
 ProtectSystem=strict
 ProtectHome=true
 PrivateTmp=true
-ReadWritePaths=/var/log/gone
+PrivateDevices=true
+
+# Kernel and process isolation
+ProtectKernelTunables=true
+ProtectKernelModules=true
+ProtectKernelLogs=true
+ProtectControlGroups=true
+ProtectClock=true
+ProtectHostname=true
+ProtectProc=invisible
+ProcSubset=pid
+PrivateIPC=true
+RemoveIPC=true
+RestrictNamespaces=true
+RestrictRealtime=true
+RestrictSUIDSGID=true
+LockPersonality=true
+MemoryDenyWriteExecute=true
+
+# TCP/IP listeners only
+RestrictAddressFamilies=AF_INET AF_INET6
+# Limit access to local network
+#IPAddressDeny=any
+#IPAddressAllow=localhost 192.168.0.0/16
+
+# System calls
+SystemCallArchitectures=native
+SystemCallFilter=@system-service
+SystemCallFilter=~@privileged @resources
+SystemCallErrorNumber=EPERM
 
 [Install]
 WantedBy=multi-user.target

@@ -1,6 +1,9 @@
 package settings
 
-import "testing"
+import (
+	"errors"
+	"testing"
+)
 
 // TestInvalidAddr tests loading invalid address value.
 func TestInvalidAddr(t *testing.T) {
@@ -144,5 +147,31 @@ func TestInvalidContentLimits(t *testing.T) {
 				t.Fatal("expected invalid content limits error")
 			}
 		})
+	}
+}
+
+// validSettings returns embedded defaults for mutation.
+func validSettings(t *testing.T) Settings {
+	t.Helper()
+
+	s, err := Load("")
+	if err != nil {
+		t.Fatalf("Load: %v", err)
+	}
+
+	return s
+}
+
+// TestValidateShutdown tests the shutdown timeout.
+func TestValidateShutdown(t *testing.T) {
+	s := validSettings(t)
+	s.Shutdown.Duration = -1
+	if err := s.Validate(); !errors.Is(err, errTimeoutShutdown) {
+		t.Fatalf("Validate = %v; want %v", err, errTimeoutShutdown)
+	}
+
+	s.Shutdown.Duration = 0
+	if err := s.Validate(); err != nil {
+		t.Fatalf("Validate with 0 (stop immediately): %v", err)
 	}
 }

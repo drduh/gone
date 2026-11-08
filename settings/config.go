@@ -257,6 +257,10 @@ type Timeout struct {
 
 	// Time to wait for a full response write ("20s")
 	Write Duration `json:"write"`
+
+	// Time to let inflight requests finish on stop ("10s")
+	// Set to "0" to stop immediately
+	Shutdown Duration `json:"shutdown"`
 }
 
 // Limit represents limits on content.

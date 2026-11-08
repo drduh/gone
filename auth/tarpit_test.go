@@ -1,6 +1,8 @@
 package auth
 
 import (
+	"sync"
+	"sync/atomic"
 	"testing"
 	"time"
 )
@@ -79,5 +81,33 @@ func TestTarpitJitter(t *testing.T) {
 	if maximum-minimum < 500*time.Microsecond {
 		t.Errorf("no jitter with %d samples (%s-%s)",
 			samples, minimum, maximum)
+	}
+}
+
+// TestTarpitBounded tests requests beyond limit are not delayed.
+func TestTarpitBounded(t *testing.T) {
+	if testing.Short() {
+		t.Skip("short test: skip tarpit bound")
+	}
+
+	SetTarpit(base)
+	t.Cleanup(func() { SetTarpit(0) })
+
+	var delayed atomic.Int64
+	var wg sync.WaitGroup
+	for range maxTarpit * 4 {
+		wg.Go(func() {
+			start := time.Now()
+			ApplyTarpit()
+			if time.Since(start) >= base {
+				delayed.Add(1)
+			}
+		})
+	}
+	wg.Wait()
+
+	if n := delayed.Load(); n != maxTarpit {
+		t.Errorf("%d calls delayed, want %d",
+			n, maxTarpit)
 	}
 }
