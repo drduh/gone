@@ -30,7 +30,7 @@ func Message(app *config.App) http.HandlerFunc {
 			return
 		}
 
-		if req.IsBrowser {
+		if wantsIndex(app, req) {
 			toPath(w, r, app.Root)
 			return
 		}
@@ -93,7 +93,7 @@ func MessageAdd(app *config.App) http.HandlerFunc {
 			"length", msgLength,
 			"user", req)
 
-		if req.IsBrowser {
+		if wantsIndex(app, req) {
 			toPath(w, r, app.Root)
 			return
 		}
@@ -114,7 +114,7 @@ func MessageClear(app *config.App) http.HandlerFunc {
 		app.Log.Info("cleared messages",
 			"user", req)
 
-		if req.IsBrowser {
+		if wantsIndex(app, req) {
 			toPath(w, r, app.Root)
 			return
 		}
@@ -187,7 +187,7 @@ func MessageDelete(app *config.App) http.HandlerFunc {
 			"count", count,
 			"user", req)
 
-		if req.IsBrowser {
+		if wantsIndex(app, req) {
 			toPath(w, r, app.Root)
 			return
 		}

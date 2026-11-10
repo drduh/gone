@@ -127,7 +127,7 @@ func Upload(app *config.App) http.HandlerFunc {
 			"files", uploads,
 			"user", req)
 
-		if req.IsBrowser {
+		if wantsIndex(app, req) {
 			toPath(w, r, app.Root)
 		} else {
 			writeJSON(w, http.StatusOK, uploads)

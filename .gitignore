@@ -2,8 +2,8 @@
 !.github
 !.gitignore
 *.log
-*.pem
 *.out
+*.pem
 *.sh
 *.test
 main

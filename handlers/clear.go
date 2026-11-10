@@ -18,7 +18,7 @@ func Clear(app *config.App) http.HandlerFunc {
 		app.Log.Info("storage cleared",
 			"user", req)
 
-		if req.IsBrowser {
+		if wantsIndex(app, req) {
 			toPath(w, r, app.Root)
 		} else {
 			writeJSON(w, http.StatusOK, "storage cleared")

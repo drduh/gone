@@ -53,7 +53,8 @@ func Serve(app *config.App) error {
 
 	server := newServer(app)
 
-	ln, err := net.Listen("tcp", server.Addr)
+	var lc net.ListenConfig
+	ln, err := lc.Listen(context.Background(), "tcp", server.Addr)
 	if err != nil {
 		return fmt.Errorf("listen failed: %w", err)
 	}
