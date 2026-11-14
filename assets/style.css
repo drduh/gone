@@ -1,5 +1,27 @@
 /* https://github.com/drduh/gone/blob/main/assets/style.css */
 
+:root {
+  --animation-fast:  250ms;
+  --animation-slow:  500ms;
+  --bg-animation:    none;
+  --bg-gradient:     linear-gradient(
+      var(--rotation),
+      var(--bg-light) 0%,
+      var(--bg-dark) 100%);
+  --bg-size:         100%;
+  --font-size-norm:  1em;
+  --font-size-small: 0.8em;
+  --radius-box:      0.4em;
+  --radius-opt:      1em;
+  --rotation:        0deg;
+  --width-theme:     2em;
+  --width-xsmall:    4.4em;
+  --width-small:     6em;
+  --width-medium:    8em;
+  --width-large:     10em;
+  --width-xlarge:    18em;
+}
+
 * {
   box-sizing: border-box;
 }
@@ -354,9 +376,12 @@ details[open] > summary:hover {
   display: grid;
   gap: 1em;
   grid-template-columns: repeat(5, 1fr);
+  outline-color: var(--fg-dark);
 }
 
 .themes button {
+  background: linear-gradient(
+    var(--rotation), var(--bg-light) 0%, var(--bg-dark) 100%);
   cursor: pointer;
   display: block;
   width: var(--width-theme);
@@ -371,62 +396,225 @@ details[open] > summary:hover {
 
 .themes button:hover,
 .themes button:has(input:checked) {
-  outline-color: var(--fg-dark);
+  outline-color: inherit;
 }
 
 .themes button:has(input:focus-visible) {
   outline-color: var(--fg-light);
 }
 
-.theme-light,
-.theme-dark,
-.theme-navy,
-.theme-rose,
-.theme-green,
-.theme-lime,
-.theme-pink,
-.theme-gold,
-.theme-purple,
-.theme-lush,
-.theme-beach,
-.theme-dusk,
-.theme-neon,
-.theme-night,
-.theme-ember,
-.theme-gray,
-.theme-teal,
-.theme-tidal,
-.theme-lagoon,
-.theme-plum,
-.theme-mango,
-.theme-reef,
-.theme-canopy,
-.theme-cabana {
-  background: linear-gradient(
-    var(--rotation), var(--grad-start) 0%, var(--grad-end) 100%);
+:root[data-theme="dark"], .theme-dark {
+  --bg-dark:      rgba(  0,  43,  54,   1);
+  --bg-norm:      rgba(  7,  54,  66,   1);
+  --bg-norm-half: rgba(  7,  54,  66, 0.5);
+  --bg-light:     rgba(101, 123, 131,   1);
+  --fg-dark:      rgba(131, 148, 150,   1);
+  --fg-light:     rgba(253, 246, 227,   1);
 }
 
-.theme-light  { --grad-start: rgb(238,232,213); --grad-end: rgb(253,246,227); }
-.theme-dark   { --grad-start: rgb(101,123,131); --grad-end: rgb(  0, 43, 54); }
-.theme-navy   { --grad-start: rgb(  0, 91,150); --grad-end: rgb(  1, 31, 75); }
-.theme-rose   { --grad-start: rgb(220,130,130); --grad-end: rgb(145, 55, 55); }
-.theme-green  { --grad-start: rgb(119,171, 89); --grad-end: rgb( 35, 77, 32); }
-.theme-lime   { --grad-start: rgb(170,220,130); --grad-end: rgb( 80,130, 50); }
-.theme-pink   { --grad-start: rgb(255,185,210); --grad-end: rgb(210, 90,140); }
-.theme-gold   { --grad-start: rgb(255,212, 71); --grad-end: rgb(166,124,  0); }
-.theme-purple { --grad-start: rgb(170,145,230); --grad-end: rgb( 80, 60,160); }
-.theme-lush   { --grad-start: rgb(169,132,248); --grad-end: rgb( 26,184,126); }
-.theme-beach  { --grad-start: rgb(246, 97, 81); --grad-end: rgb( 66,142,186); }
-.theme-dusk   { --grad-start: rgb(255,190,111); --grad-end: rgb( 38, 36, 48); }
-.theme-neon   { --grad-start: rgb(146, 21,245); --grad-end: rgb(  0,  0,  0); }
-.theme-night  { --grad-start: rgb(128,  0,  0); --grad-end: rgb(  0,  0,  0); }
-.theme-ember  { --grad-start: rgb(240,130, 30); --grad-end: rgb(120, 40,  0); }
-.theme-teal   { --grad-start: rgb( 30,165,175); --grad-end: rgb(  0, 45, 50); }
-.theme-gray   { --grad-start: rgb(120,120, 13); --grad-end: rgb( 30, 30, 35); }
-.theme-tidal  { --grad-start: rgb(242,169, 80); --grad-end: rgb( 31, 44, 61); }
-.theme-lagoon { --grad-start: rgb(233,196, 10); --grad-end: rgb( 19, 70, 78); }
-.theme-plum   { --grad-start: rgb(255,146,139); --grad-end: rgb( 88, 28, 60); }
-.theme-mango  { --grad-start: rgb(255,195,  0); --grad-end: rgb(114, 52, 18); }
-.theme-reef   { --grad-start: rgb(231,111, 81); --grad-end: rgb( 38, 70, 83); }
-.theme-canopy { --grad-start: rgb(167,201, 87); --grad-end: rgb( 30, 61, 44); }
-.theme-cabana { --grad-start: rgb(214,185,128); --grad-end: rgb(116,104, 87); }
+:root[data-theme="light"], .theme-light {
+  --bg-dark:      rgba(253, 246, 227,   1);
+  --bg-norm:      rgba(147, 161, 161,   1);
+  --bg-norm-half: rgba(147, 161, 161, 0.5);
+  --bg-light:     rgba(238, 232, 213,   1);
+  --fg-dark:      rgba(  7,  54,  66,   1);
+  --fg-light:     rgba(  0,  43,  54,   1);
+}
+
+:root[data-theme="gold"], .theme-gold {
+  --bg-dark:      rgba(166, 124,   0,   1);
+  --bg-norm:      rgba(255, 191,   0,   1);
+  --bg-norm-half: rgba(255, 191,   0, 0.5);
+  --bg-light:     rgba(255, 212,  71,   1);
+  --fg-dark:      rgba(255, 232, 120,   1);
+  --fg-light:     rgba(255, 220, 115,   1);
+}
+
+:root[data-theme="navy"], .theme-navy {
+  --bg-dark:      rgba(  1,  31,  75,   1);
+  --bg-norm:      rgba(  3,  57, 108,   1);
+  --bg-norm-half: rgba(  3,  57, 108, 0.5);
+  --bg-light:     rgba(  0,  91, 150,   1);
+  --fg-dark:      rgba(100, 151, 177,   1);
+  --fg-light:     rgba(179, 205, 224,   1);
+}
+
+:root[data-theme="rose"], .theme-rose {
+  --bg-dark:      rgba(175,  83,  83,   1);
+  --bg-norm:      rgba(208, 124, 124,   1);
+  --bg-norm-half: rgba(208, 124, 124, 0.5);
+  --bg-light:     rgba(223, 145, 145,   1);
+  --fg-dark:      rgba(244, 168, 168,   1);
+  --fg-light:     rgba(254, 181, 181,   1);
+}
+
+:root[data-theme="lime"], .theme-lime {
+  --bg-dark:      rgba(172, 221, 163,   1);
+  --bg-norm:      rgba(188, 227, 181,   1);
+  --bg-norm-half: rgba(188, 227, 181, 0.5);
+  --bg-light:     rgba(205, 234, 199,   1);
+  --fg-dark:      rgba(221, 241, 218,   1);
+  --fg-light:     rgba(238, 248, 236,   1);
+}
+
+:root[data-theme="green"], .theme-green {
+  --bg-dark:      rgba( 35,  77,  32,   1);
+  --bg-norm:      rgba( 54, 128,  45,   1);
+  --bg-norm-half: rgba( 54, 128,  45, 0.5);
+  --bg-light:     rgba(119, 171,  89,   1);
+  --fg-dark:      rgba(201, 223, 138,   1);
+  --fg-light:     rgba(240, 247, 218,   1);
+}
+
+:root[data-theme="purple"], .theme-purple {
+  --bg-dark:      rgba(156, 163, 214,   1);
+  --bg-norm:      rgba(207, 193, 232,   1);
+  --bg-norm-half: rgba(207, 193, 232, 0.5);
+  --bg-light:     rgba(242, 213, 239,   1);
+  --fg-dark:      rgba(247, 239, 218,   1);
+  --fg-light:     rgba(179, 221, 196,   1);
+}
+
+:root[data-theme="night"], .theme-night {
+  --bg-dark:      rgba(  0,   0,   0,   1);
+  --bg-norm:      rgba( 64,   0,   0,   1);
+  --bg-norm-half: rgba( 64,   0,   0, 0.5);
+  --bg-light:     rgba(128,   0,   0,   1);
+  --fg-dark:      rgba(191,   0,   0,   1);
+  --fg-light:     rgba(255,   0,   0,   1);
+}
+
+:root[data-theme="pink"], .theme-pink {
+  --bg-dark:      rgba(255, 132, 182,   1);
+  --bg-norm:      rgba(255, 192, 159,   1);
+  --bg-norm-half: rgba(255, 192, 159, 0.5);
+  --bg-light:     rgba(208, 188, 255,   1);
+  --fg-dark:      rgba(131, 127, 255,   1);
+  --fg-light:     rgba(255, 229, 142,   1);
+}
+
+:root[data-theme="lush"], .theme-lush {
+  --bg-dark:      rgba( 26, 184, 126,   1);
+  --bg-norm:      rgba( 23, 255, 227,   1);
+  --bg-norm-half: rgba( 23, 255, 227, 0.5);
+  --bg-light:     rgba(169, 132, 248,   1);
+  --fg-dark:      rgba(239, 105,  46,   1);
+  --fg-light:     rgba(249, 155, 197,   1);
+}
+
+:root[data-theme="dusk"], .theme-dusk {
+  --bg-dark:      rgba( 38,  36,  48,   1);
+  --bg-norm:      rgba( 42,  45,  84,   1);
+  --bg-norm-half: rgba( 42,  45,  84, 0.5);
+  --bg-light:     rgba(255, 190, 111,   1);
+  --fg-dark:      rgba(166, 129, 186,   1);
+  --fg-light:     rgba(211,  65,  59,   1);
+}
+
+:root[data-theme="beach"], .theme-beach {
+  --bg-dark:      rgba( 66, 142, 186,   1);
+  --bg-norm:      rgba( 72, 202, 240,   1);
+  --bg-norm-half: rgba( 72, 202, 240, 0.5);
+  --bg-light:     rgba(246,  97,  81,   1);
+  --fg-dark:      rgba(249, 240, 107,   1);
+  --fg-light:     rgba(249, 240, 107,   1);
+}
+
+:root[data-theme="neon"], .theme-neon {
+  --bg-dark:      rgba(  0,   0,   0,   1);
+  --bg-norm:      rgba( 18,  18,  37,   1);
+  --bg-norm-half: rgba( 18,  18,  37, 0.5);
+  --bg-light:     rgba(146,  21, 245,   1);
+  --fg-dark:      rgba(250,  23, 138,   1);
+  --fg-light:     rgba(200, 247,  30,   1);
+}
+
+:root[data-theme="ember"], .theme-ember {
+  --bg-dark:      rgba(120,  40,   0,   1);
+  --bg-norm:      rgba(190,  75,  10,   1);
+  --bg-norm-half: rgba(190,  75,  10, 0.5);
+  --bg-light:     rgba(240, 130,  30,   1);
+  --fg-dark:      rgba(255, 200,  80,   1);
+  --fg-light:     rgba(255, 240, 180,   1);
+}
+
+:root[data-theme="teal"], .theme-teal {
+  --bg-dark:      rgba(  0,  45,  50,   1);
+  --bg-norm:      rgba( 10, 100, 110,   1);
+  --bg-norm-half: rgba( 10, 100, 110, 0.5);
+  --bg-light:     rgba( 30, 165, 175,   1);
+  --fg-dark:      rgba( 90, 230, 210,   1);
+  --fg-light:     rgba(190, 250, 235,   1);
+}
+
+:root[data-theme="gray"], .theme-gray {
+  --bg-dark:      rgba( 30,  30,  35,   1);
+  --bg-norm:      rgba( 70,  70,  80,   1);
+  --bg-norm-half: rgba( 70,  70,  80, 0.5);
+  --bg-light:     rgba(120, 120, 135,   1);
+  --fg-dark:      rgba(210, 210, 220,   1);
+  --fg-light:     rgba(240, 240, 245,   1);
+}
+
+:root[data-theme="tidal"], .theme-tidal {
+  --bg-dark:      rgba( 31,  44,  61,   1);
+  --bg-norm:      rgba(127, 169, 174,   1);
+  --bg-norm-half: rgba(127, 169, 174, 0.5);
+  --bg-light:     rgba(242, 169,  80,   1);
+  --fg-dark:      rgba(255, 221, 173,   1);
+  --fg-light:     rgba(255, 245, 225,   1);
+}
+
+:root[data-theme="lagoon"], .theme-lagoon {
+  --bg-dark:      rgba( 19,  70,  78,   1);
+  --bg-norm:      rgba( 42, 157, 143,   1);
+  --bg-norm-half: rgba( 42, 157, 143, 0.5);
+  --bg-light:     rgba(233, 196, 106,   1);
+  --fg-dark:      rgba(244, 162,  97,   1);
+  --fg-light:     rgba(255, 236, 179,   1);
+}
+
+:root[data-theme="plum"], .theme-plum {
+  --bg-dark:      rgba( 88,  28,  60,   1);
+  --bg-norm:      rgba(181,  61, 111,   1);
+  --bg-norm-half: rgba(181,  61, 111, 0.5);
+  --bg-light:     rgba(255, 146, 139,   1);
+  --fg-dark:      rgba(255, 201, 167,   1);
+  --fg-light:     rgba(255, 232, 214,   1);
+}
+
+:root[data-theme="mango"], .theme-mango {
+  --bg-dark:      rgba(114,  52,  18,   1);
+  --bg-norm:      rgba(230, 126,  34,   1);
+  --bg-norm-half: rgba(230, 126,  34, 0.5);
+  --bg-light:     rgba(255, 195,   0,   1);
+  --fg-dark:      rgba(255, 224, 138,   1);
+  --fg-light:     rgba(255, 245, 204,   1);
+}
+
+:root[data-theme="reef"], .theme-reef {
+  --bg-dark:      rgba( 38,  70,  83,   1);
+  --bg-norm:      rgba( 42, 157, 143,   1);
+  --bg-norm-half: rgba( 42, 157, 143, 0.5);
+  --bg-light:     rgba(231, 111,  81,   1);
+  --fg-dark:      rgba(244, 162,  97,   1);
+  --fg-light:     rgba(255, 230, 204,   1);
+}
+
+:root[data-theme="canopy"], .theme-canopy {
+  --bg-dark:      rgba( 30,  61,  44,   1);
+  --bg-norm:      rgba( 88, 129,  87,   1);
+  --bg-norm-half: rgba( 88, 129,  87, 0.5);
+  --bg-light:     rgba(167, 201,  87,   1);
+  --fg-dark:      rgba(244, 213, 141,   1);
+  --fg-light:     rgba(255, 241, 214,   1);
+}
+
+:root[data-theme="cabana"], .theme-cabana {
+  --bg-dark:      rgba(116, 104,  87,   1);
+  --bg-norm:      rgba(183, 168, 139,   1);
+  --bg-norm-half: rgba(183, 168, 139, 0.5);
+  --bg-light:     rgba(214, 185, 128,   1);
+  --fg-dark:      rgba(232, 205, 170,   1);
+  --fg-light:     rgba(250, 240, 220,   1);
+}
