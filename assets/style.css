@@ -618,3 +618,12 @@ details[open] > summary:hover {
   --fg-dark:      rgba(232, 205, 170,   1);
   --fg-light:     rgba(250, 240, 220,   1);
 }
+
+:root[data-theme="sky"], .theme-sky {
+  --bg-dark:      rgba(205, 230, 250,   1);
+  --bg-norm:      rgba( 90, 150, 205,   1);
+  --bg-norm-half: rgba( 90, 150, 205, 0.5);
+  --bg-light:     rgba(125, 185, 235,   1);
+  --fg-dark:      rgba( 15,  50,  95,   1);
+  --fg-light:     rgba( 10,  35,  70,   1);
+}
