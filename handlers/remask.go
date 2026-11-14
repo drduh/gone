@@ -20,7 +20,7 @@ func UserRemask(app *config.App) http.HandlerFunc {
 			"new", reqNew.AddressMask,
 			"old", req.AddressMask)
 
-		if req.IsBrowser {
+		if wantsIndex(app, req) {
 			toPath(w, r, app.Root)
 		} else {
 			writeJSON(w, http.StatusOK,

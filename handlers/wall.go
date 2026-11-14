@@ -63,7 +63,7 @@ func Wall(app *config.App) http.HandlerFunc {
 			"length", length,
 			"user", req)
 
-		if req.IsBrowser {
+		if wantsIndex(app, req) {
 			toPath(w, r, app.Root)
 			return
 		}

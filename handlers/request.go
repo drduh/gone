@@ -4,6 +4,8 @@ import (
 	"net"
 	"net/http"
 	"strings"
+
+	"github.com/drduh/gone/config"
 )
 
 // parseRequest returns a Request with masked address.
@@ -33,4 +35,10 @@ func clientAddr(r *http.Request) string {
 // toPath redirects an HTTP request to a path.
 func toPath(w http.ResponseWriter, r *http.Request, p string) {
 	http.Redirect(w, r, p, http.StatusSeeOther)
+}
+
+// wantsIndex returns true if a browser request should be
+// redirected to the index page.
+func wantsIndex(app *config.App, req *Request) bool {
+	return req.IsBrowser && app.Root != ""
 }

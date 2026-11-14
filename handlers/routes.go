@@ -16,6 +16,16 @@ func post(pattern string) string {
 	return http.MethodPost + " " + pattern
 }
 
+// exact suffixes a pattern to match only its path and
+// not the subtree below it.
+func exact(pattern string) string {
+	if pattern == "" {
+		return ""
+	}
+
+	return pattern + "{$}"
+}
+
 // patternPath returns the path of a mux pattern, without
 // method prefix or "{$}" suffix.
 func patternPath(pattern string) string {
@@ -42,7 +52,7 @@ func Routes(app *config.App) map[string]http.HandlerFunc {
 	return map[string]http.HandlerFunc{
 
 		// Index page (exact match)
-		app.Root + "{$}": Index(app),
+		exact(app.Root): Index(app),
 
 		// Service status
 		app.Status: Status(app),

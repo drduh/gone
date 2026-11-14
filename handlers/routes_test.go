@@ -36,6 +36,23 @@ func TestRegisterDisabled(t *testing.T) {
 	}
 }
 
+// TestRegisterEmptyRoot tests an empty root disables the
+// index page while other paths stay routed.
+func TestRegisterEmptyRoot(t *testing.T) {
+	app := newTestApp()
+	app.Root = ""
+
+	req := httptest.NewRequestWithContext(t.Context(),
+		http.MethodGet, "/", nil)
+	rr := serveRequest(t, app, req)
+	assertStatus(t, rr, http.StatusNotFound)
+
+	req = httptest.NewRequestWithContext(t.Context(),
+		http.MethodGet, app.Status, nil)
+	rr = serveRequest(t, app, req)
+	assertStatus(t, rr, http.StatusOK)
+}
+
 // TestStateChangeRequiresPost tests GET cannot modify state.
 func TestStateChangeRequiresPost(t *testing.T) {
 	app := newTestAppWithStorage()
@@ -83,5 +100,9 @@ func TestPatternPath(t *testing.T) {
 
 	if post("") != "" || post("/x") != "POST /x" {
 		t.Fatal("post() prefix incorrect")
+	}
+
+	if exact("") != "" || exact("/") != "/{$}" {
+		t.Fatal("exact() suffix incorrect")
 	}
 }

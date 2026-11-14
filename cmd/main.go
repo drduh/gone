@@ -5,7 +5,7 @@ package main
 import (
 	"os"
 
-	"github.com/drduh/gone/cmd/v1"
+	v1 "github.com/drduh/gone/cmd/v1"
 )
 
 func main() {

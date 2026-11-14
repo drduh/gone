@@ -26,7 +26,7 @@ func Random(app *config.App) http.HandlerFunc {
 
 		app.Log.Info("serving random", "user", req)
 
-		if req.IsBrowser {
+		if wantsIndex(app, req) {
 			renderIndex(app, w, r, req, path, response)
 		} else {
 			writeJSON(w, http.StatusOK, response)
