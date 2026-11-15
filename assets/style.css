@@ -73,6 +73,7 @@ form {
 .row {
   align-items: center;
   display: flex;
+  flex-wrap: wrap;
   justify-content: center;
 }
 
@@ -95,6 +96,7 @@ form {
 .itemName {
   display: block;
   font-size: var(--font-size-norm);
+  overflow-wrap: anywhere;
 }
 .itemName:hover { color: var(--fg-light); }
 
@@ -329,6 +331,10 @@ button.selectDelete:hover {
 .selectFilename,
 .selectMessage {
   width: var(--width-xlarge);
+}
+
+.selectMessage {
+  max-width: calc(100% - 1.2em);
 }
 
 input:out-of-range,
