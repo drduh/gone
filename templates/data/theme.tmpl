@@ -8,6 +8,7 @@
         <div class="themes">
         {{- range .Style.Available }}
           <button aria-label="{{ . }}"
+          {{- if eq . $.Theme }} aria-current="true" {{- end }}
                        class="theme-{{ . }}"
                         name="theme"
                        title="{{ . }}"
