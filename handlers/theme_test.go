@@ -3,6 +3,7 @@ package handlers
 import (
 	"net/http"
 	"net/http/httptest"
+	"os"
 	"strings"
 	"testing"
 	"time"
@@ -82,5 +83,51 @@ func TestIndexOptions(t *testing.T) {
 	}
 	if len(rr.Result().Cookies()) != 0 {
 		t.Fatal("expected no cookie with picking disabled")
+	}
+}
+
+// TestThemeRules tests each default theme has one stylesheet rule.
+func TestThemeRules(t *testing.T) {
+	css, err := os.ReadFile("../assets/style.css")
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	themes := newTestApp().Style.Available
+	if len(themes) == 0 {
+		t.Fatal("expected default themes")
+	}
+
+	for _, name := range themes {
+		rule := `[data-theme="` + name + `"]`
+		if got := strings.Count(string(css), rule); got != 1 {
+			t.Errorf("%s rules = %d; want 1", rule, got)
+		}
+	}
+}
+
+// TestIndexTheme tests the index names and marks the current theme.
+func TestIndexTheme(t *testing.T) {
+	app := newTestApp()
+	app.Require.Root = false
+
+	rr := serveRequest(t, app, httptest.NewRequestWithContext(
+		t.Context(), http.MethodGet, "/?theme=lime", nil))
+	assertStatus(t, rr, http.StatusOK)
+
+	body := rr.Body.String()
+	if !strings.Contains(body,
+		`<html lang="en" data-theme="lime">`) {
+		t.Error("expected data-theme on html")
+	}
+	if strings.Contains(body, "<style") {
+		t.Error("expected no style element")
+	}
+	if got := strings.Count(body, `aria-current="true"`); got != 1 {
+		t.Errorf("current swatches = %d; want 1", got)
+	}
+	if !strings.Contains(body,
+		`aria-label="lime" aria-current="true"`) {
+		t.Error("expected the lime swatch marked current")
 	}
 }
