@@ -73,11 +73,11 @@
       "allowPick": true,
       "theme":     "auto",
       "available": [
-        "light", "lime", "gold", "pink", "lush",
-        "dark", "green", "mango", "rose", "purple",
-        "navy", "canopy", "ember", "beach", "neon",
-        "teal", "lagoon", "cabana", "plum", "night",
-        "tidal", "gray", "dusk", "reef"
+        "light", "gold", "lime", "sky", "purple",
+        "cabana", "mango", "lush", "beach", "pink",
+        "gray", "ember", "green", "reef", "rose",
+        "dark", "tidal", "canopy", "teal", "plum",
+        "night", "dusk", "lagoon", "navy", "neon"
       ]
     }
   },

@@ -3,7 +3,11 @@ package settings
 import (
 	"errors"
 	"fmt"
+	"iter"
 	"net"
+	"reflect"
+	"regexp"
+	"strings"
 )
 
 var (
@@ -24,7 +28,18 @@ var (
 	errTimeoutHeader   = errors.New("readHeader timeout must be 1 or more")
 	errTimeoutWrite    = errors.New("write timeout must be 0 or more")
 	errTimeoutShutdown = errors.New("shutdown timeout must be 0 or more")
+	errPathSlash       = errors.New("path must start with /")
+	errPathRoot        = errors.New("path / is reserved for root")
+	errPathUnique      = errors.New("path must be unique")
+	errPathSegment     = errors.New("path segments must be non-empty letters, digits or ._~-")
+	errPathCount       = errors.New("path must have one {count} segment")
+	errPathPrefix      = errors.New("path must end with /")
 )
+
+// countSegment is the message number wildcard.
+const countSegment = "{count}"
+
+var pathSegment = regexp.MustCompile(`^[A-Za-z0-9._~-]+$`)
 
 // Validate returns an error if a setting is invalid.
 func (s *Settings) Validate() error {
@@ -33,6 +48,10 @@ func (s *Settings) Validate() error {
 	}
 
 	if err := s.validateAuth(); err != nil {
+		return err
+	}
+
+	if err := s.validatePaths(); err != nil {
 		return err
 	}
 
@@ -78,6 +97,82 @@ func (s *Settings) validateServer() error {
 	}
 
 	return nil
+}
+
+// validatePaths rejects invalid mux paths.
+func (s *Settings) validatePaths() error {
+	seen := make(map[string]string)
+	for name, path := range s.named() {
+		if path == "" {
+			continue
+		}
+
+		if !strings.HasPrefix(path, "/") {
+			return fmt.Errorf("%w - not %s %q",
+				errPathSlash, name, path)
+		}
+
+		if err := pathShape(name, path); err != nil {
+			return err
+		}
+
+		if path == "/" && name != "root" {
+			return fmt.Errorf("%w - not %s", errPathRoot, name)
+		}
+
+		if other, ok := seen[path]; ok {
+			return fmt.Errorf("%w - %s and %s are both %q",
+				errPathUnique, other, name, path)
+		}
+		seen[path] = name
+	}
+
+	return nil
+}
+
+// pathShape returns an error for invalid mux path segments.
+func pathShape(name, path string) error {
+	counts := 0
+	segs := strings.Split(path[1:], "/")
+	for i, seg := range segs {
+		switch {
+		case seg == "" && i == len(segs)-1:
+		case seg == countSegment &&
+			(name == "msgGet" || name == "msgDelete"):
+			counts++
+		case seg == "." || seg == ".." || !pathSegment.MatchString(seg):
+			return fmt.Errorf("%w - not %s %q",
+				errPathSegment, name, path)
+		}
+	}
+
+	switch name {
+	case "msgGet", "msgDelete":
+		if counts != 1 {
+			return fmt.Errorf("%w - not %s %q",
+				errPathCount, name, path)
+		}
+	case "assets", "download", "random", "root":
+		if !strings.HasSuffix(path, "/") {
+			return fmt.Errorf("%w - not %s %q",
+				errPathPrefix, name, path)
+		}
+	}
+
+	return nil
+}
+
+// named returns each path with its setting name and the JSON
+// key it is configured by.
+func (p *Paths) named() iter.Seq2[string, string] {
+	return func(yield func(string, string) bool) {
+		for f, v := range reflect.ValueOf(p).Elem().Fields() {
+			name, _, _ := strings.Cut(f.Tag.Get("json"), ",")
+			if !yield(name, v.String()) {
+				return
+			}
+		}
+	}
 }
 
 func (s *Settings) validateAuth() error {
