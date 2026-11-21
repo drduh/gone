@@ -72,6 +72,10 @@ MOD_FILE  = 0644
 ARG_TEST ?=
 TESTCOVER = testCoverage
 TESTTIME ?= 1m
+FUZZTIME ?= 10s
+FUZZLONG ?= 5m
+FUZZMIN  ?= 0s
+FUZZFAIL  = exit 1
 
 CMD_TEST  = $(CMD_GO) test -trimpath
 CMD_COVER = $(CMD_TEST) \
@@ -175,6 +179,22 @@ test-verbose: ARG_TEST = -v
 
 test test-race test-short test-verbose:
 	@$(CMD_TEST) $(ARG_TEST) -timeout=$(TESTTIME) $(PKG)
+
+fuzz-long: FUZZTIME = $(FUZZLONG)
+fuzz-long: FUZZMIN  = 60s
+fuzz-long: FUZZFAIL = fail=1
+
+fuzz fuzz-long:
+	@pkgs=$$($(CMD_GO) list $(PKG)) || exit 1; \
+	fail=0; for pkg in $$pkgs; do \
+		list=$$($(CMD_TEST) -list '^Fuzz' $$pkg) || $(FUZZFAIL); \
+		for f in $$(printf '%s\n' "$$list" | grep '^Fuzz'); do \
+			printf '%s %s\n' $$pkg $$f; \
+			$(CMD_TEST) -run '^$$' -fuzz "^$$f$$" \
+				-fuzztime $(FUZZTIME) -fuzzminimizetime $(FUZZMIN) \
+				$$pkg || $(FUZZFAIL); \
+		done; \
+	done; exit $$fail
 
 RUN_IF_FOUND = if command -v $(1) >/dev/null 2>&1 ; \
 		then $(1) $(2) ; else \
