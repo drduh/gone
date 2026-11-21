@@ -201,7 +201,7 @@ func TestSanitizeName(t *testing.T) {
 		{"file%FF.txt", extraChars, 30, "file.txt"},
 		{"file.txt", extraChars, -1, defaultName},
 		{"file.txt", extraChars, 0, defaultName},
-		{"file.txt", extraChars, 1, "."},
+		{"file.txt", extraChars, 1, defaultName},
 		{"file.txt", extraChars, 4, ".txt"},
 		{"file.txt", extraChars, 5, "f.txt"},
 	}

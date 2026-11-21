@@ -34,6 +34,7 @@ func TestStatus(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			app := newTestAppWithStorage()
 			app.ShowBuild = tt.showBuild
+			app.WallContent = "héllo, wörld" // 12 characters, 14 bytes
 
 			req := httptest.NewRequestWithContext(
 				t.Context(), http.MethodGet, app.Status, nil)
@@ -127,9 +128,9 @@ func TestStatus(t *testing.T) {
 				t.Fatalf("decode wall meta: %v", err)
 			}
 
-			if gotWall.WallChars != len(app.WallContent) {
-				t.Errorf("wallChars = %d; want %d",
-					gotWall.WallChars, len(app.WallContent))
+			if gotWall.WallChars != 12 {
+				t.Errorf("wallChars = %d; want 12",
+					gotWall.WallChars)
 			}
 		})
 	}
