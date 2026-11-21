@@ -7,6 +7,9 @@ import (
 	"net/url"
 	"strings"
 	"testing"
+	"unicode/utf8"
+
+	"github.com/drduh/gone/auth"
 )
 
 // TestWallGet tests reading wall content.
@@ -165,4 +168,58 @@ func TestWallPostBrowser(t *testing.T) {
 	if app.WallContent != "hi" {
 		t.Fatalf("wall = %q; want hi", app.WallContent)
 	}
+}
+
+// FuzzWall checks a post within limits is stored as sent.
+func FuzzWall(f *testing.F) {
+	app := newTestApp()
+	app.Require.Wall = false
+	mux := newTestMux(app)
+
+	limit := app.WallLimits.LengthChars
+	for _, s := range []string{
+		"", "new content", testContentWall, "&wall=x", "%41+",
+		strings.Repeat("a", limit), strings.Repeat("a", limit+1),
+		strings.Repeat("é", limit), strings.Repeat("é", limit+1),
+		strings.Repeat("\xff", limit),
+		"\x00", "\xff\xfe", "a\r\r\nb", "\v\f", "\u00a0", "\u0085",
+		"ſ", "\u212a", "İ", "a==b", "=", ";;;", `"""`, "(((",
+	} {
+		f.Add(s)
+	}
+
+	f.Fuzz(func(t *testing.T, content string) {
+		app.ClearStorage()
+		app.RequestThrottle = auth.RequestThrottle{}
+
+		body := url.Values{formFieldWall: {content}}.Encode()
+		req := httptest.NewRequestWithContext(t.Context(),
+			http.MethodPost, app.WallModify,
+			strings.NewReader(body))
+		req.Header.Set("Content-Type", formContentType)
+		rr := httptest.NewRecorder()
+		mux.ServeHTTP(rr, req)
+
+		chars := utf8.RuneCountInString(content)
+		accepted := rr.Code == http.StatusOK
+		if accepted != (chars <= limit) {
+			t.Fatalf("%d characters (limit %d): status %d",
+				chars, limit, rr.Code)
+		}
+
+		want := ""
+		if accepted {
+			want = content
+		}
+		got, meta := app.GetWall()
+		if got != want {
+			t.Fatalf("%q: status %d, stored %q",
+				content, rr.Code, got)
+		}
+
+		if accepted && (meta.WallChars != chars || meta.WallCap > 100) {
+			t.Fatalf("%q: %d characters shown as %d (%d%%)",
+				content, chars, meta.WallChars, meta.WallCap)
+		}
+	})
 }
