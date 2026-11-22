@@ -8,7 +8,9 @@ import (
 	"strconv"
 	"strings"
 	"testing"
+	"unicode/utf8"
 
+	"github.com/drduh/gone/auth"
 	"github.com/drduh/gone/storage"
 )
 
@@ -248,4 +250,61 @@ func TestMessageSpacesOnly(t *testing.T) {
 	if got := len(app.Messages); got != 0 {
 		t.Fatalf("expected 0 messages, got %d", got)
 	}
+}
+
+// FuzzMessageAdd checks a message is stored trimmed if within the limit.
+func FuzzMessageAdd(f *testing.F) {
+	app := newTestApp()
+	app.Require.MessageAdd = false
+	mux := newTestMux(app)
+
+	limit := app.MessageLimits.LengthChars
+	for _, s := range []string{
+		"", " ", "   \n\t  ", testContentMsgs,
+		fmt.Sprintf("  \n\t %s \r\n ", testContentMsgs),
+		strings.Repeat("a", limit), strings.Repeat("a", limit+1),
+		strings.Repeat("é", limit), strings.Repeat("é", limit+1),
+		" " + strings.Repeat("a", limit) + " ", "&message=x", "%41+",
+		"\x00", "\xff\xfe", "a\r\r\nb", "\v\f", "\u00a0", "\u0085",
+		"ſ", "\u212a", "İ", "a==b", "=", ";;;", `"""`, "(((",
+	} {
+		f.Add(s)
+	}
+
+	f.Fuzz(func(t *testing.T, content string) {
+		app.ClearStorage()
+		app.RequestThrottle = auth.RequestThrottle{}
+
+		form := url.Values{}
+		form.Set(formFieldMessage, content)
+		req := httptest.NewRequestWithContext(t.Context(),
+			http.MethodPost, app.MessageAdd,
+			strings.NewReader(form.Encode()))
+		req.Header.Set("Content-Type", formContentType)
+		rr := httptest.NewRecorder()
+		mux.ServeHTTP(rr, req)
+
+		got := app.ListMessages()
+		want := strings.TrimSpace(content)
+		valid := want != "" && utf8.RuneCountInString(want) <= limit
+
+		switch {
+		case len(got) > 1 || len(got) == 1 && !valid:
+			t.Fatalf("%q: stored %d messages", content, len(got))
+		case len(got) == 1 && (got[0].Data != want || got[0].Count != 1):
+			t.Fatalf("%q: stored %q as %d",
+				content, got[0].Data, got[0].Count)
+		case len(got) == 0 && valid &&
+			utf8.RuneCountInString(content) <= limit:
+			t.Fatalf("%q: status %d, nothing stored",
+				content, rr.Code)
+		case want != "" && (rr.Code == http.StatusOK) != (len(got) == 1):
+			t.Fatalf("%q: status %d, stored %d messages",
+				content, rr.Code, len(got))
+		case len(got) == 1 &&
+			app.CharsMessages != utf8.RuneCountInString(want):
+			t.Fatalf("%q: %d characters counted as %d", content,
+				utf8.RuneCountInString(want), app.CharsMessages)
+		}
+	})
 }

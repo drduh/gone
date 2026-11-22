@@ -2,6 +2,7 @@ package storage
 
 import (
 	"strings"
+	"unicode/utf8"
 
 	"github.com/drduh/gone/util"
 )
@@ -88,13 +89,13 @@ func (s *Storage) countMessages() {
 
 	total := 0
 	for _, message := range s.Messages {
-		total += len(message.Data)
+		total += utf8.RuneCountInString(message.Data)
 	}
 	s.CharsMessages = total
 }
 
 func (s *Storage) countWall() {
-	s.WallChars = len(s.WallContent)
+	s.WallChars = utf8.RuneCountInString(s.WallContent)
 
 	if s.WallContent == "" {
 		s.WallLines = 0

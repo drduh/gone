@@ -39,7 +39,12 @@ func SanitizeName(input, extraChars string, maxLength int) string {
 		base = defaultName
 	}
 
-	return truncateName(base, ext, maxLength)
+	name := truncateName(base, ext, maxLength)
+	if name == "." || name == ".." {
+		return defaultName
+	}
+
+	return name
 }
 
 // removeInvalidChars removes all invalid characters.
@@ -78,7 +83,7 @@ func truncateName(base string, ext string, maxLength int) string {
 
 	allowedBaseLength := maxLength - len(ext)
 	if allowedBaseLength > 0 {
-		return base[:allowedBaseLength] + ext
+		return strings.TrimSpace(base[:allowedBaseLength]) + ext
 	}
 
 	return ext[:maxLength]

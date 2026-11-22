@@ -201,7 +201,7 @@ func TestSanitizeName(t *testing.T) {
 		{"file%FF.txt", extraChars, 30, "file.txt"},
 		{"file.txt", extraChars, -1, defaultName},
 		{"file.txt", extraChars, 0, defaultName},
-		{"file.txt", extraChars, 1, "."},
+		{"file.txt", extraChars, 1, defaultName},
 		{"file.txt", extraChars, 4, ".txt"},
 		{"file.txt", extraChars, 5, "f.txt"},
 	}
@@ -215,4 +215,65 @@ func TestSanitizeName(t *testing.T) {
 			}
 		})
 	}
+}
+
+// FuzzSanitizeName checks names keep to allowed characters and length.
+func FuzzSanitizeName(f *testing.F) {
+	for _, s := range []string{
+		"", " ", ".", "..", "/", `\\`, ".txt", "file.", "file..txt",
+		"...........", " file . txt ", "file.txt   ", "%20%20%20",
+		"%2e%2e", "file%2Etxt", "100%25-real.txt", "payload.ph%p.txt",
+		"report+final.txt", "a copy.my copy", "archive.tar.gz",
+		"my@invalid#name?.txt", ".hiddenfile", "/path/to/file.txt",
+		"../../../etc/passwd", `..\..\..\etc\passwd`,
+		"..%2F..%2Fetc%2Fpasswd", "..%252F..%252Fetc%252Fpasswd",
+		"file.txt\x00../../etc/passwd", "file.txt\r\nSet-Cookie: a=b",
+		"data:", "DATA:IMAGE/PNG;BASE64,AAAA", "da%74a:xxx",
+		"café-menu_2026.pdf", "cafe\u0301.pdf", "\u202erun.exe",
+		"dir∕subdir∕file.txt", "．．/passwd", "#⃣#⃣#⃣™ℹ↔.txt",
+		strings.Repeat("a", 64), strings.Repeat("a", 60) + ".txt",
+		strings.Repeat("a", 61) + ".txt",
+		"example." + strings.Repeat("x", 1000),
+		"\x00", "\xff\xfe", "a\r\r\nb", "\v\f", "\u00a0", "\u0085",
+		"ſ", "\u212a", "İ", "a==b", "=", ";;;", `"""`, "(((",
+	} {
+		f.Add(s, byte(0))
+	}
+
+	f.Add("..!", byte(0))
+	f.Add(". .", byte(0))
+	f.Add("0.", byte(6))
+	f.Add("0000000 0", byte(2))
+	f.Add("ab cd.txt", byte(4))
+
+	f.Fuzz(func(t *testing.T, input string, opts byte) {
+		extra := []string{extraChars, ""}[opts&1]
+		maxLength := []int{64, 8, 7, 1}[opts>>1&3]
+
+		got := SanitizeName(input, extra, maxLength)
+		long := len(got) > maxLength && got != defaultName
+		if got == "" || got == "." || got == ".." || long {
+			t.Fatalf("%q (extra %q, length %d): %q",
+				input, extra, maxLength, got)
+		}
+
+		for _, r := range got {
+			if !isNameChar(r, extra) {
+				t.Fatalf("%q (extra %q, length %d): %q has %q",
+					input, extra, maxLength, got, r)
+			}
+		}
+
+		again := SanitizeName(got, extra, maxLength)
+		if again != got && got != defaultName {
+			t.Fatalf("%q (extra %q, length %d): %q, then %q",
+				input, extra, maxLength, got, again)
+		}
+	})
+}
+
+// isNameChar reports whether r is an ascii letter, digit or in extra.
+func isNameChar(r rune, extra string) bool {
+	return 'a' <= r && r <= 'z' || 'A' <= r && r <= 'Z' ||
+		'0' <= r && r <= '9' || strings.ContainsRune(extra, r)
 }
