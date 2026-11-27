@@ -10,6 +10,23 @@ import (
 	"github.com/drduh/gone/util"
 )
 
+// typeFmts maps content types to readable labels.
+var typeFmts = map[string]string{
+	"application/pdf":                         "pdf document",
+	"application/vnd.android.package-archive": "android package",
+	"application/x-gzip":                      "archive",
+	"application/zip":                         "archive",
+	"image/gif":                               "image",
+	"image/jpeg":                              "image",
+	"image/png":                               "image",
+	"image/webp":                              "image",
+	"text/html; charset=utf-8":                "html document",
+	"text/plain; charset=utf-8":               "plain text",
+	"text/x-shellscript":                      "shell script",
+	"text/xml; charset=utf-8":                 "xml document",
+	"video/mp4":                               "video",
+}
+
 // Scan identifies and sets File attributes.
 func (f *File) Scan() {
 	f.setID()
@@ -72,19 +89,9 @@ func (f *File) setTypeOverride(ext string) bool {
 	return true
 }
 
-// setTypeFmt sets TypeFmt to Type unless a type-specific
-// format override is available.
+// setTypeFmt sets TypeFmt to a readable label, or Type if none.
 func (f *File) setTypeFmt() {
-	overrides := map[string]string{
-		"application/vnd.android.package-archive": "android package",
-		"application/zip":                         "zip archive",
-		"application/x-gzip":                      "gzip archive",
-		"text/html; charset=utf-8":                "html document",
-		"text/plain; charset=utf-8":               "text file",
-		"text/x-shellscript":                      "shell script",
-	}
-
-	if t, ok := overrides[f.Type]; ok {
+	if t, ok := typeFmts[f.Type]; ok {
 		f.TypeFmt = t
 		return
 	}

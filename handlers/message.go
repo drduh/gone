@@ -54,6 +54,16 @@ func MessageAdd(app *config.App) http.HandlerFunc {
 		formContent := strings.TrimSpace(
 			r.PostFormValue(formFieldMessage))
 		if formContent == "" {
+			app.Log.Error(app.MsgEmpty,
+				"user", req)
+
+			if wantsIndex(app, req) {
+				toPath(w, r, app.Root)
+			} else {
+				writeJSON(w, http.StatusBadRequest,
+					errorJSON(app.MsgEmpty))
+			}
+
 			return
 		}
 

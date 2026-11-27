@@ -2,16 +2,31 @@ package config
 
 import (
 	"context"
-	"log"
 	"os"
 	"time"
+
+	"github.com/drduh/gone/audit"
+	"github.com/drduh/gone/settings"
 )
 
 var (
-	funcExit  = os.Exit
-	funcFatal = log.Fatalf
-	funcNow   = time.Now
+	funcExit = os.Exit
+	funcNow  = time.Now
 )
+
+// fatal logs err as JSON with default settings and exits.
+func fatal(msg string, err error) {
+	defaults, _ := settings.Load("")
+
+	auditor, auditErr := audit.Start(&audit.Config{
+		TimeFormat: defaults.TimeFormat,
+	})
+	if auditErr == nil {
+		auditor.Log.Error(msg, "error", err.Error())
+	}
+
+	funcExit(1)
+}
 
 // Start records the application start time and
 // initiates Storage.

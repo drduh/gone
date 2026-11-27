@@ -245,7 +245,40 @@ func TestMessageSpacesOnly(t *testing.T) {
 		strings.NewReader(form.Encode()))
 	req.Header.Set("Content-Type", formContentType)
 	rr := serveRequest(t, app, req)
-	assertStatus(t, rr, http.StatusOK)
+	assertStatus(t, rr, http.StatusBadRequest)
+
+	want := `{"error":"` + app.MsgEmpty + `"}` + "\n"
+	if rr.Body.String() != want {
+		t.Errorf("expected response %q, got %q",
+			want, rr.Body.String())
+	}
+
+	if got := len(app.Messages); got != 0 {
+		t.Fatalf("expected 0 messages, got %d", got)
+	}
+}
+
+// TestMessageSpacesOnlyBrowser tests spaces-only Message
+// add with browser.
+func TestMessageSpacesOnlyBrowser(t *testing.T) {
+	app := newTestApp()
+	app.Require.MessageAdd = false
+
+	form := url.Values{}
+	form.Set(formFieldMessage, "   ")
+
+	req := httptest.NewRequestWithContext(t.Context(),
+		http.MethodPost, app.MessageAdd,
+		strings.NewReader(form.Encode()))
+	req.Header.Set("Content-Type", formContentType)
+	req.Header.Set("Accept", "text/html")
+	rr := serveRequest(t, app, req)
+	assertStatus(t, rr, http.StatusSeeOther)
+
+	if got := rr.Header().Get("Location"); got != app.Root {
+		t.Fatalf("expected redirect to %q, got %q",
+			app.Root, got)
+	}
 
 	if got := len(app.Messages); got != 0 {
 		t.Fatalf("expected 0 messages, got %d", got)

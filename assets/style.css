@@ -145,7 +145,7 @@ footer {
   transition: max-height var(--animation-fast) ease;
 }
 
-footer label {
+footer summary {
   cursor: pointer;
   display: block;
   font-size: var(--font-size-norm);
@@ -156,13 +156,20 @@ footer label {
 
 footer .footerExtra { padding: 0 2em 2em; }
 
-#footerToggle:checked ~ footer {
+footer:has(details[open]) {
   max-height: 200px;
 }
 
-#footerToggle:focus-visible + footer label {
+footer summary:focus-visible { outline: none; }
+
+footer summary:focus-visible span {
+  border-radius: var(--radius-box);
   outline: 2px solid var(--fg-light);
   outline-offset: 2px;
+}
+
+footer details::details-content {
+  transition: content-visibility var(--animation-fast) allow-discrete;
 }
 
 a {
@@ -270,18 +277,6 @@ input::placeholder {
   opacity: 0.8;
 }
 
-#footerToggle,
-.hide {
-  border: 0;
-  height: 1px;
-  margin: -1px;
-  overflow: hidden;
-  padding: 0;
-  position: absolute;
-  white-space: nowrap;
-  width: 1px;
-}
-
 .inline-form {
   display: inline;
 }
@@ -343,12 +338,12 @@ input:out-of-range,
   box-shadow: 0 0 0 var(--radius-box) var(--bg-light);
 }
 
-details {
+main details {
   padding: 1em;
   text-align: center;
 }
 
-summary {
+main summary {
   border-bottom: 1px dotted var(--fg-light);
   color: var(--fg-light);
   cursor: pointer;
@@ -360,15 +355,15 @@ summary::marker {
   content: "";
 }
 
-summary:hover {
+main summary:hover {
   border-bottom-style: solid;
 }
 
-details[open] summary {
+main details[open] summary {
   border-bottom-color: transparent;
 }
 
-details[open] > summary:hover {
+main details[open] > summary:hover {
   border-bottom: 1px solid var(--fg-light);
 }
 
