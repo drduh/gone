@@ -17,7 +17,7 @@ func Load() *App {
 
 	s, err := settings.Load(pathConfig)
 	if err != nil {
-		funcFatal("failed loading settings: %v", err)
+		fatal("failed loading settings", err)
 		return nil
 	}
 	app.Settings = s
@@ -28,7 +28,7 @@ func Load() *App {
 		TimeFormat: app.TimeFormat,
 	})
 	if err != nil {
-		funcFatal("failed starting auditor: %v", err)
+		fatal("failed starting auditor", err)
 		return nil
 	}
 	app.Log = auditor.Log
