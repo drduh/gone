@@ -149,6 +149,9 @@ type Error struct {
 	// Message count exceeded configured limit
 	MsgCount string `json:"msgCount,omitempty"`
 
+	// Message empty or only whitespace
+	MsgEmpty string `json:"msgEmpty,omitempty"`
+
 	// Message length exceeded configured limit
 	MsgLength string `json:"msgLength,omitempty"`
 

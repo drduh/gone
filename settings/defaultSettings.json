@@ -44,6 +44,7 @@
     "fileSizeAll": "size limit met",
     "form":        "file form fail",
     "msgCount":    "msgs count met",
+    "msgEmpty":    "msg text empty",
     "msgLength":   "msg length met",
     "msgNotFound": "msg not stored",
     "noFilename":  "need file name",
